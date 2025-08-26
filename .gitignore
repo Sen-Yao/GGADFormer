@@ -2,4 +2,4 @@ dataset/*
 
 __pycache__/
 
-swanlog/
+wandb/
