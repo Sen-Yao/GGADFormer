@@ -11,6 +11,9 @@ import argparse
 from tqdm import tqdm
 import time
 
+import swanlab
+import datetime
+
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
 # os.environ["KMP_DUPLICATE_LnIB_OK"] = "TRUE"
@@ -65,6 +68,13 @@ else:
     args.mean = 0.0
     args.var = 0.0
 
+swanlab.init(
+    # 设置项目名
+    project="GGADFormer",
+    name=datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),
+    # 设置超参数
+    config=args,
+)
 
 print('Dataset: ', args.dataset)
 
@@ -227,6 +237,10 @@ with tqdm(total=args.num_epoch) as pbar:
             print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
             print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
             print("=====================================================================")
+            swanlab.log({"train_loss_margin": "{:.5f}".format(loss_margin.item()), 
+                        "train_loss_bce": "{:.5f}".format(loss_bce.item()),
+                        "rec_loss": "{:.5f}".format(loss_rec.item()),
+                        "train_loss": "{:.5f}".format(loss.item())}, step=epoch)
         if epoch % 10 == 0:
             model.eval()
             train_flag = False
@@ -238,3 +252,4 @@ with tqdm(total=args.num_epoch) as pbar:
             print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
             AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
             print('Testing AP:', AP)
+            swanlab.log({"AUC": auc, "AP": AP}, step=epoch)
