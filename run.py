@@ -157,8 +157,7 @@ best_AP = 0
 
 
 # Train model
-with tqdm(total=args.num_epoch) as pbar:
-    pbar.set_description('Training')
+with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
     total_time = 0
     for epoch in range(args.num_epoch):
         start_time = time.time()
@@ -231,7 +230,14 @@ with tqdm(total=args.num_epoch) as pbar:
         optimiser.step()
         end_time = time.time()
         total_time += end_time - start_time
-        print('Total time is', total_time)
+        
+        # 更新进度条信息
+        pbar.set_postfix({
+            'Loss': f'{loss.item():.4f}',
+            'Time': f'{total_time:.1f}s',
+            'Epoch': f'{epoch+1}/{args.num_epoch}'
+        })
+        pbar.update(1)
         if epoch % 2 == 0:
             logits = np.squeeze(logits.cpu().detach().numpy())
             lbl = np.squeeze(lbl.cpu().detach().numpy())
@@ -240,11 +246,11 @@ with tqdm(total=args.num_epoch) as pbar:
             # AP = average_precision_score(lbl, logits, average='macro', pos_label=1, sample_weight=None)
             # print('Traininig AP:', AP)
 
-            print("Epoch:", '%04d' % (epoch), "train_loss_margin=", "{:.5f}".format(loss_margin.item()))
-            print("Epoch:", '%04d' % (epoch), "train_loss_bce=", "{:.5f}".format(loss_bce.item()))
-            print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
-            print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
-            print("=====================================================================")
+            # print("Epoch:", '%04d' % (epoch), "train_loss_margin=", "{:.5f}".format(loss_margin.item()))
+            # print("Epoch:", '%04d' % (epoch), "train_loss_bce=", "{:.5f}".format(loss_bce.item()))
+            # print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
+            # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
+            # print("=====================================================================")
             wandb.log({"train_loss_margin": loss_margin.item(), 
                         "train_loss_bce": loss_bce.item(),
                         "rec_loss": loss_rec.item(),
@@ -257,7 +263,7 @@ with tqdm(total=args.num_epoch) as pbar:
             # evaluation on the valid and test node
             logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
             auc = roc_auc_score(ano_label[idx_test], logits)
-            print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
+            # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
             AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
-            print('Testing AP:', AP)
+            # print('Testing AP:', AP)
             wandb.log({"AUC": auc, "AP": AP}, step=epoch)
