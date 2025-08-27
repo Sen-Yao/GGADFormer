@@ -183,7 +183,7 @@ class GGADFormer(nn.Module):
         self.act = nn.ReLU()
 
         # 添加 token_projection 层
-        self.token_projection = nn.Linear(n_in, args.embedding_dim)
+        self.token_projection = nn.Linear(2 * n_in, args.embedding_dim)
 
         # Graph Transformer
         encoders = [EncoderLayer(args.embedding_dim, args.GT_ffn_dim, args.GT_dropout, args.GT_attention_dropout, args.GT_num_heads)

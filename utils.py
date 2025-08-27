@@ -180,6 +180,14 @@ def generate_rwr_subgraph(dgl_graph, subgraph_size):
 
     return subv
 
+def node_neighborhood_feature(adj, features, k, alpha=0.1):
+
+    x_0 = features
+    for i in range(k):
+        # print(f"features.shape: {features.shape}, adj.shape: {adj.shape}")
+        features = (1-alpha) * torch.mm(adj, features) + alpha * x_0
+
+    return features
 
 import matplotlib.pyplot as plt
 import matplotlib

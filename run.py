@@ -35,6 +35,7 @@ parser.add_argument('--mean', type=float, default=0.0)
 parser.add_argument('--var', type=float, default=0.0)
 parser.add_argument('--device', type=int, default=0)
 
+parser.add_argument('--pp_k', type=int, default=2)
 parser.add_argument('--GT_ffn_dim', type=int, default=128)
 parser.add_argument('--GT_dropout', type=float, default=0.5)
 parser.add_argument('--GT_attention_dropout', type=float, default=0.5)
@@ -126,7 +127,7 @@ dgl_graph = adj_to_dgl_graph(adj)
 nb_nodes = features.shape[0]
 ft_size = features.shape[1]
 raw_adj = adj
-print(adj.sum())
+#print(adj.sum())
 adj = normalize_adj(adj)
 
 raw_adj = (raw_adj + sp.eye(raw_adj.shape[0])).todense()
@@ -146,6 +147,10 @@ features = features.to(device)
 adj = adj.to(device)
 raw_adj = raw_adj.to(device)
 labels = labels.to(device)
+
+progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k).to(args.device).unsqueeze(0)
+concated_input_features = torch.concat((features.to(args.device), progregated_features), dim=2)
+# concated_input_features.shape: torch.Size([1, node_num, 2 * feature_dim])
 
 # idx_train = torch.LongTensor(idx_train)
 # idx_val = torch.LongTensor(idx_val)
@@ -175,7 +180,7 @@ with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
 
         # Train model
         train_flag = True
-        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(features, adj,
+        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj,
                                                                 normal_for_generation_idx, normal_for_train_idx,
                                                                 train_flag, args)
         if epoch % 10 == 0:
@@ -266,7 +271,7 @@ with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
         if epoch % 10 == 0:
             model.eval()
             train_flag = False
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(features, adj, normal_for_generation_idx, normal_for_train_idx,
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                     train_flag, args)
             # evaluation on the valid and test node
             logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
