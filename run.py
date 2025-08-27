@@ -1,6 +1,7 @@
 import torch.nn as nn
 
 from model import Model
+from GGADFormer import GGADFormer
 from utils import *
 
 from sklearn.metrics import roc_auc_score
@@ -32,6 +33,13 @@ parser.add_argument('--auc_test_rounds', type=int, default=256)
 parser.add_argument('--negsamp_ratio', type=int, default=1)
 parser.add_argument('--mean', type=float, default=0.0)
 parser.add_argument('--var', type=float, default=0.0)
+parser.add_argument('--device', type=int, default=0)
+
+parser.add_argument('--GT_ffn_dim', type=int, default=128)
+parser.add_argument('--GT_dropout', type=float, default=0.5)
+parser.add_argument('--GT_attention_dropout', type=float, default=0.5)
+parser.add_argument('--GT_num_heads', type=int, default=1)
+parser.add_argument('--GT_num_layers', type=int, default=3)
 
 
 
@@ -95,6 +103,15 @@ random.seed(args.seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
+# 设置设备
+device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
+print(f'Using device: {device}')
+if torch.cuda.is_available() and args.device >= 0:
+    print(f'CUDA device name: {torch.cuda.get_device_name(args.device)}')
+    print(f'CUDA device memory: {torch.cuda.get_device_properties(args.device).total_memory / 1024**3:.1f} GB')
+else:
+    print('Using CPU for computation')
+
 # Load and preprocess data
 adj, features, labels, all_idx, idx_train, idx_val, \
 idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset)
@@ -124,32 +141,23 @@ adj = torch.FloatTensor(adj[np.newaxis])
 raw_adj = torch.FloatTensor(raw_adj[np.newaxis])
 labels = torch.FloatTensor(labels[np.newaxis])
 
+# 将数据移动到指定设备
+features = features.to(device)
+adj = adj.to(device)
+raw_adj = raw_adj.to(device)
+labels = labels.to(device)
+
 # idx_train = torch.LongTensor(idx_train)
 # idx_val = torch.LongTensor(idx_val)
 # idx_test = torch.LongTensor(idx_test)
 
 # Initialize model and optimiser
-model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
+# model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
+model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
 optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-#
-# if torch.cuda.is_available():
-#     print('Using CUDA')
-#     model.cuda()
-#     features = features.cuda()
-#     adj = adj.cuda()
-#     labels = labels.cuda()
-#     raw_adj = raw_adj.cuda()
 
-# idx_train = idx_train.cuda()
-# idx_val = idx_val.cuda()
-# idx_test = idx_test.cuda()
-#
-# if torch.cuda.is_available():
-#     b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]).cuda())
-# else:
-#     b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]))
-
-b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]))
+# 损失函数设置
+b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]).to(device))
 xent = nn.CrossEntropyLoss()
 
 best_AUC = 0
@@ -183,8 +191,7 @@ with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
         lbl = torch.unsqueeze(torch.cat(
             (torch.zeros(len(normal_for_train_idx)), torch.ones(len(outlier_emb)))),
             1).unsqueeze(0)
-        # if torch.cuda.is_available():
-        #     lbl = lbl.cuda()
+        lbl = lbl.to(device)  # 将标签移动到指定设备
 
         loss_bce = b_xent(logits, lbl)
         loss_bce = torch.mean(loss_bce)
