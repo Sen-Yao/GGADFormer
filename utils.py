@@ -149,7 +149,7 @@ def adj_to_dgl_graph(adj):
     else:
         # 对于较老版本的NetworkX，使用替代方法
         nx_graph = nx.from_scipy_sparse_matrix(adj)
-    dgl_graph = dgl.DGLGraph(nx_graph)
+    dgl_graph = dgl.from_networkx(nx_graph)
     return dgl_graph
 
 

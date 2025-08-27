@@ -182,7 +182,7 @@ def load_mat(dataset):
 def adj_to_dgl_graph(adj):
     """Convert adjacency matrix to dgl format."""
     nx_graph = nx.from_scipy_sparse_matrix(adj)
-    dgl_graph = dgl.DGLGraph(nx_graph)
+    dgl_graph = dgl.graph(nx_graph)
     return dgl_graph
 
 
