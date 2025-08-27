@@ -76,8 +76,7 @@ def train(args):
     raw_adj = raw_adj.to(device)
     labels = labels.to(device)
 
-    progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k, args.progregate_alpha).to(args.device).unsqueeze(0)
-    concated_input_features = torch.concat((features.to(args.device), progregated_features), dim=2)
+
     # concated_input_features.shape: torch.Size([1, node_num, 2 * feature_dim])
 
     # idx_train = torch.LongTensor(idx_train)
@@ -85,8 +84,18 @@ def train(args):
     # idx_test = torch.LongTensor(idx_test)
 
     # Initialize model and optimiser
-    # model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
-    model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
+
+
+    if args.model_type == 'GGADFormer':
+        progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k, args.progregate_alpha).to(args.device).unsqueeze(0)
+        concated_input_features = torch.concat((features.to(args.device), progregated_features), dim=2)
+        model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
+    elif args.model_type == 'GGAD':
+        concated_input_features = features.to(args.device)
+        model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout, args)
+    else:
+        raise ValueError(f"Invalid model type: {args.model_type}")
+
     optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
     # 损失函数设置
@@ -229,6 +238,7 @@ if __name__ == "__main__":
     parser.add_argument('--var', type=float, default=0.0)
     parser.add_argument('--confidence_margin', type=float, default=0.7)
     parser.add_argument('--progregate_alpha', type=float, default=0.1)
+    parser.add_argument('--model_type', type=str, default='GGADFormer')
     parser.add_argument('--device', type=int, default=0)
 
     parser.add_argument('--pp_k', type=int, default=2)

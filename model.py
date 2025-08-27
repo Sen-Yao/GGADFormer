@@ -106,8 +106,9 @@ class Discriminator(nn.Module):
 
 
 class Model(nn.Module):
-    def __init__(self, n_in, n_h, activation, negsamp_round, readout):
+    def __init__(self, n_in, n_h, activation, negsamp_round, readout, args):
         super(Model, self).__init__()
+        self.device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
         self.read_mode = readout
         self.gcn1 = GCN(n_in, n_h, activation)
         self.gcn2 = GCN(n_h, n_h, activation)
@@ -129,6 +130,7 @@ class Model(nn.Module):
             self.read = WSReadout()
 
         self.disc = Discriminator(n_h, negsamp_round)
+        self.to(self.device)
 
     def forward(self, seq1, adj, normal_for_generation_idx, normal_for_train_idx, train_flag, args, sparse=False):
         h_1 = self.gcn1(seq1, adj, sparse)
@@ -140,7 +142,7 @@ class Model(nn.Module):
         emb_combine = None
         normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
 
-        noise = torch.randn(normal_for_generation_emb.size()) * args.var + args.mean
+        noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
         noised_normal_for_generation_emb = normal_for_generation_emb + noise
         if train_flag:
             # Add noise into the attribute of sampled abnormal nodes
