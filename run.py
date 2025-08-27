@@ -13,6 +13,7 @@ from tqdm import tqdm
 import time
 
 import wandb
+from visualization import create_tsne_visualization
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -104,7 +105,8 @@ def train(args):
 
     best_AUC = 0
     best_AP = 0
-
+    best_model_state = None
+    best_epoch = 0
 
     # Train model
     print(f"Start training! Total epochs: {args.num_epoch}")
@@ -210,14 +212,83 @@ def train(args):
                 emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                         train_flag, args)
                 # evaluation on the valid and test node
-                logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
+                # 在eval阶段，我们需要为所有节点生成logits
+                # 首先获取所有节点的嵌入
+                all_embeddings = emb.squeeze(0)  # [num_nodes, embedding_dim]
+                
+                # 为所有节点生成logits
+                all_logits = []
+                for i in range(all_embeddings.shape[0]):
+                    node_emb = all_embeddings[i:i+1, :].unsqueeze(0)  # [1, 1, embedding_dim]
+                    f_1 = model.fc1(node_emb)
+                    f_1 = model.act(f_1)
+                    f_2 = model.fc2(f_1)
+                    f_2 = model.act(f_2)
+                    node_logit = model.fc3(f_2)
+                    all_logits.append(node_logit.squeeze())
+                
+                all_logits = torch.stack(all_logits)  # [num_nodes]
+                logits = all_logits[idx_test].cpu().detach().numpy()
                 auc = roc_auc_score(ano_label[idx_test], logits)
                 # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
                 AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
                 # print('Testing AP:', AP)
                 wandb.log({"AUC": auc, "AP": AP}, step=epoch)
+                
+                # 检查是否为最佳模型
+                if auc > best_AUC and AP > best_AP:
+                    best_AUC = auc
+                    best_AP = AP
+                    best_model_state = model.state_dict().copy()
+                    best_epoch = epoch
 
     print(f"Training done! Total time: {total_time:.2f} seconds")
+    
+    # 加载最佳模型进行tsne可视化
+    if best_model_state is not None:
+        print("tsne visualization...")
+        model.load_state_dict(best_model_state)
+        model.eval()
+        
+        # 获取所有节点的嵌入
+        train_flag = False
+        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj, 
+                                                                                        normal_for_generation_idx, normal_for_train_idx,
+                                                                                        train_flag, args)
+        
+        # 准备tsne数据
+        # 获取原始特征（去掉batch维度）
+        original_features = concated_input_features.squeeze(0)  # [num_nodes, feature_dim]
+        
+        # 获取嵌入（去掉batch维度）
+
+        embeddings = emb.squeeze(0)  # [num_nodes, embedding_dim]
+        
+        # 获取真实标签（去掉batch维度）
+        true_labels = labels.squeeze(0)  # [num_nodes]
+
+        if outlier_emb is None:
+            print("outlier_emb is None")
+            outlier_emb_len = 0
+        else:
+            outlier_emb_len = len(outlier_emb)
+        
+        # 创建节点类型标签
+        node_types = []
+        for i in range(nb_nodes + outlier_emb_len):
+            if i >= nb_nodes:
+                node_types.append("generated_anomaly")
+            elif true_labels[i] == 1:
+                # 真实异常点
+                node_types.append("anomaly") 
+            else:
+                node_types.append("normal")
+        
+        # 创建tsne可视化
+        create_tsne_visualization(original_features, embeddings, true_labels, node_types, best_epoch, device,
+                                 normal_for_train_idx, normal_for_generation_idx, outlier_emb)
+        
+        
 
 if __name__ == "__main__":
     
