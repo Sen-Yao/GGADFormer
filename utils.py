@@ -100,7 +100,8 @@ def load_mat(dataset, train_rate=0.3, val_rate=0.1):
     # Sample some labeled normal nodes
     all_normal_label_idx = [i for i in idx_train if ano_labels[i] == 0]
     rate = 0.5  #  change train_rate to 0.3 0.5 0.6  0.8
-    normal_label_idx = all_normal_label_idx[: int(len(all_normal_label_idx) * rate)]
+    # normal_for_train_idx 为用于训练的正常的节点索引
+    normal_for_train_idx = all_normal_label_idx[: int(len(all_normal_label_idx) * rate)]
     print('Training rate', rate)
 
     # normal_label_idx = all_normal_label_idx[: int(len(all_normal_label_idx) * 0.2)]
@@ -132,13 +133,16 @@ def load_mat(dataset, train_rate=0.3, val_rate=0.1):
     # replace_rate = 0.05 * normal_feat.shape[1]
     # feat[real_abnormal_id, :int(replace_rate)] = normal_feat[:, :int(replace_rate)]
 
-    random.shuffle(normal_label_idx)
+    random.shuffle(normal_for_train_idx)
     # 0.05 for Amazon and 0.15 for other datasets
+
+    # 选择一部分正常节点用于生成异常节点
+    # normal_for_generation_idx 为用于生成异常节点的正常节点索引
     if dataset in ['Amazon']:
-        abnormal_label_idx = normal_label_idx[: int(len(normal_label_idx) * 0.05)]  
+        normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * 0.05)]  
     else:
-        abnormal_label_idx = normal_label_idx[: int(len(normal_label_idx) * 0.15)]  
-    return adj, feat, ano_labels, all_idx, idx_train, idx_val, idx_test, ano_labels, str_ano_labels, attr_ano_labels, normal_label_idx, abnormal_label_idx
+        normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * 0.15)]  
+    return adj, feat, ano_labels, all_idx, idx_train, idx_val, idx_test, ano_labels, str_ano_labels, attr_ano_labels, normal_for_train_idx, normal_for_generation_idx
 
 
 def adj_to_dgl_graph(adj):

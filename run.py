@@ -51,7 +51,7 @@ if args.lr is None:
 
 if args.num_epoch is None:
     if args.dataset in ['photo']:
-        args.num_epoch = 81
+        args.num_epoch = 80
     if args.dataset in ['elliptic']:
         args.num_epoch = 150
     if args.dataset in ['reddit']:
@@ -97,7 +97,7 @@ torch.backends.cudnn.benchmark = False
 
 # Load and preprocess data
 adj, features, labels, all_idx, idx_train, idx_val, \
-idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat(args.dataset)
+idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset)
 
 if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
     features, _ = preprocess_features(features)
@@ -157,6 +157,7 @@ best_AP = 0
 
 
 # Train model
+print(f"Start training! Total epochs: {args.num_epoch}")
 with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
     total_time = 0
     for epoch in range(args.num_epoch):
@@ -166,8 +167,8 @@ with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
 
         # Train model
         train_flag = True
-        emb, emb_combine, logits, emb_con, emb_abnormal = model(features, adj,
-                                                                abnormal_label_idx, normal_label_idx,
+        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(features, adj,
+                                                                normal_for_generation_idx, normal_for_train_idx,
                                                                 train_flag, args)
         if epoch % 10 == 0:
             # save data for tsne
@@ -180,7 +181,7 @@ with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
 
         # BCE loss
         lbl = torch.unsqueeze(torch.cat(
-            (torch.zeros(len(normal_label_idx)), torch.ones(len(emb_con)))),
+            (torch.zeros(len(normal_for_train_idx)), torch.ones(len(outlier_emb)))),
             1).unsqueeze(0)
         # if torch.cuda.is_available():
         #     lbl = lbl.cuda()
@@ -204,8 +205,8 @@ with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
         r_inv[torch.isinf(r_inv)] = 0.
         affinity = torch.sum(similar_matrix, 0) * r_inv
 
-        affinity_normal_mean = torch.mean(affinity[normal_label_idx])
-        affinity_abnormal_mean = torch.mean(affinity[abnormal_label_idx])
+        affinity_normal_mean = torch.mean(affinity[normal_for_train_idx])
+        affinity_abnormal_mean = torch.mean(affinity[normal_for_generation_idx])
 
         # if epoch % 10 == 0:
         #     real_abnormal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 1).squeeze()].tolist()
@@ -221,7 +222,7 @@ with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
         confidence_margin = 0.7
         loss_margin = (confidence_margin - (affinity_normal_mean - affinity_abnormal_mean)).clamp_min(min=0)
 
-        diff_attribute = torch.pow(emb_con - emb_abnormal, 2)
+        diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
         loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
 
         loss = 1 * loss_margin + 1 * loss_bce + 1 * loss_rec
@@ -258,7 +259,7 @@ with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
         if epoch % 10 == 0:
             model.eval()
             train_flag = False
-            emb, emb_combine, logits, emb_con, emb_abnormal = model(features, adj, abnormal_label_idx, normal_label_idx,
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                     train_flag, args)
             # evaluation on the valid and test node
             logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
@@ -267,3 +268,5 @@ with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
             AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
             # print('Testing AP:', AP)
             wandb.log({"AUC": auc, "AP": AP}, step=epoch)
+
+print(f"Training done! Total time: {total_time:.2f} seconds")

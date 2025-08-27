@@ -130,33 +130,32 @@ class Model(nn.Module):
 
         self.disc = Discriminator(n_h, negsamp_round)
 
-    def forward(self, seq1, adj, sample_abnormal_idx, normal_idx, train_flag, args, sparse=False):
+    def forward(self, seq1, adj, normal_for_generation_idx, normal_for_train_idx, train_flag, args, sparse=False):
         h_1 = self.gcn1(seq1, adj, sparse)
         # emb = h_1
         emb = self.gcn2(h_1, adj, sparse)
 
 
-        emb_con = None
+        outlier_emb = None
         emb_combine = None
-        emb_abnormal = emb[:, sample_abnormal_idx, :]
+        normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
 
-        noise = torch.randn(emb_abnormal.size()) * args.var + args.mean
-        emb_abnormal = emb_abnormal + noise
-        # emb_abnormal = emb_abnormal + noise.cuda()
+        noise = torch.randn(normal_for_generation_emb.size()) * args.var + args.mean
+        noised_normal_for_generation_emb = normal_for_generation_emb + noise
         if train_flag:
             # Add noise into the attribute of sampled abnormal nodes
             # degree = torch.sum(raw_adj[0, :, :], 0)[sample_abnormal_idx]
             # neigh_adj = raw_adj[0, sample_abnormal_idx, :] / torch.unsqueeze(degree, 1)
 
-            neigh_adj = adj[0, sample_abnormal_idx, :]
+            neigh_adj = adj[0, normal_for_generation_idx, :]
             # emb[0, sample_abnormal_idx, :] =self.act(torch.mm(neigh_adj, emb[0, :, :]))
             # emb[0, sample_abnormal_idx, :] = self.fc4(emb[0, sample_abnormal_idx, :])
 
-            emb_con = torch.mm(neigh_adj, emb[0, :, :])
-            emb_con = self.act(self.fc4(emb_con))
+            outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
+            outlier_emb = self.act(self.fc4(outlier_emb))
             # emb_con = self.act(self.fc6(emb_con))
 
-            emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
+            emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
             # TODO ablation study add noise on the selected nodes
 
@@ -177,15 +176,13 @@ class Model(nn.Module):
             f_1 = self.act(f_1)
             f_2 = self.fc2(f_1)
             f_2 = self.act(f_2)
-            f_3 = self.fc3(f_2)
-            # f_3 = torch.sigmoid(f_3)
-            emb[:, sample_abnormal_idx, :] = emb_con
+            logits = self.fc3(f_2)
+            emb[:, normal_for_generation_idx, :] = outlier_emb
         else:
             f_1 = self.fc1(emb)
             f_1 = self.act(f_1)
             f_2 = self.fc2(f_1)
             f_2 = self.act(f_2)
-            f_3 = self.fc3(f_2)
-            # f_3 = torch.sigmoid(f_3)
+            logits = self.fc3(f_2)
 
-        return emb, emb_combine, f_3, emb_con, emb_abnormal
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb
