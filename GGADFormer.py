@@ -211,48 +211,41 @@ class GGADFormer(nn.Module):
         noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
         noised_normal_for_generation_emb = normal_for_generation_emb + noise
         
-        if train_flag:
-            # Add noise into the attribute of sampled abnormal nodes
-            # degree = torch.sum(raw_adj[0, :, :], 0)[sample_abnormal_idx]
-            # neigh_adj = raw_adj[0, sample_abnormal_idx, :] / torch.unsqueeze(degree, 1)
+        # Add noise into the attribute of sampled abnormal nodes
+        # degree = torch.sum(raw_adj[0, :, :], 0)[sample_abnormal_idx]
+        # neigh_adj = raw_adj[0, sample_abnormal_idx, :] / torch.unsqueeze(degree, 1)
 
-            neigh_adj = adj[0, normal_for_generation_idx, :]
-            # emb[0, sample_abnormal_idx, :] =self.act(torch.mm(neigh_adj, emb[0, :, :]))
-            # emb[0, sample_abnormal_idx, :] = self.fc4(emb[0, sample_abnormal_idx, :])
+        neigh_adj = adj[0, normal_for_generation_idx, :]
+        # emb[0, sample_abnormal_idx, :] =self.act(torch.mm(neigh_adj, emb[0, :, :]))
+        # emb[0, sample_abnormal_idx, :] = self.fc4(emb[0, sample_abnormal_idx, :])
 
-            outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
-            outlier_emb = self.act(self.fc4(outlier_emb))
-            # emb_con = self.act(self.fc6(emb_con))
+        outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
+        outlier_emb = self.act(self.fc4(outlier_emb))
+        # emb_con = self.act(self.fc6(emb_con))
 
-            emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
+        emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
-            # TODO ablation study add noise on the selected nodes
+        # TODO ablation study add noise on the selected nodes
 
-            # std = 0.01
-            # mean = 0.02
-            # noise = torch.randn(emb[:, sample_abnormal_idx, :].size()) * std + mean
-            # emb_combine = torch.cat((emb[:, normal_idx, :], emb[:, sample_abnormal_idx, :] + noise), 1)
+        # std = 0.01
+        # mean = 0.02
+        # noise = torch.randn(emb[:, sample_abnormal_idx, :].size()) * std + mean
+        # emb_combine = torch.cat((emb[:, normal_idx, :], emb[:, sample_abnormal_idx, :] + noise), 1)
 
-            # TODO ablation study generate outlier from random noise
-            # std = 0.01
-            # mean = 0.02
-            # emb_con = torch.mm(neigh_adj, emb[0, :, :])
-            # noise = torch.randn(emb_con.size()) * std + mean
-            # emb_con = self.act(self.fc4(noise))
-            # emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
+        # TODO ablation study generate outlier from random noise
+        # std = 0.01
+        # mean = 0.02
+        # emb_con = torch.mm(neigh_adj, emb[0, :, :])
+        # noise = torch.randn(emb_con.size()) * std + mean
+        # emb_con = self.act(self.fc4(noise))
+        # emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
 
-            f_1 = self.fc1(emb_combine)
-            f_1 = self.act(f_1)
-            f_2 = self.fc2(f_1)
-            f_2 = self.act(f_2)
-            logits = self.fc3(f_2)
-            emb[:, normal_for_generation_idx, :] = outlier_emb
-        else:
-            f_1 = self.fc1(emb)
-            f_1 = self.act(f_1)
-            f_2 = self.fc2(f_1)
-            f_2 = self.act(f_2)
-            logits = self.fc3(f_2)
+        f_1 = self.fc1(emb_combine)
+        f_1 = self.act(f_1)
+        f_2 = self.fc2(f_1)
+        f_2 = self.act(f_2)
+        logits = self.fc3(f_2)
+        emb[:, normal_for_generation_idx, :] = outlier_emb
 
         return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb
     
