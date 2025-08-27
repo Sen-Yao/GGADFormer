@@ -18,267 +18,283 @@ import wandb
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
 # os.environ["KMP_DUPLICATE_LnIB_OK"] = "TRUE"
 # Set argument
-parser = argparse.ArgumentParser(description='')
 
-parser.add_argument('--dataset', type=str,
-                    default='reddit')
-parser.add_argument('--lr', type=float)
-parser.add_argument('--weight_decay', type=float, default=0.0)
-parser.add_argument('--seed', type=int, default=0)
-parser.add_argument('--embedding_dim', type=int, default=300)
-parser.add_argument('--num_epoch', type=int)
-parser.add_argument('--drop_prob', type=float, default=0.0)
-parser.add_argument('--readout', type=str, default='avg')  # max min avg  weighted_sum
-parser.add_argument('--auc_test_rounds', type=int, default=256)
-parser.add_argument('--negsamp_ratio', type=int, default=1)
-parser.add_argument('--mean', type=float, default=0.0)
-parser.add_argument('--var', type=float, default=0.0)
-parser.add_argument('--device', type=int, default=0)
+def train(args):
+    # Set random seed
+    dgl.random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    torch.cuda.manual_seed(args.seed)
+    torch.cuda.manual_seed_all(args.seed)
+    random.seed(args.seed)
+    # os.environ['PYTHONHASHSEED'] = str(args.seed)
+    # os.environ['OMP_NUM_THREADS'] = '1'
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
-parser.add_argument('--pp_k', type=int, default=2)
-parser.add_argument('--GT_ffn_dim', type=int, default=128)
-parser.add_argument('--GT_dropout', type=float, default=0.5)
-parser.add_argument('--GT_attention_dropout', type=float, default=0.5)
-parser.add_argument('--GT_num_heads', type=int, default=1)
-parser.add_argument('--GT_num_layers', type=int, default=3)
+    # 设置设备
+    device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
+    print(f'Using device: {device}')
+    if torch.cuda.is_available() and args.device >= 0:
+        print(f'CUDA device name: {torch.cuda.get_device_name(args.device)}')
+        print(f'CUDA device memory: {torch.cuda.get_device_properties(args.device).total_memory / 1024**3:.1f} GB')
+    else:
+        print('Using CPU for computation')
 
+    # Load and preprocess data
+    adj, features, labels, all_idx, idx_train, idx_val, \
+    idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset)
 
+    if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
+        features, _ = preprocess_features(features)
+    else:
+        features = features.todense()
 
-args = parser.parse_args()
+    dgl_graph = adj_to_dgl_graph(adj)
 
-if args.lr is None:
-    if args.dataset in ['Amazon']:
-        args.lr = 1e-3
-    elif args.dataset in ['t_finance']:
-        args.lr = 1e-3
-    elif args.dataset in ['reddit']:
-        args.lr = 1e-3
-    elif args.dataset in ['photo']:
-        args.lr = 1e-3
-    elif args.dataset in ['elliptic']:
-        args.lr = 1e-3
+    nb_nodes = features.shape[0]
+    ft_size = features.shape[1]
+    raw_adj = adj
+    #print(adj.sum())
+    adj = normalize_adj(adj)
 
-if args.num_epoch is None:
-    if args.dataset in ['photo']:
-        args.num_epoch = 80
-    if args.dataset in ['elliptic']:
-        args.num_epoch = 150
-    if args.dataset in ['reddit']:
-        args.num_epoch = 300
-    elif args.dataset in ['t_finance']:
-        args.num_epoch = 500
-    elif args.dataset in ['Amazon']:
-        args.num_epoch = 800
-if args.dataset in ['reddit', 'photo']:
-    args.mean = 0.02
-    args.var = 0.01
-else:
-    args.mean = 0.0
-    args.var = 0.0
+    raw_adj = (raw_adj + sp.eye(raw_adj.shape[0])).todense()
+    adj = (adj + sp.eye(adj.shape[0])).todense()
 
+    features = torch.FloatTensor(features[np.newaxis])
+    # adj = torch.FloatTensor(adj[np.newaxis])
+    features = torch.FloatTensor(features)
+    adj = torch.FloatTensor(adj)
+    # adj = adj.to_sparse_csr()
+    adj = torch.FloatTensor(adj[np.newaxis])
+    raw_adj = torch.FloatTensor(raw_adj[np.newaxis])
+    labels = torch.FloatTensor(labels[np.newaxis])
 
-run = wandb.init(
-    # Set the wandb entity where your project will be logged (generally your team name).
-    entity="HCCS",
-    # Set the wandb project where this run will be logged.
-    project="GGADFormer",
-    # Track hyperparameters and run metadata.
-    config=args,
-)
+    # 将数据移动到指定设备
+    features = features.to(device)
+    adj = adj.to(device)
+    raw_adj = raw_adj.to(device)
+    labels = labels.to(device)
 
-wandb.define_metric("AUC", summary="max")
-wandb.define_metric("AP", summary="max")
+    progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k).to(args.device).unsqueeze(0)
+    concated_input_features = torch.concat((features.to(args.device), progregated_features), dim=2)
+    # concated_input_features.shape: torch.Size([1, node_num, 2 * feature_dim])
 
+    # idx_train = torch.LongTensor(idx_train)
+    # idx_val = torch.LongTensor(idx_val)
+    # idx_test = torch.LongTensor(idx_test)
 
-print('Dataset: ', args.dataset)
+    # Initialize model and optimiser
+    # model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
+    model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
+    optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-# Set random seed
-dgl.random.seed(args.seed)
-np.random.seed(args.seed)
-torch.manual_seed(args.seed)
-torch.cuda.manual_seed(args.seed)
-torch.cuda.manual_seed_all(args.seed)
-random.seed(args.seed)
-# os.environ['PYTHONHASHSEED'] = str(args.seed)
-# os.environ['OMP_NUM_THREADS'] = '1'
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
+    # 损失函数设置
+    b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]).to(device))
+    xent = nn.CrossEntropyLoss()
 
-# 设置设备
-device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
-print(f'Using device: {device}')
-if torch.cuda.is_available() and args.device >= 0:
-    print(f'CUDA device name: {torch.cuda.get_device_name(args.device)}')
-    print(f'CUDA device memory: {torch.cuda.get_device_properties(args.device).total_memory / 1024**3:.1f} GB')
-else:
-    print('Using CPU for computation')
-
-# Load and preprocess data
-adj, features, labels, all_idx, idx_train, idx_val, \
-idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset)
-
-if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
-    features, _ = preprocess_features(features)
-else:
-    features = features.todense()
-
-dgl_graph = adj_to_dgl_graph(adj)
-
-nb_nodes = features.shape[0]
-ft_size = features.shape[1]
-raw_adj = adj
-#print(adj.sum())
-adj = normalize_adj(adj)
-
-raw_adj = (raw_adj + sp.eye(raw_adj.shape[0])).todense()
-adj = (adj + sp.eye(adj.shape[0])).todense()
-
-features = torch.FloatTensor(features[np.newaxis])
-# adj = torch.FloatTensor(adj[np.newaxis])
-features = torch.FloatTensor(features)
-adj = torch.FloatTensor(adj)
-# adj = adj.to_sparse_csr()
-adj = torch.FloatTensor(adj[np.newaxis])
-raw_adj = torch.FloatTensor(raw_adj[np.newaxis])
-labels = torch.FloatTensor(labels[np.newaxis])
-
-# 将数据移动到指定设备
-features = features.to(device)
-adj = adj.to(device)
-raw_adj = raw_adj.to(device)
-labels = labels.to(device)
-
-progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k).to(args.device).unsqueeze(0)
-concated_input_features = torch.concat((features.to(args.device), progregated_features), dim=2)
-# concated_input_features.shape: torch.Size([1, node_num, 2 * feature_dim])
-
-# idx_train = torch.LongTensor(idx_train)
-# idx_val = torch.LongTensor(idx_val)
-# idx_test = torch.LongTensor(idx_test)
-
-# Initialize model and optimiser
-# model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
-model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
-optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-
-# 损失函数设置
-b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]).to(device))
-xent = nn.CrossEntropyLoss()
-
-best_AUC = 0
-best_AP = 0
+    best_AUC = 0
+    best_AP = 0
 
 
-# Train model
-print(f"Start training! Total epochs: {args.num_epoch}")
-with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
-    total_time = 0
-    for epoch in range(args.num_epoch):
-        start_time = time.time()
-        model.train()
-        optimiser.zero_grad()
+    # Train model
+    print(f"Start training! Total epochs: {args.num_epoch}")
+    with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
+        total_time = 0
+        for epoch in range(args.num_epoch):
+            start_time = time.time()
+            model.train()
+            optimiser.zero_grad()
 
-        # Train model
-        train_flag = True
-        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj,
-                                                                normal_for_generation_idx, normal_for_train_idx,
-                                                                train_flag, args)
-        if epoch % 10 == 0:
-            # save data for tsne
-            pass
-
-            # tsne_data_path = 'draw/tfinance/tsne_data_{}.mat'.format(str(epoch))
-            # io.savemat(tsne_data_path, {'emb': np.array(emb.cpu().detach()), 'ano_label': ano_label,
-            #                             'abnormal_label_idx': np.array(abnormal_label_idx),
-            #                             'normal_label_idx': np.array(normal_label_idx)})
-
-        # BCE loss
-        lbl = torch.unsqueeze(torch.cat(
-            (torch.zeros(len(normal_for_train_idx)), torch.ones(len(outlier_emb)))),
-            1).unsqueeze(0)
-        lbl = lbl.to(device)  # 将标签移动到指定设备
-
-        loss_bce = b_xent(logits, lbl)
-        loss_bce = torch.mean(loss_bce)
-
-        # Local affinity margin loss
-        emb = torch.squeeze(emb)
-
-        emb_inf = torch.norm(emb, dim=-1, keepdim=True)
-        emb_inf = torch.pow(emb_inf, -1)
-        emb_inf[torch.isinf(emb_inf)] = 0.
-        emb_norm = emb * emb_inf
-
-        sim_matrix = torch.mm(emb_norm, emb_norm.T)
-        raw_adj = torch.squeeze(raw_adj)
-        similar_matrix = sim_matrix * raw_adj
-
-        r_inv = torch.pow(torch.sum(raw_adj, 0), -1)
-        r_inv[torch.isinf(r_inv)] = 0.
-        affinity = torch.sum(similar_matrix, 0) * r_inv
-
-        affinity_normal_mean = torch.mean(affinity[normal_for_train_idx])
-        affinity_abnormal_mean = torch.mean(affinity[normal_for_generation_idx])
-
-        # if epoch % 10 == 0:
-        #     real_abnormal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 1).squeeze()].tolist()
-        #     real_normal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 0).squeeze()].tolist()
-        #     overlap = list(set(real_abnormal_label_idx) & set(real_normal_label_idx))
-        #
-        #     real_affinity, index = torch.sort(affinity[real_abnormal_label_idx])
-        #     real_affinity = real_affinity[:300]
-        #     draw_pdf(np.array(affinity[real_normal_label_idx].detach().cpu()),
-        #              np.array(affinity[abnormal_label_idx].detach().cpu()),
-        #              np.array(real_affinity.detach().cpu()), args.dataset, epoch)
-
-        confidence_margin = 0.7
-        loss_margin = (confidence_margin - (affinity_normal_mean - affinity_abnormal_mean)).clamp_min(min=0)
-
-        diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
-        loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
-
-        loss = 1 * loss_margin + 1 * loss_bce + 1 * loss_rec
-
-        loss.backward()
-        optimiser.step()
-        end_time = time.time()
-        total_time += end_time - start_time
-        
-        # 更新进度条信息
-        pbar.set_postfix({
-            'Loss': f'{loss.item():.4f}',
-            'Time': f'{total_time:.1f}s',
-            'Epoch': f'{epoch+1}/{args.num_epoch}'
-        })
-        pbar.update(1)
-        if epoch % 2 == 0:
-            logits = np.squeeze(logits.cpu().detach().numpy())
-            lbl = np.squeeze(lbl.cpu().detach().numpy())
-            auc = roc_auc_score(lbl, logits)
-            # print('Traininig {} AUC:{:.4f}'.format(args.dataset, auc))
-            # AP = average_precision_score(lbl, logits, average='macro', pos_label=1, sample_weight=None)
-            # print('Traininig AP:', AP)
-
-            # print("Epoch:", '%04d' % (epoch), "train_loss_margin=", "{:.5f}".format(loss_margin.item()))
-            # print("Epoch:", '%04d' % (epoch), "train_loss_bce=", "{:.5f}".format(loss_bce.item()))
-            # print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
-            # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
-            # print("=====================================================================")
-            wandb.log({"train_loss_margin": loss_margin.item(), 
-                        "train_loss_bce": loss_bce.item(),
-                        "rec_loss": loss_rec.item(),
-                        "train_loss": loss.item()}, step=epoch)
-        if epoch % 10 == 0:
-            model.eval()
-            train_flag = False
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
+            # Train model
+            train_flag = True
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj,
+                                                                    normal_for_generation_idx, normal_for_train_idx,
                                                                     train_flag, args)
-            # evaluation on the valid and test node
-            logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
-            auc = roc_auc_score(ano_label[idx_test], logits)
-            # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
-            AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
-            # print('Testing AP:', AP)
-            wandb.log({"AUC": auc, "AP": AP}, step=epoch)
+            if epoch % 10 == 0:
+                # save data for tsne
+                pass
 
-print(f"Training done! Total time: {total_time:.2f} seconds")
+                # tsne_data_path = 'draw/tfinance/tsne_data_{}.mat'.format(str(epoch))
+                # io.savemat(tsne_data_path, {'emb': np.array(emb.cpu().detach()), 'ano_label': ano_label,
+                #                             'abnormal_label_idx': np.array(abnormal_label_idx),
+                #                             'normal_label_idx': np.array(normal_label_idx)})
+
+            # BCE loss
+            lbl = torch.unsqueeze(torch.cat(
+                (torch.zeros(len(normal_for_train_idx)), torch.ones(len(outlier_emb)))),
+                1).unsqueeze(0)
+            lbl = lbl.to(device)  # 将标签移动到指定设备
+
+            loss_bce = b_xent(logits, lbl)
+            loss_bce = torch.mean(loss_bce)
+
+            # Local affinity margin loss
+            emb = torch.squeeze(emb)
+
+            emb_inf = torch.norm(emb, dim=-1, keepdim=True)
+            emb_inf = torch.pow(emb_inf, -1)
+            emb_inf[torch.isinf(emb_inf)] = 0.
+            emb_norm = emb * emb_inf
+
+            sim_matrix = torch.mm(emb_norm, emb_norm.T)
+            raw_adj = torch.squeeze(raw_adj)
+            similar_matrix = sim_matrix * raw_adj
+
+            r_inv = torch.pow(torch.sum(raw_adj, 0), -1)
+            r_inv[torch.isinf(r_inv)] = 0.
+            affinity = torch.sum(similar_matrix, 0) * r_inv
+
+            affinity_normal_mean = torch.mean(affinity[normal_for_train_idx])
+            affinity_abnormal_mean = torch.mean(affinity[normal_for_generation_idx])
+
+            # if epoch % 10 == 0:
+            #     real_abnormal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 1).squeeze()].tolist()
+            #     real_normal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 0).squeeze()].tolist()
+            #     overlap = list(set(real_abnormal_label_idx) & set(real_normal_label_idx))
+            #
+            #     real_affinity, index = torch.sort(affinity[real_abnormal_label_idx])
+            #     real_affinity = real_affinity[:300]
+            #     draw_pdf(np.array(affinity[real_normal_label_idx].detach().cpu()),
+            #              np.array(affinity[abnormal_label_idx].detach().cpu()),
+            #              np.array(real_affinity.detach().cpu()), args.dataset, epoch)
+
+            confidence_margin = 0.7
+            loss_margin = (confidence_margin - (affinity_normal_mean - affinity_abnormal_mean)).clamp_min(min=0)
+
+            diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
+            loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
+
+            loss = 1 * loss_margin + 1 * loss_bce + 1 * loss_rec
+
+            loss.backward()
+            optimiser.step()
+            end_time = time.time()
+            total_time += end_time - start_time
+            
+            # 更新进度条信息
+            pbar.set_postfix({
+                'Loss': f'{loss.item():.4f}',
+                'Time': f'{total_time:.1f}s',
+                'Epoch': f'{epoch+1}/{args.num_epoch}'
+            })
+            pbar.update(1)
+            if epoch % 2 == 0:
+                logits = np.squeeze(logits.cpu().detach().numpy())
+                lbl = np.squeeze(lbl.cpu().detach().numpy())
+                auc = roc_auc_score(lbl, logits)
+                # print('Traininig {} AUC:{:.4f}'.format(args.dataset, auc))
+                # AP = average_precision_score(lbl, logits, average='macro', pos_label=1, sample_weight=None)
+                # print('Traininig AP:', AP)
+
+                # print("Epoch:", '%04d' % (epoch), "train_loss_margin=", "{:.5f}".format(loss_margin.item()))
+                # print("Epoch:", '%04d' % (epoch), "train_loss_bce=", "{:.5f}".format(loss_bce.item()))
+                # print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
+                # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
+                # print("=====================================================================")
+                wandb.log({"train_loss_margin": loss_margin.item(), 
+                            "train_loss_bce": loss_bce.item(),
+                            "rec_loss": loss_rec.item(),
+                            "train_loss": loss.item()}, step=epoch)
+            if epoch % 10 == 0:
+                model.eval()
+                train_flag = False
+                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
+                                                                        train_flag, args)
+                # evaluation on the valid and test node
+                logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
+                auc = roc_auc_score(ano_label[idx_test], logits)
+                # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
+                AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
+                # print('Testing AP:', AP)
+                wandb.log({"AUC": auc, "AP": AP}, step=epoch)
+
+    print(f"Training done! Total time: {total_time:.2f} seconds")
+
+if __name__ == "__main__":
+    
+    parser = argparse.ArgumentParser(description='')
+
+    parser.add_argument('--dataset', type=str,
+                        default='reddit')
+    parser.add_argument('--lr', type=float)
+    parser.add_argument('--weight_decay', type=float, default=0.0)
+    parser.add_argument('--seed', type=int, default=0)
+    parser.add_argument('--embedding_dim', type=int, default=300)
+    parser.add_argument('--num_epoch', type=int)
+    parser.add_argument('--drop_prob', type=float, default=0.0)
+    parser.add_argument('--readout', type=str, default='avg')  # max min avg  weighted_sum
+    parser.add_argument('--auc_test_rounds', type=int, default=256)
+    parser.add_argument('--negsamp_ratio', type=int, default=1)
+    parser.add_argument('--mean', type=float, default=0.0)
+    parser.add_argument('--var', type=float, default=0.0)
+    parser.add_argument('--device', type=int, default=0)
+
+    parser.add_argument('--pp_k', type=int, default=2)
+    parser.add_argument('--GT_ffn_dim', type=int, default=128)
+    parser.add_argument('--GT_dropout', type=float, default=0.5)
+    parser.add_argument('--GT_attention_dropout', type=float, default=0.5)
+    parser.add_argument('--GT_num_heads', type=int, default=1)
+    parser.add_argument('--GT_num_layers', type=int, default=3)
+
+
+
+    args = parser.parse_args()
+
+    if args.lr is None:
+        if args.dataset in ['Amazon']:
+            args.lr = 1e-3
+        elif args.dataset in ['t_finance']:
+            args.lr = 1e-3
+        elif args.dataset in ['reddit']:
+            args.lr = 1e-3
+        elif args.dataset in ['photo']:
+            args.lr = 1e-3
+        elif args.dataset in ['elliptic']:
+            args.lr = 1e-3
+
+    if args.num_epoch is None:
+        if args.dataset in ['photo']:
+            args.num_epoch = 80
+        if args.dataset in ['elliptic']:
+            args.num_epoch = 150
+        if args.dataset in ['reddit']:
+            args.num_epoch = 300
+        elif args.dataset in ['t_finance']:
+            args.num_epoch = 500
+        elif args.dataset in ['Amazon']:
+            args.num_epoch = 800
+    if args.dataset in ['reddit', 'photo']:
+        args.mean = 0.02
+        args.var = 0.01
+    else:
+        args.mean = 0.0
+        args.var = 0.0
+
+
+    run = wandb.init(
+        # Set the wandb entity where your project will be logged (generally your team name).
+        entity="HCCS",
+        # Set the wandb project where this run will be logged.
+        project="GGADFormer",
+        # Track hyperparameters and run metadata.
+        config=args,
+    )
+
+    wandb.define_metric("AUC", summary="max")
+    wandb.define_metric("AP", summary="max")
+    print('Dataset: ', args.dataset)
+        
+    try:
+        train(args)
+        
+    except torch.cuda.OutOfMemoryError as e:
+        print(f"显存不足!：{e}")
+        wandb.log({"AUC.max": 0})
+        wandb.log({"AP.max": 0})
+        wandb.finish()
+    
+    except Exception as e:
+        print(f"其他错误：{e}")
+        wandb.log({"AUC.max": 0})
+        wandb.finish()
