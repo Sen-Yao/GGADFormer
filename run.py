@@ -76,7 +76,7 @@ def train(args):
     raw_adj = raw_adj.to(device)
     labels = labels.to(device)
 
-    progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k).to(args.device).unsqueeze(0)
+    progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k, args.progregate_alpha).to(args.device).unsqueeze(0)
     concated_input_features = torch.concat((features.to(args.device), progregated_features), dim=2)
     # concated_input_features.shape: torch.Size([1, node_num, 2 * feature_dim])
 
@@ -159,8 +159,7 @@ def train(args):
             #              np.array(affinity[abnormal_label_idx].detach().cpu()),
             #              np.array(real_affinity.detach().cpu()), args.dataset, epoch)
 
-            confidence_margin = 0.7
-            loss_margin = (confidence_margin - (affinity_normal_mean - affinity_abnormal_mean)).clamp_min(min=0)
+            loss_margin = (args.confidence_margin - (affinity_normal_mean - affinity_abnormal_mean)).clamp_min(min=0)
 
             diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
             loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
@@ -228,6 +227,8 @@ if __name__ == "__main__":
     parser.add_argument('--negsamp_ratio', type=int, default=1)
     parser.add_argument('--mean', type=float, default=0.0)
     parser.add_argument('--var', type=float, default=0.0)
+    parser.add_argument('--confidence_margin', type=float, default=0.7)
+    parser.add_argument('--progregate_alpha', type=float, default=0.1)
     parser.add_argument('--device', type=int, default=0)
 
     parser.add_argument('--pp_k', type=int, default=2)
