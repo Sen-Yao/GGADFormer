@@ -196,7 +196,7 @@ def train(args):
                             "train_loss_bce": loss_bce.item(),
                             "rec_loss": loss_rec.item(),
                             "train_loss": loss.item()}, step=epoch)
-            if epoch % 10 == 0:
+            if epoch % 10 == 0 and epoch != 0:
                 model.eval()
                 train_flag = False
                 emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
