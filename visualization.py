@@ -38,39 +38,47 @@ def create_tsne_visualization(features, embeddings, labels, node_types, epoch, d
             outlier_emb = np.array(outlier_emb)
         embeddings = np.concatenate([embeddings, outlier_emb], axis=0)
     
+    # 创建过滤索引：只包含异常节点和属于normal_for_train_idx的正常节点
+    filter_indices = []
+    for i in range(num_nodes):
+        if labels[i] == 1:  # 异常节点
+            filter_indices.append(i)
+        elif i in normal_for_train_idx:  # 属于训练集的正常节点
+            filter_indices.append(i)
+    
+    # 过滤特征和标签
+    filtered_features = features[filter_indices]
+    filtered_labels = labels[filter_indices]
+    filtered_node_types = [node_types[i] for i in filter_indices]
+    
+    # 过滤嵌入（只过滤原始节点，不包括生成的异常节点）
+    filtered_embeddings = embeddings[:num_nodes][filter_indices]
+    
+    # 如果有生成的异常节点，添加到过滤后的嵌入中
+    if outlier_emb is not None and len(outlier_emb) > 0:
+        filtered_embeddings = np.concatenate([filtered_embeddings, outlier_emb], axis=0)
 
     # 创建tsne可视化
     tsne = TSNE(n_components=2, random_state=42, perplexity=30, init='random', learning_rate=200.0)
     
-    # 对原始特征进行tsne
-    features_2d = tsne.fit_transform(features)
+    # 对过滤后的原始特征进行tsne
+    features_2d = tsne.fit_transform(filtered_features)
     
-    # 对嵌入进行tsne
-    embeddings_2d = tsne.fit_transform(embeddings)
+    # 对过滤后的嵌入进行tsne
+    embeddings_2d = tsne.fit_transform(filtered_embeddings)
     print("tsne visualization done! Creating wandb tables...")
-    
-    # 创建用于可视化的节点索引
-    # 只包含异常节点和属于normal_for_generation_idx的正常节点
-    visualization_indices = []
-    
-    for i in range(len(features_2d)):
-        # 如果是异常节点，或者如果是正常节点且属于normal_for_generation_idx，则包含在可视化中
-        if labels[i] == 1 or (labels[i] == 0 and i in normal_for_generation_idx):
-            visualization_indices.append(i)
-    
+    # 创建wandb表格
     # 原始特征空间的tsne
     feature_table_data = []
-    for i in visualization_indices:
+    for i in range(len(features_2d)):
         feature_table_data.append([
-            f"Node_{i}",
             float(features_2d[i, 0]),
             float(features_2d[i, 1]),
-            int(labels[i]),
-            node_types[i]
+            filtered_node_types[i]
         ])
     
     feature_table = wandb.Table(
-        columns=["Node_ID", "TSNE_X", "TSNE_Y", "Label", "Node_Type"],
+        columns=["TSNE_X", "TSNE_Y", "Node_Type"],
         data=feature_table_data
     )
     
@@ -78,13 +86,9 @@ def create_tsne_visualization(features, embeddings, labels, node_types, epoch, d
     embedding_table_data = []
     for i in range(len(embeddings_2d)):
         # 对于生成的异常节点，使用默认标签和类型
-        if i < len(labels):
-            # 只包含异常节点和属于normal_for_generation_idx的正常节点
-            if labels[i] == 1 or (labels[i] == 0 and i in normal_for_generation_idx):
-                label = int(labels[i])
-                node_type = node_types[i]
-            else:
-                continue  # 跳过不属于normal_for_generation_idx的正常节点
+        if i < len(filtered_labels):
+            label = int(filtered_labels[i])
+            node_type = filtered_node_types[i]
         else:
             label = 1  # 生成的异常节点标签为1
             node_type = "generated_anomaly"

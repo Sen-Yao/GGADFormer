@@ -243,50 +243,50 @@ def train(args):
                     best_epoch = epoch
 
     print(f"Training done! Total time: {total_time:.2f} seconds")
-    
-    # 加载最佳模型进行tsne可视化
-    if best_model_state is not None:
-        print("tsne visualization...")
-        model.load_state_dict(best_model_state)
-        model.eval()
-        
-        # 获取所有节点的嵌入
-        train_flag = False
-        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj, 
-                                                                                        normal_for_generation_idx, normal_for_train_idx,
-                                                                                        train_flag, args)
-        
-        # 准备tsne数据
-        # 获取原始特征（去掉batch维度）
-        original_features = concated_input_features.squeeze(0)  # [num_nodes, feature_dim]
-        
-        # 获取嵌入（去掉batch维度）
+    if args.visualize:
+        # 加载最佳模型进行tsne可视化
+        if best_model_state is not None:
+            
+            model.load_state_dict(best_model_state)
+            model.eval()
+            print("running the best model...")
+            # 获取所有节点的嵌入
+            train_flag = False
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj, 
+                                                                                            normal_for_generation_idx, normal_for_train_idx,
+                                                                                            train_flag, args)
+            
+            # 准备tsne数据
+            # 获取原始特征（去掉batch维度）
+            original_features = concated_input_features.squeeze(0)  # [num_nodes, feature_dim]
+            
+            # 获取嵌入（去掉batch维度）
 
-        embeddings = emb.squeeze(0)  # [num_nodes, embedding_dim]
-        
-        # 获取真实标签（去掉batch维度）
-        true_labels = labels.squeeze(0)  # [num_nodes]
+            embeddings = emb.squeeze(0)  # [num_nodes, embedding_dim]
+            
+            # 获取真实标签（去掉batch维度）
+            true_labels = labels.squeeze(0)  # [num_nodes]
 
-        if outlier_emb is None:
-            print("outlier_emb is None")
-            outlier_emb_len = 0
-        else:
-            outlier_emb_len = len(outlier_emb)
-        
-        # 创建节点类型标签
-        node_types = []
-        for i in range(nb_nodes + outlier_emb_len):
-            if i >= nb_nodes:
-                node_types.append("generated_anomaly")
-            elif true_labels[i] == 1:
-                # 真实异常点
-                node_types.append("anomaly") 
+            if outlier_emb is None:
+                print("outlier_emb is None")
+                outlier_emb_len = 0
             else:
-                node_types.append("normal")
-        
-        # 创建tsne可视化
-        create_tsne_visualization(original_features, embeddings, true_labels, node_types, best_epoch, device,
-                                 normal_for_train_idx, normal_for_generation_idx, outlier_emb)
+                outlier_emb_len = len(outlier_emb)
+            
+            # 创建节点类型标签
+            node_types = []
+            for i in range(nb_nodes + outlier_emb_len):
+                if i >= nb_nodes:
+                    node_types.append("generated_anomaly")
+                elif true_labels[i] == 1:
+                    # 真实异常点
+                    node_types.append("anomaly") 
+                else:
+                    node_types.append("normal")
+            
+            # 创建tsne可视化
+            create_tsne_visualization(original_features, embeddings, true_labels, node_types, best_epoch, device,
+                                    normal_for_train_idx, normal_for_generation_idx, outlier_emb)
         
         
 
@@ -310,6 +310,7 @@ if __name__ == "__main__":
     parser.add_argument('--confidence_margin', type=float, default=0.7)
     parser.add_argument('--progregate_alpha', type=float, default=0.1)
     parser.add_argument('--model_type', type=str, default='GGADFormer')
+    parser.add_argument('--visualize', type=bool, default=False)
     parser.add_argument('--device', type=int, default=0)
 
     parser.add_argument('--pp_k', type=int, default=2)
