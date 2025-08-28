@@ -180,4 +180,7 @@ class Model(nn.Module):
         logits = self.fc3(f_2)
         emb[:, normal_for_generation_idx, :] = outlier_emb
 
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb
+        agg_attention_weights = 0
+        con_loss = 0
+
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss

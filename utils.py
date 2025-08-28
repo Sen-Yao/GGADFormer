@@ -7,6 +7,9 @@ import random
 import dgl
 from collections import Counter
 import pandas as pd
+import os
+import torch
+from tqdm import tqdm
 
 def sparse_to_tuple(sparse_mx, insert_batch=False):
     """Convert sparse matrix to tuple representation."""
@@ -473,3 +476,168 @@ def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_
         'generated_anomaly_indices': generated_anomaly_indices,
         'node_types': node_types
     }
+
+def node_seq_feature(features, pk, nk, sample_batch):
+    """
+    跟据特征矩阵采样正负样本
+
+    Args:
+        features: 特征矩阵, size = (N, d)
+        pk: 采样正样本的个数
+        nk: 采样负样本的个数
+        sample_batch: 每次采样的batch大小
+    Returns:
+        nodes_features: 采样之后的特征矩阵, size = (N, 1, K+1, d)
+    """
+
+    nodes_features_p = torch.empty(features.shape[0], pk+1, features.shape[1])
+
+    nodes_features_n = torch.empty(features.shape[0], nk+1, features.shape[1])
+
+    x = features + torch.zeros_like(features)
+    
+    x = torch.nn.functional.normalize(x, dim=1)
+
+    # 构建 batch 采样
+    total_batch = int(features.shape[0]/sample_batch)
+
+    rest_batch = int(features.shape[0]%sample_batch)
+
+    for index_batch in tqdm(range(total_batch)):
+
+        # x_batch, [b,d]
+        # x1_batch, [b,d]
+        # 切片操作左闭右开
+        x_batch = x[(index_batch)*sample_batch:(index_batch+1)*sample_batch,:]
+
+        
+        s = torch.matmul(x_batch, x.transpose(1, 0))
+
+
+        # Begin sampling positive samples
+        # print(s.shape)
+        for i in range(sample_batch):
+            s[i][(index_batch)*(sample_batch) + i] = -1000        #将得到的相似度矩阵的对角线的值置为负的最大值
+
+        topk_values, topk_indices = torch.topk(s, pk, dim=1)
+
+        for index in range(sample_batch):
+
+            nodes_features_p[(index_batch)*sample_batch + index, 0, :] = features[(index_batch)*sample_batch + index]
+            for i in range(pk):
+                nodes_features_p[(index_batch)*sample_batch + index, i+1, :] = features[topk_indices[index][i]]
+
+        # Begin sampling positive samples
+        if nk > 0:
+            all_idx = [i for i in range(s.shape[1])]
+
+            for index in tqdm(range(sample_batch)):
+
+                nce_idx = list(set(all_idx) - set(topk_indices[index].tolist()))
+                
+
+                nce_indices = np.random.choice(nce_idx, nk, replace=True)
+
+                nodes_features_n[(index_batch)*sample_batch + index, 0, :] = features[(index_batch)*sample_batch + index]
+                for i in range(nk):
+                    nodes_features_n[(index_batch)*sample_batch + index, i+1, :] = features[nce_indices[i]]
+
+    if rest_batch > 0:
+
+        x_batch = x[(total_batch)*sample_batch:(total_batch)*sample_batch + rest_batch,:]
+        x = x
+        # print(f"x_batch.shape: {x_batch.shape}, x.shape: {x.shape}")
+
+        s = torch.matmul(x_batch, x.transpose(1, 0))
+
+        print("------------begin sampling positive samples------------")
+
+        #采正样本
+        for i in range(rest_batch):
+            s[i][(total_batch)*sample_batch + i] = -1000         #将得到的相似度矩阵的对角线的值置为负的最大值
+
+        topk_values, topk_indices = torch.topk(s, pk, dim=1)
+        # print(topk_indices.shape)
+
+        for index in range(rest_batch):
+            nodes_features_p[(total_batch)*sample_batch + index, 0, :] = features[(total_batch)*sample_batch + index]
+            for i in range(pk):
+                nodes_features_p[(total_batch)*sample_batch + index, i+1, :] = features[topk_indices[index][i]]
+
+
+        print("------------begin sampling negative samples------------")
+
+        #采负样本
+        if nk > 0:
+            all_idx = [i for i in range(s.shape[1])]
+
+            for index in tqdm(range(rest_batch)):
+
+                nce_idx = list(set(all_idx) - set(topk_indices[index].tolist()))
+                
+
+                nce_indices = np.random.choice(nce_idx, nk, replace=False)
+                # print(nce_indices)
+
+                # print((index_batch)*sample_batch + index)
+                # print(nce_indices)
+
+
+                nodes_features_n[(total_batch)*sample_batch + index, 0, :] = features[(total_batch)*sample_batch + index]
+                for i in range(nk):
+                    nodes_features_n[(total_batch)*sample_batch + index, i+1, :] = features[nce_indices[i]]
+
+
+    nodes_features = torch.concat((nodes_features_p, nodes_features_n), dim=1)
+    
+
+    # print(nodes_features_p.shape)
+    # print(nodes_features_n.shape)
+    # print(nodes_features.shape)
+
+    return nodes_features
+
+def preprocess_sample_features(args, features, adj):
+    """
+    基于节点序列采样方法，准备预处理特征矩阵
+    Args:
+        args: 输入的训练参数
+        features: 特征矩阵, size = (N, d)
+    Returns:
+        features: 预处理后的特征矩阵, size = (N, args.sample_num_p+1 + args.sample_num_n+1, d)
+    """
+    # 检查./pretrain目录是否存在，不存在则创建
+    pretrain_dir = './pretrain'
+    if not os.path.exists(pretrain_dir):
+        os.makedirs(pretrain_dir)
+
+    data_file = './pretrain/pre_sample/'+args.dataset +'_'+str(args.sample_num_p)+'_'+str(args.sample_num_n)+"_"+str(args.pp_k)+'.pt'
+    if os.path.isfile(data_file):
+        processed_features = torch.load(data_file)
+
+    else:
+        processed_features = node_seq_feature(features, args.sample_num_p, args.sample_num_n, args.sample_size)  # return (N, hops+1, d)
+
+        if args.pp_k > 0:
+
+            data_file_ppr = './pretrain/pre_features'+args.dataset +'_'+str(args.pp_k)+'.pt'
+
+            if os.path.isfile(data_file_ppr):
+                ppr_features = torch.load(data_file_ppr)
+
+            else:
+                ppr_features = node_neighborhood_feature(adj, features, args.pp_k, args.progregate_alpha)  # return (N, d)
+                # store the data 
+                torch.save(ppr_features, data_file_ppr)
+
+            ppr_processed_features = node_seq_feature(ppr_features, args.sample_num_p, args.sample_num_n, args.sample_size)
+
+            processed_features = torch.concat((processed_features, ppr_processed_features), dim=1)
+
+        # store the data
+        # 检查父目录是否存在，如果不存在则创建
+        if not os.path.exists(os.path.dirname(data_file)):
+            os.makedirs(os.path.dirname(data_file))
+        torch.save(processed_features, data_file)
+    # return (N, sample_num_p+1 + args.sample_num_n+1, d)
+    return processed_features

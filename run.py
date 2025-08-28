@@ -2,6 +2,7 @@ import torch.nn as nn
 
 from model import Model
 from GGADFormer import GGADFormer
+from SGT import SGT
 from utils import *
 
 from sklearn.metrics import roc_auc_score
@@ -86,11 +87,21 @@ def train(args):
 
     # Initialize model and optimiser
 
-
     if args.model_type == 'GGADFormer':
         progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k, args.progregate_alpha).to(args.device).unsqueeze(0)
         concated_input_features = torch.concat((features.to(args.device), progregated_features), dim=2)
         model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
+    elif args.model_type == 'SGT':
+        concated_input_features = preprocess_sample_features(args, features.squeeze(0), adj.squeeze(0)).to(args.device)
+        model = SGT(n_layers=args.GT_num_layers,
+            input_dim=concated_input_features.shape[-1],
+            hidden_dim=args.embedding_dim,
+            n_class=2,
+            num_heads=args.GT_num_heads,
+            ffn_dim=args.GT_ffn_dim,
+            dropout_rate=args.GT_dropout,
+            attention_dropout_rate=args.GT_attention_dropout,
+            args=args).to(device)
     elif args.model_type == 'GGAD':
         concated_input_features = features.to(args.device)
         model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout, args)
@@ -119,7 +130,7 @@ def train(args):
 
             # Train model
             train_flag = True
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _ = model(concated_input_features, adj,
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss = model(concated_input_features, adj,
                                                                     normal_for_generation_idx, normal_for_train_idx,
                                                                     train_flag, args)
             if epoch % 10 == 0:
@@ -175,7 +186,7 @@ def train(args):
             diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
             loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
 
-            loss = args.margin_loss_weight * loss_margin + 1 * loss_bce + 1 * loss_rec
+            loss = args.margin_loss_weight * loss_margin + 1 * loss_bce + 1 * loss_rec + args.con_loss_weight * con_loss
 
             loss.backward()
             optimiser.step()
@@ -202,14 +213,14 @@ def train(args):
                 # print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
                 # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
                 # print("=====================================================================")
-                wandb.log({"train_loss_margin": loss_margin.item(), 
-                            "train_loss_bce": loss_bce.item(),
+                wandb.log({ "bce_loss": loss_bce.item(),
                             "rec_loss": loss_rec.item(),
+                            "con_loss": con_loss.item(),
                             "train_loss": loss.item()}, step=epoch)
             if epoch % 10 == 0 and epoch != 0:
                 model.eval()
                 train_flag = False
-                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _ = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
+                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                         train_flag, args)
                 # evaluation on the valid and test node
                 # 在eval阶段，我们需要为所有节点生成logits
@@ -243,7 +254,7 @@ def train(args):
                     best_epoch = epoch
 
     print(f"Training done! Total time: {total_time:.2f} seconds")
-    if args.visualize:
+    if args.visualize and args.model_type != 'SGT':
         # 加载最佳模型进行tsne可视化
         if best_model_state is not None:
             
@@ -317,12 +328,17 @@ if __name__ == "__main__":
     parser.add_argument('--mean', type=float, default=0.0)
     parser.add_argument('--var', type=float, default=0.0)
     parser.add_argument('--confidence_margin', type=float, default=0.7)
-    parser.add_argument('--progregate_alpha', type=float, default=0.1)
+    
     parser.add_argument('--model_type', type=str, default='GGADFormer')
     parser.add_argument('--visualize', type=bool, default=False)
     parser.add_argument('--device', type=int, default=0)
 
     parser.add_argument('--pp_k', type=int, default=2)
+    parser.add_argument('--progregate_alpha', type=float, default=0.1)
+    parser.add_argument('--sample_num_p', type=int, default=7)
+    parser.add_argument('--sample_num_n', type=int, default=7)
+    parser.add_argument('--sample_size', type=int, default=10000)
+
     parser.add_argument('--GT_ffn_dim', type=int, default=128)
     parser.add_argument('--GT_dropout', type=float, default=0.5)
     parser.add_argument('--GT_attention_dropout', type=float, default=0.5)
@@ -330,6 +346,8 @@ if __name__ == "__main__":
     parser.add_argument('--GT_num_layers', type=int, default=3)
 
     parser.add_argument('--margin_loss_weight', type=float, default=1.0)
+    parser.add_argument('--con_loss_weight', type=float, default=1.0)
+    parser.add_argument('--con_loss_temp', type=float, default=10)
 
 
 
@@ -389,6 +407,8 @@ if __name__ == "__main__":
         wandb.finish()
     
     except Exception as e:
+        import traceback
         print(f"其他错误：{e}")
+        traceback.print_exc()  # 打印详细的错误堆栈，包括出错的代码行
         wandb.log({"AUC.max": 0})
         wandb.finish()

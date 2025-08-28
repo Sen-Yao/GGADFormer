@@ -250,7 +250,9 @@ class GGADFormer(nn.Module):
         logits = self.fc3(f_2)
         emb[:, normal_for_generation_idx, :] = outlier_emb
 
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights
+        con_loss = 0
+
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss
     
     def calculate_local_perturbation(self, emb_sampled, full_embeddings, agg_attention_weights, sample_normal_idx, adj, args):
         """
