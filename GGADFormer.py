@@ -202,6 +202,9 @@ class GGADFormer(nn.Module):
             emb, current_attention_weights = self.layers[i](emb)
             if i == len(self.layers) - 1: # 拿到最后一层的注意力
                 attention_weights = current_attention_weights
+                # 聚合多头注意力
+                agg_attention_weights = torch.mean(attention_weights, dim=1)
+                # agg_attention_weights: [1, num_nodes, num_nodes]
         emb = self.final_ln(emb)
         # emb: [1, num_nodes, hidden_dim]
 
@@ -247,7 +250,7 @@ class GGADFormer(nn.Module):
         logits = self.fc3(f_2)
         emb[:, normal_for_generation_idx, :] = outlier_emb
 
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights
     
     def calculate_local_perturbation(self, emb_sampled, full_embeddings, agg_attention_weights, sample_normal_idx, adj, args):
         """

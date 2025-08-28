@@ -278,3 +278,130 @@ def draw_pdf_methods(method, message_normal, message_abnormal, message_real_abno
     # plt.title('BlogCatalog', fontsize=50)
     plt.savefig('fig/{}/{}2/{}_{}.svg'.format(method, dataset, dataset, epoch))
     plt.close()
+
+
+def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_idx, normal_for_generation_idx, 
+                               outlier_emb, epoch, dataset_name, device):
+    """
+    分析注意力权重，将原始注意力数据保存到wandb table中
+    
+    Args:
+        agg_attention_weights: 注意力权重矩阵 [1, num_nodes, num_nodes]
+        labels: 真实标签 [1, num_nodes]
+        normal_for_train_idx: 用于训练的正常节点索引
+        normal_for_generation_idx: 用于生成异常节点的正常节点索引
+        outlier_emb: 生成的异常节点嵌入
+        epoch: 当前epoch
+        dataset_name: 数据集名称
+        device: 设备
+    """
+    import wandb
+    
+    # 将注意力权重从GPU移到CPU并转换为numpy
+    attention_weights = agg_attention_weights.squeeze(0).detach().cpu().numpy()  # [num_nodes, num_nodes]
+    labels_np = labels.squeeze(0).detach().cpu().numpy()  # [num_nodes]
+    
+    # 获取节点数量
+    num_nodes = attention_weights.shape[0]
+    
+    # 计算生成的异常节点数量
+    if outlier_emb is None:
+        outlier_emb_len = 0
+    else:
+        outlier_emb_len = len(outlier_emb)
+    
+    # 创建节点类型标签
+    node_types = []
+    for i in range(num_nodes):
+        if i >= num_nodes - outlier_emb_len:
+            node_types.append("generated_anomaly")
+        elif labels_np[i] == 1:
+            node_types.append("anomaly")
+        else:
+            node_types.append("normal")
+    
+    # 将节点类型转换为numpy数组
+    node_types = np.array(node_types)
+    
+    # 分别获取正常节点和异常节点的索引
+    normal_indices = np.where(node_types == "normal")[0]
+    anomaly_indices = np.where(node_types == "anomaly")[0]
+    generated_anomaly_indices = np.where(node_types == "generated_anomaly")[0]
+    
+    print(f"节点统计: 正常={len(normal_indices)}, 异常={len(anomaly_indices)}, 生成异常={len(generated_anomaly_indices)}")
+    
+    # 1. 从正常点中选取前len(anomaly_indices)个，保证正常点和异常点数量相似
+    if len(anomaly_indices) > 0 and len(normal_indices) > 0:
+        max_sample_num = 100
+        sampled_normal_count = min(len(anomaly_indices), len(normal_indices))
+        sampled_normal_indices = normal_indices[:max_sample_num]
+        sampled_anomaly_indices = anomaly_indices[:max_sample_num]
+        
+        print(f"采样节点数量: {max_sample_num}")
+        
+        # 2. 记录每个采样出来的正常点关于其他全部正常点的注意力
+        normal_to_normal_data = []
+        for i, source_node in enumerate(sampled_normal_indices):
+            for j, target_node in enumerate(sampled_normal_indices):
+                attention_value = attention_weights[source_node, target_node]
+                normal_to_normal_data.append([
+                    source_node, target_node, attention_value
+                ])
+        print("Finished saving normal to normal attention weights")
+        # 3. 记录每个采样出来的正常点关于其他全部异常点的注意力
+        normal_to_anomaly_data = []
+        for i, source_node in enumerate(sampled_normal_indices):
+            for j, target_node in enumerate(sampled_anomaly_indices):
+                attention_value = attention_weights[source_node, target_node]
+                normal_to_anomaly_data.append([
+                    source_node, target_node, attention_value
+                ])
+        print("Finished saving normal to anomaly attention weights")
+        # 4. 记录每个异常点关于其他全部异常点的注意力
+        anomaly_to_anomaly_data = []
+        for i, source_node in enumerate(sampled_anomaly_indices):
+            for j, target_node in enumerate(sampled_anomaly_indices):
+                attention_value = attention_weights[source_node, target_node]
+                anomaly_to_anomaly_data.append([
+                    source_node, target_node, attention_value
+                ])
+        print("Saving attention weights to wandb table...")
+        # 保存到wandb table
+        wandb.log({
+            f"attention_tables/normal_to_normal_epoch_{epoch}": wandb.Table(
+                columns=["source_node", "target_node", "attention_weight"],
+                data=normal_to_normal_data
+            ),
+            f"attention_tables/normal_to_anomaly_epoch_{epoch}": wandb.Table(
+                columns=["source_node", "target_node", "attention_weight"],
+                data=normal_to_anomaly_data
+            ),
+            f"attention_tables/anomaly_to_anomaly_epoch_{epoch}": wandb.Table(
+                columns=["source_node", "target_node", "attention_weight"],
+                data=anomaly_to_anomaly_data
+            )
+        })
+        
+        print(f"注意力权重数据已保存到wandb table:")
+        print(f"  正常->正常: {len(normal_to_normal_data)} 个数据点")
+        print(f"  正常->异常: {len(normal_to_anomaly_data)} 个数据点")
+        print(f"  异常->异常: {len(anomaly_to_anomaly_data)} 个数据点")
+        
+    else:
+        print("警告: 没有足够的正常节点或异常节点进行分析")
+        wandb.log({
+            f"attention_analysis/num_normal_nodes": len(normal_indices),
+            f"attention_analysis/num_anomaly_nodes": len(anomaly_indices),
+            f"attention_analysis/num_generated_anomaly_nodes": len(generated_anomaly_indices),
+            f"attention_analysis/sampled_normal_count": 0,
+            f"attention_analysis/normal_to_normal_pairs": 0,
+            f"attention_analysis/normal_to_anomaly_pairs": 0,
+            f"attention_analysis/anomaly_to_anomaly_pairs": 0,
+        })
+    
+    return {
+        'normal_indices': normal_indices,
+        'anomaly_indices': anomaly_indices,
+        'generated_anomaly_indices': generated_anomaly_indices,
+        'node_types': node_types
+    }

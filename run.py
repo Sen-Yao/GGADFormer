@@ -119,7 +119,7 @@ def train(args):
 
             # Train model
             train_flag = True
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj,
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _ = model(concated_input_features, adj,
                                                                     normal_for_generation_idx, normal_for_train_idx,
                                                                     train_flag, args)
             if epoch % 10 == 0:
@@ -209,7 +209,7 @@ def train(args):
             if epoch % 10 == 0 and epoch != 0:
                 model.eval()
                 train_flag = False
-                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
+                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _ = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                         train_flag, args)
                 # evaluation on the valid and test node
                 # 在eval阶段，我们需要为所有节点生成logits
@@ -252,7 +252,7 @@ def train(args):
             print("running the best model...")
             # 获取所有节点的嵌入
             train_flag = False
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb = model(concated_input_features, adj, 
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights = model(concated_input_features, adj, 
                                                                                             normal_for_generation_idx, normal_for_train_idx,
                                                                                             train_flag, args)
             
@@ -287,6 +287,13 @@ def train(args):
             # 创建tsne可视化
             create_tsne_visualization(original_features, embeddings, true_labels, node_types, best_epoch, device,
                                     normal_for_train_idx, normal_for_generation_idx, outlier_emb)
+            
+            # 可视化注意力权重
+            print("开始分析注意力权重...")
+            attention_stats = visualize_attention_weights(agg_attention_weights, labels, normal_for_train_idx, 
+                                                        normal_for_generation_idx, outlier_emb, best_epoch, 
+                                                        args.dataset, device)
+            print("注意力权重分析完成！")
         
         
 
