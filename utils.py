@@ -332,7 +332,7 @@ def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_
     
     # 1. 从正常点中选取前len(anomaly_indices)个，保证正常点和异常点数量相似
     if len(anomaly_indices) > 0 and len(normal_indices) > 0:
-        max_sample_num = 100
+        max_sample_num = 50
         sampled_normal_count = min(len(anomaly_indices), len(normal_indices))
         sampled_normal_indices = normal_indices[:max_sample_num]
         sampled_anomaly_indices = anomaly_indices[:max_sample_num]
@@ -345,7 +345,7 @@ def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_
             for j, target_node in enumerate(sampled_normal_indices):
                 attention_value = attention_weights[source_node, target_node]
                 normal_to_normal_data.append([
-                    source_node, target_node, attention_value
+                    "normal", "normal", source_node, target_node, attention_value
                 ])
         print("Finished saving normal to normal attention weights")
         # 3. 记录每个采样出来的正常点关于其他全部异常点的注意力
@@ -354,7 +354,7 @@ def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_
             for j, target_node in enumerate(sampled_anomaly_indices):
                 attention_value = attention_weights[source_node, target_node]
                 normal_to_anomaly_data.append([
-                    source_node, target_node, attention_value
+                     "normal", "abnormal", source_node, target_node, attention_value
                 ])
         print("Finished saving normal to anomaly attention weights")
         # 4. 记录每个异常点关于其他全部异常点的注意力
@@ -363,22 +363,43 @@ def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_
             for j, target_node in enumerate(sampled_anomaly_indices):
                 attention_value = attention_weights[source_node, target_node]
                 anomaly_to_anomaly_data.append([
-                    source_node, target_node, attention_value
+                    "abnormal", "abnormal", source_node, target_node, attention_value
+                ])
+    
+        # 5. 记录前一百个正常点和异常点的注意力
+        all_to_all_data = []
+        # 拼接采样的正常点和异常点索引
+        all_sampled_indices = np.concatenate([sampled_normal_indices, sampled_anomaly_indices])
+        for i, source_node in enumerate(all_sampled_indices):
+            for j, target_node in enumerate(all_sampled_indices):
+                attention_value = attention_weights[source_node, target_node]
+                all_to_all_data.append([
+                    i,
+                    j,
+                    "normal" if source_node in sampled_normal_indices else "abnormal", 
+                    "normal" if target_node in sampled_normal_indices else "abnormal", 
+                    source_node, 
+                    target_node, 
+                    attention_value
                 ])
         print("Saving attention weights to wandb table...")
         # 保存到wandb table
         wandb.log({
             f"attention_tables/normal_to_normal_epoch_{epoch}": wandb.Table(
-                columns=["source_node", "target_node", "attention_weight"],
+                columns=["source_type", "target_type", "source_node", "target_node", "attention_weight"],
                 data=normal_to_normal_data
             ),
             f"attention_tables/normal_to_anomaly_epoch_{epoch}": wandb.Table(
-                columns=["source_node", "target_node", "attention_weight"],
+                columns=["source_type", "target_type", "source_node", "target_node", "attention_weight"],
                 data=normal_to_anomaly_data
             ),
             f"attention_tables/anomaly_to_anomaly_epoch_{epoch}": wandb.Table(
-                columns=["source_node", "target_node", "attention_weight"],
+                columns=["source_type", "target_type", "source_node", "target_node", "attention_weight"],
                 data=anomaly_to_anomaly_data
+            ),
+            f"attention_tables/all_to_all_epoch_{epoch}": wandb.Table(
+                columns=["index_1", "index_2", "source_type", "target_type", "source_node", "target_node", "attention_weight"],
+                data=all_to_all_data
             )
         })
         
