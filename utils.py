@@ -6,7 +6,7 @@ import scipy.io as sio
 import random
 import dgl
 from collections import Counter
-
+import pandas as pd
 
 def sparse_to_tuple(sparse_mx, insert_batch=False):
     """Convert sparse matrix to tuple representation."""
@@ -281,7 +281,7 @@ def draw_pdf_methods(method, message_normal, message_abnormal, message_real_abno
 
 
 def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_idx, normal_for_generation_idx, 
-                               outlier_emb, epoch, dataset_name, device):
+                               outlier_emb, epoch, dataset_name, device, adj_matrix=None):
     """
     分析注意力权重，将原始注意力数据保存到wandb table中
     
@@ -294,6 +294,7 @@ def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_
         epoch: 当前epoch
         dataset_name: 数据集名称
         device: 设备
+        adj_matrix: 邻接矩阵，用于判断节点间的邻居关系
     """
     import wandb
     
@@ -338,7 +339,7 @@ def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_
         sampled_anomaly_indices = anomaly_indices[:max_sample_num]
         
         print(f"采样节点数量: {max_sample_num}")
-        
+        '''
         # 2. 记录每个采样出来的正常点关于其他全部正常点的注意力
         normal_to_normal_data = []
         for i, source_node in enumerate(sampled_normal_indices):
@@ -365,8 +366,8 @@ def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_
                 anomaly_to_anomaly_data.append([
                     "abnormal", "abnormal", source_node, target_node, attention_value
                 ])
-    
-        # 5. 记录前一百个正常点和异常点的注意力
+        '''
+        # 记录前一百个正常点和异常点的注意力
         all_to_all_data = []
         # 拼接采样的正常点和异常点索引
         all_sampled_indices = np.concatenate([sampled_normal_indices, sampled_anomaly_indices])
@@ -382,21 +383,15 @@ def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_
                     target_node, 
                     attention_value
                 ])
+        df = pd.DataFrame(all_to_all_data, columns=["index_1", "index_2", "source_type", "target_type", "source_node", "target_node", "attention_weight"])
+
+         # 按 source_type 分组并计算方差
+        variance_by_type = df.groupby('source_type')['attention_weight'].var().to_dict()
+
+        print(variance_by_type)
         print("Saving attention weights to wandb table...")
         # 保存到wandb table
         wandb.log({
-            f"attention_tables/normal_to_normal_epoch_{epoch}": wandb.Table(
-                columns=["source_type", "target_type", "source_node", "target_node", "attention_weight"],
-                data=normal_to_normal_data
-            ),
-            f"attention_tables/normal_to_anomaly_epoch_{epoch}": wandb.Table(
-                columns=["source_type", "target_type", "source_node", "target_node", "attention_weight"],
-                data=normal_to_anomaly_data
-            ),
-            f"attention_tables/anomaly_to_anomaly_epoch_{epoch}": wandb.Table(
-                columns=["source_type", "target_type", "source_node", "target_node", "attention_weight"],
-                data=anomaly_to_anomaly_data
-            ),
             f"attention_tables/all_to_all_epoch_{epoch}": wandb.Table(
                 columns=["index_1", "index_2", "source_type", "target_type", "source_node", "target_node", "attention_weight"],
                 data=all_to_all_data
@@ -404,9 +399,61 @@ def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_
         })
         
         print(f"注意力权重数据已保存到wandb table:")
-        print(f"  正常->正常: {len(normal_to_normal_data)} 个数据点")
-        print(f"  正常->异常: {len(normal_to_anomaly_data)} 个数据点")
-        print(f"  异常->异常: {len(anomaly_to_anomaly_data)} 个数据点")
+        # print(f"  正常->正常: {len(normal_to_normal_data)} 个数据点")
+        # print(f"  正常->异常: {len(normal_to_anomaly_data)} 个数据点")
+        # print(f"  异常->异常: {len(anomaly_to_anomaly_data)} 个数据点")
+        
+        # 添加画图功能：记录选定节点关于其他节点的注意力
+        print("开始生成节点注意力分析图...")
+        
+        # 获取邻接矩阵信息（从原始数据中获取）
+        # 这里需要从外部传入邻接矩阵，暂时使用一个简单的判断方法
+        # 在实际使用时，您需要将邻接矩阵作为参数传入
+        
+        # 选择一个正常节点和一个异常节点进行分析
+        if len(normal_indices) > 0 and len(anomaly_indices) > 0:
+            selected_normal_node = normal_indices[0]  # 选择第一个正常节点
+            selected_anomaly_node = anomaly_indices[0]  # 选择第一个异常节点
+            
+            # 分析正常节点的注意力分布
+            normal_node_attention_data = []
+            for target_node in range(num_nodes):
+                attention_value = attention_weights[selected_normal_node, target_node]
+                target_type = "normal" if target_node in normal_indices else ("anomaly" if target_node in anomaly_indices else "generated_anomaly")
+                
+                # 判断是否为邻居
+
+                is_neighbor = adj_matrix[selected_normal_node, target_node] > 0                
+                normal_node_attention_data.append([
+                    target_node,  target_type, 
+                    attention_value, is_neighbor
+                ])
+            
+            # 分析异常节点的注意力分布
+            anomaly_node_attention_data = []
+            for target_node in range(num_nodes):
+                attention_value = attention_weights[selected_anomaly_node, target_node]
+                target_type = "normal" if target_node in normal_indices else ("anomaly" if target_node in anomaly_indices else "generated_anomaly")
+                
+                # 判断是否为邻居
+                is_neighbor = adj_matrix[selected_anomaly_node, target_node] > 0
+                
+                anomaly_node_attention_data.append([
+                    target_node,  target_type, 
+                    attention_value, is_neighbor
+                ])
+            
+            # 保存到wandb table
+            wandb.log({
+                f"attention_analysis/normal_node_attention_epoch_{epoch}": wandb.Table(
+                    columns=["target_node", "target_type", "attention_weight", "is_neighbor"],
+                    data=normal_node_attention_data
+                ),
+                f"attention_analysis/anomaly_node_attention_epoch_{epoch}": wandb.Table(
+                    columns=["target_node", "target_type", "attention_weight", "is_neighbor"],
+                    data=anomaly_node_attention_data
+                )
+            })
         
     else:
         print("警告: 没有足够的正常节点或异常节点进行分析")
