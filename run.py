@@ -254,7 +254,7 @@ def train(args):
                     best_epoch = epoch
 
     print(f"Training done! Total time: {total_time:.2f} seconds")
-    if args.visualize and args.model_type != 'SGT':
+    if args.visualize:
         # 加载最佳模型进行tsne可视化
         if best_model_state is not None:
             
@@ -263,13 +263,13 @@ def train(args):
             print("running the best model...")
             # 获取所有节点的嵌入
             train_flag = False
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights = model(concated_input_features, adj, 
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, _ = model(concated_input_features, adj, 
                                                                                             normal_for_generation_idx, normal_for_train_idx,
                                                                                             train_flag, args)
             
             # 准备tsne数据
-            # 获取原始特征（去掉batch维度）
-            original_features = concated_input_features.squeeze(0)  # [num_nodes, feature_dim]
+            # 获取原始特征
+            original_features = features.squeeze(0)
             
             # 获取嵌入（去掉batch维度）
 
@@ -305,7 +305,7 @@ def train(args):
             adj_matrix_np = adj.squeeze(0).detach().cpu().numpy()
             attention_stats = visualize_attention_weights(agg_attention_weights, labels, normal_for_train_idx, 
                                                         normal_for_generation_idx, outlier_emb, best_epoch, 
-                                                        args.dataset, device, adj_matrix_np)
+                                                        args.dataset, device, adj_matrix_np, args)
             print("注意力权重分析完成！")
         
         

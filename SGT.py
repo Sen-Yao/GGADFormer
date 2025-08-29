@@ -66,10 +66,10 @@ class MultiHeadAttention(nn.Module):
         if attn_bias is not None:
             x = x + attn_bias
 
-        x = torch.softmax(x, dim=3)
+        # 这里的 x 就是经过 softmax 归一化的注意力权重
+        attention_weights = torch.softmax(x, dim=3)
 
-        # print(x)
-        x = self.att_dropout(x)
+        x = self.att_dropout(attention_weights) # Dropout 应用于注意力权重
 
 
         x = x.matmul(v)  # [b, h, q_len, attn]
@@ -80,7 +80,7 @@ class MultiHeadAttention(nn.Module):
         x = self.output_layer(x)
 
         assert x.size() == orig_q_size
-        return x
+        return x, attention_weights
 
 
 class EncoderLayer(nn.Module):
@@ -103,7 +103,7 @@ class EncoderLayer(nn.Module):
 
 
         y = self.self_attention_norm(x)
-        y = self.self_attention(y, y, y, attn_bias)
+        y, attention_weights = self.self_attention(y, y, y, attn_bias)
         y = self.self_attention_dropout(y)
         x = x + y
         ## 实现的是transformer 和 FFN的LayerNorm 以及相关操作
@@ -113,7 +113,7 @@ class EncoderLayer(nn.Module):
         y = self.ffn_dropout(y)
         x = x + y
 
-        return x
+        return x, attention_weights
 
 
 class SGT(nn.Module):
@@ -217,11 +217,21 @@ class SGT(nn.Module):
 
         for i, l in enumerate(self.layers):
 
-            node_n = self.layers[i](node_n)
-            node_p = self.layers[i](node_p)
+            node_n, node_n_attention_weights = self.layers[i](node_n)
+            node_p, node_p_attention_weights = self.layers[i](node_p)
 
-            hop_n = self.layers[i](hop_n)
-            hop_p = self.layers[i](hop_p)
+            hop_n, hop_n_attention_weights = self.layers[i](hop_n)
+            hop_p, hop_p_attention_weights = self.layers[i](hop_p)
+            if i == len(self.layers) - 1: # 拿到最后一层的注意力
+                # node_n_attention_weights: [num_nodes, sample_num_n+1, sample_num_n+1]
+                # node_p_attention_weights: [num_nodes, sample_num_p+1, sample_num_p+1]
+                # hop_n_attention_weights: [num_nodes, sample_num_n+1, sample_num_n+1]
+                # hop_p_attention_weights: [num_nodes, sample_num_p+1, sample_num_p+1]
+                node_n_attention_weights = torch.mean(node_n_attention_weights, dim=1)
+                node_p_attention_weights = torch.mean(node_p_attention_weights, dim=1)
+                hop_n_attention_weights = torch.mean(hop_n_attention_weights, dim=1)
+                hop_p_attention_weights = torch.mean(hop_p_attention_weights, dim=1)
+                agg_attention_weights = [node_n_attention_weights, node_p_attention_weights, hop_n_attention_weights, hop_p_attention_weights]
 
         node_p = self.final_ln(node_p)
         node_n = self.final_ln(node_n)
@@ -275,8 +285,6 @@ class SGT(nn.Module):
 
         else:
             con_loss = 0
-
-        agg_attention_weights = 0
 
         return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss
 
