@@ -186,7 +186,7 @@ def train(args):
             diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
             loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
 
-            loss = args.margin_loss_weight * loss_margin + 1 * loss_bce + args.rec_loss_weight * loss_rec + args.con_loss_weight * con_loss
+            loss = args.margin_loss_weight * loss_margin + args.bce_loss_weight * loss_bce + args.rec_loss_weight * loss_rec + args.con_loss_weight * con_loss
 
             loss.backward()
             optimiser.step()
@@ -346,6 +346,7 @@ if __name__ == "__main__":
     parser.add_argument('--GT_num_layers', type=int, default=3)
 
     parser.add_argument('--rec_loss_weight', type=float, default=1.0)
+    parser.add_argument('--bce_loss_weight', type=float, default=1.0)
     parser.add_argument('--margin_loss_weight', type=float, default=1.0)
     parser.add_argument('--con_loss_weight', type=float, default=1.0)
     parser.add_argument('--con_loss_temp', type=float, default=10)
