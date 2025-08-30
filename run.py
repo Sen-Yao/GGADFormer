@@ -108,7 +108,15 @@ def train(args):
     else:
         raise ValueError(f"Invalid model type: {args.model_type}")
 
-    optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=args.peak_lr, weight_decay=args.weight_decay)
+    lr_scheduler = PolynomialDecayLR(
+        optimizer,
+        warmup_updates=int(0.1 * args.num_epoch),
+        tot_updates=args.num_epoch,
+        lr=args.peak_lr,
+        end_lr=args.end_lr,
+        power=1.0,
+    )
 
     # 损失函数设置
     b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]).to(device))
@@ -126,7 +134,7 @@ def train(args):
         for epoch in range(args.num_epoch):
             start_time = time.time()
             model.train()
-            optimiser.zero_grad()
+            optimizer.zero_grad()
 
             # Train model
             train_flag = True
@@ -189,13 +197,18 @@ def train(args):
             loss = args.margin_loss_weight * loss_margin + args.bce_loss_weight * loss_bce + args.rec_loss_weight * loss_rec + args.con_loss_weight * con_loss
 
             loss.backward()
-            optimiser.step()
+            optimizer.step()
+            lr_scheduler.step()
             end_time = time.time()
             total_time += end_time - start_time
+            
+            # 获取当前学习率
+            current_lr = optimizer.param_groups[0]['lr']
             
             # 更新进度条信息
             pbar.set_postfix({
                 'Loss': f'{loss.item():.4f}',
+                'LR': f'{current_lr:.2e}',
                 'Time': f'{total_time:.1f}s',
                 'Epoch': f'{epoch+1}/{args.num_epoch}'
             })
@@ -216,7 +229,8 @@ def train(args):
                 wandb.log({ "bce_loss": loss_bce.item(),
                             "rec_loss": loss_rec.item(),
                             "con_loss": con_loss.item(),
-                            "train_loss": loss.item()}, step=epoch)
+                            "train_loss": loss.item(),
+                            "learning_rate": current_lr}, step=epoch)
             if epoch % 10 == 0 and epoch != 0:
                 model.eval()
                 train_flag = False
@@ -351,6 +365,10 @@ if __name__ == "__main__":
     parser.add_argument('--con_loss_weight', type=float, default=1.0)
     parser.add_argument('--con_loss_temp', type=float, default=10)
 
+    parser.add_argument('--warmup_updates', type=int, default=100)
+    parser.add_argument('--tot_updates', type=int, default=1000)
+    parser.add_argument('--peak_lr', type=float, default=1e-4)    
+    parser.add_argument('--end_lr', type=float, default=1e-6)
 
 
     args = parser.parse_args()
