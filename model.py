@@ -181,6 +181,6 @@ class Model(nn.Module):
         emb[:, normal_for_generation_idx, :] = outlier_emb
 
         agg_attention_weights = 0
-        con_loss = 0
+        con_loss = torch.tensor(0.0, device=emb.device)
 
         return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss
