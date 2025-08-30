@@ -618,7 +618,7 @@ def preprocess_sample_features(args, features, adj):
 
     data_file = './pretrain/pre_sample/'+args.dataset +'_'+str(args.sample_num_p)+'_'+str(args.sample_num_n)+"_"+str(args.pp_k)+'.pt'
     if os.path.isfile(data_file):
-        processed_features = torch.load(data_file)
+        processed_features = torch.load(data_file, map_location='cpu')
 
     else:
         processed_features = node_seq_feature(features, args.sample_num_p, args.sample_num_n, args.sample_size)  # return (N, hops+1, d)
@@ -628,7 +628,7 @@ def preprocess_sample_features(args, features, adj):
             data_file_ppr = './pretrain/pre_features'+args.dataset +'_'+str(args.pp_k)+'.pt'
 
             if os.path.isfile(data_file_ppr):
-                ppr_features = torch.load(data_file_ppr)
+                ppr_features = torch.load(data_file_ppr, map_location='cpu')
 
             else:
                 ppr_features = node_neighborhood_feature(adj, features, args.pp_k, args.progregate_alpha)  # return (N, d)
