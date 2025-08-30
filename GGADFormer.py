@@ -176,6 +176,9 @@ class GGADFormer(nn.Module):
         # 设置设备
         self.device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
         
+        self.gcn1 = GCN(args.embedding_dim, args.embedding_dim, activation)
+        self.gcn2 = GCN(args.embedding_dim, args.embedding_dim, activation)
+
         self.fc1 = nn.Linear(n_h, int(n_h / 2), bias=False)
         self.fc2 = nn.Linear(int(n_h / 2), int(n_h / 4), bias=False)
         self.fc3 = nn.Linear(int(n_h / 4), 1, bias=False)
@@ -197,7 +200,10 @@ class GGADFormer(nn.Module):
     def forward(self, input_tokens, adj, normal_for_generation_idx, normal_for_train_idx, train_flag, args, sparse=False):
         
         attention_weights = None # 初始化注意力权重
+        agg_attention_weights = None 
         emb = self.token_projection(input_tokens)
+        # emb = self.gcn1(emb, adj, sparse)
+        # emb = self.gcn2(emb, adj, sparse)              
         for i, l in enumerate(self.layers):
             emb, current_attention_weights = self.layers[i](emb)
             if i == len(self.layers) - 1: # 拿到最后一层的注意力
