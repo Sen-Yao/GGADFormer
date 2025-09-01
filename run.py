@@ -132,6 +132,7 @@ def train(args):
     with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
         total_time = 0
         for epoch in range(args.num_epoch):
+            dynamic_weights = get_dynamic_loss_weights(epoch, args)
             start_time = time.time()
             model.train()
             optimizer.zero_grad()
@@ -194,7 +195,7 @@ def train(args):
             diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
             loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
 
-            loss = args.margin_loss_weight * loss_margin + args.bce_loss_weight * loss_bce + args.rec_loss_weight * loss_rec + args.con_loss_weight * con_loss + args.gna_loss_weight * gna_loss
+            loss = dynamic_weights['margin_loss_weight'] * loss_margin + dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['gna_loss_weight'] * gna_loss
 
             loss.backward()
             optimizer.step()
@@ -377,6 +378,8 @@ if __name__ == "__main__":
     parser.add_argument('--tot_updates', type=int, default=1000)
     parser.add_argument('--peak_lr', type=float, default=1e-4)    
     parser.add_argument('--end_lr', type=float, default=0)
+
+    parser.add_argument('--warmup_epoch', type=int, default=20)
 
 
     args = parser.parse_args()

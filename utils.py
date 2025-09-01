@@ -677,3 +677,36 @@ class PolynomialDecayLR(_LRScheduler):
 
     def _get_closed_form_lr(self):
         assert False
+
+
+def get_dynamic_loss_weights(epoch, args):
+    """
+    根据当前epoch和warmup_epoch计算动态损失权重
+    
+    Args:
+        epoch: 当前epoch
+        args: 参数对象，包含各种损失权重的目标值
+    
+    Returns:
+        dict: 包含各种损失权重的字典
+    """
+    if epoch < args.warmup_epoch:
+        # warmup阶段：只开启community_loss和正常节点内部的对比损失
+        return {
+            'margin_loss_weight': args.margin_loss_weight,
+            'bce_loss_weight': args.bce_loss_weight,
+            'rec_loss_weight': args.rec_loss_weight,
+            'con_loss_weight': args.con_loss_weight,
+            'gna_loss_weight': 0.0
+        }
+    else:
+        # 超过warmup后，使用线性插值平滑地恢复到目标值
+        progress = min(1.0, (epoch - args.warmup_epoch) / args.warmup_epoch)  # 在warmup_epoch个epoch内平滑过渡
+        
+        return {
+            'margin_loss_weight': args.margin_loss_weight,
+            'bce_loss_weight': args.bce_loss_weight,
+            'rec_loss_weight': args.rec_loss_weight,
+            'con_loss_weight': args.con_loss_weight,
+            'gna_loss_weight': progress * args.gna_loss_weight
+        }
