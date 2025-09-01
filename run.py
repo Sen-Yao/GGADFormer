@@ -315,13 +315,14 @@ def train(args):
                                     normal_for_train_idx, normal_for_generation_idx, outlier_emb)
             
             # 可视化注意力权重
-            print("开始分析注意力权重...")
-            # 获取邻接矩阵（去掉batch维度）
-            adj_matrix_np = adj.squeeze(0).detach().cpu().numpy()
-            attention_stats = visualize_attention_weights(agg_attention_weights, labels, normal_for_train_idx, 
-                                                        normal_for_generation_idx, outlier_emb, best_epoch, 
-                                                        args.dataset, device, adj_matrix_np, args)
-            print("注意力权重分析完成！")
+            if args.model_type == 'GGADFormer' or args.model_type == 'SGT':
+                print("开始分析注意力权重...")
+                # 获取邻接矩阵（去掉batch维度）
+                adj_matrix_np = adj.squeeze(0).detach().cpu().numpy()
+                attention_stats = visualize_attention_weights(agg_attention_weights, labels, normal_for_train_idx, 
+                                                            normal_for_generation_idx, outlier_emb, best_epoch, 
+                                                            args.dataset, device, adj_matrix_np, args)
+                print("注意力权重分析完成！")
         
         
 
