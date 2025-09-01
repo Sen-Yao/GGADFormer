@@ -370,12 +370,12 @@ if __name__ == "__main__":
     parser.add_argument('--gna_loss_weight', type=float, default=1.0)
     
     parser.add_argument('--con_loss_temp', type=float, default=10)
-    parser.add_argument('--GNA_temp', type=float, default=10)
+    parser.add_argument('--GNA_temp', type=float, default=1)
     
 
     parser.add_argument('--warmup_updates', type=int, default=100)
     parser.add_argument('--tot_updates', type=int, default=1000)
-    parser.add_argument('--peak_lr', type=float, default=1e-3)    
+    parser.add_argument('--peak_lr', type=float, default=1e-4)    
     parser.add_argument('--end_lr', type=float, default=0)
 
 
