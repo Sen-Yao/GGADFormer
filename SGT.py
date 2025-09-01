@@ -285,8 +285,10 @@ class SGT(nn.Module):
 
         else:
             con_loss = 0
+        
+        gna_loss = torch.tensor(0.0, device=emb.device)
 
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss
 
 
 

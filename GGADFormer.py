@@ -172,7 +172,7 @@ class Discriminator(nn.Module):
 class GGADFormer(nn.Module):
     def __init__(self, n_in, n_h, activation, args):
         super(GGADFormer, self).__init__()
-        
+
         # 设置设备
         self.device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
         
@@ -185,8 +185,7 @@ class GGADFormer(nn.Module):
         self.fc4 = nn.Linear(n_h, n_h, bias=False)
         self.act = nn.ReLU()
 
-        # 添加 token_projection 层
-        self.token_projection = nn.Linear(2 * n_in, args.embedding_dim)
+        self.n_in = n_in
 
         # Graph Transformer
         encoders = [EncoderLayer(args.embedding_dim, args.GT_ffn_dim, args.GT_dropout, args.GT_attention_dropout, args.GT_num_heads)
@@ -194,14 +193,37 @@ class GGADFormer(nn.Module):
         self.layers = nn.ModuleList(encoders)
         self.final_ln = nn.LayerNorm(args.embedding_dim)
 
+        proj_dim = args.proj_dim
+        self.token_projection = nn.Linear(2 * proj_dim, args.embedding_dim)
+
+        self.proj_raw = nn.Linear(self.n_in, proj_dim)
+        self.proj_prop = nn.Linear(self.n_in, proj_dim)
+        self.shared_mlp = nn.Sequential(
+            nn.Linear(proj_dim, proj_dim),
+            nn.ReLU(),
+            nn.Linear(proj_dim, proj_dim)
+        )
+        self.contrastive_proj_raw = nn.Sequential(nn.Linear(proj_dim, proj_dim // 2), nn.ReLU(), nn.Linear(proj_dim // 2, proj_dim))
+        self.contrastive_proj_prop = nn.Sequential(nn.Linear(proj_dim, proj_dim // 2), nn.ReLU(), nn.Linear(proj_dim // 2, proj_dim))
+
         # 将模型移动到指定设备
         self.to(self.device)
 
     def forward(self, input_tokens, adj, normal_for_generation_idx, normal_for_train_idx, train_flag, args, sparse=False):
-        
+        # 拆分输入特征
+        raw_features = input_tokens[:, :, :self.n_in]
+        prop_features = input_tokens[:, :, self.n_in:2*self.n_in]
+
+        # 通过投影和共享MLP得到嵌入
+        h_raw = self.shared_mlp(self.proj_raw(raw_features))
+        h_prop = self.shared_mlp(self.proj_prop(prop_features))
+
+        # 将不同方面的嵌入拼接后送入transformer
+        combined_features = torch.cat([h_raw, h_prop], dim=-1)
+
         attention_weights = None # 初始化注意力权重
         agg_attention_weights = None 
-        emb = self.token_projection(input_tokens)
+        emb = self.token_projection(combined_features)
         # emb = self.gcn1(emb, adj, sparse)
         # emb = self.gcn2(emb, adj, sparse)              
         for i, l in enumerate(self.layers):
@@ -248,6 +270,42 @@ class GGADFormer(nn.Module):
         # noise = torch.randn(emb_con.size()) * std + mean
         # emb_con = self.act(self.fc4(noise))
         # emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
+        gna_loss = torch.tensor(0.0, device=emb.device)
+        if train_flag:
+            # 推拉损失
+            h_raw_normal = h_raw[:, normal_for_train_idx, :].squeeze(0)
+            h_prop_normal = h_prop[:, normal_for_train_idx, :].squeeze(0)
+            z_raw = self.contrastive_proj_raw(h_raw_normal)
+            z_prop = self.contrastive_proj_prop(h_prop_normal)
+            # L2归一化
+            z_raw_norm = F.normalize(z_raw, p=2, dim=1)
+            z_prop_norm = F.normalize(z_prop, p=2, dim=1)
+
+            # 计算两个视图间的相似度矩阵 (N_normal x N_normal)
+            sim_raw_prop = torch.mm(z_raw_norm, z_prop_norm.T) / args.GNA_temp
+            # 计算视图内部的相似度矩阵
+            sim_raw_raw = torch.mm(z_raw_norm, z_raw_norm.T) / args.GNA_temp
+            sim_prop_prop = torch.mm(z_prop_norm, z_prop_norm.T) / args.GNA_temp
+
+            # 正样本分数是 sim_raw_prop_scaled 的对角线
+            positive_pairs = torch.diag(sim_raw_prop)
+            # 负样本分数中， raw 对于其他的负样本分数
+            exp_sim_raw_prop = torch.exp(sim_raw_prop)
+            exp_sim_raw_raw = torch.exp(sim_raw_raw)
+            exp_sim_prop_prop = torch.exp(sim_prop_prop)
+            
+            neg_raw_prop_sum = torch.sum(exp_sim_raw_prop, dim=1) - torch.diag(exp_sim_raw_prop)
+            neg_raw_raw_sum = torch.sum(exp_sim_raw_raw, dim=1) - torch.diag(exp_sim_raw_raw)
+            denominator_raw_anchor = neg_raw_prop_sum + neg_raw_raw_sum
+            loss_raw_anchor = -torch.log(torch.exp(positive_pairs) / denominator_raw_anchor).mean()
+
+            # 负样本分数中， prop 对于其他的负样本分数
+            neg_prop_raw_sum = torch.sum(exp_sim_raw_prop, dim=1) - torch.diag(exp_sim_raw_prop)
+            neg_prop_prop_sum = torch.sum(exp_sim_prop_prop, dim=1) - torch.diag(exp_sim_prop_prop)
+            denominator_prop_anchor = neg_prop_raw_sum + neg_prop_prop_sum
+            loss_prop_anchor = -torch.log(torch.exp(positive_pairs) / denominator_prop_anchor).mean()
+
+            gna_loss = (loss_raw_anchor + loss_prop_anchor) * 0.5
 
         f_1 = self.fc1(emb_combine)
         f_1 = self.act(f_1)
@@ -257,8 +315,9 @@ class GGADFormer(nn.Module):
         emb[:, normal_for_generation_idx, :] = outlier_emb
 
         con_loss = torch.tensor(0.0, device=emb.device)
+        # gna_loss = torch.tensor(0.0, device=emb.device)
 
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss
     
     def calculate_local_perturbation(self, emb_sampled, full_embeddings, agg_attention_weights, sample_normal_idx, adj, args):
         """

@@ -138,7 +138,7 @@ def train(args):
 
             # Train model
             train_flag = True
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss = model(concated_input_features, adj,
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss = model(concated_input_features, adj,
                                                                     normal_for_generation_idx, normal_for_train_idx,
                                                                     train_flag, args)
             if epoch % 10 == 0:
@@ -194,7 +194,7 @@ def train(args):
             diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
             loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
 
-            loss = args.margin_loss_weight * loss_margin + args.bce_loss_weight * loss_bce + args.rec_loss_weight * loss_rec + args.con_loss_weight * con_loss
+            loss = args.margin_loss_weight * loss_margin + args.bce_loss_weight * loss_bce + args.rec_loss_weight * loss_rec + args.con_loss_weight * con_loss + args.gna_loss_weight * gna_loss
 
             loss.backward()
             optimizer.step()
@@ -230,12 +230,13 @@ def train(args):
                             "bce_loss": loss_bce.item(),
                             "rec_loss": loss_rec.item(),
                             "con_loss": con_loss.item(),
+                            "gna_loss": gna_loss.item(),
                             "train_loss": loss.item(),
                             "learning_rate": current_lr}, step=epoch)
             if epoch % 10 == 0 and epoch != 0:
                 model.eval()
                 train_flag = False
-                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
+                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                         train_flag, args)
                 # evaluation on the valid and test node
                 # 在eval阶段，我们需要为所有节点生成logits
@@ -278,7 +279,7 @@ def train(args):
             print("running the best model...")
             # 获取所有节点的嵌入
             train_flag = False
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, _ = model(concated_input_features, adj, 
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, _, _ = model(concated_input_features, adj, 
                                                                                             normal_for_generation_idx, normal_for_train_idx,
                                                                                             train_flag, args)
             
@@ -336,6 +337,7 @@ if __name__ == "__main__":
     parser.add_argument('--weight_decay', type=float, default=0.0)
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--embedding_dim', type=int, default=300)
+    parser.add_argument('--proj_dim', type=int, default=32)
     parser.add_argument('--num_epoch', type=int)
     parser.add_argument('--drop_prob', type=float, default=0.0)
     parser.add_argument('--readout', type=str, default='avg')  # max min avg  weighted_sum
@@ -365,7 +367,11 @@ if __name__ == "__main__":
     parser.add_argument('--bce_loss_weight', type=float, default=1.0)
     parser.add_argument('--margin_loss_weight', type=float, default=0)
     parser.add_argument('--con_loss_weight', type=float, default=1.0)
+    parser.add_argument('--gna_loss_weight', type=float, default=1.0)
+    
     parser.add_argument('--con_loss_temp', type=float, default=10)
+    parser.add_argument('--GNA_temp', type=float, default=10)
+    
 
     parser.add_argument('--warmup_updates', type=int, default=100)
     parser.add_argument('--tot_updates', type=int, default=1000)
