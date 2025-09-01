@@ -415,6 +415,8 @@ if __name__ == "__main__":
 
     wandb.define_metric("AUC", summary="max")
     wandb.define_metric("AP", summary="max")
+    wandb.define_metric("AUC", summary="last")
+    wandb.define_metric("AP", summary="last")
     print('Dataset: ', args.dataset)
         
     try:
