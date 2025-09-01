@@ -226,7 +226,8 @@ def train(args):
                 # print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
                 # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
                 # print("=====================================================================")
-                wandb.log({ "bce_loss": loss_bce.item(),
+                wandb.log({ "margin_loss": loss_margin.item(),
+                            "bce_loss": loss_bce.item(),
                             "rec_loss": loss_rec.item(),
                             "con_loss": con_loss.item(),
                             "train_loss": loss.item(),
