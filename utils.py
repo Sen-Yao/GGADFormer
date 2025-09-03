@@ -69,7 +69,7 @@ def dense_to_one_hot(labels_dense, num_classes):
     return labels_one_hot
 
 
-def load_mat(dataset, train_rate=0.3, val_rate=0.1):
+def load_mat(dataset, train_rate=0.3, val_rate=0.1, args=None):
 
     """Load .mat dataset."""
     data = sio.loadmat("./dataset/{}.mat".format(dataset))
@@ -145,9 +145,9 @@ def load_mat(dataset, train_rate=0.3, val_rate=0.1):
     # 选择一部分正常节点用于生成异常节点
     # normal_for_generation_idx 为用于生成异常节点的正常节点索引
     if dataset in ['Amazon']:
-        normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * 0.05)]  
+        normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]  
     else:
-        normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * 0.15)]  
+        normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]  
     return adj, feat, ano_labels, all_idx, idx_train, idx_val, idx_test, ano_labels, str_ano_labels, attr_ano_labels, normal_for_train_idx, normal_for_generation_idx
 
 

@@ -45,7 +45,7 @@ def train(args):
 
     # Load and preprocess data
     adj, features, labels, all_idx, idx_train, idx_val, \
-    idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset)
+    idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset, args=args)
 
     if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
         features, _ = preprocess_features(features)
@@ -347,6 +347,7 @@ if __name__ == "__main__":
     parser.add_argument('--mean', type=float, default=0.0)
     parser.add_argument('--var', type=float, default=0.0)
     parser.add_argument('--confidence_margin', type=float, default=0.7)
+    parser.add_argument('--sample_rate', type=float, default=0.05)
     
     parser.add_argument('--model_type', type=str, default='GGADFormer')
     parser.add_argument('--visualize', type=bool, default=False)
