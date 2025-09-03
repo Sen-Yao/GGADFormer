@@ -203,6 +203,16 @@ class GGADFormer(nn.Module):
             nn.ReLU(),
             nn.Linear(proj_dim, proj_dim)
         )
+        self.raw_mlp = nn.Sequential(
+            nn.Linear(proj_dim, proj_dim),
+            nn.ReLU(),
+            nn.Linear(proj_dim, proj_dim)
+        )
+        self.prop_mlp = nn.Sequential(
+            nn.Linear(proj_dim, proj_dim),
+            nn.ReLU(),
+            nn.Linear(proj_dim, proj_dim)
+        )
         self.contrastive_proj_raw = nn.Sequential(nn.Linear(proj_dim, proj_dim // 2), nn.ReLU(), nn.Linear(proj_dim // 2, proj_dim))
         self.contrastive_proj_prop = nn.Sequential(nn.Linear(proj_dim, proj_dim // 2), nn.ReLU(), nn.Linear(proj_dim // 2, proj_dim))
 
@@ -215,8 +225,8 @@ class GGADFormer(nn.Module):
         prop_features = input_tokens[:, :, self.n_in:2*self.n_in]
 
         # 通过投影和共享MLP得到嵌入
-        h_raw = self.shared_mlp(self.proj_raw(raw_features))
-        h_prop = self.shared_mlp(self.proj_prop(prop_features))
+        h_raw = self.raw_mlp(self.proj_raw(raw_features))
+        h_prop = self.prop_mlp(self.proj_prop(prop_features))
 
         # 将不同方面的嵌入拼接后送入transformer
         combined_features = torch.cat([h_raw, h_prop], dim=-1)
