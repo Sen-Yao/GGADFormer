@@ -347,7 +347,7 @@ if __name__ == "__main__":
     parser.add_argument('--mean', type=float, default=0.0)
     parser.add_argument('--var', type=float, default=0.0)
     parser.add_argument('--confidence_margin', type=float, default=0.7)
-    parser.add_argument('--sample_rate', type=float, default=0.05)
+    parser.add_argument('--sample_rate', type=float, default=0.15)
     
     parser.add_argument('--model_type', type=str, default='GGADFormer')
     parser.add_argument('--visualize', type=bool, default=False)
