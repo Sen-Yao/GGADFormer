@@ -395,6 +395,7 @@ if __name__ == "__main__":
 
 
     run = wandb.init(
+        entity="HCCS",
         # Set the wandb project where this run will be logged.
         project="GGADFormer",
         # Track hyperparameters and run metadata.
@@ -411,12 +412,13 @@ if __name__ == "__main__":
         train(args)
         start_time = time.time()
         wandb.finish()
-        print(f"WandB cleanup took {time.time() - start_time:.2f} seconds")
+        
         
     except torch.cuda.OutOfMemoryError as e:
         print(f"显存不足!：{e}")
         wandb.log({"AUC.max": 0})
         wandb.log({"AP.max": 0})
+        start_time = time.time()
         wandb.finish()
     
     except Exception as e:
@@ -424,4 +426,6 @@ if __name__ == "__main__":
         print(f"其他错误：{e}")
         traceback.print_exc()  # 打印详细的错误堆栈，包括出错的代码行
         wandb.log({"AUC.max": 0})
+        start_time = time.time()
         wandb.finish()
+    print(f"WandB finish took {time.time() - start_time:.2f} seconds")
