@@ -52,7 +52,6 @@ def train(args):
     else:
         features = features.todense()
 
-    dgl_graph = adj_to_dgl_graph(adj)
 
     nb_nodes = features.shape[0]
     ft_size = features.shape[1]
