@@ -129,129 +129,129 @@ def train(args):
 
     # Train model
     print(f"Start training! Total epochs: {args.num_epoch}")
-    with tqdm(total=args.num_epoch, desc='Training', ncols=100) as pbar:
-        total_time = 0
-        for epoch in range(args.num_epoch):
-            dynamic_weights = get_dynamic_loss_weights(epoch, args)
-            start_time = time.time()
-            model.train()
-            optimizer.zero_grad()
+    pbar = tqdm(range(args.num_epoch), desc='Training')
+    total_time = 0
+    for epoch in pbar:
+        dynamic_weights = get_dynamic_loss_weights(epoch, args)
+        start_time = time.time()
+        model.train()
+        optimizer.zero_grad()
 
-            # Train model
-            train_flag = True
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss = model(concated_input_features, adj,
-                                                                    normal_for_generation_idx, normal_for_train_idx,
+        # Train model
+        train_flag = True
+        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss = model(concated_input_features, adj,
+                                                                normal_for_generation_idx, normal_for_train_idx,
+                                                                train_flag, args)
+        if epoch % 10 == 0:
+            # save data for tsne
+            pass
+
+            # tsne_data_path = 'draw/tfinance/tsne_data_{}.mat'.format(str(epoch))
+            # io.savemat(tsne_data_path, {'emb': np.array(emb.cpu().detach()), 'ano_label': ano_label,
+            #                             'abnormal_label_idx': np.array(abnormal_label_idx),
+            #                             'normal_label_idx': np.array(normal_label_idx)})
+
+        # BCE loss
+        lbl = torch.unsqueeze(torch.cat(
+            (torch.zeros(len(normal_for_train_idx)), torch.ones(len(outlier_emb)))),
+            1).unsqueeze(0)
+        lbl = lbl.to(device)  # 将标签移动到指定设备
+
+        loss_bce = b_xent(logits, lbl)
+        loss_bce = torch.mean(loss_bce)
+
+        # Local affinity margin loss
+        emb = torch.squeeze(emb)
+
+        emb_inf = torch.norm(emb, dim=-1, keepdim=True)
+        emb_inf = torch.pow(emb_inf, -1)
+        emb_inf[torch.isinf(emb_inf)] = 0.
+        emb_norm = emb * emb_inf
+
+        sim_matrix = torch.mm(emb_norm, emb_norm.T)
+        raw_adj = torch.squeeze(raw_adj)
+        similar_matrix = sim_matrix * raw_adj
+
+        r_inv = torch.pow(torch.sum(raw_adj, 0), -1)
+        r_inv[torch.isinf(r_inv)] = 0.
+        affinity = torch.sum(similar_matrix, 0) * r_inv
+
+        affinity_normal_mean = torch.mean(affinity[normal_for_train_idx])
+        affinity_abnormal_mean = torch.mean(affinity[normal_for_generation_idx])
+
+        # if epoch % 10 == 0:
+        #     real_abnormal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 1).squeeze()].tolist()
+        #     real_normal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 0).squeeze()].tolist()
+        #     overlap = list(set(real_abnormal_label_idx) & set(real_normal_label_idx))
+        #
+        #     real_affinity, index = torch.sort(affinity[real_abnormal_label_idx])
+        #     real_affinity = real_affinity[:300]
+        #     draw_pdf(np.array(affinity[real_normal_label_idx].detach().cpu()),
+        #              np.array(affinity[abnormal_label_idx].detach().cpu()),
+        #              np.array(real_affinity.detach().cpu()), args.dataset, epoch)
+
+        loss_margin = (args.confidence_margin - (affinity_normal_mean - affinity_abnormal_mean)).clamp_min(min=0)
+
+        diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
+        loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
+
+        loss = dynamic_weights['margin_loss_weight'] * loss_margin + dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['gna_loss_weight'] * gna_loss
+
+        loss.backward()
+        optimizer.step()
+        lr_scheduler.step()
+        end_time = time.time()
+        total_time += end_time - start_time
+        
+        # 获取当前学习率
+        current_lr = optimizer.param_groups[0]['lr']
+        
+        # 更新进度条信息
+        pbar.set_postfix({
+            'Loss': f'{loss.item():.4f}',
+            'LR': f'{current_lr:.2e}',
+            'Time': f'{total_time:.1f}s',
+            'Epoch': f'{epoch+1}/{args.num_epoch}'
+        })
+        pbar.update(1)
+        if epoch % 2 == 0:
+            logits = np.squeeze(logits.cpu().detach().numpy())
+            lbl = np.squeeze(lbl.cpu().detach().numpy())
+            auc = roc_auc_score(lbl, logits)
+            # print('Traininig {} AUC:{:.4f}'.format(args.dataset, auc))
+            # AP = average_precision_score(lbl, logits, average='macro', pos_label=1, sample_weight=None)
+            # print('Traininig AP:', AP)
+
+            # print("Epoch:", '%04d' % (epoch), "train_loss_margin=", "{:.5f}".format(loss_margin.item()))
+            # print("Epoch:", '%04d' % (epoch), "train_loss_bce=", "{:.5f}".format(loss_bce.item()))
+            # print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
+            # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
+            # print("=====================================================================")
+            wandb.log({ "margin_loss": loss_margin.item(),
+                        "bce_loss": loss_bce.item(),
+                        "rec_loss": loss_rec.item(),
+                        "con_loss": con_loss.item(),
+                        "gna_loss": gna_loss.item(),
+                        "train_loss": loss.item(),
+                        "learning_rate": current_lr}, step=epoch)
+        if epoch % 10 == 0 and epoch != 0:
+            model.eval()
+            train_flag = False
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                     train_flag, args)
-            if epoch % 10 == 0:
-                # save data for tsne
-                pass
-
-                # tsne_data_path = 'draw/tfinance/tsne_data_{}.mat'.format(str(epoch))
-                # io.savemat(tsne_data_path, {'emb': np.array(emb.cpu().detach()), 'ano_label': ano_label,
-                #                             'abnormal_label_idx': np.array(abnormal_label_idx),
-                #                             'normal_label_idx': np.array(normal_label_idx)})
-
-            # BCE loss
-            lbl = torch.unsqueeze(torch.cat(
-                (torch.zeros(len(normal_for_train_idx)), torch.ones(len(outlier_emb)))),
-                1).unsqueeze(0)
-            lbl = lbl.to(device)  # 将标签移动到指定设备
-
-            loss_bce = b_xent(logits, lbl)
-            loss_bce = torch.mean(loss_bce)
-
-            # Local affinity margin loss
-            emb = torch.squeeze(emb)
-
-            emb_inf = torch.norm(emb, dim=-1, keepdim=True)
-            emb_inf = torch.pow(emb_inf, -1)
-            emb_inf[torch.isinf(emb_inf)] = 0.
-            emb_norm = emb * emb_inf
-
-            sim_matrix = torch.mm(emb_norm, emb_norm.T)
-            raw_adj = torch.squeeze(raw_adj)
-            similar_matrix = sim_matrix * raw_adj
-
-            r_inv = torch.pow(torch.sum(raw_adj, 0), -1)
-            r_inv[torch.isinf(r_inv)] = 0.
-            affinity = torch.sum(similar_matrix, 0) * r_inv
-
-            affinity_normal_mean = torch.mean(affinity[normal_for_train_idx])
-            affinity_abnormal_mean = torch.mean(affinity[normal_for_generation_idx])
-
-            # if epoch % 10 == 0:
-            #     real_abnormal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 1).squeeze()].tolist()
-            #     real_normal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 0).squeeze()].tolist()
-            #     overlap = list(set(real_abnormal_label_idx) & set(real_normal_label_idx))
-            #
-            #     real_affinity, index = torch.sort(affinity[real_abnormal_label_idx])
-            #     real_affinity = real_affinity[:300]
-            #     draw_pdf(np.array(affinity[real_normal_label_idx].detach().cpu()),
-            #              np.array(affinity[abnormal_label_idx].detach().cpu()),
-            #              np.array(real_affinity.detach().cpu()), args.dataset, epoch)
-
-            loss_margin = (args.confidence_margin - (affinity_normal_mean - affinity_abnormal_mean)).clamp_min(min=0)
-
-            diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
-            loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
-
-            loss = dynamic_weights['margin_loss_weight'] * loss_margin + dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['gna_loss_weight'] * gna_loss
-
-            loss.backward()
-            optimizer.step()
-            lr_scheduler.step()
-            end_time = time.time()
-            total_time += end_time - start_time
+            logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
+            auc = roc_auc_score(ano_label[idx_test], logits)
+            # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
+            AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
+            # print('Testing AP:', AP)
+            wandb.log({"AUC": auc, "AP": AP}, step=epoch)
             
-            # 获取当前学习率
-            current_lr = optimizer.param_groups[0]['lr']
-            
-            # 更新进度条信息
-            pbar.set_postfix({
-                'Loss': f'{loss.item():.4f}',
-                'LR': f'{current_lr:.2e}',
-                'Time': f'{total_time:.1f}s',
-                'Epoch': f'{epoch+1}/{args.num_epoch}'
-            })
-            pbar.update(1)
-            if epoch % 2 == 0:
-                logits = np.squeeze(logits.cpu().detach().numpy())
-                lbl = np.squeeze(lbl.cpu().detach().numpy())
-                auc = roc_auc_score(lbl, logits)
-                # print('Traininig {} AUC:{:.4f}'.format(args.dataset, auc))
-                # AP = average_precision_score(lbl, logits, average='macro', pos_label=1, sample_weight=None)
-                # print('Traininig AP:', AP)
-
-                # print("Epoch:", '%04d' % (epoch), "train_loss_margin=", "{:.5f}".format(loss_margin.item()))
-                # print("Epoch:", '%04d' % (epoch), "train_loss_bce=", "{:.5f}".format(loss_bce.item()))
-                # print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
-                # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
-                # print("=====================================================================")
-                wandb.log({ "margin_loss": loss_margin.item(),
-                            "bce_loss": loss_bce.item(),
-                            "rec_loss": loss_rec.item(),
-                            "con_loss": con_loss.item(),
-                            "gna_loss": gna_loss.item(),
-                            "train_loss": loss.item(),
-                            "learning_rate": current_lr}, step=epoch)
-            if epoch % 10 == 0 and epoch != 0:
-                model.eval()
-                train_flag = False
-                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
-                                                                        train_flag, args)
-                logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
-                auc = roc_auc_score(ano_label[idx_test], logits)
-                # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
-                AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
-                # print('Testing AP:', AP)
-                wandb.log({"AUC": auc, "AP": AP}, step=epoch)
-                
-                # 检查是否为最佳模型
-                if auc > best_AUC and AP > best_AP:
-                    best_AUC = auc
-                    best_AP = AP
-                    best_model_state = model.state_dict().copy()
-                    best_epoch = epoch
+            # 检查是否为最佳模型
+            if auc > best_AUC and AP > best_AP:
+                best_AUC = auc
+                best_AP = AP
+                best_model_state = model.state_dict().copy()
+                best_epoch = epoch
 
     print(f"Training done! Total time: {total_time:.2f} seconds")
     if args.visualize:
