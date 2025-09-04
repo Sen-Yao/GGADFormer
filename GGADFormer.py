@@ -307,7 +307,9 @@ class GGADFormer(nn.Module):
 
             gna_loss = (loss_raw_anchor + loss_prop_anchor) * 0.5
 
-        f_1 = self.fc1(emb_combine)
+            f_1 = self.fc1(emb_combine)
+        else:
+            f_1 = self.fc1(emb)
         f_1 = self.act(f_1)
         f_2 = self.fc2(f_1)
         f_2 = self.act(f_2)

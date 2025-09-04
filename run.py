@@ -239,24 +239,7 @@ def train(args):
                 train_flag = False
                 emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                         train_flag, args)
-                # evaluation on the valid and test node
-                # 在eval阶段，我们需要为所有节点生成logits
-                # 首先获取所有节点的嵌入
-                all_embeddings = emb.squeeze(0)  # [num_nodes, embedding_dim]
-                
-                # 为所有节点生成logits
-                all_logits = []
-                for i in range(all_embeddings.shape[0]):
-                    node_emb = all_embeddings[i:i+1, :].unsqueeze(0)  # [1, 1, embedding_dim]
-                    f_1 = model.fc1(node_emb)
-                    f_1 = model.act(f_1)
-                    f_2 = model.fc2(f_1)
-                    f_2 = model.act(f_2)
-                    node_logit = model.fc3(f_2)
-                    all_logits.append(node_logit.squeeze())
-                
-                all_logits = torch.stack(all_logits)  # [num_nodes]
-                logits = all_logits[idx_test].cpu().detach().numpy()
+                logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
                 auc = roc_auc_score(ano_label[idx_test], logits)
                 # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
                 AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
@@ -278,8 +261,8 @@ def train(args):
             model.load_state_dict(best_model_state)
             model.eval()
             print("running the best model...")
-            # 获取所有节点的嵌入
-            train_flag = False
+            # 为了获取人造异常点的嵌入，设置train_flag为True
+            train_flag = True
             emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, _, _ = model(concated_input_features, adj, 
                                                                                             normal_for_generation_idx, normal_for_train_idx,
                                                                                             train_flag, args)
