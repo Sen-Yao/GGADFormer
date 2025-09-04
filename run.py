@@ -128,9 +128,9 @@ def train(args):
 
     # Train model
     print(f"Start training! Total epochs: {args.num_epoch}")
-    pbar = tqdm(range(args.num_epoch), desc='Training')
+    pbar = tqdm(total=args.num_epoch, desc='Training')
     total_time = 0
-    for epoch in pbar:
+    for epoch in range(args.num_epoch):
         dynamic_weights = get_dynamic_loss_weights(epoch, args)
         start_time = time.time()
         model.train()
@@ -207,8 +207,6 @@ def train(args):
         
         # 更新进度条信息
         pbar.set_postfix({
-            'Loss': f'{loss.item():.4f}',
-            'LR': f'{current_lr:.2e}',
             'Time': f'{total_time:.1f}s',
             'Epoch': f'{epoch+1}/{args.num_epoch}'
         })
@@ -252,6 +250,7 @@ def train(args):
                 best_model_state = model.state_dict().copy()
                 best_epoch = epoch
 
+    pbar.close()  # 关闭进度条
     print(f"Training done! Total time: {total_time:.2f} seconds")
     if args.visualize:
         # 加载最佳模型进行tsne可视化
