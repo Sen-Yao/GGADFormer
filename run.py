@@ -433,6 +433,9 @@ if __name__ == "__main__":
         
     try:
         train(args)
+        start_time = time.time()
+        wandb.finish()
+        print(f"WandB cleanup took {time.time() - start_time:.2f} seconds")
         
     except torch.cuda.OutOfMemoryError as e:
         print(f"显存不足!：{e}")
