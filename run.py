@@ -417,8 +417,6 @@ if __name__ == "__main__":
 
 
     run = wandb.init(
-        # Set the wandb entity where your project will be logged (generally your team name).
-        entity="HCCS",
         # Set the wandb project where this run will be logged.
         project="GGADFormer",
         # Track hyperparameters and run metadata.
