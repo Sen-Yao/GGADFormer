@@ -14,7 +14,7 @@ from tqdm import tqdm
 import time
 
 import wandb
-from visualization import create_tsne_visualization
+from visualization import create_tsne_visualization, visualize_attention_weights
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -259,7 +259,6 @@ def train(args):
             
             model.load_state_dict(best_model_state)
             model.eval()
-            print("running the best model...")
             # 为了获取人造异常点的嵌入，设置train_flag为True
             train_flag = True
             emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, _, _ = model(concated_input_features, adj, 
@@ -300,13 +299,11 @@ def train(args):
             
             # 可视化注意力权重
             if args.model_type == 'GGADFormer' or args.model_type == 'SGT':
-                print("开始分析注意力权重...")
                 # 获取邻接矩阵（去掉batch维度）
                 adj_matrix_np = adj.squeeze(0).detach().cpu().numpy()
                 attention_stats = visualize_attention_weights(agg_attention_weights, labels, normal_for_train_idx, 
                                                             normal_for_generation_idx, outlier_emb, best_epoch, 
                                                             args.dataset, device, adj_matrix_np, args)
-                print("注意力权重分析完成！")
         
         
 
