@@ -236,6 +236,9 @@ class GGADFormer(nn.Module):
         emb = self.final_ln(emb)
         # emb: [1, num_nodes, hidden_dim]
 
+        # 生成全局中心点
+        h_mean = torch.mean(emb, dim=1, keepdim=True)
+
         outlier_emb = None
         emb_combine = None
         normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
@@ -252,6 +255,7 @@ class GGADFormer(nn.Module):
 
         outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
         outlier_emb = self.act(self.fc4(outlier_emb))
+        # outlier_emb: [num_nodes, hidden_dim]
         # emb_con = self.act(self.fc6(emb_con))
 
         emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
@@ -307,18 +311,26 @@ class GGADFormer(nn.Module):
 
             gna_loss = (loss_raw_anchor + loss_prop_anchor) * 0.5
 
+            # 对比学习
+            # 第一部分，鼓励离群点靠近全局中心点
+            # 计算离群点嵌入与全局中心的距离
+            outlier_to_center_dist = torch.norm(outlier_emb - h_mean.squeeze(0), p=2, dim=1)
+            # 只有超过 confidence_margin 的距离才会产生损失
+            margin_excess = outlier_to_center_dist - args.confidence_margin
+            con_loss = torch.mean(torch.relu(margin_excess))
+
             f_1 = self.fc1(emb_combine)
         else:
+            con_loss = torch.tensor(0.0, device=emb.device)
             f_1 = self.fc1(emb)
         f_1 = self.act(f_1)
         f_2 = self.fc2(f_1)
         f_2 = self.act(f_2)
         logits = self.fc3(f_2)
+        emb = emb.clone()
         emb[:, normal_for_generation_idx, :] = outlier_emb
 
-        con_loss = torch.tensor(0.0, device=emb.device)
         # gna_loss = torch.tensor(0.0, device=emb.device)
-
         return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss
     
     def calculate_local_perturbation(self, emb_sampled, full_embeddings, agg_attention_weights, sample_normal_idx, adj, args):
