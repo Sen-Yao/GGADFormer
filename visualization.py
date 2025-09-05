@@ -6,7 +6,7 @@ import numpy as np
 import torch
 import pandas as pd
 
-def create_tsne_visualization(features, embeddings, labels, node_types, epoch, device, 
+def create_tsne_visualization(features, emb, labels, epoch, device, 
                              normal_for_train_idx, normal_for_generation_idx, outlier_emb=None):
     """
     创建tsne可视化并保存到wandb
@@ -22,6 +22,34 @@ def create_tsne_visualization(features, embeddings, labels, node_types, epoch, d
         normal_for_generation_idx: 用于生成异常节点的正常节点索引
         outlier_emb: 生成的异常节点嵌入 [num_generated_anomalies, embedding_dim]
     """
+        # 准备tsne数据
+    # 获取原始特征
+    features = features.squeeze(0)
+    
+    # 获取嵌入（去掉batch维度）
+
+    embeddings = emb.squeeze(0)  # [num_nodes, embedding_dim]
+    
+    # 获取真实标签（去掉batch维度）
+    labels = labels.squeeze(0)  # [num_nodes]
+
+    if outlier_emb is None:
+        print("outlier_emb is None")
+        outlier_emb_len = 0
+    else:
+        outlier_emb_len = len(outlier_emb)
+    
+    # 创建节点类型标签
+    node_types = []
+    nb_nodes = features.shape[0]
+    for i in range(nb_nodes + outlier_emb_len):
+        if i >= nb_nodes:
+            node_types.append("generated_anomaly")
+        elif labels[i] == 1:
+            # 真实异常点
+            node_types.append("anomaly") 
+        else:
+            node_types.append("normal")
     # 将数据移到CPU并转换为numpy，使用detach()避免梯度问题
     print(f"\n\nStarting tsne visualization...")
     features = features.cpu().detach().numpy()

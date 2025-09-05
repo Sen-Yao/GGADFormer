@@ -264,36 +264,10 @@ def train(args):
                                                                                             normal_for_generation_idx, normal_for_train_idx,
                                                                                             train_flag, args)
             
-            # 准备tsne数据
-            # 获取原始特征
-            original_features = features.squeeze(0)
-            
-            # 获取嵌入（去掉batch维度）
 
-            embeddings = emb.squeeze(0)  # [num_nodes, embedding_dim]
-            
-            # 获取真实标签（去掉batch维度）
-            true_labels = labels.squeeze(0)  # [num_nodes]
-
-            if outlier_emb is None:
-                print("outlier_emb is None")
-                outlier_emb_len = 0
-            else:
-                outlier_emb_len = len(outlier_emb)
-            
-            # 创建节点类型标签
-            node_types = []
-            for i in range(nb_nodes + outlier_emb_len):
-                if i >= nb_nodes:
-                    node_types.append("generated_anomaly")
-                elif true_labels[i] == 1:
-                    # 真实异常点
-                    node_types.append("anomaly") 
-                else:
-                    node_types.append("normal")
             
             # 创建tsne可视化
-            create_tsne_visualization(original_features, embeddings, true_labels, node_types, best_epoch, device,
+            create_tsne_visualization(features, emb, labels, best_epoch, device,
                                     normal_for_train_idx, normal_for_generation_idx, outlier_emb)
             
             # 可视化注意力权重
