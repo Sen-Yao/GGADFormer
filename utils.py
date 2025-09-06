@@ -97,7 +97,25 @@ def load_mat(dataset, train_rate=0.3, val_rate=0.1, args=None):
     num_train = int(num_node * train_rate)
     num_val = int(num_node * val_rate)
     all_idx = list(range(num_node))
-    # random.shuffle(all_idx)
+    
+    # 使用data_split_seed来控制数据集划分的随机性
+    if args is not None and hasattr(args, 'data_split_seed'):
+        # 保存当前的全局随机种子状态
+        original_random_seed = random.getstate()
+        original_np_random_seed = np.random.get_state()
+        
+        # 设置数据划分专用的随机种子
+        random.seed(args.data_split_seed)
+        np.random.seed(args.data_split_seed)
+        
+        random.shuffle(all_idx)
+        
+        # 恢复全局随机种子状态
+        random.setstate(original_random_seed)
+        np.random.set_state(original_np_random_seed)
+    else:
+        random.shuffle(all_idx)
+    
     idx_train = all_idx[: num_train]
     idx_val = all_idx[num_train: num_train + num_val]
     idx_test = all_idx[num_train + num_val:]

@@ -45,7 +45,7 @@ def train(args):
 
     # Load and preprocess data
     adj, features, labels, all_idx, idx_train, idx_val, \
-    idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset, args=args)
+    idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset, args.train_rate, 0.1, args=args)
 
     if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
         features, _ = preprocess_features(features)
@@ -294,6 +294,9 @@ if __name__ == "__main__":
     parser.add_argument('--lr', type=float)
     parser.add_argument('--weight_decay', type=float, default=0.0)
     parser.add_argument('--seed', type=int, default=0)
+    parser.add_argument('--data_split_seed', type=int, default=0)
+    parser.add_argument('--train_rate', type=float, default=0.3)
+
     parser.add_argument('--embedding_dim', type=int, default=300)
     parser.add_argument('--proj_dim', type=int, default=32)
     parser.add_argument('--num_epoch', type=int)
