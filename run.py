@@ -255,27 +255,32 @@ def train(args):
     if args.visualize:
         # 加载最佳模型进行tsne可视化
         if best_model_state is not None:
-            
-            model.load_state_dict(best_model_state)
             model.eval()
             # 为了获取人造异常点的嵌入，设置train_flag为True
             train_flag = True
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, _, _ = model(concated_input_features, adj, 
+
+            # 先运行最后一个 epoch 的模型
+            emb_last_epoch, _, _, outlier_emb_last_epoch, _, agg_attention_weights_last_epoch, _, _ = model(concated_input_features, adj, 
+                                                                                normal_for_generation_idx, normal_for_train_idx,
+                                                                                train_flag, args)
+            # 再运行最佳模型的模型
+            model.load_state_dict(best_model_state)
+            emb_best_epoch, _, _, outlier_emb_best_epoch, _, agg_attention_weights_best_epoch, _, _ = model(concated_input_features, adj, 
                                                                                             normal_for_generation_idx, normal_for_train_idx,
                                                                                             train_flag, args)
             
 
             
             # 创建tsne可视化
-            create_tsne_visualization(features, emb, labels, best_epoch, device,
-                                    normal_for_train_idx, normal_for_generation_idx, outlier_emb)
+            create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, best_epoch, device,
+                                    normal_for_train_idx, normal_for_generation_idx, outlier_emb_last_epoch, outlier_emb_best_epoch)
             
             # 可视化注意力权重
             if args.model_type == 'GGADFormer' or args.model_type == 'SGT':
                 # 获取邻接矩阵（去掉batch维度）
                 adj_matrix_np = adj.squeeze(0).detach().cpu().numpy()
-                attention_stats = visualize_attention_weights(agg_attention_weights, labels, normal_for_train_idx, 
-                                                            normal_for_generation_idx, outlier_emb, best_epoch, 
+                attention_stats = visualize_attention_weights(agg_attention_weights_last_epoch, labels, normal_for_train_idx, 
+                                                            normal_for_generation_idx, outlier_emb_last_epoch, best_epoch, 
                                                             args.dataset, device, adj_matrix_np, args)
         
         

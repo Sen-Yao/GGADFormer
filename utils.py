@@ -77,6 +77,7 @@ def load_mat(dataset, train_rate=0.3, val_rate=0.1, args=None):
     attr = data['Attributes'] if ('Attributes' in data) else data['X']
     network = data['Network'] if ('Network' in data) else data['A']
 
+
     adj = sp.csr_matrix(network)
     feat = sp.lil_matrix(attr)
 
@@ -96,7 +97,7 @@ def load_mat(dataset, train_rate=0.3, val_rate=0.1, args=None):
     num_train = int(num_node * train_rate)
     num_val = int(num_node * val_rate)
     all_idx = list(range(num_node))
-    random.shuffle(all_idx)
+    # random.shuffle(all_idx)
     idx_train = all_idx[: num_train]
     idx_val = all_idx[num_train: num_train + num_val]
     idx_test = all_idx[num_train + num_val:]
@@ -139,7 +140,7 @@ def load_mat(dataset, train_rate=0.3, val_rate=0.1, args=None):
     # replace_rate = 0.05 * normal_feat.shape[1]
     # feat[real_abnormal_id, :int(replace_rate)] = normal_feat[:, :int(replace_rate)]
 
-    random.shuffle(normal_for_train_idx)
+    # random.shuffle(normal_for_train_idx)
     # 0.05 for Amazon and 0.15 for other datasets
 
     # 选择一部分正常节点用于生成异常节点
