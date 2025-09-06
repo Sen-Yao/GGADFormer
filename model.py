@@ -173,7 +173,11 @@ class Model(nn.Module):
         # emb_con = self.act(self.fc4(noise))
         # emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
 
-        f_1 = self.fc1(emb_combine)
+        if train_flag:
+            f_1 = self.fc1(emb_combine)
+        else:
+            f_1 = self.fc1(emb)
+        
         f_1 = self.act(f_1)
         f_2 = self.fc2(f_1)
         f_2 = self.act(f_2)
