@@ -44,7 +44,7 @@ def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, 
     for i in range(nb_nodes):
         if labels[i] == 1:
             # 真实异常点
-            node_types.append("anomaly") 
+            node_types.append("real_anomaly") 
         else:
             node_types.append("normal")
     
@@ -121,7 +121,7 @@ def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, 
         if i < len(filtered_node_types):
             node_type = filtered_node_types[i]
         else:
-            node_type = "outliers"
+            node_type = "outlier"
         
         embedding_table_data_last_epoch.append([
             float(embeddings_2d_last_epoch[i, 0]),
@@ -139,7 +139,7 @@ def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, 
         if i < len(filtered_node_types):
             node_type = filtered_node_types[i]
         else:
-            node_type = "generated_anomaly"
+            node_type = "outlier"
         embedding_table_data_best_epoch.append([
             float(embeddings_2d_best_epoch[i, 0]),
             float(embeddings_2d_best_epoch[i, 1]),
