@@ -253,7 +253,8 @@ class GGADFormer(nn.Module):
         # outlier_emb = self.act(self.fc4(outlier_emb))
 
         # 基于注意力加权
-        outlier_emb = self.calculate_local_perturbation(normal_for_generation_emb, emb, agg_attention_weights, normal_for_generation_idx, adj, args)
+        outlier_emb = self.calculate_local_perturbation(emb, agg_attention_weights, normal_for_generation_idx, adj, args)
+        outlier_emb = self.act(self.fc4(outlier_emb))
         # outlier_emb: [num_nodes, hidden_dim]
         # emb_con = self.act(self.fc6(emb_con))
 
@@ -334,13 +335,12 @@ class GGADFormer(nn.Module):
         # gna_loss = torch.tensor(0.0, device=emb.device)
         return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss
     
-    def calculate_local_perturbation(self, emb_sampled, full_embeddings, agg_attention_weights, sample_normal_idx, adj, args):
+    def calculate_local_perturbation(self, full_embeddings, agg_attention_weights, sample_normal_idx, adj, args):
         """
         根据节点的注意力，计算邻居节点可以带来的局部扰动
-        现在使用所有邻居而不是topk
+        使用并行张量运算提高效率
 
         Args:
-            emb_sampled (Tensor): 采样正常节点的嵌入，形状 [1, num_sampled_nodes, hidden_dim]。
             full_embeddings (Tensor): 所有节点的完整嵌入，形状 [1, num_nodes, hidden_dim]。
             agg_attention_weights (Tensor): 聚合注意力权重矩阵，形状 [1, num_nodes, num_nodes]。
             sample_normal_idx (list or Tensor): 包含要生成离群点的原始正常节点索引的 Python 列表或 Tensor。
@@ -348,75 +348,48 @@ class GGADFormer(nn.Module):
             args (Namespace): 包含 hidden_dim。
 
         Returns:
-            Tensor: 聚合的扰动，形状 [1, num_sampled_nodes, hidden_dim]。
+            Tensor: 聚合的扰动，形状 [num_sampled_nodes, hidden_dim]。
         """
         # 将 list 转换为 Tensor
         if isinstance(sample_normal_idx, list):
             sample_normal_idx = torch.tensor(sample_normal_idx, dtype=torch.long, device=full_embeddings.device)
 
         num_sampled_nodes = sample_normal_idx.numel()
-        num_total_nodes = full_embeddings.shape[1]
         hidden_dim = args.embedding_dim
         device = full_embeddings.device
 
         if num_sampled_nodes == 0:
-            return torch.zeros(1, 0, hidden_dim, device=device)
+            return torch.zeros(0, hidden_dim, device=device)
 
-        # adj_matrix 形状: [num_total_nodes, num_total_nodes]
+        # adj_matrix 形状: [num_nodes, num_nodes]
         adj_matrix = adj.squeeze(0).bool() 
 
-        # selected_att_weights 形状: [num_sampled_nodes, num_total_nodes]
+        # selected_att_weights 形状: [num_sampled_nodes, num_nodes]
         selected_att_weights = agg_attention_weights[0, sample_normal_idx, :]
 
-        # masked_adj_rows 形状: [num_sampled_nodes, num_total_nodes]
+        # masked_adj_rows 形状: [num_sampled_nodes, num_nodes]
         masked_adj_rows = adj_matrix[sample_normal_idx]
 
-        # masked_att_weights 形状: [num_sampled_nodes, num_total_nodes]
+        # masked_att_weights 形状: [num_sampled_nodes, num_nodes]
         masked_att_weights = selected_att_weights.clone()
         masked_att_weights[~masked_adj_rows] = 0.0  # 非邻居节点权重设为0
 
-        # 获取所有邻居的嵌入
-        # full_embeddings.squeeze(0) 的形状是 [num_nodes, hidden_dim]
-        embeddings_to_gather = full_embeddings.squeeze(0)
+        # full_embeddings_squeezed 形状: [num_nodes, hidden_dim]
+        full_embeddings_squeezed = full_embeddings.squeeze(0)
 
-        # 为每个采样节点创建所有邻居的嵌入
-        neighbor_embeddings = []
-        neighbor_weights = []
+        # 使用矩阵乘法并行计算加权平均
+        # 归一化权重：对每个采样节点的所有邻居权重进行归一化
+        weight_sums = masked_att_weights.sum(dim=1, keepdim=True)  # [num_sampled_nodes, 1]
+        
+        # 处理权重总和为0的情况
+        weight_sums = torch.where(weight_sums == 0, torch.ones_like(weight_sums), weight_sums)
+        normalized_weights = masked_att_weights / weight_sums  # [num_sampled_nodes, num_nodes]
+        
+        # 并行计算加权平均：使用矩阵乘法
+        # aggregated_perturbations = normalized_weights @ full_embeddings_squeezed
+        aggregated_perturbations = torch.matmul(normalized_weights, full_embeddings_squeezed)  # [num_sampled_nodes, hidden_dim]
 
-        for i in range(num_sampled_nodes):
-            # 获取当前节点的邻居索引
-            neighbor_indices = torch.where(masked_adj_rows[i])[0]
-            if len(neighbor_indices) > 0:
-                # 获取邻居嵌入
-                current_neighbor_embeddings = embeddings_to_gather[neighbor_indices]
-                # 获取邻居权重
-                current_neighbor_weights = masked_att_weights[i, neighbor_indices]
-                
-                neighbor_embeddings.append(current_neighbor_embeddings)
-                neighbor_weights.append(current_neighbor_weights)
-            else:
-                # 如果没有邻居，使用零向量
-                neighbor_embeddings.append(torch.zeros(1, hidden_dim, device=device))
-                neighbor_weights.append(torch.zeros(1, device=device))
-
-        # 计算加权平均
-        aggregated_perturbations = []
-        for i in range(num_sampled_nodes):
-            if len(neighbor_embeddings[i]) > 0:
-                # 归一化权重
-                weights_sum = neighbor_weights[i].sum()
-                if weights_sum > 0:
-                    normalized_weights = neighbor_weights[i] / weights_sum
-                    # 计算加权平均
-                    weighted_embedding = torch.sum(neighbor_embeddings[i] * normalized_weights.unsqueeze(-1), dim=0)
-                else:
-                    # 如果权重总和为0，使用简单平均
-                    weighted_embedding = torch.mean(neighbor_embeddings[i], dim=0)
-                aggregated_perturbations.append(weighted_embedding)
-            else:
-                aggregated_perturbations.append(torch.zeros(hidden_dim, device=device))
-
-        return torch.stack(aggregated_perturbations)
+        return aggregated_perturbations
     
 
 class CommunityAutoencoder(nn.Module):
