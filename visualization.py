@@ -121,7 +121,7 @@ def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, 
         if i < len(filtered_node_types):
             node_type = filtered_node_types[i]
         else:
-            node_type = "generated_anomaly"
+            node_type = "outliers"
         
         embedding_table_data_last_epoch.append([
             float(embeddings_2d_last_epoch[i, 0]),
