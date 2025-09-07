@@ -205,7 +205,7 @@ class GGADFormer(nn.Module):
         )
 
         self.premutation_mlp = nn.Sequential(
-            nn.Linear(args.embedding_dim, args.embedding_dim),
+            nn.Linear(3 * args.embedding_dim, args.embedding_dim),
             nn.ReLU(),
             nn.Linear(args.embedding_dim, args.embedding_dim)
         )
@@ -244,7 +244,7 @@ class GGADFormer(nn.Module):
         # emb: [1, num_nodes, hidden_dim]
 
         # 生成全局中心点
-        h_mean = torch.mean(emb, dim=1, keepdim=True)
+        h_mean = torch.mean(emb[:, normal_for_train_idx, :], dim=1, keepdim=True)
         # h_mean: [1, 1, hidden_dim]
 
         outlier_emb = None
@@ -260,8 +260,10 @@ class GGADFormer(nn.Module):
         # outlier_emb = self.act(self.fc4(outlier_emb))
 
         # 基于注意力加权
-        outliers_perturbation = self.calculate_local_perturbation(emb, agg_attention_weights, normal_for_generation_idx, adj, args)
-        outliers_perturbation = self.premutation_mlp(outliers_perturbation)
+        weighted_neibhors_emb = self.calculate_local_perturbation(emb, agg_attention_weights, normal_for_generation_idx, adj, args)
+        # 显式扩展h_mean到正确的维度
+        h_mean_expanded = h_mean.squeeze(0).expand(normal_for_generation_emb.squeeze(0).shape[0], -1)
+        outliers_perturbation = self.premutation_mlp(torch.cat((normal_for_generation_emb.squeeze(0), weighted_neibhors_emb, h_mean_expanded), dim=1))
         # outliers_perturbation: [num_nodes, hidden_dim]
         # normal_for_generation_emb: [1, num_nodes, hidden_dim]
         outlier_emb = normal_for_generation_emb.squeeze(0) + outliers_perturbation
