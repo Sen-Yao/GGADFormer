@@ -12,6 +12,7 @@ from sklearn.metrics import average_precision_score
 import argparse
 from tqdm import tqdm
 import time
+import copy
 
 import wandb
 from visualization import create_tsne_visualization, visualize_attention_weights
@@ -247,7 +248,7 @@ def train(args):
             if auc > best_AUC and AP > best_AP:
                 best_AUC = auc
                 best_AP = AP
-                best_model_state = model.state_dict().copy()
+                best_model_state = copy.deepcopy(model.state_dict())
                 best_epoch = epoch
 
     pbar.close()  # 关闭进度条
