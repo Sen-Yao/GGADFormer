@@ -203,6 +203,13 @@ class GGADFormer(nn.Module):
             nn.ReLU(),
             nn.Linear(proj_dim, proj_dim)
         )
+
+        self.premutation_mlp = nn.Sequential(
+            nn.Linear(args.embedding_dim, args.embedding_dim),
+            nn.ReLU(),
+            nn.Linear(args.embedding_dim, args.embedding_dim)
+        )
+
         self.contrastive_proj_raw = nn.Sequential(nn.Linear(proj_dim, proj_dim // 2), nn.ReLU(), nn.Linear(proj_dim // 2, proj_dim))
         self.contrastive_proj_prop = nn.Sequential(nn.Linear(proj_dim, proj_dim // 2), nn.ReLU(), nn.Linear(proj_dim // 2, proj_dim))
 
@@ -253,8 +260,11 @@ class GGADFormer(nn.Module):
         # outlier_emb = self.act(self.fc4(outlier_emb))
 
         # 基于注意力加权
-        outlier_emb = self.calculate_local_perturbation(emb, agg_attention_weights, normal_for_generation_idx, adj, args)
-        outlier_emb = self.act(self.fc4(outlier_emb))
+        outliers_perturbation = self.calculate_local_perturbation(emb, agg_attention_weights, normal_for_generation_idx, adj, args)
+        outliers_perturbation = self.premutation_mlp(outliers_perturbation)
+        # outliers_perturbation: [num_nodes, hidden_dim]
+        # normal_for_generation_emb: [1, num_nodes, hidden_dim]
+        outlier_emb = normal_for_generation_emb.squeeze(0) + outliers_perturbation
         # outlier_emb: [num_nodes, hidden_dim]
         # emb_con = self.act(self.fc6(emb_con))
 
@@ -316,10 +326,12 @@ class GGADFormer(nn.Module):
             # 计算离群点嵌入与全局中心的距离
             # outlier_emb: [num_nodes, hidden_dim]
             # h_mean: [1, 1, hidden_dim]
-            outlier_to_center_dist = torch.norm(outlier_emb - h_mean.squeeze(0), p=2, dim=1)
+            # outlier_to_center_dist = torch.norm(outlier_emb - h_mean.squeeze(0), p=2, dim=1)
             # 只有超过 confidence_margin 的距离才会产生损失
-            margin_excess = outlier_to_center_dist - args.confidence_margin
-            con_loss = torch.mean(torch.relu(margin_excess))
+            # margin_excess = outlier_to_center_dist - args.confidence_margin
+            # con_loss = torch.mean(torch.relu(margin_excess))
+            # 改为约束聚合的扰动
+            con_loss = torch.mean(torch.norm(outliers_perturbation, p=2, dim=1))
 
             f_1 = self.fc1(emb_combine)
         else:
