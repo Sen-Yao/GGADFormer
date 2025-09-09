@@ -140,7 +140,7 @@ def train(args):
 
         # Train model
         train_flag = True
-        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss = model(concated_input_features, adj,
+        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj,
                                                                 normal_for_generation_idx, normal_for_train_idx,
                                                                 train_flag, args)
         if epoch % 10 == 0:
@@ -196,7 +196,7 @@ def train(args):
         diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
         loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
 
-        loss = dynamic_weights['margin_loss_weight'] * loss_margin + dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['gna_loss_weight'] * gna_loss
+        loss = dynamic_weights['margin_loss_weight'] * loss_margin + dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['gna_loss_weight'] * gna_loss + dynamic_weights['reconstruction_loss_weight'] * reconstruction_loss
 
         loss.backward()
         optimizer.step()
@@ -234,11 +234,12 @@ def train(args):
                         "con_loss": con_loss.item(),
                         "gna_loss": gna_loss.item(),
                         "train_loss": loss.item(),
+                        "reconstruction_loss": reconstruction_loss.item(),
                         "learning_rate": current_lr}, step=epoch)
         if epoch % 10 == 0 and epoch != 0:
             model.eval()
             train_flag = False
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                     train_flag, args)
             logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
             auc = roc_auc_score(ano_label[idx_test], logits)
@@ -264,12 +265,12 @@ def train(args):
             train_flag = True
 
             # 先运行最后一个 epoch 的模型
-            emb_last_epoch, _, _, outlier_emb_last_epoch, _, agg_attention_weights_last_epoch, _, _ = model(concated_input_features, adj, 
+            emb_last_epoch, _, _, outlier_emb_last_epoch, _, agg_attention_weights_last_epoch, _, _, _ = model(concated_input_features, adj, 
                                                                                 normal_for_generation_idx, normal_for_train_idx,
                                                                                 train_flag, args)
             # 再运行最佳模型的模型
             model.load_state_dict(best_model_state)
-            emb_best_epoch, _, _, outlier_emb_best_epoch, _, agg_attention_weights_best_epoch, _, _ = model(concated_input_features, adj, 
+            emb_best_epoch, _, _, outlier_emb_best_epoch, _, agg_attention_weights_best_epoch, _, _, _ = model(concated_input_features, adj, 
                                                                                             normal_for_generation_idx, normal_for_train_idx,
                                                                                             train_flag, args)
             
@@ -334,6 +335,7 @@ if __name__ == "__main__":
     parser.add_argument('--margin_loss_weight', type=float, default=0)
     parser.add_argument('--con_loss_weight', type=float, default=1.0)
     parser.add_argument('--gna_loss_weight', type=float, default=1.0)
+    parser.add_argument('--reconstruction_loss_weight', type=float, default=1.0)
     
     parser.add_argument('--con_loss_temp', type=float, default=10)
     parser.add_argument('--GNA_temp', type=float, default=1)

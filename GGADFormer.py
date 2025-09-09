@@ -206,6 +206,15 @@ class GGADFormer(nn.Module):
         self.contrastive_proj_raw = nn.Sequential(nn.Linear(proj_dim, proj_dim // 2), nn.ReLU(), nn.Linear(proj_dim // 2, proj_dim))
         self.contrastive_proj_prop = nn.Sequential(nn.Linear(proj_dim, proj_dim // 2), nn.ReLU(), nn.Linear(proj_dim // 2, proj_dim))
 
+        self.token_decoder = nn.Sequential(
+            nn.Linear(args.embedding_dim, args.embedding_dim),
+            nn.ReLU(),
+            nn.Linear(args.embedding_dim, 2 * n_in)
+        )
+
+        # 重构损失函数
+        self.recon_loss_fn = nn.MSELoss()
+
         # 将模型移动到指定设备
         self.to(self.device)
 
@@ -319,9 +328,17 @@ class GGADFormer(nn.Module):
             margin_excess = outlier_to_center_dist - args.confidence_margin
             con_loss = torch.mean(torch.relu(margin_excess))
 
+            # 重构损失
+            # 解码器重构原始输入tokens
+            reconstructed_tokens = self.token_decoder(emb)  # [1, num_nodes, input_dim]
+        
+            # 计算重构损失
+            reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens)
+
             f_1 = self.fc1(emb_combine)
         else:
             con_loss = torch.tensor(0.0, device=emb.device)
+            reconstruction_loss = torch.tensor(0.0, device=emb.device)
             f_1 = self.fc1(emb)
         f_1 = self.act(f_1)
         f_2 = self.fc2(f_1)
@@ -331,8 +348,7 @@ class GGADFormer(nn.Module):
         emb[:, normal_for_generation_idx, :] = outlier_emb
 
         # gna_loss = torch.tensor(0.0, device=emb.device)
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss
-    
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss, reconstruction_loss    
     def calculate_local_perturbation(self, emb_sampled, full_embeddings, agg_attention_weights, sample_normal_idx, adj, args):
         """
         根据节点的注意力，计算邻居节点可以带来的局部扰动
