@@ -107,6 +107,8 @@ def train(args):
     b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]).to(device))
     xent = nn.CrossEntropyLoss()
 
+    auc = 0
+    ap = 0
     best_AUC = 0
     best_AP = 0
     best_model_state = None
@@ -140,7 +142,9 @@ def train(args):
         # 更新进度条信息
         postfix_dict = {
             'Time': f'{total_time:.1f}s',
-            'Epoch': f'{epoch+1}/{args.num_epoch}'
+            'Epoch': f'{epoch+1}/{args.num_epoch}',
+            'AUC': f'{auc:.4f}',
+            'AP': f'{ap:.4f}'   
         }
         
         pbar.update(1)
@@ -167,9 +171,9 @@ def train(args):
             anomaly_scores = anomaly_scores[idx_test].cpu().detach().numpy()
             auc = roc_auc_score(ano_label[idx_test], anomaly_scores)
             # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
-            AP = average_precision_score(ano_label[idx_test], anomaly_scores, average='macro', pos_label=1, sample_weight=None)
+            ap = average_precision_score(ano_label[idx_test], anomaly_scores, average='macro', pos_label=1, sample_weight=None)
             # print('Testing AP:', AP)
-            wandb.log({"AUC": auc, "AP": AP}, step=epoch)
+            wandb.log({"AUC": auc, "AP": ap}, step=epoch)
             
             # 添加AUC和AP到进度条后缀
             postfix_dict['AUC'] = f'{auc:.4f}'
@@ -177,9 +181,9 @@ def train(args):
             pbar.set_postfix(postfix_dict)
             
             # 检查是否为最佳模型
-            if auc > best_AUC and AP > best_AP:
+            if auc > best_AUC and ap > best_AP:
                 best_AUC = auc
-                best_AP = AP
+                best_AP = ap
                 best_model_state = model.state_dict().copy()
                 best_epoch = epoch
 
