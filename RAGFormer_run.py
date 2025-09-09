@@ -126,10 +126,10 @@ def train(args):
 
         # Train model
         train_flag = True
-        emb, anomaly_scores, reconstruction_loss = model(concated_input_features, adj,
+        emb, anomaly_scores, reconstruction_loss, compact_loss = model(concated_input_features, adj,
                                                                 normal_for_generation_idx, normal_for_train_idx,
                                                                 train_flag, args)
-        loss = reconstruction_loss
+        loss = reconstruction_loss * dynamic_weights['reconstruction_loss_weight'] + compact_loss * dynamic_weights['compact_loss_weight']
         loss.backward()
         optimizer.step()
         lr_scheduler.step()
@@ -160,13 +160,14 @@ def train(args):
             # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
             # print("=====================================================================")
             wandb.log({ 
-                        "rec_loss": reconstruction_loss.item(),
+                        "reconstruction_loss": reconstruction_loss.item(),
+                        "compact_loss": compact_loss.item(),
                         "train_loss": loss.item(),
                         "learning_rate": current_lr}, step=epoch)
         if epoch % 10 == 0 and epoch != 0:
             model.eval()
             train_flag = False
-            emb, anomaly_scores, reconstruction_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
+            emb, anomaly_scores, reconstruction_loss, compact_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                     train_flag, args)
             anomaly_scores = anomaly_scores[idx_test].cpu().detach().numpy()
             auc = roc_auc_score(ano_label[idx_test], anomaly_scores)
@@ -175,10 +176,6 @@ def train(args):
             # print('Testing AP:', AP)
             wandb.log({"AUC": auc, "AP": ap}, step=epoch)
             
-            # 添加AUC和AP到进度条后缀
-            postfix_dict['AUC'] = f'{auc:.4f}'
-            postfix_dict['AP'] = f'{AP:.4f}'
-            pbar.set_postfix(postfix_dict)
             
             # 检查是否为最佳模型
             if auc > best_AUC and ap > best_AP:
@@ -197,12 +194,12 @@ def train(args):
             train_flag = True
 
             # 先运行最后一个 epoch 的模型
-            emb_last_epoch, _, _ = model(concated_input_features, adj, 
+            emb_last_epoch, _, _, _ = model(concated_input_features, adj, 
                                                                                 normal_for_generation_idx, normal_for_train_idx,
                                                                                 train_flag, args)
             # 再运行最佳模型的模型
             model.load_state_dict(best_model_state)
-            emb_best_epoch, _, _ = model(concated_input_features, adj, 
+            emb_best_epoch, _, _, _ = model(concated_input_features, adj, 
                                                                                             normal_for_generation_idx, normal_for_train_idx,
                                                                                             train_flag, args)
         
@@ -267,6 +264,8 @@ if __name__ == "__main__":
     # RAGFormer
     parser.add_argument('--mask_ratio', type=float, default=0.1)
     parser.add_argument('--mask_edge', type=float, default=0.1)
+    parser.add_argument('--reconstruction_loss_weight', type=float, default=1.0)
+    parser.add_argument('--compact_loss_weight', type=float, default=1.0)
 
     args = parser.parse_args()
 

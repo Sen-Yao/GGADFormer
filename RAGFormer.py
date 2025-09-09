@@ -198,10 +198,22 @@ class RAGFormer(nn.Module):
             # 训练模式：直接使用token重构损失
             reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, concated_input_features)
             anomaly_scores = torch.tensor(0.0, device=self.device)
+
+            # 计算正常节点的全局中心
+            emb_normal_mean = torch.mean(emb[0, normal_for_train_idx], dim=0)
+
+            # 计算正常节点聚类损失：鼓励正常节点靠近全局中心
+            normal_embeddings = emb[0, normal_for_train_idx]  # [num_normal_nodes, emb_dim]
+            # 计算每个正常节点到全局中心的欧氏距离平方
+            center_distances = torch.sum((normal_embeddings - emb_normal_mean) ** 2, dim=1)
+            # 使用均方误差作为聚类损失
+            compact_loss = torch.mean(center_distances)
+            
         else:
             # 推理模式：计算每个节点的异常分数
             reconstruction_loss = torch.tensor(0.0, device=self.device)
-
+            compact_loss = torch.tensor(0.0, device=self.device)
+            
             num_nodes = masked_tokens.shape[1]
             anomaly_scores = torch.zeros(num_nodes, device=self.device)
             
@@ -224,5 +236,5 @@ class RAGFormer(nn.Module):
                     # 如果所有分数相同，设置为0.5
                     anomaly_scores = torch.full_like(anomaly_scores, 0.5)
 
-        return emb, anomaly_scores, reconstruction_loss
+        return emb, anomaly_scores, reconstruction_loss, compact_loss
     
