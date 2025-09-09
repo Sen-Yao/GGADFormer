@@ -160,6 +160,127 @@ def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, 
     print("tsne visualization done!\n")
 
 
+def RAGFormer_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, epoch, normal_for_train_idx, ):
+    """
+    创建tsne可视化并保存到wandb
+    
+    Args:
+        features: 原始特征 [num_nodes, feature_dim]
+        embeddings: 模型生成的嵌入 [num_nodes, embedding_dim]
+        labels: 真实标签 [num_nodes]
+        epoch: 当前epoch
+        normal_for_train_idx: 用于训练的正常节点索引
+    """
+    # 准备tsne数据
+    # 获取原始特征
+    features = features.squeeze(0)
+    
+    # 获取嵌入（去掉batch维度）
+
+    embeddings_last_epoch = emb_last_epoch.squeeze(0)  # [num_nodes, embedding_dim]
+    embeddings_best_epoch = emb_best_epoch.squeeze(0)  # [num_nodes, embedding_dim]
+    
+    # 获取真实标签（去掉batch维度）
+    labels = labels.squeeze(0)  # [num_nodes]
+
+    
+    # 创建节点类型标签
+    node_types = []
+    nb_nodes = features.shape[0]
+    for i in range(nb_nodes):
+        if labels[i] == 1:
+            # 真实异常点
+            node_types.append("anomaly") 
+        else:
+            node_types.append("normal")
+    
+    # 将数据移到CPU并转换为numpy，使用detach()避免梯度问题
+    print(f"\n\nStarting tsne visualization...")
+    features = features.cpu().detach().numpy()
+    embeddings_last_epoch = embeddings_last_epoch.cpu().detach().numpy()
+    embeddings_best_epoch = embeddings_best_epoch.cpu().detach().numpy()
+    labels = labels.cpu().detach().numpy()
+
+    num_nodes = features.shape[0]
+
+    # 创建过滤索引：只包含异常节点和属于normal_for_train_idx的正常节点
+    filter_indices = []
+    for i in range(num_nodes):
+        if labels[i] == 1:  # 异常节点
+            filter_indices.append(i)
+        elif i in normal_for_train_idx:  # 属于训练集的正常节点
+            filter_indices.append(i)
+    
+    # 过滤特征和标签
+    filtered_features = features[filter_indices]
+    filtered_node_types = [node_types[i] for i in filter_indices]
+    
+    # 过滤嵌入（只过滤原始节点，不包括生成的异常节点）
+    filtered_embeddings_last_epoch = embeddings_last_epoch[:num_nodes][filter_indices]
+    filtered_embeddings_best_epoch = embeddings_best_epoch[:num_nodes][filter_indices]
+
+    # 创建tsne可视化
+    tsne = TSNE(n_components=2, random_state=42, perplexity=30, init='random', learning_rate=200.0)
+    
+    # 对过滤后的原始特征进行tsne
+    features_2d = tsne.fit_transform(filtered_features)
+    
+    # 对过滤后的嵌入进行tsne
+    embeddings_2d_last_epoch = tsne.fit_transform(filtered_embeddings_last_epoch)
+    embeddings_2d_best_epoch = tsne.fit_transform(filtered_embeddings_best_epoch)
+    # 创建wandb表格
+    # 原始特征空间的tsne
+    feature_table_data = []
+    for i in range(len(features_2d)):
+        feature_table_data.append([
+            float(features_2d[i, 0]),
+            float(features_2d[i, 1]),
+            filtered_node_types[i]
+        ])
+    
+    feature_table = wandb.Table(
+        columns=["TSNE_X", "TSNE_Y", "Node_Type"],
+        data=feature_table_data
+    )
+    
+    # 嵌入空间的tsne
+    embedding_table_data_last_epoch = []
+    for i in range(len(embeddings_2d_last_epoch)):
+        node_type = filtered_node_types[i]
+        
+        embedding_table_data_last_epoch.append([
+            float(embeddings_2d_last_epoch[i, 0]),
+            float(embeddings_2d_last_epoch[i, 1]),
+            node_type
+        ])
+    
+    embedding_table_last_epoch = wandb.Table(
+        columns=["TSNE_X", "TSNE_Y", "Node_Type"],
+        data=embedding_table_data_last_epoch
+    )
+
+    embedding_table_data_best_epoch = []
+    for i in range(len(embeddings_2d_best_epoch)):
+        node_type = filtered_node_types[i]
+        embedding_table_data_best_epoch.append([
+            float(embeddings_2d_best_epoch[i, 0]),
+            float(embeddings_2d_best_epoch[i, 1]),
+            node_type
+        ])
+    
+    embedding_table_best_epoch = wandb.Table(
+        columns=["TSNE_X", "TSNE_Y", "Node_Type"],
+        data=embedding_table_data_best_epoch
+    )
+    
+    # 记录到wandb
+    wandb.log({
+        f"tsne_features": feature_table,
+        f"tsne_embeddings_last_epoch": embedding_table_last_epoch,
+        f"tsne_embeddings_best_epoch_{epoch}": embedding_table_best_epoch
+    })
+    print("tsne visualization done!\n")
+
 def visualize_attention_weights(agg_attention_weights, labels, normal_for_train_idx, normal_for_generation_idx, 
                                outlier_emb, epoch, dataset_name, device, adj_matrix=None, args=None):
     """
