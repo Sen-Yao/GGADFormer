@@ -15,7 +15,7 @@ from tqdm import tqdm
 import time
 
 import wandb
-from visualization import create_tsne_visualization, visualize_attention_weights
+from visualization import create_tsne_visualization, visualize_attention_weights, RAGFormer_tsne_visualization
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -128,7 +128,10 @@ def train(args):
         train_flag = True
         emb, anomaly_scores, reconstruction_loss, compact_loss = model(concated_input_features, adj,
                                                                 normal_for_generation_idx, normal_for_train_idx,
-                                                                train_flag, args)
+                                                                train_flag, epoch, args)
+        # lbl = torch.zeros(len(normal_for_train_idx)).to(device)
+        # loss_bce = b_xent(anomaly_scores[normal_for_train_idx], lbl)
+        # loss_bce = torch.mean(loss_bce)
         loss = reconstruction_loss * dynamic_weights['reconstruction_loss_weight'] + compact_loss * dynamic_weights['compact_loss_weight']
         loss.backward()
         optimizer.step()
@@ -168,7 +171,7 @@ def train(args):
             model.eval()
             train_flag = False
             emb, anomaly_scores, reconstruction_loss, compact_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
-                                                                    train_flag, args)
+                                                                    train_flag, epoch, args)
             anomaly_scores = anomaly_scores[idx_test].cpu().detach().numpy()
             auc = roc_auc_score(ano_label[idx_test], anomaly_scores)
             # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
@@ -196,13 +199,14 @@ def train(args):
             # 先运行最后一个 epoch 的模型
             emb_last_epoch, _, _, _ = model(concated_input_features, adj, 
                                                                                 normal_for_generation_idx, normal_for_train_idx,
-                                                                                train_flag, args)
+                                                                                train_flag, epoch, args)
             # 再运行最佳模型的模型
             model.load_state_dict(best_model_state)
             emb_best_epoch, _, _, _ = model(concated_input_features, adj, 
                                                                                             normal_for_generation_idx, normal_for_train_idx,
-                                                                                            train_flag, args)
-        
+                                                                                            train_flag, epoch, args)
+            RAGFormer_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, epoch, normal_for_train_idx)
+
 
 if __name__ == "__main__":
     
