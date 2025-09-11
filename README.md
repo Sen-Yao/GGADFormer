@@ -68,11 +68,11 @@ con_loss = torch.mean(torch.relu(margin_excess))
 
 在 `photo` 数据集上，采用仅有 5% 的训练集划分，GGADFormer 在 AUC 和 AP 指标上均展现出优异性能，且优于现有 SOTA 方法 GGAD。
 
-  * **AUC**: 0.6318, $\\sigma$=0.023
-  * **AP**: 0.1436, $\\sigma$=0.015
+  * **AUC**: 0.6462, $\\sigma$=0.030
+  * **AP**: 0.1685, $\\sigma$=0.021
 
 以下为复现实验所使用的超参数配置：
 
 ```bash
-python run.py --GT_attention_dropout=0.4 --GT_dropout=0.4 --GT_ffn_dim=256 --GT_num_heads=3 --GT_num_layers=3 --con_loss_weight=5 --dataset=photo --embedding_dim=256 --model_type=GGADFormer --num_epoch=100 --peak_lr=5e-4 --pp_k=3 --progregate_alpha=0.1 --proj_dim=32 --rec_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_epoch=20 --device 7
+python run.py --GT_attention_dropout=0.4 --GT_dropout=0.4 --GT_ffn_dim=256 --GT_num_heads=3 --GT_num_layers=3 --con_loss_weight=5 --dataset=photo --embedding_dim=256 --model_type=GGADFormer --num_epoch=150 --peak_lr=2e-4 --pp_k=3 --progregate_alpha=0.1 --proj_dim=32 --reconstruction_loss_weight=0.5 --train_rate=0.05 --warmup_epoch=20 --device 0
 ```
