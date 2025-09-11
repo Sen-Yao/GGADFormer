@@ -110,7 +110,7 @@ def train(args):
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.peak_lr, weight_decay=args.weight_decay)
     lr_scheduler = PolynomialDecayLR(
         optimizer,
-        warmup_updates=int(0.1 * args.num_epoch),
+        warmup_updates=int(0.1 * args.num_epoch) if args.warmup_updates == 0 else args.warmup_updates,
         tot_updates=args.num_epoch,
         lr=args.peak_lr,
         end_lr=args.end_lr,
@@ -341,7 +341,7 @@ if __name__ == "__main__":
     parser.add_argument('--GNA_temp', type=float, default=1)
     
 
-    parser.add_argument('--warmup_updates', type=int, default=100)
+    parser.add_argument('--warmup_updates', type=int, default=0)
     parser.add_argument('--tot_updates', type=int, default=1000)
     parser.add_argument('--peak_lr', type=float, default=1e-4)    
     parser.add_argument('--end_lr', type=float, default=0)
