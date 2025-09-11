@@ -299,7 +299,7 @@ if __name__ == "__main__":
     parser.add_argument('--lr', type=float)
     parser.add_argument('--weight_decay', type=float, default=0.0)
     parser.add_argument('--seed', type=int, default=0)
-    parser.add_argument('--data_split_seed', type=int, default=0)
+    parser.add_argument('--data_split_seed', type=int, default=42)
     parser.add_argument('--train_rate', type=float, default=0.3)
 
     parser.add_argument('--embedding_dim', type=int, default=300)
