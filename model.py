@@ -187,5 +187,6 @@ class Model(nn.Module):
         agg_attention_weights = 0
         con_loss = torch.tensor(0.0, device=emb.device)
         gna_loss = torch.tensor(0.0, device=emb.device)
+        reconstruction_loss = torch.tensor(0.0, device=emb.device)
 
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss, reconstruction_loss
