@@ -110,7 +110,7 @@ def train(args):
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.peak_lr, weight_decay=args.weight_decay)
     lr_scheduler = PolynomialDecayLR(
         optimizer,
-        warmup_updates=int(0.1 * args.num_epoch) if args.warmup_updates == 0 else args.warmup_updates,
+        warmup_updates=int(0.1 * args.num_epoch) if args.warmup_updates == -1 else args.warmup_updates,
         tot_updates=args.num_epoch,
         lr=args.peak_lr,
         end_lr=args.end_lr,
