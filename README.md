@@ -88,7 +88,7 @@ AUC:
 
 |Dataset|Amazon|Reddit|photo|
 |-|-|-|-|
-|GGAD|0.7514±0.0410|0.5274±0.0052|0.6114±0.0219|
+|GGAD|0.7514±0.0410|0.5274±0.0052|0.6147±0.0219|
 |GGADFormer|0.8171±0.0276|0.5560±0.0462|0.6922±0.0457
 
 AP:
@@ -105,18 +105,18 @@ AP:
 
 ```bash
 # Amazon
-python run.py --embedding_dim=300 --model_type=GGAD --num_epoch=200 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=reddit 
+python run.py --embedding_dim=300 --model_type=GGAD --margin_loss_weight=1 --warmup_updates=0 --num_epoch=200 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=reddit 
 ```
 
 ```bash
 # reddit
-python run.py --embedding_dim=300 --model_type=GGAD --num_epoch=50 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=reddit 
+python run.py --embedding_dim=300 --model_type=GGAD --margin_loss_weight=1 --warmup_updates=0 --num_epoch=50 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=reddit 
 ```
 
 
 ```bash
 # photo
-python run.py --embedding_dim=300 --model_type=GGAD --num_epoch=50 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=reddit 
+python run.py --embedding_dim=300 --model_type=GGAD --margin_loss_weight=1 --warmup_updates=0 --num_epoch=50 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=photo 
 ```
 
 ### GGADFormer
