@@ -76,13 +76,57 @@ con_loss = torch.mean(torch.relu(margin_excess))
 
 ## 实验结果
 
-在 `photo` 数据集上，采用仅有 5% 的训练集划分，GGADFormer 在 AUC 和 AP 指标上均展现出优异性能，且优于现有 SOTA 方法 GGAD。
+我们在 `Amazon`, `photo` 和 `reddit` 三个不同的数据集上，采用仅有 5% 的训练集划分，GGADFormer 在 AUC 和 AP 指标上均展现出优异性能，且优于现有 SOTA 方法 GGAD。
 
-  * **AUC**: 0.6462, $\\sigma$=0.030
-  * **AP**: 0.1685, $\\sigma$=0.021
+AUC:
+
+
+|Dataset|Amazon|Reddit|photo|
+|-|-|-|-|
+|GGAD|0.7514±0.0410|0.5274±0.0052|0.6114±0.0219|
+|GGADFormer|0.8171±0.0276|0.5560±0.0462|0.6922±0.0457
+
+AP:
+
+|Dataset|Amazon|Reddit|photo|
+|-|-|-|-|
+|GGAD|0.3755±0.0749|0.0360±0.0003|0.1269±0.0091|
+|GGADFormer|0.4915±0.1242|0.0427±0.0073|0.21355±0.0534
+
 
 以下为复现实验所使用的超参数配置：
 
+### GGAD
+
 ```bash
-python run.py --GT_attention_dropout=0.4 --GT_dropout=0.4 --GT_ffn_dim=256 --GT_num_heads=3 --GT_num_layers=3 --con_loss_weight=5 --dataset=photo --embedding_dim=256 --model_type=GGADFormer --num_epoch=150 --peak_lr=2e-4 --pp_k=3 --progregate_alpha=0.1 --proj_dim=32 --reconstruction_loss_weight=0.5 --train_rate=0.05 --warmup_epoch=20 --device 0
+# Amazon
+python run.py --embedding_dim=300 --model_type=GGAD --num_epoch=200 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=reddit 
+```
+
+```bash
+# reddit
+python run.py --embedding_dim=300 --model_type=GGAD --num_epoch=50 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=reddit 
+```
+
+
+```bash
+# photo
+python run.py --embedding_dim=300 --model_type=GGAD --num_epoch=50 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=reddit 
+```
+
+### GGADFormer
+
+```bash
+# Amazon
+python run.py --GT_attention_dropout=0.4 --GT_dropout=0.4 --GT_ffn_dim=128 --GT_num_heads=2 --GT_num_layers=2 --con_loss_weight=10 --dataset=Amazon --embedding_dim=128 --model_type=GGADFormer --num_epoch=200 --warmup_updates=50 --peak_lr=2e-4 --end_lr=8e-5 --pp_k=2 --progregate_alpha=0.05 --proj_dim=64 --seed=0 --train_rate=0.05 --warmup_epoch=50 --confidence_margin=2
+```
+
+```bash
+# reddit
+python run.py --GT_attention_dropout=0.4 --GT_dropout=0.4 --GT_ffn_dim=128 --GT_num_heads=2 --GT_num_layers=2 --con_loss_weight=10 --dataset=reddit --embedding_dim=128 --model_type=GGADFormer --num_epoch=400 --warmup_updates=50 --peak_lr=3e-4 --end_lr=1e-4 --pp_k=1 --progregate_alpha=0.1 --proj_dim=64 --seed=0 --train_rate=0.05 --warmup_epoch=50 --confidence_margin=2
+```
+
+```bash
+# photo
+python run.py --GT_attention_dropout=0.4 --GT_dropout=0.4 --GT_ffn_dim=128 --GT_num_heads=2 --GT_num_layers=2 --con_loss_weight=10 --confidence_margin=2 --data_split_seed=42 --dataset=photo --embedding_dim=128 --end_lr=2e-4 --model_type=GGADFormer --num_epoch=150 --peak_lr=3e-4 --pp_k=3 --progregate_alpha=0.05 --proj_dim=64 --seed=4 --train_rate=0.05 --warmup_epoch=50 --warmup_updates=50
 ```
