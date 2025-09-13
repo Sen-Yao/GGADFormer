@@ -55,28 +55,27 @@ def train(args):
 
     nb_nodes = features.shape[0]
     ft_size = features.shape[1]
-    raw_adj = adj
-    #print(adj.sum())
+    if args.model_type == 'GGAD':
+        raw_adj = adj
+        #print(adj.sum())
+        raw_adj = (raw_adj + sp.eye(raw_adj.shape[0])).todense()
+        raw_adj = torch.FloatTensor(raw_adj[np.newaxis])
+        raw_adj = raw_adj.to(device)
+
     adj = normalize_adj(adj)
-
-    raw_adj = (raw_adj + sp.eye(raw_adj.shape[0])).todense()
     adj = (adj + sp.eye(adj.shape[0])).todense()
-
     features = torch.FloatTensor(features[np.newaxis])
     # adj = torch.FloatTensor(adj[np.newaxis])
     features = torch.FloatTensor(features)
     adj = torch.FloatTensor(adj)
     # adj = adj.to_sparse_csr()
     adj = torch.FloatTensor(adj[np.newaxis])
-    raw_adj = torch.FloatTensor(raw_adj[np.newaxis])
     labels = torch.FloatTensor(labels[np.newaxis])
 
     # 将数据移动到指定设备
     features = features.to(device)
     adj = adj.to(device)
-    raw_adj = raw_adj.to(device)
     labels = labels.to(device)
-
 
     # concated_input_features.shape: torch.Size([1, node_num, 2 * feature_dim])
 
@@ -140,6 +139,7 @@ def train(args):
 
         # Train model
         train_flag = True
+        print("start forward")
         emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj,
                                                                 normal_for_generation_idx, normal_for_train_idx,
                                                                 train_flag, args)
@@ -160,38 +160,29 @@ def train(args):
 
         loss_bce = b_xent(logits, lbl)
         loss_bce = torch.mean(loss_bce)
-
+        if args.model_type == 'GGAD':
         # Local affinity margin loss
-        emb = torch.squeeze(emb)
+            emb = torch.squeeze(emb)
 
-        emb_inf = torch.norm(emb, dim=-1, keepdim=True)
-        emb_inf = torch.pow(emb_inf, -1)
-        emb_inf[torch.isinf(emb_inf)] = 0.
-        emb_norm = emb * emb_inf
+            emb_inf = torch.norm(emb, dim=-1, keepdim=True)
+            emb_inf = torch.pow(emb_inf, -1)
+            emb_inf[torch.isinf(emb_inf)] = 0.
+            emb_norm = emb * emb_inf
 
-        sim_matrix = torch.mm(emb_norm, emb_norm.T)
-        raw_adj = torch.squeeze(raw_adj)
-        similar_matrix = sim_matrix * raw_adj
+            sim_matrix = torch.mm(emb_norm, emb_norm.T)
+            raw_adj = torch.squeeze(raw_adj)
+            similar_matrix = sim_matrix * raw_adj
 
-        r_inv = torch.pow(torch.sum(raw_adj, 0), -1)
-        r_inv[torch.isinf(r_inv)] = 0.
-        affinity = torch.sum(similar_matrix, 0) * r_inv
+            r_inv = torch.pow(torch.sum(raw_adj, 0), -1)
+            r_inv[torch.isinf(r_inv)] = 0.
+            affinity = torch.sum(similar_matrix, 0) * r_inv
 
-        affinity_normal_mean = torch.mean(affinity[normal_for_train_idx])
-        affinity_abnormal_mean = torch.mean(affinity[normal_for_generation_idx])
+            affinity_normal_mean = torch.mean(affinity[normal_for_train_idx])
+            affinity_abnormal_mean = torch.mean(affinity[normal_for_generation_idx])
 
-        # if epoch % 10 == 0:
-        #     real_abnormal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 1).squeeze()].tolist()
-        #     real_normal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 0).squeeze()].tolist()
-        #     overlap = list(set(real_abnormal_label_idx) & set(real_normal_label_idx))
-        #
-        #     real_affinity, index = torch.sort(affinity[real_abnormal_label_idx])
-        #     real_affinity = real_affinity[:300]
-        #     draw_pdf(np.array(affinity[real_normal_label_idx].detach().cpu()),
-        #              np.array(affinity[abnormal_label_idx].detach().cpu()),
-        #              np.array(real_affinity.detach().cpu()), args.dataset, epoch)
-
-        loss_margin = (args.confidence_margin - (affinity_normal_mean - affinity_abnormal_mean)).clamp_min(min=0)
+            loss_margin = (args.confidence_margin - (affinity_normal_mean - affinity_abnormal_mean)).clamp_min(min=0)
+        else:
+            loss_margin = torch.tensor(0.0)
 
         diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
         loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
