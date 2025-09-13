@@ -87,11 +87,11 @@ def train(args):
     # Initialize model and optimiser
 
     if args.model_type == 'GGADFormer':
-        progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k, args.progregate_alpha).to(args.device).unsqueeze(0)
-        concated_input_features = torch.concat((features.to(args.device), progregated_features), dim=2)
+        progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k, args.progregate_alpha).to(device).unsqueeze(0)
+        concated_input_features = torch.concat((features.to(device), progregated_features), dim=2)
         model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
     elif args.model_type == 'SGT':
-        concated_input_features = preprocess_sample_features(args, features.squeeze(0), adj.squeeze(0)).to(args.device)
+        concated_input_features = preprocess_sample_features(args, features.squeeze(0), adj.squeeze(0)).to(device)
         model = SGT(n_layers=args.GT_num_layers,
             input_dim=concated_input_features.shape[-1],
             hidden_dim=args.embedding_dim,
@@ -102,7 +102,7 @@ def train(args):
             attention_dropout_rate=args.GT_attention_dropout,
             args=args).to(device)
     elif args.model_type == 'GGAD':
-        concated_input_features = features.to(args.device)
+        concated_input_features = features.to(device)
         model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout, args)
     else:
         raise ValueError(f"Invalid model type: {args.model_type}")
