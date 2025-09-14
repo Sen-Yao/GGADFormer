@@ -214,6 +214,13 @@ class GGADFormer(nn.Module):
 
         # 重构损失函数
         self.recon_loss_fn = nn.MSELoss()
+        
+        # 投影层：将重构误差从2*n_in维度投影到embedding_dim维度
+        self.reconstruction_proj = nn.Sequential(
+            nn.Linear( 2 * n_in, args.embedding_dim),
+            nn.ReLU(),
+            nn.Linear(args.embedding_dim, args.embedding_dim)
+        )
 
         # 将模型移动到指定设备
         self.to(self.device)
@@ -258,14 +265,25 @@ class GGADFormer(nn.Module):
         # degree = torch.sum(raw_adj[0, :, :], 0)[sample_abnormal_idx]
         # neigh_adj = raw_adj[0, sample_abnormal_idx, :] / torch.unsqueeze(degree, 1)
 
-        neigh_adj = adj[0, normal_for_generation_idx, :]
+        # neigh_adj = adj[0, normal_for_generation_idx, :]
         # emb[0, sample_abnormal_idx, :] =self.act(torch.mm(neigh_adj, emb[0, :, :]))
         # emb[0, sample_abnormal_idx, :] = self.fc4(emb[0, sample_abnormal_idx, :])
 
-        outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
-        outlier_emb = self.act(self.fc4(outlier_emb))
+        # outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
+        # outlier_emb = self.act(self.fc4(outlier_emb))
         # outlier_emb: [num_nodes, hidden_dim]
         # emb_con = self.act(self.fc6(emb_con))
+
+        # 重构损失
+        # 解码器重构原始输入tokens
+        reconstructed_tokens = self.token_decoder(emb)  # [1, num_nodes, 2*n_in]
+        reconstruction_error = reconstructed_tokens - input_tokens
+        # Project reconstruction error to embedding dimension
+        reconstruction_error_proj = self.reconstruction_proj(reconstruction_error[:, normal_for_generation_idx, :])
+        outlier_emb = normal_for_generation_emb + args.outlier_alpha * reconstruction_error_proj
+        outlier_emb = outlier_emb.squeeze(0)
+        # 计算重构损失
+        reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens)
 
         emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
@@ -328,12 +346,6 @@ class GGADFormer(nn.Module):
             margin_excess = outlier_to_center_dist - args.confidence_margin
             con_loss = torch.mean(torch.relu(margin_excess))
 
-            # 重构损失
-            # 解码器重构原始输入tokens
-            reconstructed_tokens = self.token_decoder(emb)  # [1, num_nodes, input_dim]
-        
-            # 计算重构损失
-            reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens)
 
             f_1 = self.fc1(emb_combine)
         else:
