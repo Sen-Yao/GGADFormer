@@ -287,14 +287,13 @@ if __name__ == "__main__":
 
     parser.add_argument('--dataset', type=str,
                         default='reddit')
-    parser.add_argument('--lr', type=float)
     parser.add_argument('--weight_decay', type=float, default=0.0)
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--data_split_seed', type=int, default=42)
-    parser.add_argument('--train_rate', type=float, default=0.3)
+    parser.add_argument('--train_rate', type=float, default=0.05)
 
-    parser.add_argument('--embedding_dim', type=int, default=300)
-    parser.add_argument('--proj_dim', type=int, default=32)
+    parser.add_argument('--embedding_dim', type=int, default=128)
+    parser.add_argument('--proj_dim', type=int, default=64)
     parser.add_argument('--num_epoch', type=int)
     parser.add_argument('--drop_prob', type=float, default=0.0)
     parser.add_argument('--readout', type=str, default='avg')  # max min avg  weighted_sum
@@ -302,7 +301,7 @@ if __name__ == "__main__":
     parser.add_argument('--negsamp_ratio', type=int, default=1)
     parser.add_argument('--mean', type=float, default=0.0)
     parser.add_argument('--var', type=float, default=0.0)
-    parser.add_argument('--confidence_margin', type=float, default=0.7)
+    parser.add_argument('--confidence_margin', type=float, default=2)
     parser.add_argument('--sample_rate', type=float, default=0.15)
     
     parser.add_argument('--model_type', type=str, default='GGADFormer')
@@ -316,15 +315,15 @@ if __name__ == "__main__":
     parser.add_argument('--sample_size', type=int, default=10000)
 
     parser.add_argument('--GT_ffn_dim', type=int, default=128)
-    parser.add_argument('--GT_dropout', type=float, default=0.5)
-    parser.add_argument('--GT_attention_dropout', type=float, default=0.5)
-    parser.add_argument('--GT_num_heads', type=int, default=1)
-    parser.add_argument('--GT_num_layers', type=int, default=3)
+    parser.add_argument('--GT_dropout', type=float, default=0.4)
+    parser.add_argument('--GT_attention_dropout', type=float, default=0.4)
+    parser.add_argument('--GT_num_heads', type=int, default=2)
+    parser.add_argument('--GT_num_layers', type=int, default=2)
 
     parser.add_argument('--rec_loss_weight', type=float, default=1.0)
     parser.add_argument('--bce_loss_weight', type=float, default=1.0)
     parser.add_argument('--margin_loss_weight', type=float, default=0)
-    parser.add_argument('--con_loss_weight', type=float, default=1.0)
+    parser.add_argument('--con_loss_weight', type=float, default=10)
     parser.add_argument('--gna_loss_weight', type=float, default=1.0)
     parser.add_argument('--reconstruction_loss_weight', type=float, default=1.0)
     
@@ -342,29 +341,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.lr is None:
-        if args.dataset in ['Amazon']:
-            args.lr = 1e-3
-        elif args.dataset in ['t_finance']:
-            args.lr = 1e-3
-        elif args.dataset in ['reddit']:
-            args.lr = 1e-3
-        elif args.dataset in ['photo']:
-            args.lr = 1e-3
-        elif args.dataset in ['elliptic']:
-            args.lr = 1e-3
-
-    if args.num_epoch is None:
-        if args.dataset in ['photo']:
-            args.num_epoch = 80
-        if args.dataset in ['elliptic']:
-            args.num_epoch = 150
-        if args.dataset in ['reddit']:
-            args.num_epoch = 300
-        elif args.dataset in ['t_finance']:
-            args.num_epoch = 500
-        elif args.dataset in ['Amazon']:
-            args.num_epoch = 800
     if args.dataset in ['reddit', 'photo']:
         args.mean = 0.02
         args.var = 0.01
