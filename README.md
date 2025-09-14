@@ -24,13 +24,13 @@ pip install -r requirements.txt
 
 传统的图神经网络（如 GCN）通过邻居聚合来学习节点表示，但这通常会导致\*\*过度平滑（over-smoothing）\*\*问题，即随着传播层数增加，节点的表示趋于同质化，难以区分，这对需要捕捉细微差异的异常检测任务是致命的。
 
-为解决此问题并让 Transformer 感知到图结构信息，我们采用一种**个性化 PageRank (PPR)** 传播机制来编码节点的拓扑特征。
+为解决此问题并让 Transformer 感知到图结构信息，我们采用一种基于传播机制来编码节点的拓扑特征。
 
-$$\text{features} = (1-\alpha) \cdot \mathbf{A} \cdot \text{features} + \alpha \cdot \mathbf{X}_0$$
+$$\text{features} = (1-\alpha) \cdot \mathbf{A} \cdot X_p + \alpha \cdot \mathbf{X}_0$$
 
-其中，$\\mathbf{A}$ 是归一化后的邻接矩阵，$\\mathbf{X}\_0$ 是节点的原始特征。经过 $k$ 次传播后，得到的 `features` 融入了节点邻居的结构信息，同时超参数 $\\alpha$ 保证了节点自身的原始特征不会被完全稀释，从而有效缓解了过度平滑问题，保留了节点的独特性。
+其中，$\mathbf{A}$ 是归一化后的邻接矩阵，$\mathbf{X}_0$ 是节点的原始特征。经过 $k$ 次传播后，得到的 `feature` 融入了节点邻居的结构信息，同时超参数 $\alpha$ 保证了节点自身的原始特征不会被完全稀释，从而有效缓解了过度平滑问题，保留了节点的独特性。
 
-我们将节点的原始特征 (`x_0`) 和 PPR 传播后的结构特征 (`features`) 分别通过线性层和共享 MLP 进行编码，得到 `h_raw` 和 `h_prop`，然后将它们拼接作为 Transformer 的输入 Token。
+我们将节点的原始特征 (`x_0`) 和传播后的结构特征 (`features`) 分别通过线性层和共享 MLP 进行编码，得到 `h_raw` 和 `h_prop`，然后将它们拼接作为 Transformer 的输入 Token。
 
 ### 生成式伪异常样本策略
 
