@@ -267,7 +267,11 @@ class SGT(nn.Module):
 
         emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
-        f_1 = self.fc1(emb_combine)
+        if train_flag:
+
+            f_1 = self.fc1(emb_combine)
+        else:
+            f_1 = self.fc1(emb)
         f_1 = self.act(f_1)
         f_2 = self.fc2(f_1)
         f_2 = self.act(f_2)
@@ -287,8 +291,9 @@ class SGT(nn.Module):
             con_loss = 0
         
         gna_loss = torch.tensor(0.0, device=emb.device)
+        reconstruction_loss = torch.tensor(0.0, device=emb.device)
 
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss, reconstruction_loss
 
 
 

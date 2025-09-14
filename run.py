@@ -139,7 +139,7 @@ def train(args):
 
         # Train model
         train_flag = True
-        print("start forward")
+        # print("start forward")
         emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj,
                                                                 normal_for_generation_idx, normal_for_train_idx,
                                                                 train_flag, args)
