@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.distributions import Beta
 
 class FeedForwardNetwork(nn.Module):
     def __init__(self, hidden_size, ffn_size, dropout_rate):
@@ -258,12 +259,14 @@ class GGADFormer(nn.Module):
         # degree = torch.sum(raw_adj[0, :, :], 0)[sample_abnormal_idx]
         # neigh_adj = raw_adj[0, sample_abnormal_idx, :] / torch.unsqueeze(degree, 1)
 
-        neigh_adj = adj[0, normal_for_generation_idx, :]
+        # neigh_adj = adj[0, normal_for_generation_idx, :]
         # emb[0, sample_abnormal_idx, :] =self.act(torch.mm(neigh_adj, emb[0, :, :]))
         # emb[0, sample_abnormal_idx, :] = self.fc4(emb[0, sample_abnormal_idx, :])
 
-        outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
-        outlier_emb = self.act(self.fc4(outlier_emb))
+        # outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
+        # outlier_emb = self.act(self.fc4(outlier_emb))
+
+        outlier_emb = self.generate_outliers(emb[:, normal_for_generation_idx, :], emb, args) 
         # outlier_emb: [num_nodes, hidden_dim]
         # emb_con = self.act(self.fc6(emb_con))
 
@@ -422,6 +425,42 @@ class GGADFormer(nn.Module):
         aggregated_perturbations = torch.sum(topk_neighbor_embeddings * normalized_weights, dim=1)
 
         return aggregated_perturbations.unsqueeze(0)
+    def generate_outliers(self, normal_embeddings, all_embeddings, args):
+        """
+        Generate outlier embeddings using the formula: outlier_emb = λ * h_i + (1 - λ) * h_j
+        
+        Args:
+            normal_embeddings: Tensor of shape [1, num_normal_nodes, hidden_dim] 
+            all_embeddings: Tensor of shape [1, num_all_nodes, hidden_dim]
+            args: Arguments containing outlier generation parameters
+            
+        Returns:
+            outlier_emb: Tensor of shape [num_outliers, hidden_dim]
+        """
+        num_normal_nodes = normal_embeddings.size(1)
+        num_all_nodes = all_embeddings.size(1)
+        
+        # Number of outliers to generate (same as number of normal nodes for generation)
+        num_outliers = num_normal_nodes
+        
+        # Generate random indices for pairs: i from normal nodes, j from all nodes
+        indices_i = torch.arange(num_outliers)
+        indices_j = torch.randint(0, num_all_nodes, (num_outliers,))
+        
+        # Get embeddings h_i from normal nodes and h_j from all nodes
+        h_i = normal_embeddings[0, indices_i, :]  # [num_outliers, hidden_dim]
+        h_j = all_embeddings[0, indices_j, :]     # [num_outliers, hidden_dim]
+        
+        # Sample λ from Beta distribution
+        # Use α value from args or default to 0.3 if not provided
+        alpha = getattr(args, 'outlier_alpha', 0.3)
+        beta_dist = Beta(torch.tensor([alpha]), torch.tensor([alpha]))
+        lambda_values = beta_dist.sample((num_outliers,)).squeeze(-1).to(normal_embeddings.device)
+        
+        # Generate outlier embeddings: outlier_emb = λ * h_i + (1 - λ) * h_j
+        outlier_emb = lambda_values.unsqueeze(-1) * h_i + (1 - lambda_values.unsqueeze(-1)) * h_j
+        
+        return outlier_emb
     
 
 class CommunityAutoencoder(nn.Module):

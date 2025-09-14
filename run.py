@@ -338,6 +338,8 @@ if __name__ == "__main__":
 
     parser.add_argument('--warmup_epoch', type=int, default=20)
 
+    # parser.add_argument('--outlier_alpha', type=float, default=0.3)
+
 
     args = parser.parse_args()
 
