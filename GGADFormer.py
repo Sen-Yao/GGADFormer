@@ -175,6 +175,9 @@ class GGADFormer(nn.Module):
 
         # 设置设备
         self.device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
+
+        # 设置批次大小
+        self.batchsize = getattr(args, 'batchsize', None)
         
         self.gcn1 = GCN(args.embedding_dim, args.embedding_dim, activation)
         self.gcn2 = GCN(args.embedding_dim, args.embedding_dim, activation)
@@ -262,8 +265,24 @@ class GGADFormer(nn.Module):
         # emb[0, sample_abnormal_idx, :] =self.act(torch.mm(neigh_adj, emb[0, :, :]))
         # emb[0, sample_abnormal_idx, :] = self.fc4(emb[0, sample_abnormal_idx, :])
 
-        outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
-        outlier_emb = self.act(self.fc4(outlier_emb))
+        # 使用批次大小处理outlier_emb计算
+        if self.batchsize is not None and self.batchsize > 0:
+            # 分批处理outlier_emb计算
+            outlier_emb_list = []
+            num_nodes = len(normal_for_generation_idx)
+
+            for i in range(0, num_nodes, self.batchsize):
+                end_idx = min(i + self.batchsize, num_nodes)
+                batch_adj = neigh_adj[i:end_idx]  # [batchsize, num_nodes]
+                batch_emb = torch.mm(batch_adj, emb[0, :, :])  # [batchsize, hidden_dim]
+                batch_outlier_emb = self.act(self.fc4(batch_emb))  # [batchsize, hidden_dim]
+                outlier_emb_list.append(batch_outlier_emb)
+
+            outlier_emb = torch.cat(outlier_emb_list, dim=0)  # [num_nodes, hidden_dim]
+        else:
+            # 原有的全图处理方式
+            outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
+            outlier_emb = self.act(self.fc4(outlier_emb))
         # outlier_emb: [num_nodes, hidden_dim]
         # emb_con = self.act(self.fc6(emb_con))
 
