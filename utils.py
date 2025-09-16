@@ -471,6 +471,21 @@ def preprocess_sample_features(args, features, adj):
     # return (N, sample_num_p+1 + args.sample_num_n+1, d)
     return processed_features
 
+def nagphormer_tokenization(features, adj, args):
+    """
+    基于Nagphormer的tokenization方法，准备预处理特征矩阵
+    Args:
+        features: 特征矩阵, size = (N, d)
+        adj: 邻接矩阵, size = (N, N)
+    Returns:
+        features: 预处理后的特征矩阵, size = (N, args.pp_k+1, d)
+    """
+    nodes_features = features.unsqueeze(1)
+    for hop in range(args.pp_k):
+        steped_nodes_features = node_neighborhood_feature(adj, features, hop+1, args.progregate_alpha)
+        nodes_features = torch.concat((nodes_features, steped_nodes_features.unsqueeze(1)), dim=1)
+    return nodes_features
+
 class PolynomialDecayLR(_LRScheduler):
 
     def __init__(self, optimizer, warmup_updates, tot_updates, lr, end_lr, power, last_epoch=-1, verbose=False):

@@ -86,8 +86,7 @@ def train(args):
     # Initialize model and optimiser
 
     if args.model_type == 'GGADFormer':
-        progregated_features = node_neighborhood_feature(adj.squeeze(0), features.squeeze(0), args.pp_k, args.progregate_alpha).to(device).unsqueeze(0)
-        concated_input_features = torch.concat((features.to(device), progregated_features), dim=2)
+        concated_input_features = nagphormer_tokenization(features.squeeze(0), adj.squeeze(0), args).to(device)
         model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
     elif args.model_type == 'SGT':
         concated_input_features = preprocess_sample_features(args, features.squeeze(0), adj.squeeze(0)).to(device)
