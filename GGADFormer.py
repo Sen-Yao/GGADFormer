@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from check_gpu_memory import print_gpu_memory_usage, print_tensor_memory, clear_gpu_memory
+
 class FeedForwardNetwork(nn.Module):
     def __init__(self, hidden_size, ffn_size, dropout_rate):
         super(FeedForwardNetwork, self).__init__()
@@ -238,6 +240,7 @@ class GGADFormer(nn.Module):
         emb = self.token_projection(combined_features)
         # emb = self.gcn1(emb, adj, sparse)
         # emb = self.gcn2(emb, adj, sparse)              
+        print_gpu_memory_usage("Transformer前")
         for i, l in enumerate(self.layers):
             emb, current_attention_weights = self.layers[i](emb)
             if i == len(self.layers) - 1: # 拿到最后一层的注意力
