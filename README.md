@@ -89,14 +89,14 @@ AUC:
 |Dataset|Amazon|Reddit|photo|
 |-|-|-|-|
 |GGAD|0.7514±0.0410|0.5274±0.0052|0.6114±0.0219|
-|GGADFormer|0.8171±0.0276|0.5537±0.0165|0.6922±0.0457
+|GGADFormer|0.8722±0.0279|0.5537±0.0165|0.6922±0.0457
 
 AP:
 
 |Dataset|Amazon|Reddit|photo|
 |-|-|-|-|
 |GGAD|0.3755±0.0749|0.0360±0.0003|0.1269±0.0091|
-|GGADFormer|0.4915±0.1242|0.0409±0.0034|0.21355±0.0534
+|GGADFormer|0.6395±0.1185|0.0409±0.0034|0.21355±0.0534
 
 
 以下为复现实验所使用的超参数配置：
@@ -123,7 +123,7 @@ python run.py --embedding_dim=300 --model_type=GGAD --margin_loss_weight=1 --war
 
 ```bash
 # Amazon
-python run.py --GT_attention_dropout=0.4 --GT_dropout=0.4 --GT_ffn_dim=128 --GT_num_heads=2 --GT_num_layers=2 --con_loss_weight=10 --dataset=Amazon --embedding_dim=128 --model_type=GGADFormer --num_epoch=200 --warmup_updates=50 --peak_lr=2e-4 --end_lr=8e-5 --pp_k=2 --progregate_alpha=0.05 --proj_dim=64 --seed=0 --train_rate=0.05 --warmup_epoch=50 --confidence_margin=2
+python run.py --dataset=Amazon --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=1e-4 --end_lr=5e-5 --num_epoch=120 --warmup_epoch=30 --warmup_updates=30 --progregate_alpha=0.2 
 ```
 
 ```bash
