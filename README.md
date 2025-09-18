@@ -123,6 +123,7 @@ python run.py --embedding_dim=300 --model_type=GGAD --margin_loss_weight=1 --war
 
 ```bash
 # Amazon
+# sweep bso1m8ot
 python run.py --dataset=Amazon --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=1e-4 --end_lr=5e-5 --num_epoch=120 --warmup_epoch=30 --warmup_updates=30 --progregate_alpha=0.2 
 ```
 
