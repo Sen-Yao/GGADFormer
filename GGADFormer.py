@@ -223,10 +223,7 @@ class GGADFormer(nn.Module):
         self.to(self.device)
 
     def forward(self, input_tokens, adj, _, normal_for_train_idx, train_flag, args, sparse=False):
-        start_time = time.time()
-        random.shuffle(normal_for_train_idx)
-        normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]
-        print(f"time for shuffle:{time.time() - start_time}")
+
         # input_tokens: (N, args.pp_k+1, d)
         emb = self.token_projection(input_tokens)
         for i, l in enumerate(self.layers):
@@ -249,51 +246,22 @@ class GGADFormer(nn.Module):
 
         outlier_emb = None
         emb_combine = None
-        normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
-        noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
-        noised_normal_for_generation_emb = normal_for_generation_emb + noise
+        noised_normal_for_generation_emb = None
         
         # Add noise into the attribute of sampled abnormal nodes
         # degree = torch.sum(raw_adj[0, :, :], 0)[sample_abnormal_idx]
         # neigh_adj = raw_adj[0, sample_abnormal_idx, :] / torch.unsqueeze(degree, 1)
 
-        neigh_adj = adj[0, normal_for_generation_idx, :]
+        # neigh_adj = adj[0, normal_for_generation_idx, :]
         # emb[0, sample_abnormal_idx, :] =self.act(torch.mm(neigh_adj, emb[0, :, :]))
         # emb[0, sample_abnormal_idx, :] = self.fc4(emb[0, sample_abnormal_idx, :])
 
         # 使用批次大小处理outlier_emb计算
-        if self.batchsize is not None and self.batchsize > 0:
-            # 分批处理outlier_emb计算
-            outlier_emb_list = []
-            num_nodes = len(normal_for_generation_idx)
-
-            for i in range(0, num_nodes, self.batchsize):
-                end_idx = min(i + self.batchsize, num_nodes)
-                batch_adj = neigh_adj[i:end_idx]  # [batchsize, num_nodes]
-                batch_emb = torch.mm(batch_adj, emb[0, :, :])  # [batchsize, hidden_dim]
-                batch_outlier_emb = self.act(self.fc4(batch_emb))  # [batchsize, hidden_dim]
-                outlier_emb_list.append(batch_outlier_emb)
-
-            outlier_emb = torch.cat(outlier_emb_list, dim=0)  # [num_nodes, hidden_dim]
-        else:
-            # 原有的全图处理方式
-            outlier_emb = torch.mm(neigh_adj, emb[0, :, :])
-            outlier_emb = self.act(self.fc4(outlier_emb))
         # outlier_emb: [num_nodes, hidden_dim]
         # emb_con = self.act(self.fc6(emb_con))
 
 
-        reconstructed_tokens = self.token_decoder(emb).squeeze(0)  # [num_nodes, 2*n_in]
-        
-        reconstruction_error = reconstructed_tokens - input_tokens.view(-1, (args.pp_k+1) * self.n_in)
-        # Project reconstruction error to embedding dimension
-        reconstruction_error_proj = self.reconstruction_proj(reconstruction_error[normal_for_generation_idx, :])
-        outlier_emb = normal_for_generation_emb + args.outlier_alpha * reconstruction_error_proj
-        outlier_emb = outlier_emb.squeeze(0)
-        # 计算重构损失
-        reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens.view(-1, (args.pp_k+1) * self.n_in))
 
-        emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
         # TODO ablation study add noise on the selected nodes
 
@@ -311,6 +279,31 @@ class GGADFormer(nn.Module):
         # emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
         gna_loss = torch.tensor(0.0, device=emb.device)
         if train_flag:
+            # start_time = time.time()
+            # 高效重排
+            perm = torch.randperm(normal_for_train_idx.size(0), device=normal_for_train_idx.device)
+            normal_for_train_idx = normal_for_train_idx[perm]
+            # print(f"time for shuffle:{time.time() - start_time}")
+            normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]            
+            normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
+            # print(f"time for normal_for_generation_emb:{time.time() - start_time}")
+            # Noise
+            noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
+            noised_normal_for_generation_emb = normal_for_generation_emb + noise
+            # print(f"time for noise:{time.time() - start_time}")
+
+            # 重构学习
+            reconstructed_tokens = self.token_decoder(emb).squeeze(0)  # [num_nodes, 2*n_in]
+            reconstruction_error = reconstructed_tokens - input_tokens.view(-1, (args.pp_k+1) * self.n_in)
+            # Project reconstruction error to embedding dimension
+            reconstruction_error_proj = self.reconstruction_proj(reconstruction_error[normal_for_generation_idx, :])
+
+            outlier_emb = normal_for_generation_emb + args.outlier_alpha * reconstruction_error_proj
+            outlier_emb = outlier_emb.squeeze(0)
+            # 计算重构损失
+            reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens.view(-1, (args.pp_k+1) * self.n_in))
+            # print(f"time for reconstruction_loss:{time.time() - start_time}")
+
             # 对比学习
             # 第一部分，鼓励离群点靠近全局中心点
             # 计算离群点嵌入与全局中心的距离
@@ -318,13 +311,9 @@ class GGADFormer(nn.Module):
             # 只有超过 confidence_margin 的距离才会产生损失
             margin_excess = outlier_to_center_dist - args.confidence_margin
             con_loss = torch.mean(torch.relu(margin_excess))
+            # print(f"time for con_loss:{time.time() - start_time}")
 
-            # 重构损失
-            # 解码器重构原始输入tokens
-            # reconstructed_tokens = self.token_decoder(emb)  # [1, num_nodes, input_dim]
-        
-            # 计算重构损失
-            # reconstruction_loss = self.recon_loss_fn(reconstructed_tokens.squeeze(0), input_tokens.view(-1, (args.pp_k+1) * self.n_in))
+            emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
             f_1 = self.fc1(emb_combine)
         else:
@@ -336,7 +325,6 @@ class GGADFormer(nn.Module):
         f_2 = self.act(f_2)
         logits = self.fc3(f_2)
         emb = emb.clone()
-        emb[:, normal_for_generation_idx, :] = outlier_emb
 
         # gna_loss = torch.tensor(0.0, device=emb.device)
         return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss, reconstruction_loss    
