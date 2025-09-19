@@ -26,11 +26,11 @@ pip install -r requirements.txt
 
 为解决此问题并让 Transformer 感知到图结构信息，我们采用一种基于传播机制来编码节点的拓扑特征。
 
-$$\text{features} = (1-\alpha) \cdot \mathbf{A} \cdot X_p + \alpha \cdot \mathbf{X}_0$$
+$$X_p^{k+1} = (1-\alpha) \cdot \mathbf{A} \cdot X_p^{k} + \alpha \cdot \mathbf{X}_0$$
 
-其中，$\mathbf{A}$ 是归一化后的邻接矩阵，$\mathbf{X}_0$ 是节点的原始特征。经过 $k$ 次传播后，得到的 `feature` 融入了节点邻居的结构信息，同时超参数 $\alpha$ 保证了节点自身的原始特征不会被完全稀释，从而有效缓解了过度平滑问题，保留了节点的独特性。
+其中，$\mathbf{A}$ 是归一化后的邻接矩阵，$\mathbf{X}_0$ 是节点的原始特征。经过 $k$ 次传播后，得到了一系列的 token sequence $X_0, X_p^1, X_p^2,\cdots, X_p^k$，此序列融入了节点邻居的结构信息，同时超参数 $\alpha$ 保证了节点自身的原始特征不会被完全稀释，从而有效缓解了过度平滑问题，保留了节点的独特性。
 
-我们将节点的原始特征 (`x_0`) 和传播后的结构特征 (`features`) 分别通过线性层和共享 MLP 进行编码，得到 `h_raw` 和 `h_prop`，然后将它们拼接作为 Transformer 的输入 Token。
+token sequence 保留了用于对应节点用于异常检测所需要的所有图上下文信息，因此 Transformer 仅需要处理此序列，不需要计算全图中的节点信息，大大降低了计算开销。
 
 ### 生成式伪异常样本策略
 
@@ -43,17 +43,6 @@ $$\text{features} = (1-\alpha) \cdot \mathbf{A} \cdot X_p + \alpha \cdot \mathbf
 $$L_{rec}=\frac{1}{|V_O|}\sum_{v_i\in V_O}||\hat {h}_i-(h_i+\epsilon)||^2$$
 
 其中，$V\_O$ 为用于生成伪异常的节点集，$h\_i$ 为正常节点的嵌入，$\\hat{h}\_i$ 为其对应的伪异常嵌入，$\\epsilon$ 为高斯噪声。该损失约束了伪异常样本与原始正常样本的嵌入距离，确保生成的伪异常具有\*\*“可信性”\*\*。
-
-### 图正常性对齐（Graph Normality Alignment）
-
-在无监督/半监督学习中，\*\*表征坍缩（representation collapse）\*\*是一个常见问题，即所有节点最终被映射到嵌入空间的一个狭窄区域，导致区分性丧失。此外，即使是正常节点，其本身也具有异质性（heterogeneity）。
-
-为解决这些问题，我们设计了\*\*“图正常性对齐”\*\*机制。我们用两个独立的 MLP 分别将原始特征编码 `h_raw` 和传播特征编码 `h_prop` 映射到另一个表示空间，得到 `z_raw` 和 `z_prop`。
-
-在此空间中，我们利用 **InfoNCE 损失**进行双重对齐：
-
-1.  **节点内对齐**：鼓励同一节点的 `z_raw` 和 `z_prop` 相互靠近。这确保了节点的原始特征信息和结构信息是互补且一致的，使节点表征更加鲁棒。
-2.  **节点间对齐**：鼓励不同节点的 `z_raw` 和 `z_prop` 分别相互远离。这直接解决了表征坍缩问题，强制模型学习一个更具区分性的嵌入空间，即使是正常的节点，其独特性也能被充分保留。
 
 ### 中心点对齐（Central Point Alignment）
 
