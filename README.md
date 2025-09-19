@@ -78,14 +78,14 @@ AUC:
 |Dataset|Amazon|Reddit|photo|
 |-|-|-|-|
 |GGAD|0.7514±0.0410|0.5274±0.0052|0.6114±0.0219|
-|GGADFormer|0.8722±0.0279|0.5629±0.0161|0.6885±0.0154
+|GGADFormer|0.8722±0.0279|0.5629±0.0161|0.8173±0.0274
 
 AP:
 
 |Dataset|Amazon|Reddit|photo|
 |-|-|-|-|
 |GGAD|0.3755±0.0749|0.0360±0.0003|0.1269±0.0091|
-|GGADFormer|0.6395±0.1185|0.0418±0.0042|0.1848±0.0118
+|GGADFormer|0.6395±0.1185|0.0418±0.0042|0.3877±0.0840
 
 
 以下为复现实验所使用的超参数配置：
@@ -124,6 +124,6 @@ python run.py --dataset=reddit --GT_ffn_dim=64 --GT_num_heads=4 --GT_num_layers=
 
 ```bash
 # photo
-# sweep 1m41l9dj
-python run.py --dataset=photo --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=1e-4 --end_lr=5e-5 --num_epoch=150 --warmup_updates=50 --progregate_alpha=0.2 
+# sweep u7iqlb8h
+python run.py --dataset=photo --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=1e-3 --end_lr=8e-4 --num_epoch=1000 --warmup_updates=50 --progregate_alpha=0.3 --con_loss_weight 20 --confidence_margin=0.3
 ```
