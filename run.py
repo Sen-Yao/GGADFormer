@@ -54,7 +54,7 @@ def train(args):
         features = features.todense()
 
 
-    nb_nodes = features.shape[0]
+    num_nodes = features.shape[0]
     ft_size = features.shape[1]
     if args.model_type == 'GGAD':
         raw_adj = adj
@@ -130,14 +130,34 @@ def train(args):
     
     if args.model_type == "GGADFormer":
         labels = labels.squeeze(0)
-        batch_data_train = Data.TensorDataset(concated_input_features[idx_train], labels[idx_train])
+
+        all_node_indices = torch.arange(num_nodes)
+
+        # 在半监督场景中，模型训练时允许访问全图的 feature 和被 normal_for_train_idx 允许的那些 label
+        # 为了形式统一，这里将全图的 label 也提供给 Dataset，但是在实际训练中，只有 normal_for_train_idx 的那些 label 允许被使用！
+        # 其中 all_node_indices 是用于计算 batch 内部的 normal_for_train_idx 的
+        batch_data_train = Data.TensorDataset(concated_input_features, labels, all_node_indices)
         batch_data_val = Data.TensorDataset(concated_input_features[idx_val], labels[idx_val])
         batch_data_test = Data.TensorDataset(concated_input_features[idx_test], labels[idx_test])
 
+        # 对于训练集需要分层采样
 
-        train_data_loader = Data.DataLoader(batch_data_train, batch_size=args.batch_size, shuffle = True)
-        val_data_loader = Data.DataLoader(batch_data_val, batch_size=args.batch_size, shuffle = True)
-        test_data_loader = Data.DataLoader(batch_data_test, batch_size=args.batch_size, shuffle = True)
+        all_indices = set(range(num_nodes))
+        known_indices = set(normal_for_train_idx.tolist())
+        unknown_indices = list(all_indices - known_indices)
+
+        weights = torch.zeros(num_nodes)
+        weights[normal_for_train_idx] = 1.0 / len(normal_for_train_idx)
+        weights[unknown_indices] = 1.0 / len(unknown_indices)
+
+        # 基于权重，实例化一个采样器
+        # replacement=True 允许重复采样，这对于过采样少数类至关重要
+        sampler = Data.WeightedRandomSampler(weights, num_samples=num_nodes, replacement=True)
+
+
+        train_data_loader = Data.DataLoader(batch_data_train, batch_size=args.batch_size, sampler=sampler)
+        val_data_loader = Data.DataLoader(batch_data_val, batch_size=args.batch_size, shuffle = False)
+        test_data_loader = Data.DataLoader(batch_data_test, batch_size=args.batch_size, shuffle = False)
 
 
     # Train model
@@ -160,10 +180,18 @@ def train(args):
             for _, item in enumerate(train_data_loader):
                 concated_input_features = item[0].to(device)
                 labels = item[1].to(device)
+                batch_global_indices = item[2].to(device)
+
                 optimizer.zero_grad()
+                local_normal_for_train_idx = []
+                for local_idx, global_idx in enumerate(batch_global_indices):
+                    if global_idx.item() in known_indices:
+                        local_normal_for_train_idx.append(local_idx)
+
+                local_normal_for_train_idx = torch.tensor(local_normal_for_train_idx, dtype=torch.long)
 
                 emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj,
-                                                                    normal_for_generation_idx, normal_for_train_idx,
+                                                                    None, local_normal_for_train_idx,
                                                                     train_flag, args)
                     # BCE loss
                 lbl = torch.unsqueeze(torch.cat(
@@ -291,7 +319,7 @@ def train(args):
                 for _, item in enumerate(test_data_loader):
                     concated_input_features = item[0].to(device)
                     labels = item[1].to(device)
-                    emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
+                    emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj, None, None,
                                                                             train_flag, args)
                     all_batched_logits.append(logits)
                 # Concatenate all batched logits
