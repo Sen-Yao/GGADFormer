@@ -77,14 +77,14 @@ AUC:
 |Dataset|Amazon|Reddit|photo|
 |-|-|-|-|
 |GGAD|0.7514±0.0410|0.5274±0.0052|0.6114±0.0219|
-|GGADFormer|0.9473±0.0035|0.5629±0.0161|0.8173±0.0274
+|GGADFormer|0.9324±0.0189|0.5629±0.0161|0.8162±0.0213
 
 AP:
 
 |Dataset|Amazon|Reddit|photo|
 |-|-|-|-|
 |GGAD|0.3755±0.0749|0.0360±0.0003|0.1269±0.0091|
-|GGADFormer|0.8116±0.0075|0.0418±0.0042|0.3877±0.0840
+|GGADFormer|0.8080±0.0088|0.0418±0.0042|0.4550±0.0300
 
 
 以下为复现实验所使用的超参数配置：
@@ -111,7 +111,7 @@ python run.py --embedding_dim=300 --model_type=GGAD --margin_loss_weight=1 --war
 
 ```bash
 # Amazon
-# sweep jwc977ll
+# sweep dl92w6w1
 python run.py --dataset=Amazon --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=1e-3 --end_lr=4e-4 --num_epoch=700 --warmup_updates=30 --pp_k=2 --progregate_alpha=0.3  --con_loss_weight 20 --confidence_margin=0.3
 ```
 
@@ -123,6 +123,6 @@ python run.py --dataset=reddit --GT_ffn_dim=64 --GT_num_heads=4 --GT_num_layers=
 
 ```bash
 # photo
-# sweep u7iqlb8h
+# sweep 6o1b8ntf
 python run.py --dataset=photo --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=1e-3 --end_lr=8e-4 --num_epoch=1000 --warmup_updates=50 --progregate_alpha=0.3 --con_loss_weight 20 --confidence_margin=0.3
 ```

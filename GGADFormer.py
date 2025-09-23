@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import random
 
 from check_gpu_memory import print_gpu_memory_usage, print_tensor_memory, clear_gpu_memory
 
@@ -220,7 +221,9 @@ class GGADFormer(nn.Module):
         # 将模型移动到指定设备
         self.to(self.device)
 
-    def forward(self, input_tokens, adj, normal_for_generation_idx, normal_for_train_idx, train_flag, args, sparse=False):
+    def forward(self, input_tokens, adj, _, normal_for_train_idx, train_flag, args, sparse=False):
+        random.shuffle(normal_for_train_idx)
+        normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]
         # input_tokens: (N, args.pp_k+1, d)
         emb = self.token_projection(input_tokens)
         for i, l in enumerate(self.layers):
