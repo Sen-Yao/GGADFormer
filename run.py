@@ -321,7 +321,7 @@ if __name__ == "__main__":
     parser.add_argument('--GT_num_heads', type=int, default=2)
     parser.add_argument('--GT_num_layers', type=int, default=2)
 
-    parser.add_argument('--rec_loss_weight', type=float, default=1.0)
+    parser.add_argument('--rec_loss_weight', type=float, default=0)
     parser.add_argument('--bce_loss_weight', type=float, default=1.0)
     parser.add_argument('--margin_loss_weight', type=float, default=0)
     parser.add_argument('--con_loss_weight', type=float, default=10)
