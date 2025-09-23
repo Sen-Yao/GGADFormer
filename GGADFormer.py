@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import random
 
 from check_gpu_memory import print_gpu_memory_usage, print_tensor_memory, clear_gpu_memory
 
@@ -210,10 +211,18 @@ class GGADFormer(nn.Module):
         # 重构损失函数
         self.recon_loss_fn = nn.MSELoss()
 
+        # 投影层：将重构误差从2*n_in维度投影到embedding_dim维度
+        self.reconstruction_proj = nn.Sequential(
+            nn.Linear((args.pp_k+1) * n_in, args.embedding_dim),
+            nn.ReLU(),
+            nn.Linear(args.embedding_dim, args.embedding_dim)
+        )
+
         # 将模型移动到指定设备
         self.to(self.device)
 
-    def forward(self, input_tokens, adj, train_flag, args, sparse=False):
+    def forward(self, input_tokens, adj, _, normal_for_train_idx, train_flag, args, sparse=False):
+
         # input_tokens: (N, args.pp_k+1, d)
         emb = self.token_projection(input_tokens)
         for i, l in enumerate(self.layers):
@@ -236,9 +245,6 @@ class GGADFormer(nn.Module):
 
         outlier_emb = None
         emb_combine = None
-        # normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
-        # noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
-        # noised_normal_for_generation_emb = normal_for_generation_emb + noise
         noised_normal_for_generation_emb = None
         
         # Add noise into the attribute of sampled abnormal nodes
@@ -253,7 +259,8 @@ class GGADFormer(nn.Module):
         # outlier_emb: [num_nodes, hidden_dim]
         # emb_con = self.act(self.fc6(emb_con))
 
-        emb_combine = emb
+
+
 
         # TODO ablation study add noise on the selected nodes
 
@@ -271,6 +278,25 @@ class GGADFormer(nn.Module):
         # emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
         gna_loss = torch.tensor(0.0, device=emb.device)
         if train_flag:
+            random.shuffle(normal_for_train_idx)
+            normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]
+            normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
+
+            # Noise
+            noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
+            noised_normal_for_generation_emb = normal_for_generation_emb + noise
+
+            # 重构学习
+            reconstructed_tokens = self.token_decoder(emb).squeeze(0)  # [num_nodes, 2*n_in]
+            reconstruction_error = reconstructed_tokens - input_tokens.view(-1, (args.pp_k+1) * self.n_in)
+            # Project reconstruction error to embedding dimension
+            reconstruction_error_proj = self.reconstruction_proj(reconstruction_error[normal_for_generation_idx, :])
+
+            outlier_emb = normal_for_generation_emb + args.outlier_alpha * reconstruction_error_proj
+            outlier_emb = outlier_emb.squeeze(0)
+            # 计算重构损失
+            reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens.view(-1, (args.pp_k+1) * self.n_in))
+
             # 对比学习
             # 第一部分，鼓励离群点靠近全局中心点
             # 计算离群点嵌入与全局中心的距离
@@ -279,12 +305,8 @@ class GGADFormer(nn.Module):
             margin_excess = outlier_to_center_dist - args.confidence_margin
             con_loss = torch.mean(torch.relu(margin_excess))
 
-            # 重构损失
-            # 解码器重构原始输入tokens
-            reconstructed_tokens = self.token_decoder(emb)  # [1, num_nodes, input_dim]
-        
-            # 计算重构损失
-            reconstruction_loss = self.recon_loss_fn(reconstructed_tokens.squeeze(0), input_tokens.view(-1, (args.pp_k+1) * self.n_in))
+
+            emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
             f_1 = self.fc1(emb_combine)
         else:
