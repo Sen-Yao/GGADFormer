@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import random
+import time
 
 from check_gpu_memory import print_gpu_memory_usage, print_tensor_memory, clear_gpu_memory
 
@@ -222,8 +223,10 @@ class GGADFormer(nn.Module):
         self.to(self.device)
 
     def forward(self, input_tokens, adj, _, normal_for_train_idx, train_flag, args, sparse=False):
+        start_time = time.time()
         random.shuffle(normal_for_train_idx)
         normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]
+        print(f"time for shuffle:{time.time() - start_time}")
         # input_tokens: (N, args.pp_k+1, d)
         emb = self.token_projection(input_tokens)
         for i, l in enumerate(self.layers):
