@@ -159,6 +159,8 @@ def train(args):
         val_data_loader = Data.DataLoader(batch_data_val, batch_size=args.batch_size, shuffle = False)
         test_data_loader = Data.DataLoader(batch_data_test, batch_size=args.batch_size, shuffle = False)
 
+        normal_for_train_idx = torch.tensor(normal_for_train_idx, dtype=torch.long, device=device)
+
 
     # Train model
     print(f"Start training! Total epochs: {args.num_epoch}")
@@ -176,19 +178,14 @@ def train(args):
             batched_gna_loss = 0
             batched_reconstruction_loss = 0
 
-            for _, item in enumerate(train_data_loader):
+            for batch_idx, item in enumerate(train_data_loader):
                 concated_input_features = item[0].to(device)
                 labels = item[1].to(device)
                 batch_global_indices = item[2].to(device)
 
                 optimizer.zero_grad()
-                local_normal_for_train_idx = []
-                for local_idx, global_idx in enumerate(batch_global_indices):
-                    if global_idx.item() in known_indices:
-                        local_normal_for_train_idx.append(local_idx)
-
-                local_normal_for_train_idx = torch.tensor(local_normal_for_train_idx, dtype=torch.long)
-
+                is_known_normal_mask = torch.isin(batch_global_indices, normal_for_train_idx)
+                local_normal_for_train_idx = torch.nonzero(is_known_normal_mask, as_tuple=False).squeeze(-1)
                 emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj,
                                                                     None, local_normal_for_train_idx,
                                                                     train_flag, args)
