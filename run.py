@@ -143,7 +143,7 @@ def train(args):
         # 对于训练集需要分层采样
 
         all_indices = set(range(num_nodes))
-        known_indices = set(normal_for_train_idx.tolist())
+        known_indices = set(normal_for_train_idx)
         unknown_indices = list(all_indices - known_indices)
 
         weights = torch.zeros(num_nodes)
@@ -166,12 +166,7 @@ def train(args):
     print(f"Start training! Total epochs: {args.num_epoch}")
     pbar = tqdm(total=args.num_epoch, desc='Training')
     total_time = 0
-<<<<<<< HEAD
-    for epoch in range(args.num_epoch):
-        start_time = time.time()
-=======
     for epoch in range(args.num_epoch + 1):
->>>>>>> fix: correct epoch range in training loop and ensure learning rate scheduler is called consistently
         dynamic_weights = get_dynamic_loss_weights(epoch, args)
         start_time = time.time()
         train_flag = True
@@ -197,7 +192,7 @@ def train(args):
                                                                     train_flag, args)
                     # BCE loss
                 lbl = torch.unsqueeze(torch.cat(
-                    (torch.zeros(len(normal_for_train_idx)), torch.ones(len(outlier_emb)))),
+                    (torch.zeros(len(local_normal_for_train_idx)), torch.ones(len(outlier_emb)))),
                     1).unsqueeze(0)
                 lbl = lbl.to(device)  # 将标签移动到指定设备
                 loss_bce = b_xent(logits, lbl)
@@ -325,7 +320,7 @@ def train(args):
                     all_batched_logits.append(logits.squeeze(0))
                 # Concatenate all batched logits
                 concatenated_logits = torch.cat(all_batched_logits, dim=0)
-                logits = np.squeeze(concatenated_logits[:, idx_test, :].cpu().detach().numpy())
+                logits = np.squeeze(concatenated_logits.cpu().detach().numpy())
                 auc = roc_auc_score(ano_label[idx_test], logits)
                 ap = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
             else: 
@@ -400,6 +395,7 @@ if __name__ == "__main__":
     parser.add_argument('--mean', type=float, default=0.0)
     parser.add_argument('--var', type=float, default=0.0)
     parser.add_argument('--confidence_margin', type=float, default=2)
+    parser.add_argument('--outlier_alpha', type=float, default=0.3)
     parser.add_argument('--sample_rate', type=float, default=0.15)
     parser.add_argument('--batchsize', type=int, default=0)
     
