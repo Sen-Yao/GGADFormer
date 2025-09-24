@@ -166,7 +166,7 @@ def train(args):
     print(f"Start training! Total epochs: {args.num_epoch}")
     pbar = tqdm(total=args.num_epoch, desc='Training')
     total_time = 0
-    for epoch in range(args.num_epoch):
+    for epoch in range(args.num_epoch + 1):
         dynamic_weights = get_dynamic_loss_weights(epoch, args)
         start_time = time.time()
         train_flag = True
@@ -205,8 +205,6 @@ def train(args):
 
                 loss.backward()
                 optimizer.step()
-                lr_scheduler.step()
-
                 batched_bce_loss += loss_bce
                 batched_rec_loss += loss_rec
                 batched_con_loss += con_loss
@@ -284,7 +282,6 @@ def train(args):
 
             loss.backward()
             optimizer.step()
-            lr_scheduler.step()
             end_time = time.time()
             total_time += end_time - start_time
             
@@ -308,6 +305,7 @@ def train(args):
                             "train_loss": loss.item(),
                             "reconstruction_loss": reconstruction_loss.item(),
                             "learning_rate": current_lr}, step=epoch)
+        lr_scheduler.step()
         if epoch % 10 == 0 and epoch != 0:
             model.eval()
             train_flag = False
@@ -319,7 +317,7 @@ def train(args):
                     labels = item[1].to(device)
                     emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj, None, None,
                                                                             train_flag, args)
-                    all_batched_logits.append(logits)
+                    all_batched_logits.append(logits.squeeze(0))
                 # Concatenate all batched logits
                 concatenated_logits = torch.cat(all_batched_logits, dim=0)
                 logits = np.squeeze(concatenated_logits.cpu().detach().numpy())
