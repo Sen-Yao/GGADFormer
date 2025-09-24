@@ -279,18 +279,18 @@ class GGADFormer(nn.Module):
         # emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
         gna_loss = torch.tensor(0.0, device=emb.device)
         if train_flag:
-            start_time = time.time()
+            # start_time = time.time()
             # 高效重排
             perm = torch.randperm(normal_for_train_idx.size(0), device=normal_for_train_idx.device)
             normal_for_train_idx = normal_for_train_idx[perm]
-            print(f"time for shuffle:{time.time() - start_time}")
+            # print(f"time for shuffle:{time.time() - start_time}")
             normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]            
             normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
-            print(f"time for normal_for_generation_emb:{time.time() - start_time}")
+            # print(f"time for normal_for_generation_emb:{time.time() - start_time}")
             # Noise
             noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
             noised_normal_for_generation_emb = normal_for_generation_emb + noise
-            print(f"time for noise:{time.time() - start_time}")
+            # print(f"time for noise:{time.time() - start_time}")
 
             # 重构学习
             reconstructed_tokens = self.token_decoder(emb).squeeze(0)  # [num_nodes, 2*n_in]
@@ -302,7 +302,7 @@ class GGADFormer(nn.Module):
             outlier_emb = outlier_emb.squeeze(0)
             # 计算重构损失
             reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens.view(-1, (args.pp_k+1) * self.n_in))
-            print(f"time for reconstruction_loss:{time.time() - start_time}")
+            # print(f"time for reconstruction_loss:{time.time() - start_time}")
 
             # 对比学习
             # 第一部分，鼓励离群点靠近全局中心点
@@ -311,7 +311,7 @@ class GGADFormer(nn.Module):
             # 只有超过 confidence_margin 的距离才会产生损失
             margin_excess = outlier_to_center_dist - args.confidence_margin
             con_loss = torch.mean(torch.relu(margin_excess))
-            print(f"time for con_loss:{time.time() - start_time}")
+            # print(f"time for con_loss:{time.time() - start_time}")
 
             emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
