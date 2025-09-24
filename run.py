@@ -131,6 +131,7 @@ def train(args):
     pbar = tqdm(total=args.num_epoch, desc='Training')
     total_time = 0
     for epoch in range(args.num_epoch):
+        start_time = time.time()
         dynamic_weights = get_dynamic_loss_weights(epoch, args)
         start_time = time.time()
         model.train()
@@ -142,6 +143,7 @@ def train(args):
         emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj,
                                                                 normal_for_generation_idx, normal_for_train_idx,
                                                                 train_flag, args)
+        print(f"time for forward {time.time() - start_time}")
         if epoch % 10 == 0:
             # save data for tsne
             pass
@@ -192,6 +194,7 @@ def train(args):
         optimizer.step()
         lr_scheduler.step()
         end_time = time.time()
+        print(f"optimizer step time {time.time() - start_time}")
         total_time += end_time - start_time
         
         # 获取当前学习率
