@@ -88,7 +88,7 @@ def train(args):
     # Initialize model and optimiser
 
     if args.model_type == 'GGADFormer':
-        concated_input_features = nagphormer_tokenization(features.squeeze(0), adj.squeeze(0), args).to(device)
+        concated_input_features = nagphormer_tokenization(features.squeeze(0), adj.squeeze(0), args)
         model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
     elif args.model_type == 'SGT':
         concated_input_features = preprocess_sample_features(args, features.squeeze(0), adj.squeeze(0)).to(device)
@@ -155,7 +155,7 @@ def train(args):
         sampler = Data.WeightedRandomSampler(weights, num_samples=num_nodes, replacement=True)
 
 
-        train_data_loader = Data.DataLoader(batch_data_train, batch_size=args.batch_size, sampler=sampler)
+        train_data_loader = Data.DataLoader(batch_data_train, batch_size=args.batch_size, sampler=sampler, num_workers=4, persistent_workers=True, pin_memory=True)
         val_data_loader = Data.DataLoader(batch_data_val, batch_size=args.batch_size, shuffle = False)
         test_data_loader = Data.DataLoader(batch_data_test, batch_size=args.batch_size, shuffle = False)
 
@@ -178,8 +178,9 @@ def train(args):
             batched_con_loss = 0
             batched_gna_loss = 0
             batched_reconstruction_loss = 0
-
+            # start_time = time.time()
             for batch_idx, item in enumerate(train_data_loader):
+                # print(f"time to start batch {time.time() - start_time}")
                 concated_input_features = item[0].to(device)
                 labels = item[1].to(device)
                 batch_global_indices = item[2].to(device)
@@ -212,6 +213,7 @@ def train(args):
                 batched_con_loss += con_loss
                 batched_gna_loss += gna_loss
                 batched_reconstruction_loss += reconstruction_loss
+                # print(f"time to end batch {time.time() - start_time}\n\n")
 
             batched_total_loss = batched_bce_loss + batched_rec_loss + batched_con_loss + batched_gna_loss + batched_reconstruction_loss
             end_time = time.time()
