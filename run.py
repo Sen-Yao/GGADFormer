@@ -187,7 +187,7 @@ def train(args):
                 optimizer.zero_grad()
                 is_known_normal_mask = torch.isin(batch_global_indices, normal_for_train_idx)
                 local_normal_for_train_idx = torch.nonzero(is_known_normal_mask, as_tuple=False).squeeze(-1)
-                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj,
+                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, None,
                                                                     None, local_normal_for_train_idx,
                                                                     train_flag, args)
                     # BCE loss
@@ -312,17 +312,18 @@ def train(args):
 
             if args.model_type == "GGADFormer":
                 all_batched_logits = []
-                for _, item in enumerate(test_data_loader):
-                    concated_input_features = item[0].to(device)
-                    labels = item[1].to(device)
-                    emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj, None, None,
-                                                                            train_flag, args)
-                    all_batched_logits.append(logits.squeeze(0))
-                # Concatenate all batched logits
-                concatenated_logits = torch.cat(all_batched_logits, dim=0)
-                logits = np.squeeze(concatenated_logits.cpu().detach().numpy())
-                auc = roc_auc_score(ano_label[idx_test], logits)
-                ap = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
+                with torch.no_grad():
+                    for _, item in enumerate(test_data_loader):
+                        concated_input_features = item[0].to(device)
+                        labels = item[1].to(device)
+                        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, None, None, None,
+                                                                                train_flag, args)
+                        all_batched_logits.append(logits.squeeze(0))
+                    # Concatenate all batched logits
+                    concatenated_logits = torch.cat(all_batched_logits, dim=0)
+                    logits = np.squeeze(concatenated_logits.cpu().detach().numpy())
+                    auc = roc_auc_score(ano_label[idx_test], logits)
+                    ap = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
             else: 
                 emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                         train_flag, args)
