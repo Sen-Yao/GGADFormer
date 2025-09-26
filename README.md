@@ -69,22 +69,22 @@ $$ L_{CPA} = \frac{1}{|\tilde{V}|} \sum_{\tilde{\mathbf{h}}_j \in \tilde{V}} \ma
 
 ## 实验结果
 
-我们在 `Amazon`, `photo` 和 `reddit` 三个不同的数据集上，采用仅有 5% 的训练集划分，GGADFormer 在 AUC 和 AP 指标上均展现出优异性能，且优于现有 SOTA 方法 GGAD。
+我们在 `Amazon`, `photo`, `reddit` 和 `ellptic` 四个不同的数据集上，采用仅有 5% 的训练集划分，GGADFormer 在 AUC 和 AP 指标上均展现出优异性能，且优于现有 SOTA 方法 GGAD。
 
 AUC:
 
 
-|Dataset|Amazon|Reddit|photo|
+|Dataset|Amazon|Reddit|photo|elliptic
 |-|-|-|-|
-|GGAD|0.7514±0.0410|0.5274±0.0052|0.6114±0.0219|
-|GGADFormer|0.9324±0.0189|0.5629±0.0161|0.8183±0.0202
+|GGAD|0.7514±0.0410|0.5274±0.0052|0.6114±0.0219|0.7006±0.0090|
+|GGADFormer|0.9324±0.0189|0.5629±0.0161|0.8183±0.0202|0.7221±0.0441
 
 AP:
 
-|Dataset|Amazon|Reddit|photo|
+|Dataset|Amazon|Reddit|photo|elliptic
 |-|-|-|-|
-|GGAD|0.3755±0.0749|0.0360±0.0003|0.1269±0.0091|
-|GGADFormer|0.8080±0.0088|0.0418±0.0042|0.4756±0.0585
+|GGAD|0.3755±0.0749|0.0360±0.0003|0.1269±0.0091|0.2565±0.0200
+|GGADFormer|0.8080±0.0088|0.0418±0.0042|0.4756±0.0585|0.2268±0.0755
 
 
 以下为复现实验所使用的超参数配置：
@@ -107,11 +107,17 @@ python run.py --embedding_dim=300 --model_type=GGAD --margin_loss_weight=1 --war
 python run.py --embedding_dim=300 --model_type=GGAD --margin_loss_weight=1 --warmup_updates=0 --num_epoch=50 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=photo 
 ```
 
+```bash
+# elliptic
+# sweep jbg0lp3m
+python run.py --embedding_dim=300 --model_type=GGAD --margin_loss_weight=1 --warmup_updates=0 --num_epoch=70 --peak_lr=1e-3 --end_lr=1e-3 --train_rate 0.05  --dataset=elliptic 
+```
+
 ### GGADFormer
 
 ```bash
 # Amazon
-# sweep cuqwp5pa
+# sweep zev7xcg9
 python run.py --dataset=Amazon --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=5e-4 --end_lr=1e-4 --num_epoch=150 --warmup_updates=30 --pp_k=2 --progregate_alpha=0.3  --con_loss_weight 20 --confidence_margin=0.3 --batch_size=1024
 ```
 
@@ -123,6 +129,12 @@ python run.py --dataset=reddit --GT_ffn_dim=64 --GT_num_heads=4 --GT_num_layers=
 
 ```bash
 # photo
-# sweep 70v7achn
+# sweep h9t7vwbv
 python run.py --dataset=photo --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=1e-3 --end_lr=8e-4 --num_epoch=150 --warmup_updates=50 --progregate_alpha=0.3 --con_loss_weight=20 --confidence_margin=0.3 --batch_size=128
+```
+
+```bash
+# elliptic
+# sweep 2e1yh14
+python run.py --dataset=elliptic --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=5e-4 --end_lr=1e-4 --num_epoch=100 --warmup_updates=50  --pp_k=7 --progregate_alpha=0.5 --con_loss_weight=20 --confidence_margin=0.3 --batch_size=8192 --rec_loss_weight=1
 ```
