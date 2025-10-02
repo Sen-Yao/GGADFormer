@@ -36,8 +36,8 @@ python run.py --dataset=Amazon --GT_ffn_dim=256 --GT_num_layers=3 --embedding_di
 python run.py --dataset=reddit --GT_ffn_dim=64 --GT_num_heads=4 --GT_num_layers=2 --embedding_dim=256 --peak_lr=1e-4  --end_lr=5e-5 --num_epoch=200 --warmup_updates=50 --pp_k=1 --progregate_alpha=0.2
 
 # photo
-# sweep h9t7vwbv
-python run.py --dataset=photo --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=1e-3 --end_lr=8e-4 --num_epoch=150 --warmup_updates=50 --progregate_alpha=0.3 --con_loss_weight=20 --confidence_margin=0.3 --batch_size=128
+# sweep 4i1chaya
+python run.py --dataset=photo --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=8e-4 --end_lr=8e-4 --num_epoch=40 --warmup_updates=50 --progregate_alpha=0.3 --con_loss_weight=1 --confidence_margin=0.3 --batch_size=128
 
 # elliptic
 # sweep 2e1yh14
