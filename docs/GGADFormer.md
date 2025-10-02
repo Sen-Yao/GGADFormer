@@ -26,9 +26,11 @@ GGADFormer 的创新点包括
 
 为解决此问题并让 Transformer 感知到图结构信息，我们采用一种基于传播机制来编码节点的拓扑特征。
 
-$$X_p^{k+1} = (1-\alpha) \cdot \mathbf{A} \cdot X_p^{k} + \alpha \cdot \mathbf{X}_0$$
+$$X_p^k = \hat {A}^k\cdot \mathbf{X}_0$$
 
-其中，$\mathbf{A}$ 是归一化后的邻接矩阵，$\mathbf{X}_0$ 是节点的原始特征。经过 $k$ 次传播后，得到了一系列的 token sequence $X_0, X_p^1, X_p^2,\cdots, X_p^k$，此序列融入了节点邻居的结构信息，同时超参数 $\alpha$ 保证了节点自身的原始特征不会被完全稀释，从而有效缓解了过度平滑问题，保留了节点的独特性。
+$$X_p^{k+1} = (1-\alpha)\cdot X_p^{k} + \alpha \cdot \mathbf{X}_0$$
+
+其中，$\hat{A}$ 是归一化后的邻接矩阵，$\mathbf{X}_0$ 是节点的原始特征。经过 $k$ 次传播后，得到了一系列的 token sequence $X_0, X_p^1, X_p^2,\cdots, X_p^k$，此序列融入了节点邻居的结构信息，同时超参数 $\alpha$ 保证了节点自身的原始特征不会被完全稀释，从而有效缓解了过度平滑问题，保留了节点的独特性。
 
 token sequence 保留了用于对应节点用于异常检测所需要的所有图上下文信息，因此 Transformer 仅需要处理此序列，不需要计算全图中的节点信息，大大降低了计算开销。
 
