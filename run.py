@@ -306,7 +306,7 @@ def train(args):
                             "reconstruction_loss": reconstruction_loss.item(),
                             "learning_rate": current_lr}, step=epoch)
         lr_scheduler.step()
-        if epoch % 10 == 0 and epoch != 0:
+        if epoch % 10 == 0:
             model.eval()
             train_flag = False
 
