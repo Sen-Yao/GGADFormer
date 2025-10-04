@@ -175,7 +175,7 @@ def train(args):
             batched_bce_loss = 0
             batched_rec_loss = 0
             batched_con_loss = 0
-            batched_gna_loss = 0
+            batched_kl_loss = 0
             batched_reconstruction_loss = 0
             # start_time = time.time()
             for batch_idx, item in enumerate(train_data_loader):
@@ -187,7 +187,7 @@ def train(args):
                 optimizer.zero_grad()
                 is_known_normal_mask = torch.isin(batch_global_indices, normal_for_train_idx)
                 local_normal_for_train_idx = torch.nonzero(is_known_normal_mask, as_tuple=False).squeeze(-1)
-                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, None,
+                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, kl_loss, reconstruction_loss = model(concated_input_features, None,
                                                                     None, local_normal_for_train_idx,
                                                                     train_flag, args)
                     # BCE loss
@@ -201,18 +201,18 @@ def train(args):
                 diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
                 loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
 
-                loss = dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['gna_loss_weight'] * gna_loss + dynamic_weights['reconstruction_loss_weight'] * reconstruction_loss
+                loss = dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['kl_loss_weight'] * kl_loss + dynamic_weights['reconstruction_loss_weight'] * reconstruction_loss
 
                 loss.backward()
                 optimizer.step()
                 batched_bce_loss += loss_bce
                 batched_rec_loss += loss_rec
                 batched_con_loss += con_loss
-                batched_gna_loss += gna_loss
+                batched_kl_loss += kl_loss
                 batched_reconstruction_loss += reconstruction_loss
                 # print(f"time to end batch {time.time() - start_time}\n\n")
 
-            batched_total_loss = batched_bce_loss + batched_rec_loss + batched_con_loss + batched_gna_loss + batched_reconstruction_loss
+            batched_total_loss = batched_bce_loss + batched_rec_loss + batched_con_loss + batched_kl_loss + batched_reconstruction_loss
             end_time = time.time()
             total_time += end_time - start_time
             
@@ -231,7 +231,7 @@ def train(args):
                 wandb.log({ "bce_loss": batched_bce_loss.item(),
                             "rec_loss": batched_rec_loss.item(),
                             "con_loss": batched_con_loss.item(),
-                            "gna_loss": batched_gna_loss.item(),
+                            "kl_loss": batched_kl_loss.item(),
                             "train_loss": batched_total_loss.item(),
                             "reconstruction_loss": batched_reconstruction_loss.item(),
                             "learning_rate": current_lr}, step=epoch)
@@ -239,7 +239,7 @@ def train(args):
             optimizer.zero_grad()
 
             # print("start forward")
-            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj,
+            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, kl_loss, reconstruction_loss = model(concated_input_features, adj,
                                                                     normal_for_generation_idx, normal_for_train_idx,
                                                                     train_flag, args)
 
@@ -278,7 +278,7 @@ def train(args):
             diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
             loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
 
-            loss = dynamic_weights['margin_loss_weight'] * loss_margin + dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['gna_loss_weight'] * gna_loss + dynamic_weights['reconstruction_loss_weight'] * reconstruction_loss
+            loss = dynamic_weights['margin_loss_weight'] * loss_margin + dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['kl_loss_weight'] * kl_loss + dynamic_weights['reconstruction_loss_weight'] * reconstruction_loss
 
             loss.backward()
             optimizer.step()
@@ -301,7 +301,7 @@ def train(args):
                             "bce_loss": loss_bce.item(),
                             "rec_loss": loss_rec.item(),
                             "con_loss": con_loss.item(),
-                            "gna_loss": gna_loss.item(),
+                            "kl_loss": kl_loss.item(),
                             "train_loss": loss.item(),
                             "reconstruction_loss": reconstruction_loss.item(),
                             "learning_rate": current_lr}, step=epoch)
@@ -316,7 +316,7 @@ def train(args):
                     for _, item in enumerate(test_data_loader):
                         concated_input_features = item[0].to(device)
                         labels = item[1].to(device)
-                        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, None, None, None,
+                        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, kl_loss, reconstruction_loss = model(concated_input_features, None, None, None,
                                                                                 train_flag, args)
                         all_batched_logits.append(logits.squeeze(0))
                     # Concatenate all batched logits
@@ -325,7 +325,7 @@ def train(args):
                     auc = roc_auc_score(ano_label[idx_test], logits)
                     ap = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
             else: 
-                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
+                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, kl_loss, reconstruction_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                         train_flag, args)
                 logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
             auc = roc_auc_score(ano_label[idx_test], logits)
@@ -416,11 +416,14 @@ if __name__ == "__main__":
     parser.add_argument('--GT_num_heads', type=int, default=2)
     parser.add_argument('--GT_num_layers', type=int, default=2)
 
+    parser.add_argument('--kl_tau', type=float, default=1.0)
+    parser.add_argument('--kl_tau_max', type=float, default=3.0)
+
     parser.add_argument('--rec_loss_weight', type=float, default=1.0)
     parser.add_argument('--bce_loss_weight', type=float, default=1.0)
     parser.add_argument('--margin_loss_weight', type=float, default=0)
     parser.add_argument('--con_loss_weight', type=float, default=10)
-    parser.add_argument('--gna_loss_weight', type=float, default=1.0)
+    parser.add_argument('--kl_loss_weight', type=float, default=1.0)
     parser.add_argument('--reconstruction_loss_weight', type=float, default=1.0)
     
     parser.add_argument('--con_loss_temp', type=float, default=10)

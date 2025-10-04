@@ -534,7 +534,7 @@ def get_dynamic_loss_weights(epoch, args):
             'bce_loss_weight': args.bce_loss_weight,
             'rec_loss_weight': args.rec_loss_weight,
             'con_loss_weight': args.con_loss_weight,
-            'gna_loss_weight': 0.0,
+            'kl_loss_weight': 0.0,
             'reconstruction_loss_weight': args.reconstruction_loss_weight
         }
     else:
@@ -546,6 +546,6 @@ def get_dynamic_loss_weights(epoch, args):
             'bce_loss_weight': args.bce_loss_weight,
             'rec_loss_weight': args.rec_loss_weight,
             'con_loss_weight': args.con_loss_weight,
-            'gna_loss_weight': progress * args.gna_loss_weight,
+            'kl_loss_weight': args.kl_loss_weight,
             'reconstruction_loss_weight': args.reconstruction_loss_weight
         }

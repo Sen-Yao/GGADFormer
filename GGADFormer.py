@@ -247,50 +247,19 @@ class GGADFormer(nn.Module):
         outlier_emb = None
         emb_combine = None
         noised_normal_for_generation_emb = None
-        
-        # Add noise into the attribute of sampled abnormal nodes
-        # degree = torch.sum(raw_adj[0, :, :], 0)[sample_abnormal_idx]
-        # neigh_adj = raw_adj[0, sample_abnormal_idx, :] / torch.unsqueeze(degree, 1)
-
-        # neigh_adj = adj[0, normal_for_generation_idx, :]
-        # emb[0, sample_abnormal_idx, :] =self.act(torch.mm(neigh_adj, emb[0, :, :]))
-        # emb[0, sample_abnormal_idx, :] = self.fc4(emb[0, sample_abnormal_idx, :])
-
-        # 使用批次大小处理outlier_emb计算
-        # outlier_emb: [num_nodes, hidden_dim]
-        # emb_con = self.act(self.fc6(emb_con))
-
-
-
-
-        # TODO ablation study add noise on the selected nodes
-
-        # std = 0.01
-        # mean = 0.02
-        # noise = torch.randn(emb[:, sample_abnormal_idx, :].size()) * std + mean
-        # emb_combine = torch.cat((emb[:, normal_idx, :], emb[:, sample_abnormal_idx, :] + noise), 1)
-
-        # TODO ablation study generate outlier from random noise
-        # std = 0.01
-        # mean = 0.02
-        # emb_con = torch.mm(neigh_adj, emb[0, :, :])
-        # noise = torch.randn(emb_con.size()) * std + mean
-        # emb_con = self.act(self.fc4(noise))
-        # emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
         gna_loss = torch.tensor(0.0, device=emb.device)
+        kl_loss = torch.tensor(0.0, device=emb.device)
+
         if train_flag:
-            # start_time = time.time()
             # 高效重排
             perm = torch.randperm(normal_for_train_idx.size(0), device=normal_for_train_idx.device)
             normal_for_train_idx = normal_for_train_idx[perm]
-            # print(f"time for shuffle:{time.time() - start_time}")
             normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]            
             normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
-            # print(f"time for normal_for_generation_emb:{time.time() - start_time}")
+
             # Noise
             noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
             noised_normal_for_generation_emb = normal_for_generation_emb + noise
-            # print(f"time for noise:{time.time() - start_time}")
 
             # 重构学习
             reconstructed_tokens = self.token_decoder(emb).squeeze(0)  # [num_nodes, 2*n_in]
@@ -302,7 +271,6 @@ class GGADFormer(nn.Module):
             outlier_emb = outlier_emb.squeeze(0)
             # 计算重构损失
             reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens.view(-1, (args.pp_k+1) * self.n_in))
-            # print(f"time for reconstruction_loss:{time.time() - start_time}")
 
             # 对比学习
             # 第一部分，鼓励离群点靠近全局中心点
@@ -311,8 +279,20 @@ class GGADFormer(nn.Module):
             # 只有超过 confidence_margin 的距离才会产生损失
             margin_excess = outlier_to_center_dist - args.confidence_margin
             con_loss = torch.mean(torch.relu(margin_excess))
-            # print(f"time for con_loss:{time.time() - start_time}")
 
+            # KL 散度计算损失
+            if args.kl_loss_weight != 0:
+                normal_emb = normal_for_generation_emb.squeeze(0)  # [M, d]
+                outlier_emb_flat = outlier_emb  # [M, d]
+
+                kl_loss = self.kl_divergence_constraint(
+                    normal_emb=normal_emb,
+                    outlier_emb=outlier_emb_flat,
+                    tau=getattr(args, 'kl_tau', 1.0),
+                    tau_max=getattr(args, 'kl_tau_max', 5.0),
+                    use_diagonal=getattr(args, 'kl_use_diagonal', True),  # 建议 True（高维更稳）
+                    eps=1e-6
+                )
             emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
             f_1 = self.fc1(emb_combine)
@@ -326,5 +306,81 @@ class GGADFormer(nn.Module):
         logits = self.fc3(f_2)
         emb = emb.clone()
 
-        # gna_loss = torch.tensor(0.0, device=emb.device)
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss, reconstruction_loss    
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, kl_loss, reconstruction_loss    
+    @staticmethod
+    def kl_divergence_constraint(normal_emb, outlier_emb, tau=1.0, tau_max=5.0, use_diagonal=False, eps=1e-6):
+        """
+        计算伪异常分布与正常分布之间的 KL 散度约束损失。
+        
+        Args:
+            normal_emb: Tensor of shape [M, d], 正常节点嵌入
+            outlier_emb: Tensor of shape [M, d], 伪异常节点嵌入
+            tau: float, 最小 KL 阈值（鼓励 KL > tau）
+            tau_max: float, 最大 KL 上限（防止 trivial 异常）
+            use_diagonal: bool, 是否使用对角协方差
+            eps: float, 数值稳定小常数
+        
+        Returns:
+            kl_loss: scalar tensor, KL 约束损失
+        """
+        assert normal_emb.size(1) == outlier_emb.size(1), "Embedding dimensions must match"
+        d = normal_emb.size(1)
+        device = normal_emb.device
+
+        # 均值
+        mu_p = normal_emb.mean(dim=0)      # [d]
+        mu_q = outlier_emb.mean(dim=0)     # [d]
+
+        if use_diagonal:
+            # 对角协方差（推荐用于高维）
+            var_p = normal_emb.var(dim=0, unbiased=True) + eps  # [d]
+            var_q = outlier_emb.var(dim=0, unbiased=True) + eps  # [d]
+
+            # KL(N_q || N_p) for diagonal Gaussians
+            kl_div = 0.5 * (
+                torch.sum(var_q / var_p) +
+                torch.sum((mu_p - mu_q) ** 2 / var_p) -
+                d +
+                torch.sum(torch.log(var_p)) -
+                torch.sum(torch.log(var_q))
+            )
+        else:
+            # 完整协方差版本
+            # 协方差计算（无偏估计）
+            def _compute_cov(X):
+                X_centered = X - X.mean(dim=0, keepdim=True)
+                if X.size(0) <= 1:
+                    return torch.eye(X.size(1), device=X.device) * eps
+                return X_centered.T @ X_centered / (X.size(0) - 1)
+
+            cov_p = _compute_cov(normal_emb)  # [d, d]
+            cov_q = _compute_cov(outlier_emb)  # [d, d]
+
+            # 数值稳定：加 eps 到对角
+            cov_p = cov_p + torch.eye(d, device=device) * eps
+            cov_q = cov_q + torch.eye(d, device=device) * eps
+
+            # 尝试求逆和 logdet
+            try:
+                cov_p_inv = torch.inverse(cov_p)
+                logdet_p = torch.logdet(cov_p)
+                logdet_q = torch.logdet(cov_q)
+            except RuntimeError:
+                # 回退到对角
+                var_p = torch.diag(cov_p)
+                var_q = torch.diag(cov_q)
+                cov_p_inv = torch.diag(1.0 / var_p)
+                logdet_p = torch.sum(torch.log(var_p))
+                logdet_q = torch.sum(torch.log(var_q))
+
+            trace_term = torch.trace(cov_p_inv @ cov_q)
+            diff = (mu_p - mu_q).unsqueeze(0)  # [1, d]
+            mahalanobis = diff @ cov_p_inv @ diff.t()  # [1, 1]
+            kl_div = 0.5 * (trace_term + mahalanobis.squeeze() - d + logdet_p - logdet_q)
+
+        # Hinge-style loss
+        kl_loss_lower = F.relu(tau - kl_div)          # 鼓励 KL > tau
+        kl_loss_upper = F.relu(kl_div - tau_max)      # 防止 KL 过大
+        kl_loss = kl_loss_lower + 0.1 * kl_loss_upper
+
+        return kl_loss
