@@ -31,8 +31,7 @@ class GCN(nn.Module):
             out = torch.bmm(adj, seq_fts)
         if self.bias is not None:
             out += self.bias
-
-        return self.act(out)
+        return torch.clamp(self.act(out), min=-1000.0, max=1000.0)
 
 
 class AvgReadout(nn.Module):
@@ -108,6 +107,8 @@ class Discriminator(nn.Module):
 class Model(nn.Module):
     def __init__(self, n_in, n_h, activation, negsamp_round, readout, args):
         super(Model, self).__init__()
+        if args.dataset == 'questions':
+            activation = nn.ReLU()
         self.device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
         self.read_mode = readout
         self.gcn1 = GCN(n_in, n_h, activation)
