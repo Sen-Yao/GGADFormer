@@ -278,6 +278,7 @@ class GGADFormer(nn.Module):
         # emb_con = self.act(self.fc4(noise))
         # emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
         gna_loss = torch.tensor(0.0, device=emb.device)
+        proj_loss = torch.tensor(0.0, device=emb.device)
         if train_flag:
             # start_time = time.time()
             # 高效重排
@@ -293,7 +294,7 @@ class GGADFormer(nn.Module):
             # print(f"time for noise:{time.time() - start_time}")
 
             # 重构学习
-            reconstructed_tokens = self.token_decoder(emb).squeeze(0)  # [num_nodes, 2*n_in]
+            reconstructed_tokens = self.token_decoder(emb).squeeze(0)  # [num_nodes, (args.pp_k+1)*n_in]
             reconstruction_error = reconstructed_tokens - input_tokens.view(-1, (args.pp_k+1) * self.n_in)
             # Project reconstruction error to embedding dimension
             reconstruction_error_proj = self.reconstruction_proj(reconstruction_error[normal_for_generation_idx, :])
@@ -312,6 +313,34 @@ class GGADFormer(nn.Module):
             margin_excess = outlier_to_center_dist - args.confidence_margin
             con_loss = torch.mean(torch.relu(margin_excess))
             # print(f"time for con_loss:{time.time() - start_time}")
+            # relative_dist = torch.norm(outlier_emb - normal_for_generation_emb, p=2, dim=1)
+
+            # 约束这个相对距离不能超过一个预设的边距 (margin R)
+            # 我们复用 confidence_margin 这个超参数，但它的含义已经改变
+            # 变成了伪异常点可以在其“父辈”周围探索的最大半径
+            # margin_excess = relative_dist - args.confidence_margin
+            # con_loss = torch.mean(torch.relu(margin_excess))
+
+            # 再编码策略
+            # 将重构后的 tokens 再编码为 embedding
+            reconstructed_tokens = torch.reshape(reconstructed_tokens, (-1, args.pp_k+1, self.n_in))
+            reencoded_emb = self.token_projection(reconstructed_tokens)
+            for i, l in enumerate(self.layers):
+                reencoded_emb, current_attention_weights = self.layers[i](reencoded_emb)
+                if i == len(self.layers) - 1: # 拿到最后一层的注意力
+                    attention_weights = current_attention_weights
+                    # 聚合多头注意力
+                    agg_attention_weights = torch.mean(attention_weights, dim=1)
+                    # agg_attention_weights: [N, args.pp_k+1, args.pp_k+1]
+            reencoded_emb = self.final_ln(reencoded_emb)
+
+            attention_scores = agg_attention_weights[:, 0, :]
+            # emb: [1, N, embedding_dim]
+            reencoded_emb = torch.bmm(attention_scores.unsqueeze(1), reencoded_emb).squeeze(1)[normal_for_generation_idx, :].detach()
+            # 重编码后的 emb 和投影干扰后的 emb 之间的距离需要利用损失函数进行约束
+            relative_dist = torch.norm(reencoded_emb - outlier_emb, dim=-1)
+            proj_loss = F.relu(relative_dist - args.proj_R_max) + F.relu(args.proj_R_min - relative_dist)
+            proj_loss = torch.mean(proj_loss)
 
             emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
@@ -327,4 +356,4 @@ class GGADFormer(nn.Module):
         emb = emb.clone()
 
         # gna_loss = torch.tensor(0.0, device=emb.device)
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, gna_loss, reconstruction_loss    
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, proj_loss, reconstruction_loss    

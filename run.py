@@ -416,6 +416,9 @@ if __name__ == "__main__":
     parser.add_argument('--GT_num_heads', type=int, default=2)
     parser.add_argument('--GT_num_layers', type=int, default=2)
 
+    parser.add_argument('--proj_R_max', type=float, default=0.5)
+    parser.add_argument('--proj_R_min', type=float, default=0.1)
+
     parser.add_argument('--rec_loss_weight', type=float, default=1.0)
     parser.add_argument('--bce_loss_weight', type=float, default=1.0)
     parser.add_argument('--margin_loss_weight', type=float, default=0)
