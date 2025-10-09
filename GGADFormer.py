@@ -380,7 +380,7 @@ class GGADFormer(nn.Module):
             proj_loss = torch.mean(proj_loss)
 
             # 均匀性损失
-            uniformity_loss = self.compute_infoNCE_uniformity_loss(emb, normal_for_train_idx, args)
+            # uniformity_loss = self.compute_infoNCE_uniformity_loss(emb, normal_for_train_idx, args)
 
             emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
