@@ -349,28 +349,24 @@ def train(args):
             train_flag = True
 
             # 先运行最后一个 epoch 的模型
-            emb_last_epoch, _, _, outlier_emb_last_epoch, _, agg_attention_weights_last_epoch, _, _, _ = model(concated_input_features, adj, 
-                                                                                normal_for_generation_idx, normal_for_train_idx,
-                                                                                train_flag, args)
-            # 再运行最佳模型的模型
-            model.load_state_dict(best_model_state)
-            emb_best_epoch, _, _, outlier_emb_best_epoch, _, agg_attention_weights_best_epoch, _, _, _ = model(concated_input_features, adj, 
-                                                                                            normal_for_generation_idx, normal_for_train_idx,
-                                                                                            train_flag, args)
-            
-
+            for _, item in enumerate(test_data_loader):
+                concated_input_features = item[0].to(device)
+                labels = item[1].to(device)
+                emb_last_epoch, _, _, outlier_emb_last_epoch, _, _, _, _, _ = model(concated_input_features, None, None, local_normal_for_train_idx, train_flag, args)
+                # 再运行最佳模型的模型
+                # model.load_state_dict(best_model_state)
+                # emb_best_epoch, _, _, outlier_emb_best_epoch, _, agg_attention_weights_best_epoch, _, _, _ = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx, train_flag, args)
+                create_tsne_visualization(concated_input_features[:, 0, :], emb_last_epoch, labels, best_epoch, normal_for_train_idx, outlier_emb_last_epoch, args)
+                break
             
             # 创建tsne可视化
-            create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, best_epoch, device,
-                                    normal_for_train_idx, normal_for_generation_idx, outlier_emb_last_epoch, outlier_emb_best_epoch)
+            
             
             # 可视化注意力权重
             if args.model_type == 'GGADFormer' or args.model_type == 'SGT':
                 # 获取邻接矩阵（去掉batch维度）
                 adj_matrix_np = adj.squeeze(0).detach().cpu().numpy()
-                attention_stats = visualize_attention_weights(agg_attention_weights_last_epoch, labels, normal_for_train_idx, 
-                                                            normal_for_generation_idx, outlier_emb_last_epoch, best_epoch, 
-                                                            args.dataset, device, adj_matrix_np, args)
+                # attention_stats = visualize_attention_weights(agg_attention_weights_last_epoch, labels, normal_for_train_idx, normal_for_generation_idx, outlier_emb_last_epoch, best_epoch, args.dataset, device, adj_matrix_np, args)
         
         
 

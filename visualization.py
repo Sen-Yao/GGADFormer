@@ -6,8 +6,7 @@ import numpy as np
 import torch
 import pandas as pd
 
-def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, epoch, device, 
-                             normal_for_train_idx, normal_for_generation_idx, outlier_emb_last_epoch, outlier_emb_best_epoch):
+def create_tsne_visualization(features, emb_last_epoch, labels, epoch, normal_for_train_idx, outlier_emb_last_epoch, args):
     """
     创建tsne可视化并保存到wandb
     
@@ -28,20 +27,18 @@ def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, 
     
     # 获取嵌入（去掉batch维度）
 
-    embeddings_last_epoch = emb_last_epoch.squeeze(0)  # [num_nodes, embedding_dim]
-    embeddings_best_epoch = emb_best_epoch.squeeze(0)  # [num_nodes, embedding_dim]
+    embeddings_last_epoch = emb_last_epoch.squeeze(0)  # [args.batch_size, embedding_dim]
     
     # 获取真实标签（去掉batch维度）
-    labels = labels.squeeze(0)  # [num_nodes]
+    labels = labels.squeeze(0)  # [args.batch_size]
 
 
     outlier_emb_len = len(outlier_emb_last_epoch)
     
     # 创建节点类型标签
     node_types = []
-    nb_nodes = features.shape[0]
-    print(f"nb_nodes: {nb_nodes}, outlier_emb_len: {outlier_emb_len}")
-    for i in range(nb_nodes):
+    print(f"nb_nodes: {args.batch_size}, outlier_emb_len: {outlier_emb_len}")
+    for i in range(args.batch_size):
         if labels[i] == 1:
             # 真实异常点
             node_types.append("anomaly") 
@@ -50,55 +47,29 @@ def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, 
     
     # 添加生成的异常节点类型标签
     for i in range(outlier_emb_len):
-        node_types.append("generated_anomaly")
+        node_types.append("pesudo")
     # 将数据移到CPU并转换为numpy，使用detach()避免梯度问题
     print(f"\n\nStarting tsne visualization...")
     features = features.cpu().detach().numpy()
     embeddings_last_epoch = embeddings_last_epoch.cpu().detach().numpy()
-    embeddings_best_epoch = embeddings_best_epoch.cpu().detach().numpy()
     labels = labels.cpu().detach().numpy()
-
-    num_nodes = features.shape[0]
     
     # 创建用于可视化的嵌入和标签
     # 对于生成的离群点，我们需要将其添加到嵌入空间中，但不在特征空间中
     if outlier_emb_last_epoch is not None and len(outlier_emb_last_epoch) > 0:
         # 确保outlier_emb是numpy数组
         embeddings_last_epoch = np.concatenate([embeddings_last_epoch, outlier_emb_last_epoch.cpu().detach().numpy()], axis=0)
-        embeddings_best_epoch = np.concatenate([embeddings_best_epoch, outlier_emb_best_epoch.cpu().detach().numpy()], axis=0)
-    
-    # 创建过滤索引：只包含异常节点和属于normal_for_train_idx的正常节点
-    filter_indices = []
-    for i in range(num_nodes):
-        if labels[i] == 1:  # 异常节点
-            filter_indices.append(i)
-        elif i in normal_for_train_idx:  # 属于训练集的正常节点
-            filter_indices.append(i)
-    
-    # 过滤特征和标签
-    filtered_features = features[filter_indices]
-    filtered_labels = labels[filter_indices]
-    filtered_node_types = [node_types[i] for i in filter_indices]
-    
-    # 过滤嵌入（只过滤原始节点，不包括生成的异常节点）
-    filtered_embeddings_last_epoch = embeddings_last_epoch[:num_nodes][filter_indices]
-    filtered_embeddings_best_epoch = embeddings_best_epoch[:num_nodes][filter_indices]
-    
-    # 添加生成的异常节点到过滤后的嵌入中
-    if outlier_emb_last_epoch is not None and len(outlier_emb_last_epoch) > 0:
-        filtered_embeddings_last_epoch = np.concatenate([filtered_embeddings_last_epoch, outlier_emb_last_epoch.cpu().detach().numpy()], axis=0)
-        filtered_embeddings_best_epoch = np.concatenate([filtered_embeddings_best_epoch, outlier_emb_best_epoch.cpu().detach().numpy()], axis=0)
+
     
 
     # 创建tsne可视化
     tsne = TSNE(n_components=2, random_state=42, perplexity=30, init='random', learning_rate=200.0)
     
     # 对过滤后的原始特征进行tsne
-    features_2d = tsne.fit_transform(filtered_features)
+    features_2d = tsne.fit_transform(features)
     
     # 对过滤后的嵌入进行tsne
-    embeddings_2d_last_epoch = tsne.fit_transform(filtered_embeddings_last_epoch)
-    embeddings_2d_best_epoch = tsne.fit_transform(filtered_embeddings_best_epoch)
+    embeddings_2d_last_epoch = tsne.fit_transform(embeddings_last_epoch)
     # 创建wandb表格
     # 原始特征空间的tsne
     feature_table_data = []
@@ -106,7 +77,7 @@ def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, 
         feature_table_data.append([
             float(features_2d[i, 0]),
             float(features_2d[i, 1]),
-            filtered_node_types[i]
+            node_types[i]
         ])
     
     feature_table = wandb.Table(
@@ -118,8 +89,8 @@ def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, 
     embedding_table_data_last_epoch = []
     for i in range(len(embeddings_2d_last_epoch)):
         # 对于生成的异常节点，使用默认标签和类型
-        if i < len(filtered_node_types):
-            node_type = filtered_node_types[i]
+        if i < len(node_types):
+            node_type = node_types[i]
         else:
             node_type = "generated_anomaly"
         
@@ -133,29 +104,11 @@ def create_tsne_visualization(features, emb_last_epoch, emb_best_epoch, labels, 
         columns=["TSNE_X", "TSNE_Y", "Node_Type"],
         data=embedding_table_data_last_epoch
     )
-
-    embedding_table_data_best_epoch = []
-    for i in range(len(embeddings_2d_best_epoch)):
-        if i < len(filtered_node_types):
-            node_type = filtered_node_types[i]
-        else:
-            node_type = "generated_anomaly"
-        embedding_table_data_best_epoch.append([
-            float(embeddings_2d_best_epoch[i, 0]),
-            float(embeddings_2d_best_epoch[i, 1]),
-            node_type
-        ])
-    
-    embedding_table_best_epoch = wandb.Table(
-        columns=["TSNE_X", "TSNE_Y", "Node_Type"],
-        data=embedding_table_data_best_epoch
-    )
     
     # 记录到wandb
     wandb.log({
         f"tsne_features": feature_table,
         f"tsne_embeddings_last_epoch": embedding_table_last_epoch,
-        f"tsne_embeddings_best_epoch_{epoch}": embedding_table_best_epoch
     })
     print("tsne visualization done!\n")
 
