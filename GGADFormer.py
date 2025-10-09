@@ -337,6 +337,42 @@ class GGADFormer(nn.Module):
             attention_scores = agg_attention_weights[:, 0, :]
             # emb: [1, N, embedding_dim]
             reencoded_emb = torch.bmm(attention_scores.unsqueeze(1), reencoded_emb).squeeze(1)[normal_for_generation_idx, :].detach()
+            # 另一种对比学习思路：
+            # 拉近正常点和重构正常嵌入
+            # 推开正常点和伪异常点
+            # Anchor 为正常点，Positive 为重构正常嵌入，Negative 为伪异常点
+            # 让 (Anchor, Positive) 的距离尽可能小，同时鼓励 (Anchor, Negative) 的距离处于 proj_R_max 和 proj_R_min 之间 
+
+            anchor_emb = normal_for_generation_emb.squeeze(0)  # [N, embedding_dim]
+            positive_emb = reencoded_emb  # [N, embedding_dim] (already processed)
+            negative_emb = outlier_emb  # [N, embedding_dim]
+
+            # 计算距离
+            anchor_positive_dist = torch.norm(anchor_emb - positive_emb, dim=-1)  # [N]
+            anchor_negative_dist = torch.norm(anchor_emb - negative_emb, dim=-1)  # [N]
+
+            # 对比学习损失：Anchor(正常点), Positive(重构正常嵌入), Negative(伪异常点)
+            # 目标1: 拉近 (Anchor, Positive) 距离 -> 0
+            # 目标2: 仅当 (Anchor, Negative) 距离超出 [proj_R_min, proj_R_max] 时施加惩罚
+
+            # 目标1: 拉近正常点和重构正常嵌入
+            positive_loss = torch.mean(anchor_positive_dist)
+
+            # 目标2: 仅在超出范围时惩罚 (Anchor, Negative) 距离
+            lower_bound = args.proj_R_min
+            upper_bound = args.proj_R_max
+
+            # 使用ReLU仅在超出范围时施加惩罚
+            # 距离小于下界：lower_bound - anchor_negative_dist > 0
+            # 距离大于上界：anchor_negative_dist - upper_bound > 0
+            below_range_loss = torch.relu(lower_bound - anchor_negative_dist)
+            above_range_loss = torch.relu(anchor_negative_dist - upper_bound)
+
+            negative_loss = torch.mean(below_range_loss + above_range_loss)
+
+            # 综合对比损失
+            con_loss = positive_loss + negative_loss
+
             # 重编码后的 emb 和投影干扰后的 emb 之间的距离需要利用损失函数进行约束
             relative_dist = torch.norm(reencoded_emb - outlier_emb, dim=-1)
             proj_loss = F.relu(relative_dist - args.proj_R_max) + F.relu(args.proj_R_min - relative_dist)
