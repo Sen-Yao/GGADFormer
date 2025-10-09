@@ -177,6 +177,7 @@ def train(args):
             batched_con_loss = 0
             batched_gna_loss = 0
             batched_reconstruction_loss = 0
+            batched_uniformity_loss = 0
             # start_time = time.time()
             for batch_idx, item in enumerate(train_data_loader):
                 # print(f"time to start batch {time.time() - start_time}")
@@ -187,7 +188,7 @@ def train(args):
                 optimizer.zero_grad()
                 is_known_normal_mask = torch.isin(batch_global_indices, normal_for_train_idx)
                 local_normal_for_train_idx = torch.nonzero(is_known_normal_mask, as_tuple=False).squeeze(-1)
-                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, None,
+                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss, uniformity_loss = model(concated_input_features, None,
                                                                     None, local_normal_for_train_idx,
                                                                     train_flag, args)
                     # BCE loss
@@ -201,7 +202,7 @@ def train(args):
                 diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
                 loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
 
-                loss = dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['gna_loss_weight'] * gna_loss + dynamic_weights['reconstruction_loss_weight'] * reconstruction_loss
+                loss = dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['gna_loss_weight'] * gna_loss + dynamic_weights['reconstruction_loss_weight'] * reconstruction_loss + dynamic_weights['uniformity_loss_weight'] * uniformity_loss
 
                 loss.backward()
                 optimizer.step()
@@ -210,9 +211,10 @@ def train(args):
                 batched_con_loss += con_loss
                 batched_gna_loss += gna_loss
                 batched_reconstruction_loss += reconstruction_loss
+                batched_uniformity_loss += uniformity_loss
                 # print(f"time to end batch {time.time() - start_time}\n\n")
 
-            batched_total_loss = batched_bce_loss + batched_rec_loss + batched_con_loss + batched_gna_loss + batched_reconstruction_loss
+            batched_total_loss = batched_bce_loss + batched_rec_loss + batched_con_loss + batched_gna_loss + batched_reconstruction_loss + batched_uniformity_loss
             end_time = time.time()
             total_time += end_time - start_time
             
@@ -234,6 +236,7 @@ def train(args):
                             "gna_loss": batched_gna_loss.item(),
                             "train_loss": batched_total_loss.item(),
                             "reconstruction_loss": batched_reconstruction_loss.item(),
+                            "uniformity_loss": batched_uniformity_loss.item(),
                             "learning_rate": current_lr}, step=epoch)
         else:
             optimizer.zero_grad()
@@ -316,7 +319,7 @@ def train(args):
                     for _, item in enumerate(test_data_loader):
                         concated_input_features = item[0].to(device)
                         labels = item[1].to(device)
-                        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss = model(concated_input_features, None, None, None,
+                        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, gna_loss, reconstruction_loss, uniformity_loss = model(concated_input_features, None, None, None,
                                                                                 train_flag, args)
                         all_batched_logits.append(logits.squeeze(0))
                     # Concatenate all batched logits
@@ -352,7 +355,7 @@ def train(args):
             for _, item in enumerate(test_data_loader):
                 concated_input_features = item[0].to(device)
                 labels = item[1].to(device)
-                emb_last_epoch, _, _, outlier_emb_last_epoch, _, _, _, _, _ = model(concated_input_features, None, None, local_normal_for_train_idx, train_flag, args)
+                emb_last_epoch, _, _, outlier_emb_last_epoch, _, _, _, _, _, _ = model(concated_input_features, None, None, local_normal_for_train_idx, train_flag, args)
                 # 再运行最佳模型的模型
                 # model.load_state_dict(best_model_state)
                 # emb_best_epoch, _, _, outlier_emb_best_epoch, _, agg_attention_weights_best_epoch, _, _, _ = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx, train_flag, args)
@@ -421,6 +424,7 @@ if __name__ == "__main__":
     parser.add_argument('--con_loss_weight', type=float, default=10)
     parser.add_argument('--gna_loss_weight', type=float, default=1.0)
     parser.add_argument('--reconstruction_loss_weight', type=float, default=1.0)
+    parser.add_argument('--uniformity_loss_weight', type=float, default=1.0)
     
     parser.add_argument('--con_loss_temp', type=float, default=10)
     parser.add_argument('--GNA_temp', type=float, default=1)

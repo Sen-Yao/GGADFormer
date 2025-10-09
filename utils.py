@@ -535,7 +535,8 @@ def get_dynamic_loss_weights(epoch, args):
             'rec_loss_weight': args.rec_loss_weight,
             'con_loss_weight': args.con_loss_weight,
             'gna_loss_weight': 0.0,
-            'reconstruction_loss_weight': args.reconstruction_loss_weight
+            'reconstruction_loss_weight': args.reconstruction_loss_weight,
+            'uniformity_loss_weight': args.uniformity_loss_weight
         }
     else:
         # 超过warmup后，使用线性插值平滑地恢复到目标值
@@ -547,5 +548,6 @@ def get_dynamic_loss_weights(epoch, args):
             'rec_loss_weight': args.rec_loss_weight,
             'con_loss_weight': args.con_loss_weight,
             'gna_loss_weight': progress * args.gna_loss_weight,
-            'reconstruction_loss_weight': args.reconstruction_loss_weight
+            'reconstruction_loss_weight': args.reconstruction_loss_weight,
+            'uniformity_loss_weight': args.uniformity_loss_weight
         }
