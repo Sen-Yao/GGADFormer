@@ -385,7 +385,7 @@ if __name__ == "__main__":
     parser.add_argument('--train_rate', type=float, default=0.05)
     parser.add_argument('--batch_size', type=int, default=8192)
 
-    parser.add_argument('--embedding_dim', type=int, default=128)
+    parser.add_argument('--embedding_dim', type=int, default=256)
     parser.add_argument('--proj_dim', type=int, default=64)
     parser.add_argument('--num_epoch', type=int)
     parser.add_argument('--drop_prob', type=float, default=0.0)
@@ -403,30 +403,30 @@ if __name__ == "__main__":
     parser.add_argument('--visualize', type=bool, default=False)
     parser.add_argument('--device', type=int, default=0)
 
-    parser.add_argument('--pp_k', type=int, default=2)
-    parser.add_argument('--progregate_alpha', type=float, default=0.1)
+    parser.add_argument('--pp_k', type=int, default=6)
+    parser.add_argument('--progregate_alpha', type=float, default=0.2)
     parser.add_argument('--sample_num_p', type=int, default=7)
     parser.add_argument('--sample_num_n', type=int, default=7)
     parser.add_argument('--sample_size', type=int, default=10000)
 
-    parser.add_argument('--GT_ffn_dim', type=int, default=128)
+    parser.add_argument('--GT_ffn_dim', type=int, default=256)
     parser.add_argument('--GT_dropout', type=float, default=0.4)
     parser.add_argument('--GT_attention_dropout', type=float, default=0.4)
     parser.add_argument('--GT_num_heads', type=int, default=2)
-    parser.add_argument('--GT_num_layers', type=int, default=2)
+    parser.add_argument('--GT_num_layers', type=int, default=3)
 
     parser.add_argument('--proj_R_max', type=float, default=0.5)
     parser.add_argument('--proj_R_min', type=float, default=0.1)
-    parser.add_argument('--ring_R_max', type=float, default=2)
+    parser.add_argument('--ring_R_max', type=float, default=1)
     parser.add_argument('--ring_R_min', type=float, default=0.3)
 
     parser.add_argument('--rec_loss_weight', type=float, default=0)
     parser.add_argument('--bce_loss_weight', type=float, default=1.0)
     parser.add_argument('--margin_loss_weight', type=float, default=0)
-    parser.add_argument('--con_loss_weight', type=float, default=1)
+    parser.add_argument('--con_loss_weight', type=float, default=0.1)
     parser.add_argument('--proj_loss_weight', type=float, default=0)
     parser.add_argument('--reconstruction_loss_weight', type=float, default=1.0)
-    parser.add_argument('--ring_loss_weight', type=float, default=0)
+    parser.add_argument('--ring_loss_weight', type=float, default=1.0)
 
     parser.add_argument('--lambda_positive', type=float, default=1.0)
     parser.add_argument('--lambda_negative', type=float, default=1.0)
@@ -435,10 +435,10 @@ if __name__ == "__main__":
     parser.add_argument('--GNA_temp', type=float, default=1)
     
 
-    parser.add_argument('--warmup_updates', type=int, default=0)
+    parser.add_argument('--warmup_updates', type=int, default=50)
     parser.add_argument('--tot_updates', type=int, default=1000)
     parser.add_argument('--peak_lr', type=float, default=1e-4)    
-    parser.add_argument('--end_lr', type=float, default=0)
+    parser.add_argument('--end_lr', type=float, default=1e-4)
 
     parser.add_argument('--warmup_epoch', type=int, default=20)
 

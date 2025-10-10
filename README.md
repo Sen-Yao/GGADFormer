@@ -63,5 +63,5 @@ AP:
 ## Run
 
 ```bash
-python run.py --GT_attention_dropout=0.4 --GT_dropout=0.4 --GT_ffn_dim=256 --GT_num_layers=3 --batch_size=128 --con_loss_weight=0.1 --dataset=photo --embedding_dim=256 --end_lr=1e-4 --model_type=GGADFormer --num_epoch=200 --peak_lr=3e-4 --pp_k=6 --progregate_alpha=0.2 --proj_loss_weight=0 --rec_loss_weight=0 --reconstruction_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
+python run.py --dataset=photo --num_epoch=200 --peak_lr=3e-4  --warmup_updates=50
 ```
