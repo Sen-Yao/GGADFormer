@@ -221,11 +221,15 @@ class GGADFormer(nn.Module):
 
         # 将模型移动到指定设备
         self.to(self.device)
-
-    def forward(self, input_tokens, adj, _, normal_for_train_idx, train_flag, args, sparse=False):
-
-        # input_tokens: (N, args.pp_k+1, d)
-        emb = self.token_projection(input_tokens)
+    
+    def TransformerEncoder(self, tokens):
+        """
+        Inputs:
+            - tokens: 输入节点的 tokens 序列，形状 [batch_size, pp_k+1, feature_dim]
+        Outputs:
+            - emb: 输入节点的编码结果，形状 [1, batch_size, embedding_dim]
+        """
+        emb = self.token_projection(tokens)
         for i, l in enumerate(self.layers):
             emb, current_attention_weights = self.layers[i](emb)
             if i == len(self.layers) - 1: # 拿到最后一层的注意力
@@ -234,12 +238,20 @@ class GGADFormer(nn.Module):
                 agg_attention_weights = torch.mean(attention_weights, dim=1)
                 # agg_attention_weights: [N, args.pp_k+1, args.pp_k+1]
         emb = self.final_ln(emb)
-        # emb: [N, args.pp_k+1, embedding_dim]
 
-        # attention_scores: [N, args.pp_k+1], 表示每个节点对每个hop的注意力分数
+        # attention_scores: [N, args.pp_k+1], 表示每个节点的自身特征 (0-hop) 对每个后续 hop 的注意力分数
         attention_scores = agg_attention_weights[:, 0, :]
+
+        # 基于 attention_scores 进行池化，得到最终编码结果
         # emb: [1, N, embedding_dim]
         emb = torch.bmm(attention_scores.unsqueeze(1), emb).squeeze(1).unsqueeze(0)
+
+        return emb
+
+    def forward(self, input_tokens, adj, _, normal_for_train_idx, train_flag, args, sparse=False):
+
+        # input_tokens: (N, args.pp_k+1, d)
+        emb = self.TransformerEncoder(input_tokens)
 
         # 生成全局中心点
         h_mean = torch.mean(emb, dim=1, keepdim=True)
@@ -327,19 +339,8 @@ class GGADFormer(nn.Module):
             # 再编码策略
             # 将重构后的 tokens 再编码为 embedding
             reconstructed_tokens = torch.reshape(reconstructed_tokens, (-1, args.pp_k+1, self.n_in))
-            reencoded_emb = self.token_projection(reconstructed_tokens)
-            for i, l in enumerate(self.layers):
-                reencoded_emb, current_attention_weights = self.layers[i](reencoded_emb)
-                if i == len(self.layers) - 1: # 拿到最后一层的注意力
-                    attention_weights = current_attention_weights
-                    # 聚合多头注意力
-                    agg_attention_weights = torch.mean(attention_weights, dim=1)
-                    # agg_attention_weights: [N, args.pp_k+1, args.pp_k+1]
-            reencoded_emb = self.final_ln(reencoded_emb)
-
-            attention_scores = agg_attention_weights[:, 0, :]
+            reencoded_emb = self.TransformerEncoder(reconstructed_tokens)[:, normal_for_generation_idx, :].detach().squeeze(0)
             # emb: [1, N, embedding_dim]
-            reencoded_emb = torch.bmm(attention_scores.unsqueeze(1), reencoded_emb).squeeze(1)[normal_for_generation_idx, :].detach()
             # 另一种对比学习思路：
             # 拉近正常点和重构正常嵌入
             # 推开正常点和伪异常点
@@ -399,7 +400,7 @@ class GGADFormer(nn.Module):
         emb = emb.clone()
 
         # gna_loss = torch.tensor(0.0, device=emb.device)
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, proj_loss, reconstruction_loss, loss_ring
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, None, con_loss, proj_loss, reconstruction_loss, loss_ring
 
     # InfoNCE uniformity loss - 推开不同正常节点间的距离
     def compute_infoNCE_uniformity_loss(self, emb, normal_for_train_idx, args):
