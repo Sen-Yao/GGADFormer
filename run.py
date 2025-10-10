@@ -397,7 +397,6 @@ if __name__ == "__main__":
     parser.add_argument('--model_type', type=str, default='GGADFormer')
     parser.add_argument('--visualize', type=bool, default=False)
     parser.add_argument('--device', type=int, default=0)
-
     parser.add_argument('--pp_k', type=int, default=6)
     parser.add_argument('--progregate_alpha', type=float, default=0.2)
     parser.add_argument('--sample_num_p', type=int, default=7)
