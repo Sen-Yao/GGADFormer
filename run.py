@@ -428,8 +428,8 @@ if __name__ == "__main__":
     parser.add_argument('--reconstruction_loss_weight', type=float, default=1.0)
     parser.add_argument('--ring_loss_weight', type=float, default=1.0)
 
-    parser.add_argument('--lambda_positive', type=float, default=1.0)
-    parser.add_argument('--lambda_negative', type=float, default=1.0)
+    parser.add_argument('--lambda_rec_tok', type=float, default=1.0)
+    parser.add_argument('--lambda_rec_emb', type=float, default=0.1)
     
     parser.add_argument('--con_loss_temp', type=float, default=10)
     parser.add_argument('--GNA_temp', type=float, default=1)

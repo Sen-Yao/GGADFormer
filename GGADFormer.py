@@ -179,6 +179,7 @@ class GGADFormer(nn.Module):
 
         # 设置设备
         self.device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
+        self.args = args
 
         # 设置批次大小
         self.batchsize = getattr(args, 'batchsize', None)
@@ -259,40 +260,13 @@ class GGADFormer(nn.Module):
         outlier_emb = None
         emb_combine = None
         noised_normal_for_generation_emb = None
-        
-        # Add noise into the attribute of sampled abnormal nodes
-        # degree = torch.sum(raw_adj[0, :, :], 0)[sample_abnormal_idx]
-        # neigh_adj = raw_adj[0, sample_abnormal_idx, :] / torch.unsqueeze(degree, 1)
 
-        # neigh_adj = adj[0, normal_for_generation_idx, :]
-        # emb[0, sample_abnormal_idx, :] =self.act(torch.mm(neigh_adj, emb[0, :, :]))
-        # emb[0, sample_abnormal_idx, :] = self.fc4(emb[0, sample_abnormal_idx, :])
-
-        # 使用批次大小处理outlier_emb计算
-        # outlier_emb: [num_nodes, hidden_dim]
-        # emb_con = self.act(self.fc6(emb_con))
-
-
-
-
-        # TODO ablation study add noise on the selected nodes
-
-        # std = 0.01
-        # mean = 0.02
-        # noise = torch.randn(emb[:, sample_abnormal_idx, :].size()) * std + mean
-        # emb_combine = torch.cat((emb[:, normal_idx, :], emb[:, sample_abnormal_idx, :] + noise), 1)
-
-        # TODO ablation study generate outlier from random noise
-        # std = 0.01
-        # mean = 0.02
-        # emb_con = torch.mm(neigh_adj, emb[0, :, :])
-        # noise = torch.randn(emb_con.size()) * std + mean
-        # emb_con = self.act(self.fc4(noise))
-        # emb_combine = torch.cat((emb[:, normal_idx, :], torch.unsqueeze(emb_con, 0)), 1)
         gna_loss = torch.tensor(0.0, device=emb.device)
         proj_loss = torch.tensor(0.0, device=emb.device)
         uniformity_loss = torch.tensor(0.0, device=emb.device)
         loss_ring = torch.tensor(0.0, device=emb.device)
+        con_loss = torch.tensor(0.0, device=emb.device)
+        reconstruction_loss = torch.tensor(0.0, device=emb.device)
         if train_flag:
             # start_time = time.time()
             # 高效重排
@@ -315,9 +289,6 @@ class GGADFormer(nn.Module):
 
             outlier_emb = normal_for_generation_emb + args.outlier_alpha * reconstruction_error_proj
             outlier_emb = outlier_emb.squeeze(0)
-            # 计算重构损失
-            reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens.view(-1, (args.pp_k+1) * self.n_in))
-            # print(f"time for reconstruction_loss:{time.time() - start_time}")
 
             # 中心点对齐损失，鼓励离群点距离全局中心的距离保持在一个 ring 内
             # 计算离群点嵌入与全局中心的距离
@@ -327,71 +298,15 @@ class GGADFormer(nn.Module):
             ring_in_range_loss = torch.relu(outlier_to_center_dist - args.ring_R_max)
 
             loss_ring = torch.mean(ring_out_range_loss + ring_in_range_loss)
-            # print(f"time for con_loss:{time.time() - start_time}")
-            # relative_dist = torch.norm(outlier_emb - normal_for_generation_emb, p=2, dim=1)
-
-            # 约束这个相对距离不能超过一个预设的边距 (margin R)
-            # 我们复用 confidence_margin 这个超参数，但它的含义已经改变
-            # 变成了伪异常点可以在其“父辈”周围探索的最大半径
-            # margin_excess = relative_dist - args.confidence_margin
-            # con_loss = torch.mean(torch.relu(margin_excess))
-
-            # 再编码策略
             # 将重构后的 tokens 再编码为 embedding
-            reconstructed_tokens = torch.reshape(reconstructed_tokens, (-1, args.pp_k+1, self.n_in))
-            reencoded_emb = self.TransformerEncoder(reconstructed_tokens)[:, normal_for_generation_idx, :].detach().squeeze(0)
-            # emb: [1, N, embedding_dim]
-            # 另一种对比学习思路：
-            # 拉近正常点和重构正常嵌入
-            # 推开正常点和伪异常点
-            # Anchor 为正常点，Positive 为重构正常嵌入，Negative 为伪异常点
-            # 让 (Anchor, Positive) 的距离尽可能小，同时鼓励 (Anchor, Negative) 的距离处于 proj_R_max 和 proj_R_min 之间 
-
-            anchor_emb = normal_for_generation_emb.squeeze(0)  # [N, embedding_dim]
-            positive_emb = reencoded_emb  # [N, embedding_dim] (already processed)
-            negative_emb = outlier_emb  # [N, embedding_dim]
-
-            # 计算距离
-            anchor_positive_dist = torch.norm(anchor_emb - positive_emb, dim=-1)  # [N]
-            anchor_negative_dist = torch.norm(anchor_emb - negative_emb, dim=-1)  # [N]
-
-            # 对比学习损失：Anchor(正常点), Positive(重构正常嵌入), Negative(伪异常点)
-            # 目标1: 拉近 (Anchor, Positive) 距离 -> 0
-            # 目标2: 仅当 (Anchor, Negative) 距离超出 [proj_R_min, proj_R_max] 时施加惩罚
-
-            # 目标1: 拉近正常点和重构正常嵌入
-            positive_loss = torch.mean(anchor_positive_dist)
-
-            # 目标2: 仅在超出范围时惩罚 (Anchor, Negative) 距离
-            lower_bound = args.proj_R_min
-            upper_bound = args.proj_R_max
-
-            # 使用ReLU仅在超出范围时施加惩罚
-            # 距离小于下界：lower_bound - anchor_negative_dist > 0
-            # 距离大于上界：anchor_negative_dist - upper_bound > 0
-            below_range_loss = torch.relu(lower_bound - anchor_negative_dist)
-            above_range_loss = torch.relu(anchor_negative_dist - upper_bound)
-
-            negative_loss = torch.mean(below_range_loss + above_range_loss)
-
-            # 综合对比损失
-            con_loss = args.lambda_positive * positive_loss
-
-            # 重编码后的 emb 和投影干扰后的 emb 之间的距离需要利用损失函数进行约束'
-            # 注意，此损失在 10-09 发现非常有用。后续如果没招了可以再次尝试！
-            # relative_dist = torch.norm(reencoded_emb - outlier_emb, dim=-1)
-            # proj_loss = F.relu(relative_dist - args.proj_R_max) + F.relu(args.proj_R_min - relative_dist)
-            # proj_loss = torch.mean(proj_loss)
-
-            # 均匀性损失
-            # uniformity_loss = self.compute_infoNCE_uniformity_loss(emb, normal_for_train_idx, args)
+            reconstructed_tokens_vector = torch.reshape(reconstructed_tokens, (-1, args.pp_k+1, self.n_in))
+            reencoded_emb = self.TransformerEncoder(reconstructed_tokens_vector)[:, normal_for_generation_idx, :].detach().squeeze(0)
+            reconstruction_loss = self.compute_rec_loss(input_tokens, reconstructed_tokens, normal_for_generation_emb, reencoded_emb, normal_for_generation_idx)
 
             emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
             f_1 = self.fc1(emb_combine)
         else:
-            con_loss = torch.tensor(0.0, device=emb.device)
-            reconstruction_loss = torch.tensor(0.0, device=emb.device)
             f_1 = self.fc1(emb)
         f_1 = self.act(f_1)
         f_2 = self.fc2(f_1)
@@ -401,6 +316,24 @@ class GGADFormer(nn.Module):
 
         # gna_loss = torch.tensor(0.0, device=emb.device)
         return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, None, con_loss, proj_loss, reconstruction_loss, loss_ring
+
+    def compute_rec_loss(self, input_tokens, reconstructed_tokens, normal_for_generation_emb, reencoded_emb, normal_for_generation_idx):
+        """
+        计算 Token 空间和 Embedding 空间的重构损失
+        Args:
+            input_tokens: 原始采样的 Token 序列
+            reconstructed_tokens： 经过解码器重构的 Token 序列
+            emb: 第一次编码的嵌入结果
+            reencoded_emb: 将重构 Token 序列进行二次编码的嵌入结果
+        Returns:
+            rec_loss: 重构损失值
+        """
+        token_rec_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens.view(-1, (self.args.pp_k+1) * self.n_in))
+        # 计算距离
+        emb_rec_loss = torch.mean(torch.norm(normal_for_generation_emb.squeeze(0) - reencoded_emb, dim=-1))  # [N]
+        rec_loss = self.args.lambda_rec_tok * token_rec_loss + self.args.lambda_rec_emb * emb_rec_loss
+        return rec_loss
+
 
     # InfoNCE uniformity loss - 推开不同正常节点间的距离
     def compute_infoNCE_uniformity_loss(self, emb, normal_for_train_idx, args):
