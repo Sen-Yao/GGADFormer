@@ -174,9 +174,6 @@ def train(args):
         if args.model_type == "GGADFormer":
             batched_bce_loss = 0
             batched_rec_loss = 0
-            batched_con_loss = 0
-            batched_proj_loss = 0
-            batched_reconstruction_loss = 0
             batched_ring_loss = 0
             # start_time = time.time()
             for batch_idx, item in enumerate(train_data_loader):
@@ -208,13 +205,9 @@ def train(args):
                 optimizer.step()
                 batched_bce_loss += loss_bce
                 batched_rec_loss += loss_rec
-                # batched_con_loss += con_loss
-                # batched_proj_loss += proj_loss
-                # batched_reconstruction_loss += reconstruction_loss
                 batched_ring_loss += loss_ring
-                # print(f"time to end batch {time.time() - start_time}\n\n")
 
-            batched_total_loss = batched_bce_loss + batched_rec_loss + batched_con_loss + batched_proj_loss + batched_reconstruction_loss + batched_ring_loss
+            batched_total_loss = batched_bce_loss + batched_rec_loss + batched_ring_loss
             end_time = time.time()
             total_time += end_time - start_time
             
@@ -230,7 +223,8 @@ def train(args):
             })
             pbar.update(1)
             if epoch % 2 == 0:
-                wandb.log({ "bce_loss": batched_bce_loss.item(),
+                wandb.log({ "batched_total_loss": batched_total_loss.item(),
+                            "bce_loss": batched_bce_loss.item(),
                             "rec_loss": batched_rec_loss.item(),
                             "ring_loss": batched_ring_loss.item(),
                             "learning_rate": current_lr}, step=epoch)
@@ -397,6 +391,7 @@ if __name__ == "__main__":
     parser.add_argument('--model_type', type=str, default='GGADFormer')
     parser.add_argument('--visualize', type=bool, default=False)
     parser.add_argument('--device', type=int, default=0)
+
     parser.add_argument('--pp_k', type=int, default=6)
     parser.add_argument('--progregate_alpha', type=float, default=0.2)
     parser.add_argument('--sample_num_p', type=int, default=7)
