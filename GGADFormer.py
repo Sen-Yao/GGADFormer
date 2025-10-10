@@ -287,7 +287,7 @@ class GGADFormer(nn.Module):
             # Project reconstruction error to embedding dimension
             reconstruction_error_proj = self.reconstruction_proj(reconstruction_error[normal_for_generation_idx, :])
 
-            outlier_emb = normal_for_generation_emb + args.outlier_alpha * reconstruction_error_proj
+            outlier_emb = normal_for_generation_emb + args.outlier_beta * reconstruction_error_proj
             outlier_emb = outlier_emb.squeeze(0)
 
             # 中心点对齐损失，鼓励离群点距离全局中心的距离保持在一个 ring 内
