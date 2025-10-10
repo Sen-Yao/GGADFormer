@@ -29,7 +29,7 @@ python run.py --embedding_dim=300 --model_type=GGAD --margin_loss_weight=1 --war
 
 # Amazon
 # sweep zev7xcg9
-python run.py --dataset=Amazon --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=5e-4 --end_lr=1e-4 --num_epoch=150 --warmup_updates=30 --pp_k=2 --progregate_alpha=0.3  --con_loss_weight 20 --confidence_margin=0.3 --batch_size=1024
+python run.py --dataset=Amazon --num_epoch=50 --peak_lr=5e-4 --batch_size=1024 --pp_k=5 --progregate_alpha=0.3
 
 # reddit
 # sweep ecftoff3
@@ -37,7 +37,7 @@ python run.py --dataset=reddit --GT_ffn_dim=64 --GT_num_heads=4 --GT_num_layers=
 
 # photo
 # sweep 4i1chaya
-python run.py --dataset=photo --GT_ffn_dim=256 --GT_num_layers=3 --embedding_dim=256 --peak_lr=8e-4 --end_lr=8e-4 --num_epoch=40 --warmup_updates=50 --progregate_alpha=0.3 --con_loss_weight=1 --confidence_margin=0.3 --batch_size=128
+python run.py --dataset=photo --num_epoch=200 --peak_lr=3e-4 --batch_size=128
 
 # elliptic
 # sweep 2e1yh14
