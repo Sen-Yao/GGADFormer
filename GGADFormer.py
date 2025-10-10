@@ -266,7 +266,7 @@ class GGADFormer(nn.Module):
         uniformity_loss = torch.tensor(0.0, device=emb.device)
         loss_ring = torch.tensor(0.0, device=emb.device)
         con_loss = torch.tensor(0.0, device=emb.device)
-        reconstruction_loss = torch.tensor(0.0, device=emb.device)
+        loss_rec = torch.tensor(0.0, device=emb.device)
         if train_flag:
             # start_time = time.time()
             # 高效重排
@@ -301,7 +301,7 @@ class GGADFormer(nn.Module):
             # 将重构后的 tokens 再编码为 embedding
             reconstructed_tokens_vector = torch.reshape(reconstructed_tokens, (-1, args.pp_k+1, self.n_in))
             reencoded_emb = self.TransformerEncoder(reconstructed_tokens_vector)[:, normal_for_generation_idx, :].detach().squeeze(0)
-            reconstruction_loss = self.compute_rec_loss(input_tokens, reconstructed_tokens, normal_for_generation_emb, reencoded_emb, normal_for_generation_idx)
+            loss_rec = self.compute_rec_loss(input_tokens, reconstructed_tokens, normal_for_generation_emb, reencoded_emb, normal_for_generation_idx)
 
             emb_combine = torch.cat((emb[:, normal_for_train_idx, :], torch.unsqueeze(outlier_emb, 0)), 1)
 
@@ -315,7 +315,7 @@ class GGADFormer(nn.Module):
         emb = emb.clone()
 
         # gna_loss = torch.tensor(0.0, device=emb.device)
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, None, con_loss, proj_loss, reconstruction_loss, loss_ring
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, loss_rec, loss_ring
 
     def compute_rec_loss(self, input_tokens, reconstructed_tokens, normal_for_generation_emb, reencoded_emb, normal_for_generation_idx):
         """
@@ -326,13 +326,13 @@ class GGADFormer(nn.Module):
             emb: 第一次编码的嵌入结果
             reencoded_emb: 将重构 Token 序列进行二次编码的嵌入结果
         Returns:
-            rec_loss: 重构损失值
+            loss_rec: 重构损失值
         """
         token_rec_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens.view(-1, (self.args.pp_k+1) * self.n_in))
         # 计算距离
         emb_rec_loss = torch.mean(torch.norm(normal_for_generation_emb.squeeze(0) - reencoded_emb, dim=-1))  # [N]
-        rec_loss = self.args.lambda_rec_tok * token_rec_loss + self.args.lambda_rec_emb * emb_rec_loss
-        return rec_loss
+        loss_rec = self.args.lambda_rec_tok * token_rec_loss + self.args.lambda_rec_emb * emb_rec_loss
+        return loss_rec
 
 
     # InfoNCE uniformity loss - 推开不同正常节点间的距离

@@ -63,5 +63,5 @@ AP:
 ## Run
 
 ```bash
-python run.py --dataset=photo --num_epoch=200 --peak_lr=3e-4  --warmup_updates=50
+python run.py --dataset=photo --num_epoch=200 --peak_lr=3e-4 --batch_size=128
 ```

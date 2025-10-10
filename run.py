@@ -188,7 +188,7 @@ def train(args):
                 optimizer.zero_grad()
                 is_known_normal_mask = torch.isin(batch_global_indices, normal_for_train_idx)
                 local_normal_for_train_idx = torch.nonzero(is_known_normal_mask, as_tuple=False).squeeze(-1)
-                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, proj_loss, reconstruction_loss, ring_loss = model(concated_input_features, None,
+                emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, loss_rec, loss_ring = model(concated_input_features, None,
                                                                     None, local_normal_for_train_idx,
                                                                     train_flag, args)
                     # BCE loss
@@ -200,18 +200,18 @@ def train(args):
                 loss_bce = torch.mean(loss_bce)
 
                 diff_attribute = torch.pow(outlier_emb - noised_normal_for_generation_emb, 2)
-                loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
+                # loss_rec = torch.mean(torch.sqrt(torch.sum(diff_attribute, 1)))
 
-                loss = dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['con_loss_weight'] * con_loss + dynamic_weights['proj_loss_weight'] * proj_loss + dynamic_weights['reconstruction_loss_weight'] * reconstruction_loss + dynamic_weights['ring_loss_weight'] * ring_loss
+                loss = dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['ring_loss_weight'] * loss_ring
 
                 loss.backward()
                 optimizer.step()
                 batched_bce_loss += loss_bce
                 batched_rec_loss += loss_rec
-                batched_con_loss += con_loss
-                batched_proj_loss += proj_loss
-                batched_reconstruction_loss += reconstruction_loss
-                batched_ring_loss += ring_loss
+                # batched_con_loss += con_loss
+                # batched_proj_loss += proj_loss
+                # batched_reconstruction_loss += reconstruction_loss
+                batched_ring_loss += loss_ring
                 # print(f"time to end batch {time.time() - start_time}\n\n")
 
             batched_total_loss = batched_bce_loss + batched_rec_loss + batched_con_loss + batched_proj_loss + batched_reconstruction_loss + batched_ring_loss
@@ -232,10 +232,6 @@ def train(args):
             if epoch % 2 == 0:
                 wandb.log({ "bce_loss": batched_bce_loss.item(),
                             "rec_loss": batched_rec_loss.item(),
-                            "con_loss": batched_con_loss.item(),
-                            "proj_loss": batched_proj_loss.item(),
-                            "train_loss": batched_total_loss.item(),
-                            "reconstruction_loss": batched_reconstruction_loss.item(),
                             "ring_loss": batched_ring_loss.item(),
                             "learning_rate": current_lr}, step=epoch)
         else:
@@ -319,7 +315,7 @@ def train(args):
                     for _, item in enumerate(test_data_loader):
                         concated_input_features = item[0].to(device)
                         labels = item[1].to(device)
-                        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, proj_loss, reconstruction_loss, ring_loss = model(concated_input_features, None, None, None,
+                        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, loss_rec, loss_ring = model(concated_input_features, None, None, None,
                                                                                 train_flag, args)
                         all_batched_logits.append(logits.squeeze(0))
                     # Concatenate all batched logits
@@ -397,7 +393,6 @@ if __name__ == "__main__":
     parser.add_argument('--confidence_margin', type=float, default=2)
     parser.add_argument('--outlier_alpha', type=float, default=0.3)
     parser.add_argument('--sample_rate', type=float, default=0.15)
-    parser.add_argument('--batchsize', type=int, default=0)
     
     parser.add_argument('--model_type', type=str, default='GGADFormer')
     parser.add_argument('--visualize', type=bool, default=False)
