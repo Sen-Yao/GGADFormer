@@ -59,3 +59,9 @@ AP:
 |-|-|-|-|-|-|-|-|
 |GGAD|0.3755±0.0749|0.0360±0.0003|0.1269±0.0091|0.2565±0.0200|TBD|0.2448±0.0039|TBD
 |GGADFormer|0.8080±0.0088|0.0418±0.0042|0.5216±0.0419|0.2268±0.0755|0.6589±0.0323|0.3063±0.0138|0.0375±0.0020
+
+## Run
+
+```bash
+python run.py --GT_attention_dropout=0.4 --GT_dropout=0.4 --GT_ffn_dim=256 --GT_num_layers=3 --batch_size=128 --con_loss_weight=0.1 --dataset=photo --embedding_dim=256 --end_lr=1e-4 --model_type=GGADFormer --num_epoch=200 --peak_lr=3e-4 --pp_k=6 --progregate_alpha=0.2 --proj_loss_weight=0 --rec_loss_weight=0 --reconstruction_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
+```
