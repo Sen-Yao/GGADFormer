@@ -280,7 +280,7 @@ class GGADFormer(nn.Module):
         gna_loss = torch.tensor(0.0, device=emb.device)
         proj_loss = torch.tensor(0.0, device=emb.device)
         uniformity_loss = torch.tensor(0.0, device=emb.device)
-        cpa_loss = torch.tensor(0.0, device=emb.device)
+        loss_ring = torch.tensor(0.0, device=emb.device)
         if train_flag:
             # start_time = time.time()
             # 高效重排
@@ -307,12 +307,14 @@ class GGADFormer(nn.Module):
             reconstruction_loss = self.recon_loss_fn(reconstructed_tokens, input_tokens.view(-1, (args.pp_k+1) * self.n_in))
             # print(f"time for reconstruction_loss:{time.time() - start_time}")
 
-            # 中心点对齐损失，鼓励离群点靠近全局中心点
+            # 中心点对齐损失，鼓励离群点距离全局中心的距离保持在一个 ring 内
             # 计算离群点嵌入与全局中心的距离
             outlier_to_center_dist = torch.norm(outlier_emb - h_mean.squeeze(0), p=2, dim=1)
             # 只有超过 confidence_margin 的距离才会产生损失
-            margin_excess = outlier_to_center_dist - args.confidence_margin
-            cpa_loss = torch.mean(torch.relu(margin_excess))
+            ring_out_range_loss = torch.relu(args.ring_R_min - outlier_to_center_dist)
+            ring_in_range_loss = torch.relu(outlier_to_center_dist - args.ring_R_max)
+
+            loss_ring = torch.mean(ring_out_range_loss + ring_in_range_loss)
             # print(f"time for con_loss:{time.time() - start_time}")
             # relative_dist = torch.norm(outlier_emb - normal_for_generation_emb, p=2, dim=1)
 
@@ -372,12 +374,13 @@ class GGADFormer(nn.Module):
             negative_loss = torch.mean(below_range_loss + above_range_loss)
 
             # 综合对比损失
-            con_loss = args.lambda_positive * positive_loss + args.lambda_negative * negative_loss
+            con_loss = args.lambda_positive * positive_loss
 
-            # 重编码后的 emb 和投影干扰后的 emb 之间的距离需要利用损失函数进行约束
-            relative_dist = torch.norm(reencoded_emb - outlier_emb, dim=-1)
-            proj_loss = F.relu(relative_dist - args.proj_R_max) + F.relu(args.proj_R_min - relative_dist)
-            proj_loss = torch.mean(proj_loss)
+            # 重编码后的 emb 和投影干扰后的 emb 之间的距离需要利用损失函数进行约束'
+            # 注意，此损失在 10-09 发现非常有用。后续如果没招了可以再次尝试！
+            # relative_dist = torch.norm(reencoded_emb - outlier_emb, dim=-1)
+            # proj_loss = F.relu(relative_dist - args.proj_R_max) + F.relu(args.proj_R_min - relative_dist)
+            # proj_loss = torch.mean(proj_loss)
 
             # 均匀性损失
             # uniformity_loss = self.compute_infoNCE_uniformity_loss(emb, normal_for_train_idx, args)
@@ -396,7 +399,7 @@ class GGADFormer(nn.Module):
         emb = emb.clone()
 
         # gna_loss = torch.tensor(0.0, device=emb.device)
-        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, proj_loss, reconstruction_loss, cpa_loss
+        return emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, agg_attention_weights, con_loss, proj_loss, reconstruction_loss, loss_ring
 
     # InfoNCE uniformity loss - 推开不同正常节点间的距离
     def compute_infoNCE_uniformity_loss(self, emb, normal_for_train_idx, args):
