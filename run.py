@@ -409,7 +409,7 @@ if __name__ == "__main__":
     parser.add_argument('--ring_R_max', type=float, default=1)
     parser.add_argument('--ring_R_min', type=float, default=0.3)
 
-    parser.add_argument('--rec_loss_weight', type=float, default=0)
+    parser.add_argument('--rec_loss_weight', type=float, default=1)
     parser.add_argument('--bce_loss_weight', type=float, default=1.0)
     parser.add_argument('--margin_loss_weight', type=float, default=0)
     parser.add_argument('--con_loss_weight', type=float, default=0.1)
