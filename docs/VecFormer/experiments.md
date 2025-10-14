@@ -17,4 +17,20 @@ AP:
 ## To Reproduce:
 
 - Amazon: 8ylmsq7q
+- reddit: qs4t9byw
 - photo: ck8br8o4
+
+## Other Method
+
+### DOMINANT
+
+#### 5\%
+
+- Amazon: glorious-frost-57831
+- photo: whole-plasma-57771
+
+#### 15\%
+
+- Amazon: good-cherry-57991
+- Reddit: glorious-snowball-58170
+- photo: breezy-waterfall-57737
