@@ -1,4 +1,5 @@
 dataset/*
+GGAD/dataset/*
 
 __pycache__/
 
