@@ -47,6 +47,8 @@ if args.lr is None:
         args.lr = 3e-3
     elif args.dataset in ['elliptic']:
         args.lr = 3e-3
+    elif args.dataset in ['tolokers']:
+        args.lr = 5e-4
 
 
 if args.num_epoch is None:
@@ -61,6 +63,8 @@ if args.num_epoch is None:
         args.num_epoch = 500
     elif args.dataset in ['elliptic']:
         args.num_epoch = 500
+    elif args.dataset in ['tolokers']:
+        args.num_epoch = 20
 
 run = wandb.init(
     entity="HCCS",

@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.sparse as sp
 import torch
+import wandb
 
 from model_AnomalyDAE import Model
 from utils import *
@@ -30,6 +31,9 @@ parser.add_argument('--readout', type=str, default='avg')  # max min avg  weight
 parser.add_argument('--auc_test_rounds', type=int, default=256)
 parser.add_argument('--negsamp_ratio', type=int, default=1)
 
+parser.add_argument('--train_rate', type=float, default=0.15)
+parser.add_argument('--method', type=str, default="AnomalyDAE")
+
 args = parser.parse_args()
 
 if args.lr is None:
@@ -43,6 +47,8 @@ if args.lr is None:
         args.lr = 3e-3
     elif args.dataset in ['elliptic']:
         args.lr = 3e-3
+    elif args.dataset in ['tolokers']:
+        args.lr = 1e-3
 
 if args.num_epoch is None:
 
@@ -55,7 +61,9 @@ if args.num_epoch is None:
     elif args.dataset in ['photo']:
         args.num_epoch = 500
     elif args.dataset in ['elliptic']:
-        args.num_epoch = 500
+        args.num_epoch = 1000
+    elif args.dataset in ['tolokers']:
+        args.num_epoch = 200
 
 batch_size = args.batch_size
 subgraph_size = args.subgraph_size
@@ -72,11 +80,23 @@ random.seed(args.seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
+run = wandb.init(
+    entity="HCCS",
+    # Set the wandb project where this run will be logged.
+    project="GGADFormer",
+    # Track hyperparameters and run metadata.
+    config=args,
+)
+
+wandb.define_metric("AUC", summary="max")
+wandb.define_metric("AP", summary="max")
+wandb.define_metric("AUC", summary="last")
+wandb.define_metric("AP", summary="last")
 
 
 # Load and preprocess data
 adj, features, labels, all_idx, idx_train, idx_val, \
-idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat(args.dataset)
+idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat(args.dataset, train_rate=args.train_rate)
 
 if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
     features, _ = preprocess_features(features)
@@ -107,12 +127,12 @@ labels = torch.FloatTensor(labels[np.newaxis])
 model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
 optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-# if torch.cuda.is_available():
-#     print('Using CUDA')
-#     model.cuda()
-#     features = features.cuda()
-#     adj = adj.cuda()
-#     labels = labels.cuda()
+if torch.cuda.is_available() and args.dataset not in ['elliptic', 'questions']:
+    print('Using CUDA')
+    model.cuda()
+    features = features.cuda()
+    adj = adj.cuda()
+    labels = labels.cuda()
 
     # idx_train = idx_train.cuda()
     # idx_val = idx_val.cuda()
@@ -139,19 +159,22 @@ with tqdm(total=args.num_epoch) as pbar:
         loss.backward()
         optimiser.step()
 
-        if epoch % 2 == 0:
-            print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
+        # if epoch % 2 == 0:
+            # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
 
         if epoch % 5 == 0:
              model.eval()
              # loss, score = model(features, adj, normal_label_idx, idx_test)
              score = np.array(score.detach().cpu())
              auc = roc_auc_score(ano_label[idx_test], score)
-             print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
+             # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
              AP = average_precision_score(ano_label[idx_test], score, average='macro', pos_label=1, sample_weight=None)
-             print('Testing AP:', AP)
-             print('Total time is', total_time)
+             # print('Testing AP:', AP)
+             wandb.log({ "AUC": auc.item(),
+                            "AP": AP.item(),
+                            "loss": loss}, step=epoch)
 
         end_time = time.time()
         total_time += end_time - start_time
-
+        pbar.update(1)
+        pbar.set_postfix(loss=loss.item(), AUC=auc if epoch % 5 == 0 else 'N/A')
