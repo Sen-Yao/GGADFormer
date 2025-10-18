@@ -128,7 +128,7 @@ labels = torch.FloatTensor(labels[np.newaxis])
 model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
 optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-if torch.cuda.is_available():
+if torch.cuda.is_available() and args.dataset not in ['elliptic', 't_finance']:
     print('Using CUDA')
     model.cuda()
     features = features.cuda()

@@ -2,6 +2,7 @@ import numpy as np
 import scipy.sparse as sp
 import torch
 import torch.nn as nn
+import wandb
 
 from model_ocgnn import Model
 from utils import *
@@ -31,6 +32,10 @@ parser.add_argument('--subgraph_size', type=int, default=4)
 parser.add_argument('--readout', type=str, default='avg')  # max min avg  weighted_sum
 parser.add_argument('--auc_test_rounds', type=int, default=256)
 parser.add_argument('--negsamp_ratio', type=int, default=1)
+
+parser.add_argument('--train_rate', type=float, default=0.15)
+parser.add_argument('--method', type=str, default="AnomalyDAE")
+
 
 args = parser.parse_args()
 
@@ -112,6 +117,18 @@ def loss_func(emb):
 
     return loss, score
 
+run = wandb.init(
+    entity="HCCS",
+    # Set the wandb project where this run will be logged.
+    project="GGADFormer",
+    # Track hyperparameters and run metadata.
+    config=args,
+)
+
+wandb.define_metric("AUC", summary="max")
+wandb.define_metric("AP", summary="max")
+wandb.define_metric("AUC", summary="last")
+wandb.define_metric("AP", summary="last")
 
 # Load and preprocess data
 adj, features, labels, all_idx, idx_train, idx_val, \
@@ -194,7 +211,7 @@ with tqdm(total=args.num_epoch) as pbar:
         #     AP = average_precision_score(ano_label[idx_train], logits, average='macro', pos_label=1, sample_weight=None)
         #     print('Traininig AP:', AP)
         if epoch % 5 == 0:
-            print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
+            # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
             model.eval()
             emb = model(features, adj)
             emb = torch.squeeze(emb)
@@ -202,10 +219,15 @@ with tqdm(total=args.num_epoch) as pbar:
             # evaluation on the valid and test node
             logits = np.squeeze(score[idx_test].cpu().detach().numpy())
             auc = roc_auc_score(ano_label[idx_test], logits)
-            print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
+            #print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
             AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
-            print('Testing AP:', AP)
-            print('Total time is', total_time)
+            # print('Testing AP:', AP)
+            # print('Total time is', total_time)
+            wandb.log({ "AUC": auc.item(),
+                            "AP": AP.item(),
+                            "loss": loss}, step=epoch)
 
         end_time = time.time()
         total_time += end_time - start_time
+        pbar.update(1)
+        pbar.set_postfix(loss=loss.item(), AUC=auc)

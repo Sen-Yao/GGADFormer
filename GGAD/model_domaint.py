@@ -166,7 +166,9 @@ class Model(nn.Module):
         adj = torch.squeeze(adj)
         seq1 = torch.squeeze(seq1)
         edge_index = neighList_to_edgeList(adj)
-        edge_index = torch.tensor(np.array(edge_index)).T.cuda()
+        edge_index = torch.tensor(np.array(edge_index)).T
+        if seq1.device != torch.device('cpu'):
+            edge_index = edge_index.cuda()
         # edge_index = torch.tensor(np.array(edge_index)).T
         x_, s_ = self.model_enc(seq1, edge_index)
 

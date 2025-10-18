@@ -34,7 +34,9 @@
 |Dataset|Amazon|Reddit|photo|elliptic|t_finance|tolokers|questions
 |-|-|-|-|-|-|-|-|
 |DOMINANT|0.8804|0.5667|0.5227|0.3379|--|0.5883|0.5906
-|AnomalyDAE|0.9088|0.5209|0.6725|--|--|0.5920|--
+|AnomalyDAE|0.9088|0.5209|0.6725|--|--|0.5920|0.5860
+|OCGNN|0.9008|0.5324|0.6486|0.2853|0.7901|0.5667|0.5305
+|AEGIS|-|-|-|-|-|-|-|
 |GGAD|0.7514|0.5274|0.6115|0.7006|--|0.5382|--
 |GGADFormer|0.9324|0.5629|0.8183|0.7221|0.9077|0.6535|0.5568
 |VecFormer|0.9344|0.5782|0.8377|0.7475|0.8988|0.6509|0.5842
@@ -44,7 +46,9 @@ AP:
 |Dataset|Amazon|Reddit|photo|elliptic|t_finance|tolokers|questions
 |-|-|-|-|-|-|-|-|
 |DOMINANT|0.7832|0.0398|0.1192|0.0683|--|0.2831|0.0560
-|AnomalyDAE|0.7171|0.0361|0.1450|--|--|0.2708|--
+|AnomalyDAE|0.7171|0.0361|0.1450|--|--|0.2708|0.0612
+|OCGNN|0.6658|0.0344|0.1502|0.0644|0.1428|0.2420|0.0362
+|AEGIS|-|-|-|-|-|-|-|
 |GGAD|0.3755|0.0360|0.1269|0.2565|--|0.2449|--
 |GGADFormer|0.8080|0.0418|0.4756|0.2268|0.6589|0.3063|0.0375
 |VecFormer|0.8033|0.0441|0.6074|0.2889|0.6448|0.3051|0.0396
@@ -57,7 +61,7 @@ AP:
 - Reddit: dashing-hill-58679
 - photo: whole-plasma-57771
 - elliptic: happy-capybara-59658
-- t_finance: serene-vortex-65938
+- t_finance: fancy-fog-66040 TBD
 - tolokers: atomic-silence-65964
 - questions: fine-water-65987
 
@@ -66,10 +70,40 @@ AP:
 - Amazon: cerulean-vortex-65991
 - photo:  true-morning-65990
 - Reddit: ancient-lion-65992
-- elliptic: dazzling-sponge-66032
-- t_finance: laced-bee-66033
+- elliptic: dazzling-sponge-66032 TBD
+- t_finance: laced-plasma-66041
 - tolokers: solar-sweep-5
-- questions: 0xh8ww82
+- questions: glorious-sweep-2 (epoch 350)
+
+#### OCGNN
+
+- Amazon: polished-deluge-66039
+- reddit: splendid-field-66066 (epoch 1300)
+- photo: denim-night-66038
+- elliptic: volcanic-brook-66044
+- t_finance: wild-oath-66042 (epoch 10)
+- tolokers: easy-sweep-3
+- questions: crimson-sweep-3
+
+#### AEGIS
+
+- Amazon: 
+- reddit: 
+- photo: 
+- elliptic: 
+- t_finance: 
+- tolokers: 
+- questions: 
+
+
+#### TBD
+
+- DOMINANT:
+    - t_finance: pretty-frost-66063
+- anomalyDAE
+    - elliptic: ethereal-night-66045
+    - t_finance: prime-valley-66048
+- OCGNN:
 
 #### VecFormer
 
