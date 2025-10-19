@@ -198,7 +198,9 @@ class Model(nn.Module):
         a_ : torch.Tensor
             Reconstructed adjacency matrix from fake samples.
         """
-        x_gen = self.generator(noise.cuda())
+        if x.device != torch.device('cpu'):
+            noise = noise.cuda()
+        x_gen = self.generator(noise)
         # x_gen = self.generator(noise)
         z_gen = self.gcn_enc1(x_gen, adj)
         z_gen = self.gcn_enc2(z_gen, adj)
@@ -219,8 +221,27 @@ class Model(nn.Module):
         logits = torch.sigmoid(logits)
         logits_gen = torch.sigmoid(logits_gen)
 
+        if torch.isnan(logits).any() or (logits < 0).any() or (logits > 1).any():
+            print("[WARNING] logits contains NaN or values outside [0,1]! Applying hard fix.")
+            # 创建副本避免 in-place 操作影响梯度（可选）
+            logits = logits.clone()
+            # 将 NaN、<0、>1 的值强制设为 1.0
+            invalid_mask = torch.isnan(logits) | (logits < 0) | (logits > 1)
+            logits[invalid_mask] = 1.0
+        
+        if torch.isnan(logits_gen).any() or (logits_gen < 0).any() or (logits_gen > 1).any():
+            print("[WARNING] logits contains NaN or values outside [0,1]! Applying hard fix.")
+            # 创建副本避免 in-place 操作影响梯度（可选）
+            logits_gen = logits_gen.clone()
+            # 将 NaN、<0、>1 的值强制设为 1.0
+            invalid_mask = torch.isnan(logits_gen) | (logits_gen < 0) | (logits_gen > 1)
+            logits_gen[invalid_mask] = 1.0
+
         idx_train = idx_train + [len(z)+i for i in range(len(z))]
-        loss_dis = F.binary_cross_entropy(logits[idx_train, 0], label[idx_train].cuda())
+        if x.device != torch.device('cpu'):
+            loss_dis = F.binary_cross_entropy(logits[idx_train, 0], label[idx_train].cuda())
+        else:
+            loss_dis = F.binary_cross_entropy(logits[idx_train, 0], label[idx_train])
         # loss_dis = F.binary_cross_entropy(logits[idx_train, 0], label[idx_train])
         loss_g = F.binary_cross_entropy(logits_gen[:, 0], torch.zeros_like(logits_gen[:, 0]))
         return z_dec, loss_dis, loss_g, logits, emb_all

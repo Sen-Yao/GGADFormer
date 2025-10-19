@@ -36,7 +36,7 @@
 |DOMINANT|0.8804|0.5667|0.5227|0.3379|--|0.5883|0.5906
 |AnomalyDAE|0.9088|0.5209|0.6725|--|--|0.5920|0.5860
 |OCGNN|0.9008|0.5324|0.6486|0.2853|0.7901|0.5667|0.5305
-|AEGIS|-|-|-|-|-|-|-|
+|AEGIS|0.6853|0.5949|0.6717|-|-|0.5568|-|
 |GGAD|0.7514|0.5274|0.6115|0.7006|--|0.5382|--
 |GGADFormer|0.9324|0.5629|0.8183|0.7221|0.9077|0.6535|0.5568
 |VecFormer|0.9344|0.5782|0.8377|0.7475|0.8988|0.6509|0.5842
@@ -48,7 +48,7 @@ AP:
 |DOMINANT|0.7832|0.0398|0.1192|0.0683|--|0.2831|0.0560
 |AnomalyDAE|0.7171|0.0361|0.1450|--|--|0.2708|0.0612
 |OCGNN|0.6658|0.0344|0.1502|0.0644|0.1428|0.2420|0.0362
-|AEGIS|-|-|-|-|-|-|-|
+|AEGIS|0.1648|0.0453|0.1632|-|-|0.2500|-|
 |GGAD|0.3755|0.0360|0.1269|0.2565|--|0.2449|--
 |GGADFormer|0.8080|0.0418|0.4756|0.2268|0.6589|0.3063|0.0375
 |VecFormer|0.8033|0.0441|0.6074|0.2889|0.6448|0.3051|0.0396
@@ -87,12 +87,12 @@ AP:
 
 #### AEGIS
 
-- Amazon: 
-- reddit: 
-- photo: 
-- elliptic: 
+- Amazon: valiant-flower-66110 (epoch 600)
+- reddit: sweet-sweep-5
+- photo: decent-sweep-4
+- elliptic: ofg4i13q
 - t_finance: 
-- tolokers: 
+- tolokers: major-sweep-6
 - questions: 
 
 
@@ -103,7 +103,11 @@ AP:
 - anomalyDAE
     - elliptic: ethereal-night-66045
     - t_finance: prime-valley-66048
-- OCGNN:
+- AEGIS:
+    - elliptic: goega9qi
+    - t_finance: -
+    - questions: m8g4b0eo
+- 
 
 #### VecFormer
 
