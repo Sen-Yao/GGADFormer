@@ -97,21 +97,23 @@ wandb.define_metric("AP", summary="last")
 
 
 # Load and preprocess data
-adj, features, labels, all_idx, idx_train, idx_val, \
-idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat(args.dataset)
+adj, features, labels, all_idx, idx_train, idx_val, idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat(args.dataset, args.train_rate)
 
-if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
+# adj, features, labels, all_idx, idx_train, idx_val, idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat_GGAD(args.dataset, args.train_rate)
+
+if args.dataset in ['Amazon', 't_finance', 'reddit', 'elliptic']:
     features, _ = preprocess_features(features)
 else:
     features = features.todense()
 
-dgl_graph = adj_to_dgl_graph(adj)
 
 nb_nodes = features.shape[0]
 ft_size = features.shape[1]
 raw_adj = adj
 print(adj.sum())
 adj = normalize_adj(adj)
+
+print("normalize_adj done!")
 
 raw_adj = (raw_adj + sp.eye(raw_adj.shape[0])).todense()
 adj = (adj + sp.eye(adj.shape[0])).todense()
@@ -125,6 +127,8 @@ adj = torch.FloatTensor(adj[np.newaxis])
 raw_adj = torch.FloatTensor(raw_adj[np.newaxis])
 labels = torch.FloatTensor(labels[np.newaxis])
 
+print("Data preprocess done!")
+
 # idx_train = torch.LongTensor(idx_train)
 # idx_val = torch.LongTensor(idx_val)
 # idx_test = torch.LongTensor(idx_test)
@@ -133,7 +137,7 @@ labels = torch.FloatTensor(labels[np.newaxis])
 model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
 optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-if torch.cuda.is_available():
+if torch.cuda.is_available() and args.dataset not in ['1']:
     print('Using CUDA')
     model.cuda()
     features = features.cuda()
@@ -229,10 +233,10 @@ with tqdm(total=args.num_epoch) as pbar:
         end_time = time.time()
         total_time += end_time - start_time
         # print('Total time is', total_time)
-        if epoch % 2 == 0:
-            logits = np.squeeze(logits.cpu().detach().numpy())
-            lbl = np.squeeze(lbl.cpu().detach().numpy())
-            auc = roc_auc_score(lbl, logits)
+        # if epoch % 2 == 0:
+            # logits = np.squeeze(logits.cpu().detach().numpy())
+            # lbl = np.squeeze(lbl.cpu().detach().numpy())
+            # auc = roc_auc_score(lbl, logits)
             # print('Traininig {} AUC:{:.4f}'.format(args.dataset, auc))
             # AP = average_precision_score(lbl, logits, average='macro', pos_label=1, sample_weight=None)
             # print('Traininig AP:', AP)

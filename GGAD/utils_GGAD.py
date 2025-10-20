@@ -63,7 +63,7 @@ def dense_to_one_hot(labels_dense, num_classes):
     return labels_one_hot
 
 
-def load_mat(dataset, train_rate=0.15, val_rate=0.1):
+def load_mat_GGAD(dataset, train_rate=0.3, val_rate=0.1):
 
     """Load .mat dataset."""
     data = sio.loadmat("./dataset/{}.mat".format(dataset))
@@ -92,7 +92,6 @@ def load_mat(dataset, train_rate=0.15, val_rate=0.1):
     all_idx = list(range(num_node))
     random.shuffle(all_idx)
     idx_train = all_idx[: num_train]
-    idx_train_2 = all_idx[num_train: 2*num_train]
     idx_val = all_idx[num_train: num_train + num_val]
     idx_test = all_idx[num_train + num_val:]
     # idx_test = all_idx[num_train:]
@@ -100,17 +99,8 @@ def load_mat(dataset, train_rate=0.15, val_rate=0.1):
     print('Test', Counter(np.squeeze(ano_labels[idx_test])))
     # Sample some labeled normal nodes
     all_normal_label_idx = [i for i in idx_train if ano_labels[i] == 0]
-    all_normal_label_idx_2 = [i for i in idx_train_2 if ano_labels[i] == 0]
     rate = 0.5  #  change train_rate to 0.3 0.5 0.6  0.8
-    torch.set_printoptions(threshold=float('inf')) 
-
     normal_label_idx = all_normal_label_idx[: int(len(all_normal_label_idx) * rate)]
-    # print(f"normal_label_idx{normal_label_idx}")
-    # print(f"normal_label_idx len{len(normal_label_idx)}")
-    # print(f"all_normal_label_idx len{len(all_normal_label_idx)}")
-    # print(f"all_normal_label_idx_2 len{len(all_normal_label_idx_2)}")
-    print("args.train_rate", train_rate)
-    print("test_rate", 1 - train_rate - val_rate)
     print('Training rate', rate)
 
     # normal_label_idx = all_normal_label_idx[: int(len(all_normal_label_idx) * 0.2)]

@@ -106,7 +106,7 @@ for i in range(args.cutting * args.N_tree):
     model_list.append(model)
 
 criterion = nn.CrossEntropyLoss()
-if torch.cuda.is_available() and args.dataset not in ['elliptic']:
+if torch.cuda.is_available() and args.dataset not in ['elliptic', 't_finance']:
     print('Using CUDA')
     features = features.cuda()
     raw_features = raw_features.cuda()
@@ -180,6 +180,7 @@ with tqdm(total=args.cutting) as pbar:
     dis_path = "pretrain/distance_save/dis_array_{}.npy".format(args.dataset)
 
     if os.path.exists(dis_path):
+        print("Loading dis_array...")
         dis_array = torch.from_numpy(np.load(dis_path))
     else:
         print("Calculating Distance...")
