@@ -115,7 +115,7 @@ optimiser_ae = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=args.w
 optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 optimiser_gen = torch.optim.Adam(model.generator.parameters(),
                                  lr=args.lr)
-if torch.cuda.is_available() and args.dataset not in ['elliptic', 't_finance', 'questions']:
+if torch.cuda.is_available() and args.dataset not in ['elliptic']:
     print('Using CUDA')
     model.cuda()
     features = features.cuda()
@@ -158,38 +158,38 @@ with tqdm(total=args.num_epoch) as pbar:
         optimiser_gen.step()
         score_test = np.array(score_test.detach().cpu())
 
-        emb_inf = torch.norm(emb_all, dim=-1, keepdim=True)
-        emb_inf = torch.pow(emb_inf, -1)
-        emb_inf[torch.isinf(emb_inf)] = 0.
-        emb_norm = emb_all * emb_inf
+        # emb_inf = torch.norm(emb_all, dim=-1, keepdim=True)
+        # emb_inf = torch.pow(emb_inf, -1)
+        # emb_inf[torch.isinf(emb_inf)] = 0.
+        # emb_norm = emb_all * emb_inf
 
-        sim_matrix = torch.mm(emb_norm, emb_norm.T)
-        raw_adj = torch.squeeze(raw_adj)
-        if adj.device != torch.device('cpu'):
-            raw_adj = raw_adj.cuda()
-        similar_matrix1 = sim_matrix[:int(raw_adj.shape[0]), :int(raw_adj.shape[1])] * raw_adj
-        similar_matrix2 = sim_matrix[int(raw_adj.shape[0]):, int(raw_adj.shape[1]):] * raw_adj
+        # sim_matrix = torch.mm(emb_norm, emb_norm.T)
+        # raw_adj = torch.squeeze(raw_adj)
+        # if adj.device != torch.device('cpu'):
+            # raw_adj = raw_adj.cuda()
+        # similar_matrix1 = sim_matrix[:int(raw_adj.shape[0]), :int(raw_adj.shape[1])] * raw_adj
+        # similar_matrix2 = sim_matrix[int(raw_adj.shape[0]):, int(raw_adj.shape[1]):] * raw_adj
 
-        r_inv = torch.pow(torch.sum(raw_adj, 0), -1)
-        r_inv[torch.isinf(r_inv)] = 0.
-        affinity1 = torch.sum(similar_matrix1, 0) * r_inv
-        affinity2 = torch.sum(similar_matrix2, 0) * r_inv
+        # r_inv = torch.pow(torch.sum(raw_adj, 0), -1)
+        # r_inv[torch.isinf(r_inv)] = 0.
+        # affinity1 = torch.sum(similar_matrix1, 0) * r_inv
+        # affinity2 = torch.sum(similar_matrix2, 0) * r_inv
 
-        if epoch % 20 == 0:
+        # if epoch % 20 == 0:
             # save data for tsne
-            import scipy.io as io
+            # import scipy.io as io
 
             # tsne_data_path = 'draw/AEGIS2_tfinance/tsne_data_{}.mat'.format(str(epoch))
             # # io.savemat(tsne_data_path, {'emb': np.array(emb_all.cpu().detach()), 'ano_label': ano_label,
             # #                             'abnormal_label_idx': np.array(abnormal_label_idx),
             # #                             'normal_label_idx': np.array(normal_label_idx)})
-            real_abnormal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 1).squeeze()].tolist()
-            real_normal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 0).squeeze()].tolist()
+            # real_abnormal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 1).squeeze()].tolist()
+            # real_normal_label_idx = np.array(all_idx)[np.argwhere(ano_label == 0).squeeze()].tolist()
 
             # real_abnormal_label_idx = real_abnormal_label_idx[:50]
 
-            real_affinity, index = torch.sort(affinity1[real_abnormal_label_idx])
-            real_affinity = real_affinity[:50]
+            # real_affinity, index = torch.sort(affinity1[real_abnormal_label_idx])
+            # real_affinity = real_affinity[:50]
 
 
             # draw_pdf_methods('AEGIS', np.array(affinity1[real_normal_label_idx].detach().cpu()),

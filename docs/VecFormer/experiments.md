@@ -35,12 +35,12 @@
 
 |Dataset|Amazon|Reddit|photo|elliptic|t_finance|tolokers|questions
 |-|-|-|-|-|-|-|-|
-|DOMINANT|0.8804|0.5667↑|0.5227|0.3379↑|--|0.5883↑|0.5906↑
-|AnomalyDAE|0.9088|0.5209|0.6725↑|--|--|0.5920|0.5860↑
-|OCGNN|0.9076↑|0.5324|0.6473|-|0.5534|0.4864|-
-|AEGIS|0.7516↑|0.5666|0.5954|-|0.5220↓|0.4436|-|
+|DOMINANT|0.8804|0.5667↑|0.5227|0.3230|--|0.5883↑|0.5906↑
+|AnomalyDAE|0.9088|0.5209|0.6725↑|--|0.8146↑|0.5920|0.5860↑
+|OCGNN|0.9076↑|0.5324|0.6473|0.2618|0.5501|0.4864|0.5382
+|AEGIS|0.7516↑|0.5666|0.5954|0.6680|0.6561|0.4436|0.5101|
 |GAAN|0.6530|0.5081↓|0.4290|-|-|0.3692↑|-
-|TAM|-|-|0.5780|-|-|-|-
+|TAM|0.8793↑|0.5910|0.5780|-|-|0.4805|-
 |GGAD|0.7514|0.5274|0.6115|0.7006|--|0.5382|--
 |VecFormer|0.9344|0.5782|0.8377|0.7475|0.8988|0.6509|0.5842
 
@@ -48,14 +48,27 @@ AP:
 
 |Dataset|Amazon|Reddit|photo|elliptic|t_finance|tolokers|questions
 |-|-|-|-|-|-|-|-|
-|DOMINANT|0.7832↑|0.0398|0.1192|0.0683↑|--|0.2831↑|0.0560↑
-|AnomalyDAE|0.7171|0.0361|0.1450↑|--|--|0.2708↑|0.0612↑
-|OCGNN|0.7065|0.0340|0.1354|-|-|0.2142|-
-|AEGIS|0.2926|0.0398|0.1265↑|-|0.0440↓|0.2007|-|
-|GAAN|0.0887|0.0345|0.0760|-|-|0.1643|-
-|TAM|-|-|0.1031|-|-|-|-
+|DOMINANT|0.7832↑|0.0398|0.1192|0.0670|⌛️|0.2831↑|0.0560↑
+|AnomalyDAE|0.7171|0.0361|0.1450↑|--|0.1758↑|0.2708↑|0.0612↑
+|OCGNN|0.7065|0.0340|0.1354|0.0623|0.0474|0.2142|0.0374
+|AEGIS|0.2926|0.0398|0.1265↑|0.0663|0.0668|0.2007|0.0334|
+|GAAN|0.0887|0.0345|0.0760|-|⌛️|0.1643|-
+|TAM|0.6960↑|0.0431|0.1031|-|⌛️|0.2139|⌛️
 |GGAD|0.3755|0.0360|0.1269|0.2565|--|0.2449|--
 |VecFormer|0.8033|0.0441|0.6074|0.2889|0.6448|0.3051|0.0396
+
+GPU Support:
+
+|Dataset|Amazon|Reddit|photo|elliptic|t_finance|tolokers|questions
+|-|-|-|-|-|-|-|-|
+|DOMINANT|✅|✅|✅|✅|✅|✅|✅
+|AnomalyDAE|✅|✅|✅|❌|❌|✅|✅
+|OCGNN|✅|✅|✅|✅|✅|✅|✅
+|AEGIS|✅|✅|✅|-|✅|✅|✅|
+|GAAN|✅|✅|✅|❌|-|✅|❌
+|TAM|✅|✅|✅|-|-|✅|-
+|GGAD|✅|✅|✅|-|-|✅|-
+|VecFormer|✅|✅|✅|✅|✅|✅|✅|✅|
 
 ### TBD
 
@@ -64,14 +77,15 @@ AP:
 - anomalyDAE
     - elliptic: -
     - t_finance: jolly-glade-66297 (81 CPU, ETC 10-24)
+- OCGNN
+    - questions: copper-energy-66427 (81 GPU 2)
 - AEGIS:
     - elliptic: -
-    - t_finance: vibrant-snow-66408 (81 GPU 1, ETC 10-20 18:00)
-    - questions: -
+    - questions: azure-haze-66423 (81 GPU 1, ETC 18:00)
 - GAAN:
 - TAM:
-    - photo: -
-    - reddit: wenbafn4 (81 GPU 1,2 , ETC 10-20 15:00)
+    - t_finance: polar-cloud-66436
+    - tolokers: sparkling-shape-66435
 
 ### To Reproduce:
 
@@ -80,7 +94,7 @@ AP:
 - Amazon: glorious-frost-57831
 - Reddit: dashing-hill-58679
 - photo: whole-plasma-57771
-- elliptic: happy-capybara-59658
+- elliptic: major-rain-66424
 - t_finance: -
 - tolokers: atomic-silence-65964
 - questions: fine-water-65987
@@ -91,7 +105,7 @@ AP:
 - photo:  true-morning-65990
 - Reddit: ancient-lion-65992
 - elliptic: -
-- t_finance: -
+- t_finance: jolly-glade-66297
 - tolokers: solar-sweep-5
 - questions: glorious-sweep-2 (epoch 350)
 
@@ -100,10 +114,10 @@ AP:
 - Amazon: fast-shape-66259
 - reddit: graceful-leaf-66260
 - photo: jumping-dew-66262
-- elliptic: -
-- t_finance: firm-fog-66277
+- elliptic: charmed-forest-66425 (epoch 700)
+- t_finance: stellar-snowball-66422 (epoch 200)
 - tolokers: jumping-dawn-66265
-- questions: -
+- questions: copper-energy-66427
 
 #### AEGIS
 
@@ -111,9 +125,9 @@ AP:
 - reddit: dark-rain-66272
 - photo: driven-totem-66271
 - elliptic: -
-- t_finance: celestial-terrain-66291
+- t_finance: likely-breeze-66421 (epoch 600)
 - tolokers: soft-salad-66275
-- questions: -
+- questions: azure-haze-66423 (epoch 600)
 
 #### GAAN
 
@@ -124,7 +138,10 @@ AP:
 
 #### TAM
 
+- Amazon: laced-sun-66432
+- reddit: spring-wave-66416
 - photo:generous-snow-66303
+- tolokers: sparkling-shape-66435
 
 #### VecFormer
 

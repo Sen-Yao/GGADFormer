@@ -283,7 +283,9 @@ class GIN(torch.nn.Module):
         adj = torch.squeeze(adj)
         feat = torch.squeeze(feat)
         edge_index = neighList_to_edgeList(adj)
-        edge_index = torch.tensor(np.array(edge_index)).T.cuda()
+        edge_index = torch.tensor(np.array(edge_index)).T
+        if feat.device != torch.device('cpu'):
+            edge_index = edge_index.cuda()
         x = F.relu(self.conv1(feat, edge_index))
         for conv in self.convs:
             x = F.relu(conv(x, edge_index))

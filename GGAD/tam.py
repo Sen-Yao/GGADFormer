@@ -98,7 +98,7 @@ model_list = []
 for i in range(args.cutting * args.N_tree):
     model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
     optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-    if torch.cuda.is_available():
+    if torch.cuda.is_available() and args.dataset not in ['elliptic']:
         model = model.cuda()
         optimiser_list.append(optimiser)
         model_list.append(model)
@@ -106,7 +106,7 @@ for i in range(args.cutting * args.N_tree):
     model_list.append(model)
 
 criterion = nn.CrossEntropyLoss()
-if torch.cuda.is_available():
+if torch.cuda.is_available() and args.dataset not in ['elliptic']:
     print('Using CUDA')
     features = features.cuda()
     raw_features = raw_features.cuda()

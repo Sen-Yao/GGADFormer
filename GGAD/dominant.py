@@ -128,7 +128,7 @@ labels = torch.FloatTensor(labels[np.newaxis])
 model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
 optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-if torch.cuda.is_available() and args.dataset not in ['elliptic']:
+if torch.cuda.is_available():
     print('Using CUDA')
     model.cuda()
     features = features.cuda()
@@ -178,6 +178,6 @@ with tqdm(total=args.num_epoch) as pbar:
         end_time = time.time()
         total_time += end_time - start_time
         pbar.update(1)
-        pbar.set_postfix(loss=loss.item(), AUC=auc if epoch % 5 == 0 else 'N/A')
+        pbar.set_postfix(loss=loss.item(), AUC=auc, AP=AP)
         # print('Total time is', total_time)
 

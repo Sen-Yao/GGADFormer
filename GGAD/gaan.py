@@ -118,7 +118,7 @@ model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.rea
 optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 optimiser_gen = torch.optim.Adam(model.generator.parameters(),
                                           lr=args.lr)
-if torch.cuda.is_available() and args.dataset not in ['elliptic']:
+if torch.cuda.is_available() and args.dataset not in ['elliptic', 'questions']:
      print('Using CUDA')
      model.cuda()
      features = features.cuda()
