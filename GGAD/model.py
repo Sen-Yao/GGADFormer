@@ -141,6 +141,8 @@ class Model(nn.Module):
         emb_abnormal = emb[:, sample_abnormal_idx, :]
 
         noise = torch.randn(emb_abnormal.size()) * args.var + args.mean
+        if seq1.device != torch.device('cpu'):
+            noise = noise.cuda()
         emb_abnormal = emb_abnormal + noise
         # emb_abnormal = emb_abnormal + noise.cuda()
         if train_flag:

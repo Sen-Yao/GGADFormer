@@ -32,7 +32,8 @@ parser.add_argument('--negsamp_ratio', type=int, default=1)
 parser.add_argument('--mean', type=float, default=0.0)
 parser.add_argument('--var', type=float, default=0.0)
 
-
+parser.add_argument('--train_rate', type=float, default=0.15)
+parser.add_argument('--method', type=str, default="GGAD")
 
 args = parser.parse_args()
 
@@ -179,8 +180,8 @@ with tqdm(total=args.num_epoch) as pbar:
         lbl = torch.unsqueeze(torch.cat(
             (torch.zeros(len(normal_label_idx)), torch.ones(len(emb_con)))),
             1).unsqueeze(0)
-        # if torch.cuda.is_available():
-        #     lbl = lbl.cuda()
+        if logits.device != torch.device('cpu'):
+            lbl = lbl.cuda()
 
         loss_bce = b_xent(logits, lbl)
         loss_bce = torch.mean(loss_bce)
