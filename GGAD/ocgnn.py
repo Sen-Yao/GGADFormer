@@ -34,7 +34,7 @@ parser.add_argument('--auc_test_rounds', type=int, default=256)
 parser.add_argument('--negsamp_ratio', type=int, default=1)
 
 parser.add_argument('--train_rate', type=float, default=0.15)
-parser.add_argument('--method', type=str, default="AnomalyDAE")
+parser.add_argument('--method', type=str, default="OCGNN")
 
 
 args = parser.parse_args()
@@ -132,7 +132,7 @@ wandb.define_metric("AP", summary="last")
 
 # Load and preprocess data
 adj, features, labels, all_idx, idx_train, idx_val, \
-idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat(args.dataset)
+idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat(args.dataset, train_rate=args.train_rate)
 
 if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
     features, _ = preprocess_features(features)

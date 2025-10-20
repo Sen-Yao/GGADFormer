@@ -1,5 +1,6 @@
 from model_gaan import Model
 from utils import *
+import wandb
 
 from sklearn.metrics import roc_auc_score
 import random
@@ -26,6 +27,10 @@ parser.add_argument('--readout', type=str, default='avg')  # max min avg  weight
 parser.add_argument('--auc_test_rounds', type=int, default=256)
 parser.add_argument('--negsamp_ratio', type=int, default=1)
 
+parser.add_argument('--train_rate', type=float, default=0.15)
+parser.add_argument('--method', type=str, default="GAAN")
+
+
 args = parser.parse_args()
 
 if args.lr is None:
@@ -34,9 +39,9 @@ if args.lr is None:
     elif args.dataset in ['t_finance']:
         args.lr = 5e-4
     elif args.dataset in ['reddit']:
-        args.lr = 1e-3
+        args.lr = 5e-4
     elif args.dataset in ['photo']:
-        args.lr = 1e-3
+        args.lr = 5e-4
     elif args.dataset in ['elliptic']:
         args.lr = 5e-3
 
@@ -66,9 +71,22 @@ torch.manual_seed(args.seed)
 # torch.cuda.manual_seed_all(args.seed)
 random.seed(args.seed)
 
+run = wandb.init(
+    entity="HCCS",
+    # Set the wandb project where this run will be logged.
+    project="GGADFormer",
+    # Track hyperparameters and run metadata.
+    config=args,
+)
+
+wandb.define_metric("AUC", summary="max")
+wandb.define_metric("AP", summary="max")
+wandb.define_metric("AUC", summary="last")
+wandb.define_metric("AP", summary="last")
+
 # Load and preprocess data
 adj, features, labels, all_idx, idx_train, idx_val, \
-idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat(args.dataset)
+idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat(args.dataset, train_rate=args.train_rate)
 
 if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
     features, _ = preprocess_features(features)
@@ -100,12 +118,12 @@ model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.rea
 optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 optimiser_gen = torch.optim.Adam(model.generator.parameters(),
                                           lr=args.lr)
-# if torch.cuda.is_available():
-#     print('Using CUDA')
-#     model.cuda()
-#     features = features.cuda()
-#     adj = adj.cuda()
-#     labels = labels.cuda()
+if torch.cuda.is_available() and args.dataset not in ['elliptic']:
+     print('Using CUDA')
+     model.cuda()
+     features = features.cuda()
+     adj = adj.cuda()
+     labels = labels.cuda()
 
     # idx_train = idx_train.cuda()
     # idx_val = idx_val.cuda()
@@ -135,13 +153,17 @@ with tqdm(total=args.num_epoch) as pbar:
         optimiser_gen.step()
         score_test = np.array(score_test.detach().cpu())
         if epoch % 5 == 0:
-             print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
-             model.eval()
-             auc = roc_auc_score(ano_label[idx_test], score_test)
-             print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
-             AP = average_precision_score(ano_label[idx_test], score_test, average='macro', pos_label=1, sample_weight=None)
-             print('Testing AP:', AP)
-             print('Total time is', total_time)
+            # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
+            model.eval()
+            auc = roc_auc_score(ano_label[idx_test], score_test)
+            # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
+            AP = average_precision_score(ano_label[idx_test], score_test, average='macro', pos_label=1, sample_weight=None)
+            # print('Testing AP:', AP)
+            # print('Total time is', total_time)
+            wandb.log({ "AUC": auc.item(),
+                            "AP": AP.item()}, step=epoch)
 
         end_time = time.time()
         total_time += end_time - start_time
+        pbar.update(1)
+        pbar.set_postfix(loss=loss.item(), AUC=auc)

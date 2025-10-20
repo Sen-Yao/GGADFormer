@@ -310,8 +310,8 @@ class Model(nn.Module):
         # else:
         #     noise = torch.randn(seq1.shape[0], self.noise_dim)
         noise = torch.randn(seq1.shape[0], self.noise_dim)
-        # if torch.cuda.is_available():
-        #     noise = noise.cuda()
+        if seq1.device != torch.device('cpu'):
+            noise = noise.cuda()
 
         x_, a, a_ = self.model_enc(seq1, noise)
         # edge_index = np.array(neighList_to_edgeList_train(adj, idx_train))

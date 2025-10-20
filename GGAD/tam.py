@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import torch.nn as nn
+import wandb
 from model_tam import Model
 from utils_tam import *
 from sklearn.metrics import precision_recall_curve, average_precision_score
@@ -16,11 +17,11 @@ os.environ["KMP_DUPLICATE_LnIB_OK"] = "TRUE"
 parser = argparse.ArgumentParser(description='Truncated Affinity Maximization for Graph Anomaly Detection')
 parser.add_argument('--dataset', type=str,
                     default='photo')  # 'BlogCatalog'  'ACM'  'Amazon' 'Facebook'  'Reddit'  'YelpChi'
-parser.add_argument('--lr', type=float)
+parser.add_argument('--lr', type=float, default=1e-5)
 parser.add_argument('--weight_decay', type=float, default=0.0)
 parser.add_argument('--seed', type=int, default=0)
 parser.add_argument('--embedding_dim', type=int, default=128)
-parser.add_argument('--num_epoch', type=int)
+parser.add_argument('--num_epoch', type=int, default=500)
 parser.add_argument('--drop_prob', type=float, default=0.0)
 parser.add_argument('--subgraph_size', type=int, default=15)
 parser.add_argument('--readout', type=str, default='avg')  # max min avg  weighted_sum
@@ -30,27 +31,45 @@ parser.add_argument('--cutting', type=int, default=8)  # 3 5 8 10
 parser.add_argument('--N_tree', type=int, default=1)  # 3 5 8 10
 parser.add_argument('--lamda', type=int, default=0)  # 0  0.5  1
 parser.add_argument('--dataset_model', type=str, default='photo')  # 0  0.5  1
+
+parser.add_argument('--train_rate', type=float, default=0.15)
+parser.add_argument('--method', type=str, default="TAM")
+
 args = parser.parse_args()
 
-args.lr = 1e-5
-args.num_epoch = 500
+# args.lr = 1e-5
+# args.num_epoch = 500
 
 print('Dataset: ', args.dataset)
 
 # Set random seed
-# dgl.random.seed(args.seed)
-# np.random.seed(args.seed)
-# torch.manual_seed(args.seed)
-# torch.cuda.manual_seed(args.seed)
-# torch.cuda.manual_seed_all(args.seed)
-# random.seed(args.seed)
+dgl.random.seed(args.seed)
+np.random.seed(args.seed)
+torch.manual_seed(args.seed)
+torch.cuda.manual_seed(args.seed)
+torch.cuda.manual_seed_all(args.seed)
+random.seed(args.seed)
 os.environ['PYTHONHASHSEED'] = str(args.seed)
 os.environ['OMP_NUM_THREADS'] = '1'
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
+run = wandb.init(
+    entity="HCCS",
+    # Set the wandb project where this run will be logged.
+    project="GGADFormer",
+    # Track hyperparameters and run metadata.
+    config=args,
+)
+
+wandb.define_metric("AUC", summary="max")
+wandb.define_metric("AP", summary="max")
+wandb.define_metric("AUC", summary="last")
+wandb.define_metric("AP", summary="last")
+
+
 # Load and preprocess data
-adj, features,  ano_label, str_ano_label, attr_ano_label, normal_label_idx, idx_test = load_mat(args.dataset)
+adj, features,  ano_label, str_ano_label, attr_ano_label, normal_label_idx, idx_test = load_mat(args.dataset, args.train_rate)
 
 if args.dataset in ['Amazon', 'YelpChi', 'Amazon-all', 'YelpChi-all', 'elliptic_no_isolate']:
     features, _ = preprocess_features(features)
@@ -64,7 +83,7 @@ dgl_graph = adj_to_dgl_graph(adj)
 nb_nodes = features.shape[0]
 ft_size = features.shape[1]
 raw_adj = adj
-print(raw_adj.sum())
+# print(raw_adj.sum())
 raw_adj = (raw_adj + sp.eye(adj.shape[0])).todense()
 
 adj = (adj + sp.eye(adj.shape[0])).todense()
@@ -79,20 +98,20 @@ model_list = []
 for i in range(args.cutting * args.N_tree):
     model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
     optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-    # if torch.cuda.is_available():
-    #     model = model.cuda()
-    #     optimiser_list.append(optimiser)
-    #     model_list.append(model)
+    if torch.cuda.is_available():
+        model = model.cuda()
+        optimiser_list.append(optimiser)
+        model_list.append(model)
     optimiser_list.append(optimiser)
     model_list.append(model)
 
 criterion = nn.CrossEntropyLoss()
-# if torch.cuda.is_available():
-#     print('Using CUDA')
-#     features = features.cuda()
-#     raw_features = raw_features.cuda()
-#     adj = adj.cuda()
-#     raw_adj = raw_adj.cuda()
+if torch.cuda.is_available():
+    print('Using CUDA')
+    features = features.cuda()
+    raw_features = raw_features.cuda()
+    adj = adj.cuda()
+    raw_adj = raw_adj.cuda()
 
 
 # def reg_edge(emb, adj):
@@ -148,7 +167,7 @@ def inference(feature, adj_matrix):
 
 start = time.time()
 # Train model
-with tqdm(total=args.num_epoch) as pbar:
+with tqdm(total=args.cutting) as pbar:
     pbar.set_description('Training')
 
     score_list = []
@@ -157,12 +176,13 @@ with tqdm(total=args.num_epoch) as pbar:
         new_adj_list.append(raw_adj)
     all_cut_adj = torch.cat(new_adj_list)
     origin_degree = torch.sum(torch.squeeze(raw_adj), 0)
-    print('<<<<<<Start to calculate distance<<<<<')
-    dis_path = "distance_save/dis_array_{}.npy".format(args.dataset_model)
+    # print('<<<<<<Start to calculate distance<<<<<')
+    dis_path = "pretrain/distance_save/dis_array_{}.npy".format(args.dataset)
 
     if os.path.exists(dis_path):
         dis_array = torch.from_numpy(np.load(dis_path))
     else:
+        print("Calculating Distance...")
         dis_array = calc_distance(raw_adj[0, :, :], raw_features[0, :, :])
         np.save(dis_path, dis_array)
 
@@ -170,8 +190,9 @@ with tqdm(total=args.num_epoch) as pbar:
 
     index = 0
     message_mean_list = []
+    # print("Doing Cutting")
     for n_cut in range(args.cutting):
-        print('n_cut.{}'.format(n_cut))
+        # print('n_cut.{}'.format(n_cut))
         feat_list = []
         message_list = []
         for n_t in range(args.N_tree):
@@ -179,7 +200,7 @@ with tqdm(total=args.num_epoch) as pbar:
             cut_adj = cut_adj.unsqueeze(0)
             optimiser_list[index].zero_grad()
             model_list[index].train()
-            print("<<<< cutting num .{}<<<<<<".format(n_cut))
+            # print("<<<< cutting num .{}<<<<<<".format(n_cut))
             adj_norm = normalize_adj_tensor(cut_adj)
 
             for epoch in range(args.num_epoch):
@@ -197,8 +218,8 @@ with tqdm(total=args.num_epoch) as pbar:
 
                 loss = loss.detach().cpu().numpy()
 
-                if epoch % 50 == 0:
-                    print("mean_loss is {}".format(loss))
+                # if epoch % 50 == 0:
+                    # print("mean_loss is {}".format(loss))
             message_list.append(torch.unsqueeze(message_sum, 0))
             all_cut_adj[n_t, :, :] = torch.squeeze(cut_adj)
             index += 1
@@ -207,8 +228,7 @@ with tqdm(total=args.num_epoch) as pbar:
             mes = np.array(torch.squeeze(mes).cpu().detach())
             mes = 1 - normalize_score(mes)
             auc = roc_auc_score(ano_label, mes)
-            print('{} AUC:{:.4f}'.format(args.dataset, auc))
-
+            # print('{} AUC:{:.4f}'.format(args.dataset, auc))
         message_list = torch.mean(torch.cat(message_list), 0)
         message_mean_list.append(torch.unsqueeze(message_list, 0))
 
@@ -225,16 +245,21 @@ with tqdm(total=args.num_epoch) as pbar:
         auc = roc_auc_score(ano_label[idx_test], score[idx_test])
 
         AP = average_precision_score(ano_label[idx_test], score[idx_test], average='macro', pos_label=1, sample_weight=None)
-        print('AP:', AP)
-        print('{} AUC:{:.4f}'.format(args.dataset, auc))
+        # print('AP:', AP)
+        # print('{} AUC:{:.4f}'.format(args.dataset, auc))
         message_mean_cut = torch.mean(torch.cat(message_mean_list), 0)
         message_mean = np.array(message_mean_cut.cpu().detach())
         message_mean = 1 - normalize_score(message_mean)
         score = message_mean
         auc = roc_auc_score(ano_label, score)
         AP = average_precision_score(ano_label, score, average='macro', pos_label=1, sample_weight=None)
-        print('AP:', AP)
-        print('{} AUC:{:.4f}'.format(args.dataset, auc))
+        # print('AP:', AP)
+        # print('{} AUC:{:.4f}'.format(args.dataset, auc))
+        wandb.log({ "AUC": auc.item(),
+                    "AP": AP.item()}, step=n_cut)
+        pbar.update(1)
+        pbar.set_postfix(loss=loss.item(), AUC=auc, AP=AP)
 
     end = time.time()
-    print(end - start)
+    # print(end - start)
+    

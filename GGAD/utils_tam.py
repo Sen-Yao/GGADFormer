@@ -137,10 +137,10 @@ def draw_pr(ano_label, message):
     # plt.show()
     plt.savefig('pr1.svg', dpi=500, bbox_inches='tight')
     print("save suceess")
-def load_mat(dataset):
+def load_mat(dataset, train_rate):
     """Load .mat dataset."""
 
-    data = sio.loadmat("./data/{}.mat".format(dataset))
+    data = sio.loadmat("./dataset/{}.mat".format(dataset))
     label = data['Label'] if ('Label' in data) else data['gnd']
     attr = data['Attributes'] if ('Attributes' in data) else data['X']
     network = data['Network'] if ('Network' in data) else data['A']
@@ -156,7 +156,6 @@ def load_mat(dataset):
         str_ano_labels = None
         attr_ano_labels = None
     num_node = adj.shape[0]
-    train_rate = 0.3
     val_rate = 0.1
     num_train = int(num_node * train_rate)
     num_val = int(num_node * val_rate)
@@ -191,7 +190,7 @@ def calc_distance(adj, seq):
     dis_array = torch.zeros((adj.shape[0], adj.shape[1]))
     row = adj.shape[0]
     for i in range(row):
-        print(i)
+        # print(i)
         node_index = torch.argwhere(adj[i, :] > 0)
         for j in node_index:
             dis = torch.sqrt(torch.sum((seq[i] - seq[j]) * (seq[i] - seq[j])))
@@ -220,7 +219,8 @@ def calc_sim(adj_matrix, attr_matrix):
 
 
 def graph_nsgt(dis_array, adj):
-    # dis_array = dis_array.cuda()
+    if adj.device != torch.device('cpu'):
+        dis_array = dis_array.cuda()
     row = dis_array.shape[0]
     dis_array_u = dis_array * adj
     mean_dis = dis_array_u[dis_array_u != 0].mean()

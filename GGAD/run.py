@@ -10,6 +10,7 @@ from sklearn.metrics import average_precision_score
 import argparse
 from tqdm import tqdm
 import time
+import wandb
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -80,6 +81,20 @@ random.seed(args.seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
+run = wandb.init(
+    entity="HCCS",
+    # Set the wandb project where this run will be logged.
+    project="GGADFormer",
+    # Track hyperparameters and run metadata.
+    config=args,
+)
+
+wandb.define_metric("AUC", summary="max")
+wandb.define_metric("AP", summary="max")
+wandb.define_metric("AUC", summary="last")
+wandb.define_metric("AP", summary="last")
+
+
 # Load and preprocess data
 adj, features, labels, all_idx, idx_train, idx_val, \
 idx_test, ano_label, str_ano_label, attr_ano_label, normal_label_idx, abnormal_label_idx = load_mat(args.dataset)
@@ -116,25 +131,24 @@ labels = torch.FloatTensor(labels[np.newaxis])
 # Initialize model and optimiser
 model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
 optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-#
-# if torch.cuda.is_available():
-#     print('Using CUDA')
-#     model.cuda()
-#     features = features.cuda()
-#     adj = adj.cuda()
-#     labels = labels.cuda()
-#     raw_adj = raw_adj.cuda()
+
+if torch.cuda.is_available():
+    print('Using CUDA')
+    model.cuda()
+    features = features.cuda()
+    adj = adj.cuda()
+    labels = labels.cuda()
+    raw_adj = raw_adj.cuda()
+    b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]).cuda())
 
 # idx_train = idx_train.cuda()
 # idx_val = idx_val.cuda()
 # idx_test = idx_test.cuda()
 #
 # if torch.cuda.is_available():
-#     b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]).cuda())
-# else:
-#     b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]))
-
-b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]))
+#     
+else:
+    b_xent = nn.BCEWithLogitsLoss(reduction='none', pos_weight=torch.tensor([args.negsamp_ratio]))
 xent = nn.CrossEntropyLoss()
 
 
@@ -213,7 +227,7 @@ with tqdm(total=args.num_epoch) as pbar:
         optimiser.step()
         end_time = time.time()
         total_time += end_time - start_time
-        print('Total time is', total_time)
+        # print('Total time is', total_time)
         if epoch % 2 == 0:
             logits = np.squeeze(logits.cpu().detach().numpy())
             lbl = np.squeeze(lbl.cpu().detach().numpy())
@@ -222,11 +236,11 @@ with tqdm(total=args.num_epoch) as pbar:
             # AP = average_precision_score(lbl, logits, average='macro', pos_label=1, sample_weight=None)
             # print('Traininig AP:', AP)
 
-            print("Epoch:", '%04d' % (epoch), "train_loss_margin=", "{:.5f}".format(loss_margin.item()))
-            print("Epoch:", '%04d' % (epoch), "train_loss_bce=", "{:.5f}".format(loss_bce.item()))
-            print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
-            print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
-            print("=====================================================================")
+            # print("Epoch:", '%04d' % (epoch), "train_loss_margin=", "{:.5f}".format(loss_margin.item()))
+            # print("Epoch:", '%04d' % (epoch), "train_loss_bce=", "{:.5f}".format(loss_bce.item()))
+            # print("Epoch:", '%04d' % (epoch), "rec_loss=", "{:.5f}".format(loss_rec.item()))
+            # print("Epoch:", '%04d' % (epoch), "train_loss=", "{:.5f}".format(loss.item()))
+            # print("=====================================================================")
         if epoch % 10 == 0:
             model.eval()
             train_flag = False
@@ -235,6 +249,10 @@ with tqdm(total=args.num_epoch) as pbar:
             # evaluation on the valid and test node
             logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
             auc = roc_auc_score(ano_label[idx_test], logits)
-            print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
+            # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
             AP = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
-            print('Testing AP:', AP)
+            # print('Testing AP:', AP)
+            wandb.log({ "AUC": auc.item(),
+                "AP": AP.item()}, step=epoch)
+        pbar.update(1)
+        pbar.set_postfix(loss=loss.item(), AUC=auc, AP=AP)
