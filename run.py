@@ -166,7 +166,7 @@ def train(args):
         sampler = Data.WeightedRandomSampler(weights, num_samples=num_nodes, replacement=True)
 
 
-        train_data_loader = Data.DataLoader(batch_data_train, batch_size=args.batch_size, sampler=sampler, num_workers=4, persistent_workers=True, pin_memory=True)
+        train_data_loader = Data.DataLoader(batch_data_train, batch_size=args.batch_size, sampler=sampler, num_workers=0, pin_memory=False)
         val_data_loader = Data.DataLoader(batch_data_val, batch_size=args.batch_size, shuffle = False)
         test_data_loader = Data.DataLoader(batch_data_test, batch_size=args.batch_size, shuffle = False)
 
