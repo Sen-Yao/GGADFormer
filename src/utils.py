@@ -19,7 +19,7 @@ def load_data(data, prefix='data/'):
 	"""
 
     if data == 'dgraphfin':
-        f = np.load('../data/dgraphfin.npz')
+        f = np.load('../dataset/dgraphfin.npz')
         labels = torch.tensor(f['y']).float()
         labels = (labels == 1).int()
         labels = np.array(labels)

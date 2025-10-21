@@ -10,7 +10,7 @@ import pandas as pd
 import os
 import torch
 from tqdm import tqdm
-import wandb
+import pickle
 
 from torch.optim.lr_scheduler import _LRScheduler
 
@@ -167,20 +167,95 @@ def load_mat(dataset, train_rate=0.3, val_rate=0.1, args=None):
         normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]  
     else:
         normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]  
-    return adj, feat, ano_labels, all_idx, idx_train, idx_val, idx_test, ano_labels, str_ano_labels, attr_ano_labels, normal_for_train_idx, normal_for_generation_idx
+    return adj, feat, ano_labels, all_idx, idx_train, idx_val, idx_test, ano_labels, None, None, normal_for_train_idx, normal_for_generation_idx
 
+def load_dgraph(prefix='./dataset/', train_rate=0.3, val_rate=0.1, args=None):
+    print("Loading DGraph, this may take a while...")
+    f = np.load(prefix + 'dgraphfin.npz')
+    label = torch.tensor(f['y']).float()
+    label = (label == 1).int().unsqueeze(0).numpy()  # shape: (1, N)
+    ano_labels = np.squeeze(np.array(label))
+    attr = torch.tensor(f['x']).float()      # shape: (N, D)
 
-def adj_to_dgl_graph(adj):
-    """Convert adjacency matrix to dgl format."""
-    # 使用新的API替代已弃用的from_scipy_sparse_matrix
-    if hasattr(nx, 'from_scipy_sparse_array'):
-        nx_graph = nx.from_scipy_sparse_array(adj)
+    with open(prefix + 'dgraphfin_adj_list', 'rb') as file:
+        adj_list = pickle.load(file)
+
+    N = len(adj_list)
+    assert set(adj_list.keys()) == set(range(N)), "Keys must be 0 to N-1"
+
+    # 构建原始邻接矩阵（可能不对称）
+    row = []
+    col = []
+    for i in range(N):
+        for j in adj_list[i]:
+            if 0 <= j < N:
+                row.append(i)
+                col.append(j)
+
+    data = np.ones(len(row), dtype=np.float32)
+    adj = sp.csr_matrix((data, (row, col)), shape=(N, N))
+
+    # 强制对称化
+    adj = adj + adj.T
+    adj.data[:] = 1.0  # 保持无权
+
+    # 添加自环
+    adj = adj + sp.eye(N, format='csr')
+
+    # 对称归一化：\tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2}
+    degrees = np.array(adj.sum(1)).flatten()  # \tilde{D}_{ii} = sum_j \tilde{A}_{ij}
+    deg_inv_sqrt = np.power(degrees, -0.5)
+    deg_inv_sqrt[np.isinf(degrees)] = 0.0  # 处理孤立节点（理论上不会出现，因有自环）
+    
+    D_inv_sqrt = sp.diags(deg_inv_sqrt)  # 对角矩阵
+    adj_norm = D_inv_sqrt @ adj @ D_inv_sqrt  # 仍是 CSR
+
+    # 转为 PyTorch COO
+    adj_norm_coo = adj_norm.tocoo()
+    indices = torch.LongTensor(np.vstack((adj_norm_coo.row, adj_norm_coo.col)))
+    values = torch.FloatTensor(adj_norm_coo.data)
+    adj_coo = torch.sparse_coo_tensor(indices, values, adj_norm.shape)
+
+    num_node = adj.shape[0]
+    num_train = int(num_node * train_rate)
+    num_val = int(num_node * val_rate)
+    all_idx = list(range(num_node))
+    
+    # 使用data_split_seed来控制数据集划分的随机性
+    if args is not None and hasattr(args, 'data_split_seed'):
+        # 保存当前的全局随机种子状态
+        original_random_seed = random.getstate()
+        original_np_random_seed = np.random.get_state()
+        
+        # 设置数据划分专用的随机种子
+        random.seed(args.data_split_seed)
+        np.random.seed(args.data_split_seed)
+        
+        random.shuffle(all_idx)
+        
+        # 恢复全局随机种子状态
+        random.setstate(original_random_seed)
+        np.random.set_state(original_np_random_seed)
     else:
-        # 对于较老版本的NetworkX，使用替代方法
-        nx_graph = nx.from_scipy_sparse_matrix(adj)
-    dgl_graph = dgl.from_networkx(nx_graph)
-    return dgl_graph
+        random.shuffle(all_idx)
+    
+    idx_train = all_idx[: num_train]
+    idx_val = all_idx[num_train: num_train + num_val]
+    idx_test = all_idx[num_train + num_val:]
+    # idx_test = all_idx[num_train:]
+    print('Training', Counter(np.squeeze(ano_labels[idx_train])))
+    print('Test', Counter(np.squeeze(ano_labels[idx_test])))
+    # Sample some labeled normal nodes
+    all_normal_label_idx = [i for i in idx_train if ano_labels[i] == 0]
+    rate = 1  #  change train_rate to 0.3 0.5 0.6  0.8
+    # normal_for_train_idx 为用于训练的正常的节点索引
+    normal_for_train_idx = all_normal_label_idx[: int(len(all_normal_label_idx) * rate)]
+    print('Training rate', rate)
 
+    # 选择一部分正常节点用于生成异常节点
+    # normal_for_generation_idx 为用于生成异常节点的正常节点索引
+    normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]  
+    return adj_coo, attr, label, all_idx, idx_train, idx_val, idx_test, ano_labels, None, None, normal_for_train_idx, normal_for_generation_idx
 
 def generate_rwr_subgraph(dgl_graph, subgraph_size):
     """Generate subgraph with RWR algorithm."""
@@ -210,7 +285,11 @@ def node_neighborhood_feature(adj, features, k, alpha=0.1):
     x_0 = features
     for i in range(k):
         # print(f"features.shape: {features.shape}, adj.shape: {adj.shape}")
-        features = (1-alpha) * torch.mm(adj, features) + alpha * x_0
+        if isinstance(adj, torch.Tensor):
+            features = (1-alpha) * torch.mm(adj, features) + alpha * x_0
+        else:
+            # sparse adj, maybe DGraph
+            features = (1 - alpha) * torch.spmm(adj, features) + alpha * x_0
 
     return features
 
@@ -480,6 +559,7 @@ def nagphormer_tokenization(features, adj, args):
     Returns:
         features: 预处理后的特征矩阵, size = (N, args.pp_k+1, d)
     """
+    print("Tokenizating")
     nodes_features = features.unsqueeze(1)
     for hop in range(args.pp_k):
         steped_nodes_features = node_neighborhood_feature(adj, features, hop+1, args.progregate_alpha)

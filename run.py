@@ -45,67 +45,78 @@ def train(args):
         print('Using CPU for computation')
 
     # Load and preprocess data
-    adj, features, labels, all_idx, idx_train, idx_val, \
-    idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset, args.train_rate, 0.1, args=args)
-
-    if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
-        features, _ = preprocess_features(features)
-    else:
-        features = features.todense()
-
-
-    num_nodes = features.shape[0]
-    ft_size = features.shape[1]
-    if args.model_type == 'GGAD':
-        raw_adj = adj
-        #print(adj.sum())
-        raw_adj = (raw_adj + sp.eye(raw_adj.shape[0])).todense()
-        raw_adj = torch.FloatTensor(raw_adj[np.newaxis])
-        raw_adj = raw_adj.to(device)
-
-    adj = normalize_adj(adj)
-    adj = (adj + sp.eye(adj.shape[0])).todense()
-    features = torch.FloatTensor(features[np.newaxis])
-    # adj = torch.FloatTensor(adj[np.newaxis])
-    features = torch.FloatTensor(features)
-    adj = torch.FloatTensor(adj)
-    # adj = adj.to_sparse_csr()
-    adj = torch.FloatTensor(adj[np.newaxis])
-    labels = torch.FloatTensor(labels[np.newaxis])
-
-    # 将数据移动到指定设备
-    if args.model_type != 'GGADFormer':
+    if args.dataset == 'dgraph':
+        adj, features, labels, all_idx, idx_train, idx_val, idx_test, ano_label, _, _, normal_for_train_idx, normal_for_generation_idx = load_dgraph(train_rate=args.train_rate, val_rate=0.1, args=args)
+        concated_input_features = nagphormer_tokenization(features, adj, args)
+        model = GGADFormer(features.shape[1], args.embedding_dim, 'prelu', args)
         features = features.to(device)
         adj = adj.to(device)
-        labels = labels.to(device)
+        labels = torch.tensor(labels).to(device)
 
-    # concated_input_features.shape: torch.Size([1, node_num, 2 * feature_dim])
-
-    # idx_train = torch.LongTensor(idx_train)
-    # idx_val = torch.LongTensor(idx_val)
-    # idx_test = torch.LongTensor(idx_test)
-
-    # Initialize model and optimiser
-
-    if args.model_type == 'GGADFormer':
-        concated_input_features = nagphormer_tokenization(features.squeeze(0), adj.squeeze(0), args)
-        model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
-    elif args.model_type == 'SGT':
-        concated_input_features = preprocess_sample_features(args, features.squeeze(0), adj.squeeze(0)).to(device)
-        model = SGT(n_layers=args.GT_num_layers,
-            input_dim=concated_input_features.shape[-1],
-            hidden_dim=args.embedding_dim,
-            n_class=2,
-            num_heads=args.GT_num_heads,
-            ffn_dim=args.GT_ffn_dim,
-            dropout_rate=args.GT_dropout,
-            attention_dropout_rate=args.GT_attention_dropout,
-            args=args).to(device)
-    elif args.model_type == 'GGAD':
-        concated_input_features = features.to(device)
-        model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout, args)
+        num_nodes = features.shape[0]
+        ft_size = features.shape[1]
     else:
-        raise ValueError(f"Invalid model type: {args.model_type}")
+        adj, features, labels, all_idx, idx_train, idx_val, \
+        idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset, args.train_rate, 0.1, args=args)
+
+        if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
+            features, _ = preprocess_features(features)
+        else:
+            features = features.todense()
+
+
+        num_nodes = features.shape[0]
+        ft_size = features.shape[1]
+        if args.model_type == 'GGAD':
+            raw_adj = adj
+            #print(adj.sum())
+            raw_adj = (raw_adj + sp.eye(raw_adj.shape[0])).todense()
+            raw_adj = torch.FloatTensor(raw_adj[np.newaxis])
+            raw_adj = raw_adj.to(device)
+
+        adj = normalize_adj(adj)
+        adj = (adj + sp.eye(adj.shape[0])).todense()
+        features = torch.FloatTensor(features[np.newaxis])
+        # adj = torch.FloatTensor(adj[np.newaxis])
+        features = torch.FloatTensor(features)
+        adj = torch.FloatTensor(adj)
+        # adj = adj.to_sparse_csr()
+        adj = torch.FloatTensor(adj[np.newaxis])
+        labels = torch.FloatTensor(labels[np.newaxis])
+
+        # 将数据移动到指定设备
+        if args.model_type != 'GGADFormer':
+            features = features.to(device)
+            adj = adj.to(device)
+            labels = labels.to(device)
+
+        # concated_input_features.shape: torch.Size([1, node_num, 2 * feature_dim])
+
+        # idx_train = torch.LongTensor(idx_train)
+        # idx_val = torch.LongTensor(idx_val)
+        # idx_test = torch.LongTensor(idx_test)
+
+        # Initialize model and optimiser
+
+        if args.model_type == 'GGADFormer':
+            concated_input_features = nagphormer_tokenization(features.squeeze(0), adj.squeeze(0), args)
+            model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
+        elif args.model_type == 'SGT':
+            concated_input_features = preprocess_sample_features(args, features.squeeze(0), adj.squeeze(0)).to(device)
+            model = SGT(n_layers=args.GT_num_layers,
+                input_dim=concated_input_features.shape[-1],
+                hidden_dim=args.embedding_dim,
+                n_class=2,
+                num_heads=args.GT_num_heads,
+                ffn_dim=args.GT_ffn_dim,
+                dropout_rate=args.GT_dropout,
+                attention_dropout_rate=args.GT_attention_dropout,
+                args=args).to(device)
+        elif args.model_type == 'GGAD':
+            concated_input_features = features.to(device)
+            model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout, args)
+        else:
+            raise ValueError(f"Invalid model type: {args.model_type}")
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.peak_lr, weight_decay=args.weight_decay)
     lr_scheduler = PolynomialDecayLR(
