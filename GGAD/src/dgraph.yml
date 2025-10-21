@@ -1,6 +1,6 @@
 # Data
 data_name: 'dgraphfin'
-data_dir: './data/'
+data_dir: '../dataset/'
 train_ratio: 0.4
 test_ratio: 0.67
 save_dir: './pytorch_models/'

@@ -12,14 +12,14 @@ from collections import defaultdict
 import dgl
 
 
-def load_data(data, prefix='data/'):
+def load_data(data, prefix='../dataset/'):
     """
 	Load graph, feature, and label given dataset name
 	:returns: home and single-relation graphs, feature, label
 	"""
 
     if data == 'dgraphfin':
-        f = np.load('../data/dgraphfin.npz')
+        f = np.load('../dataset/dgraphfin.npz')
         labels = torch.tensor(f['y']).float()
         labels = (labels == 1).int()
         labels = np.array(labels)
