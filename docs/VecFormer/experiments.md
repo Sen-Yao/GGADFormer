@@ -41,7 +41,7 @@
 |AEGIS|0.7516↑|0.5666|0.5954|0.6680|0.6561|0.4436|0.5101|
 |GAAN|0.6530|0.5081↓|0.4290|-|-|0.3692↑|-
 |TAM|0.8793↑|0.5910|0.5780|-|-|0.4805|-
-|GGAD|0.7514|0.6143|0.6490|0.7006|--|0.5382|0.4879
+|GGAD|0.6540|0.6143|0.6490|0.7006|0.7853|0.5382|0.4879
 |VecFormer|0.9344|0.5782|0.8377|0.7475|0.8988|0.6509|0.5842
 
 AP:
@@ -54,7 +54,7 @@ AP:
 |AEGIS|0.2926|0.0398|0.1265↑|0.0663|0.0668|0.2007|0.0334|
 |GAAN|0.0887|0.0345|0.0760|-|⌛️|0.1643|-
 |TAM|0.6960↑|0.0431|0.1031|-|⌛️|0.2139|⌛️
-|GGAD|0.3755|0.0502|0.1426|0.2565|--|0.2449|0.0304
+|GGAD|0.1136|0.0502|0.1426|0.2565|0.1278|0.2449|0.0304
 |VecFormer|0.8033|0.0441|0.6074|0.2889|0.6448|0.3051|0.0396
 
 GPU Support:
@@ -65,9 +65,9 @@ GPU Support:
 |AnomalyDAE|✅|✅|✅|❌|❌|✅|✅
 |OCGNN|✅|✅|✅|✅|✅|✅|✅
 |AEGIS|✅|✅|✅|-|✅|✅|✅|
-|GAAN|✅|✅|✅|❌|-|✅|❌
-|TAM|✅|✅|✅|-|-|✅|-
-|GGAD|✅|✅|✅|-|-|✅|-
+|GAAN|✅|✅|✅|❌|❌|✅|❌
+|TAM|✅|✅|✅|❌|❌|✅|❌
+|GGAD|✅|✅|✅|❌|✅|✅|❌
 |VecFormer|✅|✅|✅|✅|✅|✅|✅|✅|
 
 ### TBD
@@ -75,17 +75,12 @@ GPU Support:
 - DOMINANT:
     - t_finance: quiet-serenity-66295 (81 GPU 0, ETC 10-24 8:00)
 - anomalyDAE
-    - elliptic: -
-    - t_finance: jolly-glade-66297 (81 CPU, ETC 10-24)
-- OCGNN
-    - questions: copper-energy-66427 (81 GPU 2)
-- AEGIS:
-    - elliptic: -
-    - questions: azure-haze-66423 (81 GPU 1, ETC 18:00)
+    - elliptic: legendary-lion-66542 (81 CPU, ETC 10-21 8:00)
 - GAAN:
 - TAM:
-    - t_finance: polar-cloud-66436
-    - tolokers: sparkling-shape-66435
+    - t_finance: 
+- VecFormer: 
+    - questions: pjd8tz5l
 
 ### To Reproduce:
 
@@ -131,9 +126,10 @@ GPU Support:
 
 #### GAAN
 
-- Amazon: spring-armadillo-66276
+- Amazon: vocal-snow-66758 (epoch 700)
 - reddit: rose-oath-66290
 - photo: deep-wildflower-66289
+- t_finance: young-vortex-66741 (epoch 300)
 - tolokers: distinctive-smoke-66300
 
 #### TAM

@@ -69,6 +69,7 @@ wandb.define_metric("AP", summary="last")
 
 
 # Load and preprocess data
+print("Loading datas...")
 adj, features,  ano_label, str_ano_label, attr_ano_label, normal_label_idx, idx_test = load_mat(args.dataset, args.train_rate)
 
 if args.dataset in ['Amazon', 'YelpChi', 'Amazon-all', 'YelpChi-all', 'elliptic_no_isolate']:
@@ -79,7 +80,7 @@ else:
     raw_features = features.todense()
     features = raw_features
 
-dgl_graph = adj_to_dgl_graph(adj)
+# dgl_graph = adj_to_dgl_graph(adj)
 nb_nodes = features.shape[0]
 ft_size = features.shape[1]
 raw_adj = adj
@@ -98,7 +99,7 @@ model_list = []
 for i in range(args.cutting * args.N_tree):
     model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout)
     optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-    if torch.cuda.is_available() and args.dataset not in ['elliptic']:
+    if torch.cuda.is_available() and args.dataset not in ['elliptic', 'questions', 't_finance']:
         model = model.cuda()
         optimiser_list.append(optimiser)
         model_list.append(model)
@@ -106,7 +107,7 @@ for i in range(args.cutting * args.N_tree):
     model_list.append(model)
 
 criterion = nn.CrossEntropyLoss()
-if torch.cuda.is_available() and args.dataset not in ['elliptic', 't_finance']:
+if torch.cuda.is_available() and args.dataset not in ['elliptic', 'questions', 't_finance']:
     print('Using CUDA')
     features = features.cuda()
     raw_features = raw_features.cuda()
@@ -191,7 +192,7 @@ with tqdm(total=args.cutting) as pbar:
 
     index = 0
     message_mean_list = []
-    # print("Doing Cutting")
+    print("Start Cutting")
     for n_cut in range(args.cutting):
         # print('n_cut.{}'.format(n_cut))
         feat_list = []

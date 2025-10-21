@@ -94,7 +94,7 @@ else:
     features = features.todense()
 
 
-dgl_graph = adj_to_dgl_graph(adj)
+# dgl_graph = adj_to_dgl_graph(adj)
 
 nb_nodes = features.shape[0]
 ft_size = features.shape[1]
@@ -118,12 +118,12 @@ model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.rea
 optimiser = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 optimiser_gen = torch.optim.Adam(model.generator.parameters(),
                                           lr=args.lr)
-if torch.cuda.is_available() and args.dataset not in ['elliptic', 'questions']:
-     print('Using CUDA')
-     model.cuda()
-     features = features.cuda()
-     adj = adj.cuda()
-     labels = labels.cuda()
+if torch.cuda.is_available() and args.dataset not in ['elliptic', 't_finance', 'questions']:
+    print('Using CUDA')
+    model.cuda()
+    features = features.cuda()
+    adj = adj.cuda()
+    labels = labels.cuda()
 
     # idx_train = idx_train.cuda()
     # idx_val = idx_val.cuda()
