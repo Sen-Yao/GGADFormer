@@ -287,6 +287,22 @@ class GGADFormer(nn.Module):
             # Project reconstruction error to embedding dimension
             reconstruction_error_proj = self.reconstruction_proj(reconstruction_error[normal_for_generation_idx, :])
 
+            # Ablation study:
+            if args.ablation_random_dir:
+                # 计算原始扰动向量的模长 (Magnitude)
+                # dim=1 表示计算每个样本向量的范数，keepdim=True 保持形状为 (Batch, 1) 以便广播
+                norms = torch.norm(reconstruction_error_proj, p=2, dim=1, keepdim=True)
+                
+                # 生成同维度的随机向量 (Random Direction)
+                # 从标准正态分布采样
+                random_vec = torch.randn_like(reconstruction_error_proj)
+                
+                # 将随机向量归一化为单位向量 (Unit Vector)
+                random_dir = torch.nn.functional.normalize(random_vec, p=2, dim=1)
+                
+                # 赋予随机方向以原始模长
+                reconstruction_error_proj = norms * random_dir
+
             outlier_emb = normal_for_generation_emb + args.outlier_beta * reconstruction_error_proj
             outlier_emb = outlier_emb.squeeze(0)
 

@@ -375,6 +375,18 @@ def train(args):
         
 
 if __name__ == "__main__":
+
+
+    # 定义一个辅助函数，把各种字符串转成 Python 的 bool
+    def str2bool(v):
+        if isinstance(v, bool):
+            return v
+        if v.lower() in ('yes', 'true', 't', 'y', '1'):
+            return True
+        elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+            return False
+        else:
+            raise argparse.ArgumentTypeError('Boolean value expected.')
     
     parser = argparse.ArgumentParser(description='')
 
@@ -441,6 +453,10 @@ if __name__ == "__main__":
     parser.add_argument('--end_lr', type=float, default=1e-4)
 
     parser.add_argument('--warmup_epoch', type=int, default=20)
+
+    # Ablation Study
+    parser.add_argument('--ablation_random_dir', type=str2bool, default=False, help='Ablation study: randomize perturbation direction')
+
 
 
     args = parser.parse_args()
