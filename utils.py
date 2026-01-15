@@ -11,6 +11,9 @@ import os
 import torch
 from tqdm import tqdm
 import pickle
+import os
+import datetime
+import requests
 
 from torch.optim.lr_scheduler import _LRScheduler
 
@@ -631,3 +634,12 @@ def get_dynamic_loss_weights(epoch, args):
             'reconstruction_loss_weight': args.reconstruction_loss_weight,
             'ring_loss_weight': args.ring_loss_weight
         }
+    
+
+def send_notification(content):  
+    print(f"发送通知: {content}")  
+    payload = {"text": content, "timestamp": str(datetime.now())} 
+    try:  
+        requests.post(os.environ['WANDB_NOTIFY_URL'], json=payload, timeout=10)  
+    except Exception as e:  
+        print(f"发送通知失败: {e}")  

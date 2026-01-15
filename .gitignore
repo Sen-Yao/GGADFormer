@@ -7,3 +7,4 @@ wandb/
 
 sweep_config/
 pretrain/
+logs/
