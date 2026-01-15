@@ -16,6 +16,7 @@ import torch.utils.data as Data
 
 import wandb
 from visualization import create_tsne_visualization, visualize_attention_weights
+from utils import send_notification
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -464,6 +465,7 @@ if __name__ == "__main__":
         
     except torch.cuda.OutOfMemoryError as e:
         print(f"显存不足!：{e}")
+        send_notification(f"【VecFormer】出现显存不足!：{e}")
         wandb.log({"AUC.max": 0})
         wandb.log({"AP.max": 0})
         start_time = time.time()
