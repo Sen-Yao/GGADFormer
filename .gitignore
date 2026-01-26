@@ -8,3 +8,4 @@ wandb/
 sweep_config/
 pretrain/
 logs/
+pytorch_models/
