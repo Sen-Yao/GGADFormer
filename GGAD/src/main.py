@@ -11,6 +11,8 @@ os.environ["KMP_DUPLICATE_LnIB_OK"] = "TRUE"
 from model_handler import ModelHandler
 import os
 
+import wandb
+
 ################################################################################
 # Main #
 ################################################################################
@@ -153,6 +155,13 @@ def grid(kwargs):
 ################################################################################
 if __name__ == '__main__':
     cfg = get_args()
+    run = wandb.init(
+        entity="HCCS",
+        # Set the wandb project where this run will be logged.
+        project="GGADFormer",
+        # Track hyperparameters and run metadata.
+        config=cfg,
+    )
     config = get_config(cfg['config'])
     if cfg['multi_run']:
         multi_run_main(config)

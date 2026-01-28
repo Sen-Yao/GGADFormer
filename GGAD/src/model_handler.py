@@ -12,6 +12,9 @@ from model import PCALayer
 from layers import InterAgg, IntraAgg
 from graphsage import *
 
+import wandb
+from tqdm import tqdm
+
 """
 	Training PC-GNN
 	Paper: Pick and Choose: A GNN-based Imbalanced Learning Approach for Fraud Detection
@@ -307,7 +310,7 @@ class ModelHandler(object):
 
         # train the model
         total_time = 0
-        for epoch in range(args.num_epochs):
+        for epoch in tqdm(range(args.num_epochs)):
             start_time = time.time()
             # sampled_idx_train = pick_step(idx_train, y_train, self.dataset['homo'], size=len(self.dataset['train_pos'])*2)
             sampled_idx_train = idx_train
@@ -324,10 +327,10 @@ class ModelHandler(object):
             loss_cls_sum = 0.0
             loss_rec_sum = 0.0
             loss_constraint_sum = 0.0
-            from tqdm import tqdm
+
             # mini-batch training num_batches
 
-            for batch in tqdm(range(num_batches)):
+            for batch in range(num_batches):
 
                 start_time = time.time()
                 i_start = batch * args.batch_size
@@ -368,44 +371,50 @@ class ModelHandler(object):
                 loss_cls_sum += loss_cls.item()
                 loss_rec_sum += loss_rec.item()
                 loss_constraint_sum += loss_constraint.item()
-
-            print(
-                f'Epoch: {epoch}, loss: {loss_all_sum / num_batches}, marigin_loss: {loss_constraint_sum / num_batches}, time: {epoch_time}s')
-            print('loss_cls', loss_cls_sum / num_batches)
-            print('total_time is', total_time)
+            
+            wandb.log({ "loss": loss_all_sum / num_batches,
+                            "marigin_loss": loss_constraint_sum / num_batches,
+                            "loss_cls": loss_cls_sum / num_batches,
+                            "loss_constraint": loss_constraint_sum / num_batches
+                        }, step=epoch)
+            # print(f'Epoch: {epoch}, loss: {loss_all_sum / num_batches}, marigin_loss: {loss_constraint_sum / num_batches}, time: {epoch_time}s')
+            # print('loss_cls', loss_cls_sum / num_batches)
+            # print('total_time is', total_time)
             # print('loss_rec', loss_rec_sum /  num_batches)
-            print('loss_constraint', loss_constraint_sum / num_batches)
+            # print('loss_constraint', loss_constraint_sum / num_batches)
             # Valid the model for every $valid_epoch$ epoch
             if epoch % args.valid_epochs == 0:
                 if args.model == 'SAGE' or args.model == 'GCN':
-                    print("Valid at epoch {}".format(epoch))
-                    f1_mac_val, f1_1_val, f1_0_val, auc_val, gmean_val = test_sage(idx_valid, y_valid, gnn_model,
+                    # print("Valid at epoch {}".format(epoch))
+                    f1_mac_val, f1_1_val, f1_0_val, auc_val, gmean_val, ap = test_sage(idx_valid, y_valid, gnn_model,
                                                                                    args.batch_size, args.thres)
                     if auc_val > auc_best:
                         f1_mac_best, auc_best, ep_best = f1_mac_val, auc_val, epoch
                         if not os.path.exists(dir_saver):
                             os.makedirs(dir_saver)
-                        print('  Saving model ...')
+                        # print('  Saving model ...')
                         torch.save(gnn_model.state_dict(), path_saver)
                 else:
-                    print("Valid at epoch {}".format(epoch))
+                    # print("Valid at epoch {}".format(epoch))
                     f1_mac_val, f1_1_val, f1_0_val, auc_val, gmean_val = test_pcgnn(idx_valid, y_valid, gnn_model,
                                                                                     args.batch_size, args.thres)
                     if auc_val > auc_best:
                         f1_mac_best, auc_best, ep_best = f1_mac_val, auc_val, epoch
                         if not os.path.exists(dir_saver):
                             os.makedirs(dir_saver)
-                        print('  Saving model ...')
+                        # print('  Saving model ...')
                         torch.save(gnn_model.state_dict(), path_saver)
-
+                wandb.log({ "AUC": auc_val,
+                    "AP": ap
+                    }, step=epoch)
             end_time = time.time()
             total_time += end_time - start_time
 
-        print("Restore model from epoch {}".format(ep_best))
-        print("Model path: {}".format(path_saver))
+        # print("Restore model from epoch {}".format(ep_best))
+        # print("Model path: {}".format(path_saver))
         gnn_model.load_state_dict(torch.load(path_saver))
         if args.model == 'SAGE' or args.model == 'GCN':
-            f1_mac_test, f1_1_test, f1_0_test, auc_test, gmean_test = test_sage(idx_test, y_test, gnn_model,
+            f1_mac_test, f1_1_test, f1_0_test, auc_test, gmean_test, ap = test_sage(idx_test, y_test, gnn_model,
                                                                                 args.batch_size, args.thres)
         else:
             f1_mac_test, f1_1_test, f1_0_test, auc_test, gmean_test = test_pcgnn(idx_test, y_test, gnn_model,

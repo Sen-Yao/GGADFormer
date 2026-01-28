@@ -230,7 +230,7 @@ def test_sage(test_cases, labels, model, batch_size, thres=0.5):
         gnn_prob_list.extend(gnn_prob_arr.tolist())
 
     auc_gnn = roc_auc_score(labels, np.array(gnn_prob_list))
-    AP = average_precision_score(labels, np.array(gnn_prob_list), average='macro', pos_label=1, sample_weight=None)
+    ap = average_precision_score(labels, np.array(gnn_prob_list), average='macro', pos_label=1, sample_weight=None)
 
     f1_binary_1_gnn = f1_score(labels, np.array(gnn_pred_list), pos_label=1, average='binary')
     f1_binary_0_gnn = f1_score(labels, np.array(gnn_pred_list), pos_label=0, average='binary')
@@ -240,11 +240,10 @@ def test_sage(test_cases, labels, model, batch_size, thres=0.5):
     tn, fp, fn, tp = conf_gnn.ravel()
     gmean_gnn = conf_gmean(conf_gnn)
 
-    print(f"   GNN F1-binary-1: {f1_binary_1_gnn:.4f}\tF1-binary-0: {f1_binary_0_gnn:.4f}" +
-          f"\tF1-macro: {f1_macro_gnn:.4f}\tG-Mean: {gmean_gnn:.4f}\tAUC: {auc_gnn:.4f}")
-    print('Testing AP:', AP)
-    print(f"   GNN TP: {tp}\tTN: {tn}\tFN: {fn}\tFP: {fp}")
-    return f1_macro_gnn, f1_binary_1_gnn, f1_binary_0_gnn, auc_gnn, gmean_gnn
+    # print(f"   GNN F1-binary-1: {f1_binary_1_gnn:.4f}\tF1-binary-0: {f1_binary_0_gnn:.4f}" + f"\tF1-macro: {f1_macro_gnn:.4f}\tG-Mean: {gmean_gnn:.4f}\tAUC: {auc_gnn:.4f}")
+    # print('Testing AP:', ap)
+    # print(f"   GNN TP: {tp}\tTN: {tn}\tFN: {fn}\tFP: {fp}")
+    return f1_macro_gnn, f1_binary_1_gnn, f1_binary_0_gnn, auc_gnn, gmean_gnn, ap
 
 
 def prob2pred(y_prob, thres=0.5):
