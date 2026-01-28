@@ -19,8 +19,8 @@ plt.rcParams.update({
 })
 
 # 数据
-propagation_steps = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
-x_labels = ['0', '2', '4', '6', '8', '10', '12', '14', '16', '18']
+propagation_steps = [2, 4, 6, 8, 10, 12, 14, 16, 18]
+x_labels = ['2', '4', '6', '8', '10', '12', '14', '16', '18']
 
 data = {
     'Amazon': {
@@ -43,10 +43,11 @@ markers = ['o', 's', '^']  # 圆、方、三角
 linestyles = ['-', '-', '-']
 
 # 创建图形 (两个子图: AUROC 和 AUPRC)
-fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+fig, axes = plt.subplots(1, 2, figsize=(12, 3.5))
 
 # 绘制 AUROC 子图
 ax1 = axes[0]
+ax1.set_box_aspect(0.4)
 for idx, (dataset, values) in enumerate(data.items()):
     ax1.plot(range(len(propagation_steps)), values['AUROC'], 
              color=colors[idx], marker=markers[idx], 
@@ -60,10 +61,11 @@ ax1.set_xticklabels(x_labels)
 ax1.set_ylim([0.3, 1.0])
 ax1.legend(loc='upper right', frameon=True, edgecolor='black', fancybox=False)
 ax1.grid(True, linestyle='--', alpha=0.4, linewidth=0.8)
-ax1.set_title('(a) AUROC', y=-0.25)
+fig.text(0.25, 0.02, '(a) AUROC', ha='center', fontsize=16)
 
 # 绘制 AUPRC 子图
 ax2 = axes[1]
+ax2.set_box_aspect(0.4)
 for idx, (dataset, values) in enumerate(data.items()):
     ax2.plot(range(len(propagation_steps)), values['AUPRC'], 
              color=colors[idx], marker=markers[idx], 
@@ -77,15 +79,15 @@ ax2.set_xticklabels(x_labels)
 ax2.set_ylim([0.0, 0.9])
 ax2.legend(loc='upper right', frameon=True, edgecolor='black', fancybox=False)
 ax2.grid(True, linestyle='--', alpha=0.4, linewidth=0.8)
-ax2.set_title('(b) AUPRC', y=-0.25)
+fig.text(0.75, 0.02, '(b) AUPRC', ha='center', fontsize=16)
 
 # 调整布局
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.18)
 
 # 保存为PDF
-plt.savefig('propagation_steps_analysis.pdf', format='pdf', bbox_inches='tight', pad_inches=0.05)
-plt.savefig('propagation_steps_analysis.png', format='png', bbox_inches='tight', pad_inches=0.05)
+plt.savefig('propagation_steps.pdf', format='pdf', bbox_inches='tight', pad_inches=0.05)
+plt.savefig('propagation_steps.png', format='png', bbox_inches='tight', pad_inches=0.05)
 
 print("图表已保存为 propagation_steps_analysis.pdf")
 plt.show()
