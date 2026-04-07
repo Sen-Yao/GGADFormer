@@ -475,8 +475,10 @@ if __name__ == "__main__":
 
     parser.add_argument('--warmup_epoch', type=int, default=20)
 
-    # Ablation Study
-    parser.add_argument('--ablation_random_dir', type=str2bool, default=False, help='Ablation study: randomize perturbation direction')
+    # Perturbation Ablation Study
+    parser.add_argument('--ablation_mode', type=str, default='none',
+                        choices=['none', 'random_dir', 'random_mag', 'random_both', 'constant_mag'],
+                        help='Perturbation ablation mode: none (default), random_dir, random_mag, random_both, constant_mag')
 
 
 
