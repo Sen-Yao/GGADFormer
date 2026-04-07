@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import networkx as nx
 import scipy.sparse as sp
@@ -8,10 +9,8 @@ import dgl
 from collections import Counter
 import pandas as pd
 import os
-import torch
 from tqdm import tqdm
 import pickle
-import os
 import datetime
 import requests
 
@@ -563,10 +562,26 @@ def nagphormer_tokenization(features, adj, args):
         features: 预处理后的特征矩阵, size = (N, args.pp_k+1, d)
     """
     print("Tokenizating")
+    start_time = time.time()
+
     nodes_features = features.unsqueeze(1)
     for hop in range(args.pp_k):
+
         steped_nodes_features = node_neighborhood_feature(adj, features, hop+1, args.progregate_alpha)
         nodes_features = torch.concat((nodes_features, steped_nodes_features.unsqueeze(1)), dim=1)
+    print(f"Tokenization time: {time.time() - start_time:.4f}s")
+    
+    # 计算并输出 nodes_features 空间开销
+    num_elements = nodes_features.shape[0] * nodes_features.shape[1] * nodes_features.shape[2]
+    memory_bytes = num_elements * 4  # float32 = 4 bytes
+    if memory_bytes >= 1024**3:
+        memory_str = f"{memory_bytes / 1024**3:.2f} GB"
+    elif memory_bytes >= 1024**2:
+        memory_str = f"{memory_bytes / 1024**2:.2f} MB"
+    else:
+        memory_str = f"{memory_bytes / 1024:.2f} KB"
+    print(f"nodes_features shape: {nodes_features.shape}, memory usage: {memory_str}")
+    
     return nodes_features
 
 class PolynomialDecayLR(_LRScheduler):
@@ -643,3 +658,131 @@ def send_notification(content):
         requests.post(os.environ['WANDB_NOTIFY_URL'], json=payload, timeout=10)  
     except Exception as e:  
         print(f"发送通知失败: {e}")  
+
+
+# 全局变量用于并行BFS计算（避免pickle问题）
+_adj_sparse_global = None
+
+
+def _bfs_from_source_global(source):
+    """从单个源节点执行BFS，返回到所有可达节点的距离（全局函数，用于并行计算）"""
+    distances = {}
+    visited = set([source])
+    queue = [(source, 0)]
+    
+    while queue:
+        node, dist = queue.pop(0)
+        # 获取邻居
+        neighbors = _adj_sparse_global[node].nonzero()[1]
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                new_dist = dist + 1
+                distances[neighbor] = new_dist
+                queue.append((neighbor, new_dist))
+    
+    return list(distances.values())
+
+
+def _init_worker(adj):
+    """初始化worker进程，设置全局邻接矩阵"""
+    global _adj_sparse_global
+    _adj_sparse_global = adj
+
+
+def calculate_graph_statistics(adj, n_samples=1000, n_workers=None):
+    """
+    计算图的平均最短路径和有效直径（基于采样估算）
+    
+    参数:
+        adj: 邻接矩阵（scipy sparse matrix, torch tensor, 或 numpy array）
+        n_samples: 采样源节点数量（默认1000，如果节点数少则使用全部节点）
+        n_workers: 并行工作进程数（默认使用所有CPU核心）
+    
+    返回:
+        avg_shortest_path: 平均最短路径长度（仅统计可达节点对）
+        effective_diameter: 有效直径（90%可达节点对的最大距离）
+    """
+    from multiprocessing import Pool, cpu_count
+    from scipy.sparse import csr_matrix, issparse
+    import warnings
+    
+    # 转换为 scipy sparse matrix
+    if isinstance(adj, torch.Tensor):
+        adj_np = adj.detach().cpu().numpy()
+        if adj_np.ndim == 3:
+            adj_np = adj_np.squeeze(0)  # 移除 batch 维度
+        adj_sparse = csr_matrix(adj_np)
+    elif issparse(adj):
+        adj_sparse = adj if adj.format == 'csr' else adj.tocsr()
+    else:
+        adj_sparse = csr_matrix(adj)
+    
+    n_nodes = adj_sparse.shape[0]
+    
+    # 确保邻接矩阵是无向的（取对称）
+    adj_sparse = adj_sparse.maximum(adj_sparse.transpose())
+    
+    # 移除自环
+    adj_sparse.setdiag(0)
+    adj_sparse.eliminate_zeros()
+    
+    # 检查边数
+    n_edges = adj_sparse.nnz // 2  # 无向图边数
+    print(f"图统计: 节点数={n_nodes}, 边数={n_edges}")
+    
+    if n_edges == 0:
+        warnings.warn("图没有边，无法计算最短路径统计量")
+        return float('inf'), float('inf')
+    
+    # 确定采样节点数
+    n_samples = min(n_samples, n_nodes)
+    
+    # 随机采样源节点
+    np.random.seed(42)  # 可重复性
+    sampled_nodes = np.random.choice(n_nodes, size=n_samples, replace=False)
+    
+    # 并行或串行执行BFS
+    if n_workers is None:
+        n_workers = cpu_count()
+    
+    print(f"开始计算最短路径统计量（采样 {n_samples} 个节点，{n_workers} 个并行进程）...")
+    start_time = time.time()
+    
+    # 设置全局邻接矩阵（用于串行计算）
+    global _adj_sparse_global
+    _adj_sparse_global = adj_sparse
+    
+    all_distances = []
+    if n_workers > 1 and n_samples > 10:
+        # 并行计算 - 使用全局函数和初始化函数
+        with Pool(processes=n_workers, initializer=_init_worker, initargs=(adj_sparse,)) as pool:
+            results = pool.map(_bfs_from_source_global, sampled_nodes)
+            for dists in results:
+                all_distances.extend(dists)
+    else:
+        # 串行计算（小图或单进程）
+        for source in tqdm(sampled_nodes, desc="计算最短路径"):
+            dists = _bfs_from_source_global(source)
+            all_distances.extend(dists)
+    
+    elapsed = time.time() - start_time
+    
+    if len(all_distances) == 0:
+        warnings.warn("图可能不连通，无法计算最短路径统计量")
+        return float('inf'), float('inf')
+    
+    all_distances = np.array(all_distances)
+    
+    # 计算平均最短路径
+    avg_shortest_path = np.mean(all_distances)
+    
+    # 计算有效直径（90%分位数）
+    effective_diameter = np.percentile(all_distances, 90)
+    
+    print(f"图统计计算完成，耗时 {elapsed:.2f}s")
+    print(f"  - 采样节点对数: {len(all_distances)}")
+    print(f"  - 平均最短路径: {avg_shortest_path:.4f}")
+    print(f"  - 有效直径 (90%): {effective_diameter:.4f}")
+    
+    return avg_shortest_path, effective_diameter

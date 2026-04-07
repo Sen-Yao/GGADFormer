@@ -15,8 +15,8 @@ import time
 import torch.utils.data as Data
 
 import wandb
-from visualization import create_tsne_visualization, visualize_attention_weights
-from utils import send_notification
+from visualization import create_tsne_visualization, visualize_attention_weights, visualize_reconstruction_analysis
+from utils import send_notification, calculate_graph_statistics
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -118,6 +118,9 @@ def train(args):
             model = Model(ft_size, args.embedding_dim, 'prelu', args.negsamp_ratio, args.readout, args)
         else:
             raise ValueError(f"Invalid model type: {args.model_type}")
+
+    # 计算图的平均最短路径和有效直径（基于采样估算）
+    # avg_sp, eff_diameter = calculate_graph_statistics(adj, n_samples=1000)
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.peak_lr, weight_decay=args.weight_decay)
     lr_scheduler = PolynomialDecayLR(
@@ -346,35 +349,52 @@ def train(args):
 
     pbar.close()  # 关闭进度条
     print(f"Training done! Total time: {total_time:.2f} seconds")
-    if args.visualize:
-        # 加载最佳模型进行tsne可视化
-        if best_model_state is not None:
-            model.eval()
-            # 为了获取人造异常点的嵌入，设置train_flag为True
-            train_flag = True
-
-            # 先运行最后一个 epoch 的模型
+    
+    # 在最后一次eval时进行重构误差分析可视化
+    if args.visualize and args.model_type == "GGADFormer":
+        print("\n=== Starting Final Evaluation Reconstruction Analysis ===")
+        model.eval()
+        train_flag = False
+        
+        # 收集所有测试集的数据进行重构分析
+        all_test_input_tokens = []
+        all_test_labels = []
+        all_test_embeddings = []
+        
+        with torch.no_grad():
             for _, item in enumerate(test_data_loader):
                 concated_input_features = item[0].to(device)
                 labels = item[1].to(device)
-                emb_last_epoch, _, _, outlier_emb_last_epoch, _, _, _, _, _, _ = model(concated_input_features, None, None, local_normal_for_train_idx, train_flag, args)
-                # 再运行最佳模型的模型
-                # model.load_state_dict(best_model_state)
-                # emb_best_epoch, _, _, outlier_emb_best_epoch, _, agg_attention_weights_best_epoch, _, _, _ = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx, train_flag, args)
-                create_tsne_visualization(concated_input_features[:, 0, :], emb_last_epoch, labels, best_epoch, normal_for_train_idx, outlier_emb_last_epoch, args)
-                break
-            
-            # 创建tsne可视化
-            
-            
-            # 可视化注意力权重
-            if args.model_type == 'GGADFormer' or args.model_type == 'SGT':
-                # 获取邻接矩阵（去掉batch维度）
-                adj_matrix_np = adj.squeeze(0).detach().cpu().numpy()
-                # attention_stats = visualize_attention_weights(agg_attention_weights_last_epoch, labels, normal_for_train_idx, normal_for_generation_idx, outlier_emb_last_epoch, best_epoch, args.dataset, device, adj_matrix_np, args)
+                
+                # 获取模型嵌入
+                emb = model.TransformerEncoder(concated_input_features)
+                
+                all_test_input_tokens.append(concated_input_features.cpu())
+                all_test_labels.append(labels.cpu())
+                all_test_embeddings.append(emb.squeeze(0).cpu())
         
+        # 合并所有batch的数据
+        all_test_input_tokens = torch.cat(all_test_input_tokens, dim=0)
+        all_test_labels = torch.cat(all_test_labels, dim=0)
+        all_test_embeddings = torch.cat(all_test_embeddings, dim=0)
         
-
+        print(f"测试集总节点数: {len(all_test_labels)}")
+        print(f"正常点数量: {(all_test_labels == 0).sum().item()}")
+        print(f"异常点数量: {(all_test_labels == 1).sum().item()}")
+        
+        # 调用重构误差分析可视化
+        visualize_reconstruction_analysis(
+            model=model,
+            input_tokens=all_test_input_tokens.to(device),
+            labels=all_test_labels,
+            ano_label=ano_label,
+            idx_test=idx_test,
+            epoch=args.num_epoch,  # 使用最后一个epoch
+            args=args,
+            device=device
+        )
+    
+    # tsne可视化已在visualize_reconstruction_analysis中完成，此处不再重复
 if __name__ == "__main__":
 
 
