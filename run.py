@@ -475,10 +475,15 @@ if __name__ == "__main__":
 
     parser.add_argument('--warmup_epoch', type=int, default=20)
 
-    # Perturbation Ablation Study
+    # Ablation Study (perturbation + h_mean center computation)
     parser.add_argument('--ablation_mode', type=str, default='none',
-                        choices=['none', 'random_dir', 'random_mag', 'random_both', 'constant_mag'],
-                        help='Perturbation ablation mode: none (default), random_dir, random_mag, random_both, constant_mag')
+                        choices=['none',
+                                 'random_dir', 'random_mag', 'random_both', 'constant_mag',
+                                 'h_mean_labeled_normal', 'h_mean_trimmed'],
+                        help='Ablation mode: none (original model), '
+                             'random_dir/random_mag/random_both/constant_mag (perturbation ablation), '
+                             'h_mean_labeled_normal (center from labeled normal nodes only), '
+                             'h_mean_trimmed (trimmed mean, drop furthest 10%% nodes)')
 
 
 

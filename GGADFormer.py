@@ -5,7 +5,7 @@ import random
 import time
 
 from check_gpu_memory import print_gpu_memory_usage, print_tensor_memory, clear_gpu_memory
-from ablation import apply_perturbation_ablation
+from ablation import apply_perturbation_ablation, apply_h_mean_ablation
 
 class FeedForwardNetwork(nn.Module):
     def __init__(self, hidden_size, ffn_size, dropout_rate):
@@ -255,8 +255,9 @@ class GGADFormer(nn.Module):
         # input_tokens: (N, args.pp_k+1, d)
         emb = self.TransformerEncoder(input_tokens)
 
-        # 生成全局中心点
-        h_mean = torch.mean(emb, dim=1, keepdim=True)
+        # 生成全局中心点（支持消融实验：h_mean_labeled_normal / h_mean_trimmed）
+        ablation_mode = getattr(args, 'ablation_mode', 'none')
+        h_mean = apply_h_mean_ablation(emb, ablation_mode, normal_for_train_idx)
 
         outlier_emb = None
         emb_combine = None

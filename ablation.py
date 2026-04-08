@@ -70,5 +70,52 @@ def apply_perturbation_ablation(reconstruction_error_proj, ablation_mode):
         return direction * mean_norm
 
     else:
-        raise ValueError(f"Unknown ablation_mode: '{ablation_mode}'. "
-                         f"Supported: 'none', 'random_dir', 'random_mag', 'random_both', 'constant_mag'")
+        # 非本消融的 mode，返回原值（让 h_mean 等其他消融处理）
+        return reconstruction_error_proj
+
+
+def apply_h_mean_ablation(emb, ablation_mode, normal_for_train_idx=None):
+    """
+    针对全局中心点 h_mean 计算方式的消融实验。
+
+    Args:
+        emb: 节点嵌入表征, 形状 [1, N, embedding_dim]
+        ablation_mode: 消融模式
+            - 'none': 原始模型，所有节点的嵌入平均（global_mean）
+            - 'h_mean_labeled_normal': 仅使用有标签的正常节点嵌入平均
+            - 'h_mean_trimmed': Trimmed mean，去掉离中心最远的 10% 节点后取平均
+        normal_for_train_idx: 有标签的正常节点索引（仅在 'h_mean_labeled_normal' 模式下使用）
+
+    Returns:
+        h_mean: 全局中心点, 形状 [1, 1, embedding_dim]
+    """
+    # 默认：原始模型，所有节点嵌入平均
+    h_mean = torch.mean(emb, dim=1, keepdim=True)
+
+    if ablation_mode is None or ablation_mode == 'none':
+        return h_mean
+
+    elif ablation_mode == 'h_mean_labeled_normal':
+        # 仅使用有标签的正常节点嵌入平均
+        if normal_for_train_idx is None or len(normal_for_train_idx) == 0:
+            # 退回到 global_mean
+            return h_mean
+        normal_emb = emb[:, normal_for_train_idx, :]  # [1, num_normal, embedding_dim]
+        return torch.mean(normal_emb, dim=1, keepdim=True)
+
+    elif ablation_mode == 'h_mean_trimmed':
+        # Trimmed mean：先计算粗略中心，去掉离中心最远的 10% 节点，再重新计算均值
+        distances = torch.norm(emb - h_mean, p=2, dim=2).squeeze(0)  # [N]
+        # 确定裁剪数量（去掉最远的 10%）
+        num_nodes = distances.size(0)
+        num_trim = max(1, int(num_nodes * 0.1))
+        # 找到距离最近的 (1 - 0.1) 比例的节点
+        _, sorted_indices = torch.sort(distances)
+        keep_indices = sorted_indices[:num_nodes - num_trim]
+        # 对保留的节点取平均
+        trimmed_emb = emb[:, keep_indices, :]  # [1, num_kept, embedding_dim]
+        return torch.mean(trimmed_emb, dim=1, keepdim=True)
+
+    else:
+        # 非本消融的 mode，返回默认值（让 perturbation 消融处理）
+        return h_mean
