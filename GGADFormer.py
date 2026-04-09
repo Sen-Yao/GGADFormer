@@ -5,7 +5,7 @@ import random
 import time
 
 from check_gpu_memory import print_gpu_memory_usage, print_tensor_memory, clear_gpu_memory
-from ablation import apply_perturbation_ablation, apply_h_mean_ablation
+from ablation import apply_perturbation_ablation, apply_h_mean_ablation, GPRGNNFusion, should_use_gprgnn_fusion
 
 class FeedForwardNetwork(nn.Module):
     def __init__(self, hidden_size, ffn_size, dropout_rate):
@@ -221,17 +221,37 @@ class GGADFormer(nn.Module):
             nn.Linear(args.embedding_dim, args.embedding_dim)
         )
 
+        # Token融合方式消融实验：GPRGNN式可学习权重求和
+        ablation_mode = getattr(args, 'ablation_mode', 'none')
+        if should_use_gprgnn_fusion(ablation_mode):
+            self.gprgnn_fusion = GPRGNNFusion(args.pp_k + 1)
+        else:
+            self.gprgnn_fusion = None
+
         # 将模型移动到指定设备
         self.to(self.device)
     
     def TransformerEncoder(self, tokens):
         """
+        Token 序列编码器，支持 Transformer 融合和 GPRGNN 式可学习权重融合
+        
         Inputs:
             - tokens: 输入节点的 tokens 序列，形状 [batch_size, pp_k+1, feature_dim]
         Outputs:
             - emb: 输入节点的编码结果，形状 [1, batch_size, embedding_dim]
         """
+        # Token 投影到 embedding_dim
         emb = self.token_projection(tokens)
+        
+        # 消融实验分支：GPRGNN 式可学习权重融合
+        if self.gprgnn_fusion is not None:
+            # 直接对投影后的 tokens 进行加权求和
+            # emb: [N, embedding_dim]
+            emb = self.gprgnn_fusion(emb)
+            # 添加 batch 维度: [1, N, embedding_dim]
+            return emb.unsqueeze(0)
+        
+        # 原始 Transformer 融合流程
         for i, l in enumerate(self.layers):
             emb, current_attention_weights = self.layers[i](emb)
             if i == len(self.layers) - 1: # 拿到最后一层的注意力

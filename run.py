@@ -475,15 +475,17 @@ if __name__ == "__main__":
 
     parser.add_argument('--warmup_epoch', type=int, default=20)
 
-    # Ablation Study (perturbation + h_mean center computation)
+    # Ablation Study (perturbation + h_mean center computation + token fusion)
     parser.add_argument('--ablation_mode', type=str, default='none',
                         choices=['none',
                                  'random_dir', 'random_mag', 'random_both', 'constant_mag',
-                                 'h_mean_labeled_normal', 'h_mean_trimmed'],
+                                 'h_mean_labeled_normal', 'h_mean_trimmed',
+                                 'gprgnn_weighted_sum'],
                         help='Ablation mode: none (original model), '
                              'random_dir/random_mag/random_both/constant_mag (perturbation ablation), '
                              'h_mean_labeled_normal (center from labeled normal nodes only), '
-                             'h_mean_trimmed (trimmed mean, drop furthest 10%% nodes)')
+                             'h_mean_trimmed (trimmed mean, drop furthest 10%% nodes), '
+                             'gprgnn_weighted_sum (GPRGNN-style learnable weighted sum fusion instead of Transformer)')
 
 
 

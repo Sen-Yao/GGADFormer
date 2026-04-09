@@ -7,9 +7,13 @@
 
 所有消融模式的缩放因子均从当前 batch 数据中自动提取，
 无需人工指定超参数，消除审稿人对参数选取的质疑。
+
+新增：GPRGNN式邻域融合消融实验
+对比 Transformer 融合与可学习权重线性组合的有效性。
 """
 
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 
 
@@ -119,3 +123,86 @@ def apply_h_mean_ablation(emb, ablation_mode, normal_for_train_idx=None):
     else:
         # 非本消融的 mode，返回默认值（让 perturbation 消融处理）
         return h_mean
+
+
+class GPRGNNFusion(nn.Module):
+    """
+    GPRGNN式可学习权重融合模块
+    
+    参考：*"Adaptive Universal Generalized PageRank Graph Neural Network"* (ICLR 2021)
+    
+    使用一组可学习的标量权重 {γ_k}_{k=0}^{K} 对各跳 token 进行加权求和：
+    h_i = sum_{k=0}^{K} γ_k * t_i^{(k)}
+    
+    权重通过 softmax 归一化保证和为1。
+    """
+    
+    def __init__(self, num_hops):
+        """
+        Args:
+            num_hops: token序列的跳数 (K+1)，即 args.pp_k + 1
+        """
+        super(GPRGNNFusion, self).__init__()
+        # 可学习权重参数 γ_k，初始化为0使得 softmax 后均匀分布
+        self.gamma = nn.Parameter(torch.zeros(num_hops))
+    
+    def forward(self, tokens):
+        """
+        对多跳 token 序列进行加权求和
+        
+        Args:
+            tokens: 投影后的 token 序列，形状 [N, K+1, embedding_dim]
+        
+        Returns:
+            emb: 融合后的节点嵌入，形状 [N, embedding_dim]
+        """
+        # softmax 归一化权重
+        weights = F.softmax(self.gamma, dim=0)  # [K+1]
+        
+        # 加权求和：h = sum(weights[k] * tokens[:, k, :])
+        # weights.unsqueeze(0).unsqueeze(2) -> [1, K+1, 1]
+        # tokens -> [N, K+1, embedding_dim]
+        # 结果 -> [N, embedding_dim]
+        emb = torch.sum(weights.unsqueeze(0).unsqueeze(2) * tokens, dim=1)
+        
+        return emb
+    
+    def get_weights(self):
+        """获取当前的归一化权重（用于分析）"""
+        return F.softmax(self.gamma, dim=0).detach().cpu().numpy()
+
+
+def create_token_fusion_module(ablation_mode, num_hops, embedding_dim, device):
+    """
+    根据 ablation_mode 创建相应的 token 融合模块
+    
+    Args:
+        ablation_mode: 消融模式
+            - 'none' / 'transformer': 使用 Transformer 融合，返回 None
+            - 'gprgnn_weighted_sum': 使用 GPRGNN 式可学习权重求和
+        num_hops: token 序列的跳数 (K+1)
+        embedding_dim: 嵌入维度（当前 GPRGNN 融合不需要，保留参数一致性）
+        device: 设备
+    
+    Returns:
+        fusion_module: GPRGNNFusion 模块或 None
+    """
+    if ablation_mode == 'gprgnn_weighted_sum':
+        module = GPRGNNFusion(num_hops)
+        return module.to(device)
+    
+    # 其他模式使用 Transformer，不需要额外模块
+    return None
+
+
+def should_use_gprgnn_fusion(ablation_mode):
+    """
+    判断是否应使用 GPRGNN 融合方式
+    
+    Args:
+        ablation_mode: 消融模式
+    
+    Returns:
+        bool: 是否使用 GPRGNN 融合
+    """
+    return ablation_mode == 'gprgnn_weighted_sum'
