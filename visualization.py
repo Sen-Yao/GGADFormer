@@ -5,6 +5,7 @@ import os
 import wandb
 import numpy as np
 import torch
+import torch.nn.functional as F
 import pandas as pd
 
 def create_tsne_visualization(features, emb_last_epoch, labels, epoch, normal_for_train_idx, outlier_emb_last_epoch, args):
@@ -322,9 +323,12 @@ def visualize_reconstruction_analysis(model, input_tokens, labels, ano_label,
     在最后一次eval时进行重构误差分析可视化
     
     功能：
-    1. 计算正常点和异常点的reconstruction_error
-    2. 计算归一化后的||RDV||_2（批内归一化后计算L2范数）
-    3. t-SNE降维可视化重构误差分布
+    1. 计算正常点和异常点的reconstruction_error，投影得到RDV
+    2. 计算RDV方向向量的余弦相似度统计：
+       - 正常节点内部的平均余弦相似度
+       - 异常节点内部的平均余弦相似度
+       - 正常vs异常之间的平均余弦相似度
+    3. t-SNE降维可视化RDV方向分布
     4. 计算正常和异常内部的Silhouette Score
     
     Args:
@@ -356,17 +360,11 @@ def visualize_reconstruction_analysis(model, input_tokens, labels, ano_label,
         # 4. 投影到embedding维度得到RDV
         RDV = model.reconstruction_proj(reconstruction_error)  # [N, embedding_dim]
     
-    # 5. 批内归一化RDV（batch normalization）
-    RDV_mean = RDV.mean(dim=0, keepdim=True)
-    RDV_std = RDV.std(dim=0, keepdim=True) + 1e-8  # 防止除零
-    RDV_normalized = (RDV - RDV_mean) / RDV_std  # [N, embedding_dim]
-    
-    # 6. 计算归一化后的||RDV||_2
-    rdv_norm = torch.norm(RDV_normalized, p=2, dim=1)  # [N]
+    # 5. 对RDV进行L2归一化，得到方向向量
+    RDV_normalized = F.normalize(RDV, p=2, dim=1)  # [N, embedding_dim]
     
     # 转换为numpy进行处理
     RDV_normalized_np = RDV_normalized.cpu().numpy()
-    rdv_norm_np = rdv_norm.cpu().numpy()
     labels_np = labels.cpu().numpy() if isinstance(labels, torch.Tensor) else labels
     
     # 识别正常点和异常点索引
@@ -379,12 +377,34 @@ def visualize_reconstruction_analysis(model, input_tokens, labels, ano_label,
         print("Warning: 正常点或异常点数量为0，跳过可视化")
         return
     
-    # 7. 分别统计正常点和异常点的归一化||RDV||_2分布
-    normal_rdv_norm = rdv_norm_np[normal_indices]
-    anomaly_rdv_norm = rdv_norm_np[anomaly_indices]
+    # 6. 计算方向余弦相似度统计（基于L2归一化后的RDV方向向量）
+    # 正常节点内部的平均余弦相似度
+    normal_rdv = RDV_normalized[normal_indices]  # [num_normal, embedding_dim]
+    normal_sim_matrix = torch.mm(normal_rdv, normal_rdv.t())  # [num_normal, num_normal]
+    # 排除对角线（自身与自身的相似度为1）
+    n_normal = normal_sim_matrix.size(0)
+    if n_normal > 1:
+        mask_normal = ~torch.eye(n_normal, dtype=torch.bool, device=normal_sim_matrix.device)
+        normal_inner_cosine_sim = normal_sim_matrix[mask_normal].mean().item()
+    else:
+        normal_inner_cosine_sim = 0.0
+    print(f"正常节点内部平均余弦相似度: {normal_inner_cosine_sim:.4f}")
     
-    print(f"正常点 ||RDV||_2 统计: mean={np.mean(normal_rdv_norm):.4f}, std={np.std(normal_rdv_norm):.4f}")
-    print(f"异常点 ||RDV||_2 统计: mean={np.mean(anomaly_rdv_norm):.4f}, std={np.std(anomaly_rdv_norm):.4f}")
+    # 异常节点内部的平均余弦相似度
+    anomaly_rdv = RDV_normalized[anomaly_indices]  # [num_anomaly, embedding_dim]
+    anomaly_sim_matrix = torch.mm(anomaly_rdv, anomaly_rdv.t())  # [num_anomaly, num_anomaly]
+    n_anomaly = anomaly_sim_matrix.size(0)
+    if n_anomaly > 1:
+        mask_anomaly = ~torch.eye(n_anomaly, dtype=torch.bool, device=anomaly_sim_matrix.device)
+        anomaly_inner_cosine_sim = anomaly_sim_matrix[mask_anomaly].mean().item()
+    else:
+        anomaly_inner_cosine_sim = 0.0
+    print(f"异常节点内部平均余弦相似度: {anomaly_inner_cosine_sim:.4f}")
+    
+    # 正常vs异常之间的平均余弦相似度
+    cross_sim_matrix = torch.mm(normal_rdv, anomaly_rdv.t())  # [num_normal, num_anomaly]
+    cross_cosine_sim = cross_sim_matrix.mean().item()
+    print(f"正常vs异常之间平均余弦相似度: {cross_cosine_sim:.4f}")
     
     # 8. t-SNE降维可视化
     print("Performing t-SNE dimensionality reduction...")
@@ -458,26 +478,26 @@ def visualize_reconstruction_analysis(model, input_tokens, labels, ano_label,
                 c='blue', alpha=0.6, s=20, label=f'Normal ({len(normal_indices)})')
     ax1.scatter(RDV_2d[anomaly_indices, 0], RDV_2d[anomaly_indices, 1], 
                 c='red', alpha=0.6, s=20, label=f'Anomaly ({len(anomaly_indices)})')
-    ax1.set_title(f't-SNE Visualization of RDV\nNormal Silhouette: {normal_silhouette:.3f}, Anomaly Silhouette: {anomaly_silhouette:.3f}')
+    ax1.set_title(f't-SNE Visualization of RDV Direction\nNormal Silhouette: {normal_silhouette:.3f}, Anomaly Silhouette: {anomaly_silhouette:.3f}')
     ax1.set_xlabel('t-SNE Dimension 1')
     ax1.set_ylabel('t-SNE Dimension 2')
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     
-    # 右图：||RDV||_2分布直方图
+    # 右图：三组方向余弦相似度对比柱状图
     ax2 = axes[1]
-    bins = 30
-    ax2.hist(normal_rdv_norm, bins=bins, alpha=0.6, color='blue', 
-             label='Normal', density=True)
-    ax2.hist(anomaly_rdv_norm, bins=bins, alpha=0.6, color='red', 
-             label='Anomaly', density=True)
-    ax2.set_title(f'Distribution of Normalized ||RDV||_2\n'
-                  f'Normal: μ={np.mean(normal_rdv_norm):.3f}, σ={np.std(normal_rdv_norm):.3f}\n'
-                  f'Anomaly: μ={np.mean(anomaly_rdv_norm):.3f}, σ={np.std(anomaly_rdv_norm):.3f}')
-    ax2.set_xlabel('Normalized ||RDV||_2')
-    ax2.set_ylabel('Density')
-    ax2.legend()
-    ax2.grid(True, alpha=0.3)
+    categories = ['Normal\n(Normal vs Normal)', 'Anomaly\n(Anomaly vs Anomaly)', 'Normal vs Anomaly']
+    cosine_values = [normal_inner_cosine_sim, anomaly_inner_cosine_sim, cross_cosine_sim]
+    colors = ['#3498db', '#e74c3c', '#9b59b6']
+    bars = ax2.bar(categories, cosine_values, color=colors, alpha=0.8, edgecolor='grey')
+    # 在柱子上标注数值
+    for bar, val in zip(bars, cosine_values):
+        ax2.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.01,
+                 f'{val:.4f}', ha='center', va='bottom', fontsize=10, fontweight='bold')
+    ax2.set_title('Average Cosine Similarity of RDV Directions')
+    ax2.set_ylabel('Cosine Similarity')
+    ax2.axhline(y=0, color='grey', linestyle='--', alpha=0.5)
+    ax2.grid(True, alpha=0.3, axis='y')
     
     plt.tight_layout()
     
@@ -493,15 +513,17 @@ def visualize_reconstruction_analysis(model, input_tokens, labels, ano_label,
     # 11. 记录到wandb
     # 创建RDV统计表格
     rdv_stats_table = wandb.Table(
-        columns=["Metric", "Normal", "Anomaly"],
+        columns=["Metric", "Value"],
         data=[
-            ["Count", len(normal_indices), len(anomaly_indices)],
-            ["||RDV||_2 Mean", np.mean(normal_rdv_norm), np.mean(anomaly_rdv_norm)],
-            ["||RDV||_2 Std", np.std(normal_rdv_norm), np.std(anomaly_rdv_norm)],
-            ["||RDV||_2 Min", np.min(normal_rdv_norm), np.min(anomaly_rdv_norm)],
-            ["||RDV||_2 Max", np.max(normal_rdv_norm), np.max(anomaly_rdv_norm)],
-            ["Silhouette Score", normal_silhouette, anomaly_silhouette],
-            ["Intra-cluster Distance", normal_intra_dist, anomaly_intra_dist],
+            ["Normal Node Count", len(normal_indices)],
+            ["Anomaly Node Count", len(anomaly_indices)],
+            ["Normal Inner Cosine Sim", normal_inner_cosine_sim],
+            ["Anomaly Inner Cosine Sim", anomaly_inner_cosine_sim],
+            ["Normal vs Anomaly Cosine Sim", cross_cosine_sim],
+            ["Normal Silhouette Score", normal_silhouette],
+            ["Anomaly Silhouette Score", anomaly_silhouette],
+            ["Normal Intra-cluster Distance", normal_intra_dist],
+            ["Anomaly Intra-cluster Distance", anomaly_intra_dist],
         ]
     )
     
@@ -514,11 +536,10 @@ def visualize_reconstruction_analysis(model, input_tokens, labels, ano_label,
             float(RDV_2d[i, 0]),
             float(RDV_2d[i, 1]),
             node_type,
-            float(rdv_norm_np[i])
         ])
     
     tsne_table = wandb.Table(
-        columns=["Index", "TSNE_X", "TSNE_Y", "Node_Type", "RDV_Norm"],
+        columns=["Index", "TSNE_X", "TSNE_Y", "Node_Type"],
         data=tsne_table_data
     )
     
@@ -529,8 +550,9 @@ def visualize_reconstruction_analysis(model, input_tokens, labels, ano_label,
         f"reconstruction_analysis/RDV_figure_epoch_{epoch}": wandb.Image(save_path),
         f"reconstruction_analysis/normal_silhouette": normal_silhouette,
         f"reconstruction_analysis/anomaly_silhouette": anomaly_silhouette,
-        f"reconstruction_analysis/normal_rdv_norm_mean": np.mean(normal_rdv_norm),
-        f"reconstruction_analysis/anomaly_rdv_norm_mean": np.mean(anomaly_rdv_norm),
+        f"reconstruction_analysis/normal_inner_cosine_sim": normal_inner_cosine_sim,
+        f"reconstruction_analysis/anomaly_inner_cosine_sim": anomaly_inner_cosine_sim,
+        f"reconstruction_analysis/cross_cosine_sim": cross_cosine_sim,
     })
     
     print("Reconstruction error analysis visualization done!\n")
@@ -538,8 +560,9 @@ def visualize_reconstruction_analysis(model, input_tokens, labels, ano_label,
     return {
         'normal_silhouette': normal_silhouette,
         'anomaly_silhouette': anomaly_silhouette,
-        'normal_rdv_norm_mean': np.mean(normal_rdv_norm),
-        'anomaly_rdv_norm_mean': np.mean(anomaly_rdv_norm),
+        'normal_inner_cosine_sim': normal_inner_cosine_sim,
+        'anomaly_inner_cosine_sim': anomaly_inner_cosine_sim,
+        'cross_cosine_sim': cross_cosine_sim,
         'RDV_2d': RDV_2d,
         'normal_indices': normal_indices,
         'anomaly_indices': anomaly_indices

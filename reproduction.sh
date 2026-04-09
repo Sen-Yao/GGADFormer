@@ -57,4 +57,4 @@ python run.py --batch_size=8192 --dataset=elliptic --end_lr=0.0001 --lambda_rec_
 python run.py --batch_size=8192 --dataset=elliptic --end_lr=0.0001 --lambda_rec_emb=0.1 --num_epoch=200 --outlier_beta=0.3 --peak_lr=0.0005 --pp_k=8 --progregate_alpha=0.8 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
 
 
-CUDA_VISIBLE_DEVICES=5 python run.py --batch_size=8192 --dataset=elliptic --end_lr=0.0001 --lambda_rec_emb=5 --num_epoch=150 --outlier_beta=0.3 --peak_lr=0.0005 --pp_k=8 --progregate_alpha=0.8 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
+CUDA_VISIBLE_DEVICES=5 python run.py --batch_size=1024 --dataset=tolokers --end_lr=0.00001 --lambda_rec_emb=5 --num_epoch=100 --outlier_beta=0.3 --peak_lr=0.0001 --pp_k=10 --progregate_alpha=0.9 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=5  --visualize=True
