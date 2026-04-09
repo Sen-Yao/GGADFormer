@@ -18,22 +18,24 @@ plt.rcParams.update({
     'lines.markersize': 8,
 })
 
-# 数据 - Train Ratio从25%到5%（展示衰退趋势）
-train_ratios = [25, 20, 15, 10, 5]  # x轴：从高到低
-x_labels = ['25%', '20%', '15%', '10%', '5%']
+# 数据 - Train Ratio从15%到1%（展示衰退趋势）
+train_ratios = [15, 10, 5, 1]  # x轴：从高到低
+x_labels = ['15%', '10%', '5%', '1%']
 
-# AUROC数据（按25%, 20%, 15%, 10%, 5%顺序）
-auroc_ggad = [0.5561, 0.5463, 0.5411, 0.5376, 0.5087]
-auroc_rho = [0.6107, 0.6035, 0.5949, 0.5463, 0.5098]
+# AUROC数据（按15%, 10%, 5%, 1%顺序）
+auroc_ggad = [0.5411, 0.5306, 0.5087, 0.5125]
+auroc_rho = [0.5849, 0.5763, 0.5098, 0.5137]
+auroc_vecgad = [0.6702, 0.6714, 0.6496, 0.5876]
 
-# AUPRC数据（按25%, 20%, 15%, 10%, 5%顺序）
-auprc_ggad = [0.2558, 0.2580, 0.2463, 0.2422, 0.2295]
-auprc_rho = [0.3192, 0.3127, 0.3099, 0.2683, 0.2493]
+# AUPRC数据（按15%, 10%, 5%, 1%顺序）
+auprc_ggad = [0.2463, 0.2392, 0.2295, 0.2259]
+auprc_rho = [0.2999, 0.2683, 0.2493, 0.2299]
+auprc_vecgad = [0.3222, 0.3207, 0.303, 0.2647]
 
 # KDD风格的颜色和标记
-colors = ['#E24A33', '#348ABD']  # 红、蓝
-markers = ['o', 's']  # 圆、方
-linestyles = ['-', '--']
+colors = ['#E24A33', '#348ABD', '#228B22']  # 红、蓝、绿
+markers = ['o', 's', '^']  # 圆、方、三角
+linestyles = ['-', '--', '-.']
 
 # 创建图形
 fig, axes = plt.subplots(1, 2, figsize=(14, 3.5))
@@ -49,12 +51,16 @@ ax1.plot(range(len(train_ratios)), auroc_rho,
          color=colors[1], marker=markers[1], 
          linestyle=linestyles[1], label='RHO',
          markeredgecolor='white', markeredgewidth=1.5)
+ax1.plot(range(len(train_ratios)), auroc_vecgad, 
+         color=colors[2], marker=markers[2], 
+         linestyle=linestyles[2], label='VecGAD',
+         markeredgecolor='white', markeredgewidth=1.5)
 
 ax1.set_xlabel('Train Ratio')
 ax1.set_ylabel('AUROC')
 ax1.set_xticks(range(len(train_ratios)))
 ax1.set_xticklabels(x_labels)
-ax1.set_ylim([0.48, 0.65])
+ax1.set_ylim([0.48, 0.72])
 ax1.legend(loc='upper right', frameon=True, edgecolor='black', fancybox=False)
 ax1.grid(True, linestyle='--', alpha=0.4, linewidth=0.8)
 fig.text(0.25, 0.02, '(a) AUROC', ha='center', fontsize=16)
@@ -69,6 +75,10 @@ ax2.plot(range(len(train_ratios)), auprc_ggad,
 ax2.plot(range(len(train_ratios)), auprc_rho, 
          color=colors[1], marker=markers[1], 
          linestyle=linestyles[1], label='RHO',
+         markeredgecolor='white', markeredgewidth=1.5)
+ax2.plot(range(len(train_ratios)), auprc_vecgad, 
+         color=colors[2], marker=markers[2], 
+         linestyle=linestyles[2], label='VecGAD',
          markeredgecolor='white', markeredgewidth=1.5)
 
 ax2.set_xlabel('Train Ratio')
