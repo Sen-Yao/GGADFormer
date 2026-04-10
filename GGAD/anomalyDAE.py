@@ -5,6 +5,7 @@ import wandb
 
 from model_AnomalyDAE import Model
 from utils import *
+from rec_error_filter_utils import compute_rec_error_anomalydae, evaluate_with_rec_error_filter
 
 from sklearn.metrics import roc_auc_score
 import random
@@ -33,6 +34,8 @@ parser.add_argument('--negsamp_ratio', type=int, default=1)
 
 parser.add_argument('--train_rate', type=float, default=0.15)
 parser.add_argument('--method', type=str, default="AnomalyDAE")
+parser.add_argument('--rec_error_filter_ratio', type=float, default=1.0,
+                    help='重构误差过滤比例，选择重构误差最小的该比例节点进行评估 (1.0表示不过滤)')
 
 args = parser.parse_args()
 
@@ -166,10 +169,33 @@ with tqdm(total=args.num_epoch) as pbar:
              model.eval()
              # loss, score = model(features, adj, normal_label_idx, idx_test)
              score = np.array(score.detach().cpu())
-             auc = roc_auc_score(ano_label[idx_test], score)
-             # print('Testing {} AUC:{:.4f}'.format(args.dataset, auc))
-             AP = average_precision_score(ano_label[idx_test], score, average='macro', pos_label=1, sample_weight=None)
-             # print('Testing AP:', AP)
+             
+             # 如果设置了重构误差过滤比例，则使用过滤评估
+             if args.rec_error_filter_ratio < 1.0:
+                 # 计算重构误差
+                 device = features.device
+                 rec_errors, attr_errors, stru_errors = compute_rec_error_anomalydae(
+                     model, features, adj, idx_test, device, weight=0.5
+                 )
+                 
+                 # 使用过滤评估
+                 filter_results = evaluate_with_rec_error_filter(
+                     score, rec_errors, ano_label[idx_test], args.rec_error_filter_ratio
+                 )
+                 auc = filter_results['auroc']
+                 AP = filter_results['auprc']
+                 
+                 # 打印详细信息
+                 if epoch % 50 == 0:
+                     print(f"\n[Rec Error Filter] Epoch {epoch}:")
+                     print(f"  Filter ratio: {args.rec_error_filter_ratio:.2%}")
+                     print(f"  Filtered nodes: {filter_results['filtered_nodes']}/{filter_results['total_nodes']}")
+                     print(f"  AUROC: {auc:.4f}, AUPRC: {AP:.4f}")
+             else:
+                 # 正常评估（不过滤）
+                 auc = roc_auc_score(ano_label[idx_test], score)
+                 AP = average_precision_score(ano_label[idx_test], score, average='macro', pos_label=1, sample_weight=None)
+             
              wandb.log({ "AUC": auc.item(),
                             "AP": AP.item(),
                             "loss": loss}, step=epoch)

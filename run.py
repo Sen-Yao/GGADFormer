@@ -17,6 +17,7 @@ import torch.utils.data as Data
 import wandb
 from visualization import create_tsne_visualization, visualize_attention_weights, visualize_reconstruction_analysis
 from utils import send_notification, calculate_graph_statistics
+from ablation_rec_error import evaluate_with_rec_error_filter
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -330,14 +331,24 @@ def train(args):
                     # Concatenate all batched logits
                     concatenated_logits = torch.cat(all_batched_logits, dim=0)
                     logits = np.squeeze(concatenated_logits.cpu().detach().numpy())
-                    auc = roc_auc_score(ano_label[idx_test], logits)
-                    ap = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
             else: 
                 emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, proj_loss, reconstruction_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                         train_flag, args)
                 logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
-            auc = roc_auc_score(ano_label[idx_test], logits)
-            ap = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
+            
+            # ===== 重构误差过滤消融实验 =====
+            # 当 rec_error_filter_ratio != 1.0 时，使用过滤后的节点计算AUROC/AUPRC
+            if getattr(args, 'rec_error_filter_ratio', 1.0) != 1.0 and args.model_type == "GGADFormer":
+                filtered_results = evaluate_with_rec_error_filter(
+                    model, test_data_loader, ano_label, idx_test,
+                    args, device, args.rec_error_filter_ratio
+                )
+                auc = filtered_results['auroc']
+                ap = filtered_results['auprc']
+            else:
+                auc = roc_auc_score(ano_label[idx_test], logits)
+                ap = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
+            
             wandb.log({"AUC": auc, "AP": ap}, step=epoch)
             
             # 检查是否为最佳模型
@@ -486,6 +497,12 @@ if __name__ == "__main__":
                              'h_mean_labeled_normal (center from labeled normal nodes only), '
                              'h_mean_trimmed (trimmed mean, drop furthest 10%% nodes), '
                              'gprgnn_weighted_sum (GPRGNN-style learnable weighted sum fusion instead of Transformer)')
+    
+    # Ablation Study: Reconstruction Error Filter
+    parser.add_argument('--rec_error_filter_ratio', type=float, default=1.0,
+                        help='重构误差过滤比例，选择重构误差最小的该比例节点参与评估。'
+                             '默认1.0表示使用全部节点，0.5表示只使用重构误差最小的50%%节点。'
+                             '当值为1.0时，保持原有评估逻辑不变。')
 
 
 
