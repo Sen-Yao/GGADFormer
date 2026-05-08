@@ -174,9 +174,9 @@ class Discriminator(nn.Module):
 
 
 
-class GGADFormer(nn.Module):
+class VecGAD(nn.Module):
     def __init__(self, n_in, n_h, activation, args):
-        super(GGADFormer, self).__init__()
+        super(VecGAD, self).__init__()
 
         # 设置设备
         self.device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')

@@ -332,7 +332,7 @@ def visualize_reconstruction_analysis(model, input_tokens, labels, ano_label,
     4. 计算正常和异常内部的Silhouette Score
     
     Args:
-        model: GGADFormer模型
+        model: VecGAD模型
         input_tokens: 输入tokens [N, pp_k+1, feature_dim]
         labels: 真实标签 [N]（batch内的标签）
         ano_label: 全图的真实异常标签 [total_nodes]

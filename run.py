@@ -1,7 +1,7 @@
 import torch.nn as nn
 
 from model import Model
-from GGADFormer import GGADFormer
+from VecGAD import VecGAD
 from SGT import SGT
 from utils import *
 
@@ -50,7 +50,7 @@ def train(args):
     if args.dataset == 'dgraph':
         adj, features, labels, all_idx, idx_train, idx_val, idx_test, ano_label, _, _, normal_for_train_idx, normal_for_generation_idx = load_dgraph(train_rate=args.train_rate, val_rate=0.1, args=args)
         concated_input_features = nagphormer_tokenization(features, adj, args)
-        model = GGADFormer(features.shape[1], args.embedding_dim, 'prelu', args)
+        model = VecGAD(features.shape[1], args.embedding_dim, 'prelu', args)
         features = features.to(device)
         adj = adj.to(device)
         labels = torch.tensor(labels).to(device)
@@ -87,7 +87,7 @@ def train(args):
         labels = torch.FloatTensor(labels[np.newaxis])
 
         # 将数据移动到指定设备
-        if args.model_type != 'GGADFormer':
+        if args.model_type != 'VecGAD':
             features = features.to(device)
             adj = adj.to(device)
             labels = labels.to(device)
@@ -100,9 +100,9 @@ def train(args):
 
         # Initialize model and optimiser
 
-        if args.model_type == 'GGADFormer':
+        if args.model_type == 'VecGAD':
             concated_input_features = nagphormer_tokenization(features.squeeze(0), adj.squeeze(0), args)
-            model = GGADFormer(ft_size, args.embedding_dim, 'prelu', args)
+            model = VecGAD(ft_size, args.embedding_dim, 'prelu', args)
         elif args.model_type == 'SGT':
             concated_input_features = preprocess_sample_features(args, features.squeeze(0), adj.squeeze(0)).to(device)
             model = SGT(n_layers=args.GT_num_layers,
@@ -144,7 +144,7 @@ def train(args):
     best_model_state = None
     best_epoch = 0
     
-    if args.model_type == "GGADFormer":
+    if args.model_type == "VecGAD":
         labels = labels.squeeze(0)
 
         all_node_indices = torch.arange(num_nodes)
@@ -187,7 +187,7 @@ def train(args):
         start_time = time.time()
         train_flag = True
         model.train()
-        if args.model_type == "GGADFormer":
+        if args.model_type == "VecGAD":
             batched_bce_loss = 0
             batched_rec_loss = 0
             batched_ring_loss = 0
@@ -319,7 +319,7 @@ def train(args):
             model.eval()
             train_flag = False
 
-            if args.model_type == "GGADFormer":
+            if args.model_type == "VecGAD":
                 all_batched_logits = []
                 with torch.no_grad():
                     for _, item in enumerate(test_data_loader):
@@ -338,7 +338,7 @@ def train(args):
             
             # ===== 重构误差过滤消融实验 =====
             # 当 rec_error_filter_ratio != 1.0 时，使用过滤后的节点计算AUROC/AUPRC
-            if getattr(args, 'rec_error_filter_ratio', 1.0) != 1.0 and args.model_type == "GGADFormer":
+            if getattr(args, 'rec_error_filter_ratio', 1.0) != 1.0 and args.model_type == "VecGAD":
                 filtered_results = evaluate_with_rec_error_filter(
                     model, test_data_loader, ano_label, idx_test,
                     args, device, args.rec_error_filter_ratio
@@ -362,7 +362,7 @@ def train(args):
     print(f"Training done! Total time: {total_time:.2f} seconds")
     
     # 在最后一次eval时进行重构误差分析可视化
-    if args.visualize and args.model_type == "GGADFormer":
+    if args.visualize and args.model_type == "VecGAD":
         print("\n=== Starting Final Evaluation Reconstruction Analysis ===")
         model.eval()
         train_flag = False
@@ -443,7 +443,7 @@ if __name__ == "__main__":
     parser.add_argument('--outlier_beta', type=float, default=0.3)
     parser.add_argument('--sample_rate', type=float, default=0.15)
     
-    parser.add_argument('--model_type', type=str, default='GGADFormer')
+    parser.add_argument('--model_type', type=str, default='VecGAD')
     parser.add_argument('--visualize', type=bool, default=False)
     parser.add_argument('--device', type=int, default=0)
 
@@ -519,7 +519,7 @@ if __name__ == "__main__":
     run = wandb.init(
         entity="HCCS",
         # Set the wandb project where this run will be logged.
-        project="GGADFormer",
+        project="VecGAD",
         # Track hyperparameters and run metadata.
         config=args,
     )
