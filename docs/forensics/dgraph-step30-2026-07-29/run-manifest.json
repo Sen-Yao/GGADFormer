@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "state": "prepared",
+  "evidence_class": "historical-step-30-forensic-evidence",
+  "investigation_id": "2026-07-29-vecgad-dgraph-step30-forensic",
+  "thread_id": "019fabbe-3165-72e2-b5c2-1d658ca7e0da",
+  "prepared_at_utc": "2026-07-29T03:41:04Z",
+  "source": {
+    "repository": "https://github.com/Sen-Yao/GGADFormer.git",
+    "code_sha": "08fa68eb149ab1bb9972d4e141e3c0a3857024f7",
+    "wandb_run": "HCCS/GGADFormer/43edp77a",
+    "wandb_display_name": "lively-valley-69270",
+    "wandb_state": "crashed",
+    "wandb_sweep_id": null,
+    "historical_step_30": {
+      "AUC": 0.6005969753665018,
+      "AP": 0.005738912433357575,
+      "_runtime_seconds": 3700.853709692,
+      "learning_rate": 0.000062
+    }
+  },
+  "protocol": {
+    "commit": "7a9a2918497dc6e8086e6f154e756cd30a68bfb7",
+    "path": "docs/forensics/dgraph-step30-2026-07-29/protocol.md",
+    "resolved_config_path": "docs/forensics/dgraph-step30-2026-07-29/resolved-config.json",
+    "resolved_config_sha256": "b3c621682b42a9cb89fa2e5c86fcd709c1cc2b64df7b666d6bf1eb9cafa00e50",
+    "only_trial_variable": "seed",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "target_logging_step": 30,
+    "num_epoch": 1000,
+    "data_split_seed": 42
+  },
+  "authorization": {
+    "hccs_90_execution": true,
+    "exact_dgraph_file_transfer_to_hccs_90": true,
+    "wandb_existing_run_read": true,
+    "wandb_cloud_write": false,
+    "wandb_mode": "offline",
+    "raw_data_to_git_or_wandb": false,
+    "source_code_modification": false
+  },
+  "data": {
+    "local_staging": "/private/tmp/vecgad-dgraph-forensic.cnDDEj",
+    "remote_cache": "/root/gpufree-data/linziyao/VecGAD-dgraph-data-95470dab2c48-b82e16aed09f",
+    "files": [
+      {
+        "source_label": "user-authorized-nextcloud-share-1",
+        "name": "dgraphfin.npz",
+        "bytes": 680317982,
+        "mtime_utc": "2022-04-19T09:12:31Z",
+        "sha256": "95470dab2c48523f7118a92204c090de37a957bb053bd5841c7bdba09558ba85"
+      },
+      {
+        "source_label": "user-authorized-nextcloud-share-2",
+        "name": "dgraphfin_adj_list",
+        "bytes": 399146049,
+        "mtime_utc": "2026-01-26T07:30:13Z",
+        "sha256": "b82e16aed09f00985e26e596ff894e7e43cc99d5a45357e13075a4ffa95387c1"
+      }
+    ],
+    "local_validation": {
+      "npz_crc": "passed",
+      "x_shape": [
+        3700550,
+        17
+      ],
+      "x_dtype": "float64",
+      "y_shape": [
+        3700550
+      ],
+      "y_dtype": "int64",
+      "finite": true,
+      "loader_positive_count": 15509,
+      "adjacency_node_count": 3700550,
+      "adjacency_directed_neighbors": 7994520,
+      "edge_index_alignment": "exact-undirected-deduplicated-match",
+      "restricted_unpickle": "passed"
+    },
+    "remote_validation": null
+  },
+  "execution": {
+    "host": "HCCS-90",
+    "preliminary_probe_at_utc": "2026-07-29T02:50:06Z",
+    "occupancy_at_preliminary_probe": "free",
+    "gpu_indices": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "run_root": "/root/gpufree-data/linziyao/VecGAD-dgraph-step30-forensic-08fa68eb",
+    "worktree": "/root/gpufree-data/linziyao/VecGAD-dgraph-step30-forensic-08fa68eb/worktree",
+    "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-forensic-08fa68eb",
+    "tmux_session": "vecgad_dgraph_step30_08fa68eb_20260729",
+    "first_formal_pane_start_utc": null,
+    "heartbeat_automation_id": null,
+    "prepared_manifest_commit": null
+  },
+  "trials": [
+    {
+      "seed": 0,
+      "gpu": 0,
+      "state": "prepared",
+      "pane_id": null,
+      "offline_run_id": null,
+      "step_30": null,
+      "stop_state": null,
+      "elapsed_seconds": null
+    },
+    {
+      "seed": 1,
+      "gpu": 1,
+      "state": "prepared",
+      "pane_id": null,
+      "offline_run_id": null,
+      "step_30": null,
+      "stop_state": null,
+      "elapsed_seconds": null
+    },
+    {
+      "seed": 2,
+      "gpu": 2,
+      "state": "prepared",
+      "pane_id": null,
+      "offline_run_id": null,
+      "step_30": null,
+      "stop_state": null,
+      "elapsed_seconds": null
+    },
+    {
+      "seed": 3,
+      "gpu": 3,
+      "state": "prepared",
+      "pane_id": null,
+      "offline_run_id": null,
+      "step_30": null,
+      "stop_state": null,
+      "elapsed_seconds": null
+    },
+    {
+      "seed": 4,
+      "gpu": 4,
+      "state": "prepared",
+      "pane_id": null,
+      "offline_run_id": null,
+      "step_30": null,
+      "stop_state": null,
+      "elapsed_seconds": null
+    }
+  ],
+  "aggregate": null,
+  "deviations": [
+    "Historical run used NVIDIA L40 while this task is restricted to HCCS-90 RTX 4090.",
+    "Historical run did not record raw-data hashes; share-2 mtime postdates the run.",
+    "New metrics remain local in W&B offline records because cloud write is not authorized."
+  ],
+  "final_occupancy": null,
+  "remaining_task_owned_processes": null
+}
