@@ -247,6 +247,11 @@
     "HCCS-90 is the only authorized host, and its 24 GiB RTX 4090 cannot execute the unchanged historical DGraph configuration.",
     "Producing step-30 values would require a newly authorized higher-memory host or a protocol-changing modification, neither of which is authorized."
   ],
-  "final_occupancy": "pending-release-after-terminal-checkpoint-is-pushed",
+  "final_occupancy": {
+    "state": "free",
+    "released_at_utc": "2026-07-29T04:18:05Z",
+    "terminal_handoff_commit": "9399b7e",
+    "evidence": "five offline runs flushed after pre-step-0 CUDA OOM; no task-owned training process; no GPU compute PID; remote worktree clean at 08fa68eb"
+  },
   "remaining_task_owned_processes": 0
 }
