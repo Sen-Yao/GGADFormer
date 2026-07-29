@@ -76,3 +76,26 @@ fixed_config.ring_R_min: 0.5 -> 0.3
 manifest 一致，且本地独立聚合/回放通过。任何 crashed/failed、缺失 trial、配置
 漂移、identity 不一致或非 0 退出都使正式证据无效并进入诊断。完成 handoff 前
 occupancy 保持 `running`；确认无 task-owned 残留进程后才通过 helper 释放。
+
+## 最终结果
+
+新 sweep：`HCCS/GGADFormer/n30dxpp2`。五个 run 均 finished、step 40、agent
+exit code 0，且完整 resolved config 与候选配置逐字段相等。
+
+| Seed | Run ID | AUC.last | AP.last |
+|---:|---|---:|---:|
+| 0 | `uvluzm4a` | 0.9007241725551484 | 0.6576483240310368 |
+| 1 | `1smy9jeq` | 0.9023773477030808 | 0.6179107309759142 |
+| 2 | `xrqpnqbu` | 0.9019033590636678 | 0.6673770657857934 |
+| 3 | `knhyf3m7` | 0.8855968833883806 | 0.6535736747492829 |
+| 4 | `88j4a5va` | 0.8968212776899674 | 0.6336637314569272 |
+
+AUC mean/sample std 为 `0.897484608080049 / 0.006994945403890782`，相对基线
+mean delta 为 `-0.001321911993630298`。AP mean/sample std 为
+`0.6460347053997909 / 0.019944971027181832`，相对基线 mean delta 为
+`+0.004102977133262131`。完整 history、逐 seed delta、时间和验证结论见
+`results.json`；远端日志 hash 见 `remote-log-sha256.txt`。
+
+运维偏差：tmux `remain-on-exit` 仅保留 `%8`，正常退出后的 `%9-%12` 被 tmux
+回收。五个 panes 的 ID、timestamp、完整日志、exitcode 和 W&B identity 均已保留
+并通过 hash/配置回放，因此该偏差无科学影响。

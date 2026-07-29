@@ -1,0 +1,224 @@
+{
+  "collected_at_utc": "2026-07-29T03:17:28Z",
+  "entity": "HCCS",
+  "project": "GGADFormer",
+  "sweep_id": "n30dxpp2",
+  "sweep_url": "https://wandb.ai/HCCS/GGADFormer/sweeps/n30dxpp2",
+  "sweep_final_state": "FINISHED",
+  "sweep_stopped_after_expected_trials": true,
+  "source_sweep_id": "iqxjqsdl",
+  "code_sha": "e071ae6646451d94fc8e8c9e88305eb76c393089",
+  "config_sha256": "003eca4153362eb32047e23d4a6dce4d2e640dc83a95e7183eae5e86922b5cf3",
+  "remote_log_checksum_manifest": {
+    "path": "remote-log-sha256.txt",
+    "sha256": "6b9d738b5eec09027fb450e1d2138bd28bb9e39386a6966403b214bbc8bed40a",
+    "verified_files": 20,
+    "all_verified": true
+  },
+  "scientific_difference": {
+    "field": "ring_R_min",
+    "baseline": 0.5,
+    "candidate": 0.3,
+    "difference_count": 1
+  },
+  "execution": {
+    "host": "HCCS-90",
+    "hostname": "gpufree-container",
+    "gpu_model": "NVIDIA GeForce RTX 4090",
+    "gpu_indices": [0, 1, 2, 3, 4],
+    "tmux_session": "vecgad_tfinance_rmin03_019fabbd",
+    "first_agent_start_utc": "2026-07-29T03:10:01Z",
+    "last_agent_finish_utc": "2026-07-29T03:11:09Z",
+    "batch_wall_seconds": 68,
+    "forward_entered": true,
+    "backward_entered": true,
+    "evaluation_entered": true
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "gpu": 0,
+      "pane": "%8",
+      "run_id": "uvluzm4a",
+      "name": "youthful-sweep-1",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/uvluzm4a",
+      "state": "finished",
+      "agent_start_utc": "2026-07-29T03:10:01Z",
+      "agent_finish_utc": "2026-07-29T03:11:04Z",
+      "agent_wall_seconds": 63,
+      "agent_exit_code": 0,
+      "wandb_runtime_seconds": 38.08475322,
+      "AUC.last": 0.9007241725551484,
+      "AP.last": 0.6576483240310368,
+      "baseline_AUC.last": 0.8976451645322565,
+      "baseline_AP.last": 0.6438040560862622,
+      "delta_AUC.last": 0.0030790080228918493,
+      "delta_AP.last": 0.013844267944774558,
+      "history": [
+        {"_step": 0, "AUC": 0.31409631144706757, "AP": 0.031239942351986388},
+        {"_step": 10, "AUC": 0.16522754155423508, "AP": 0.02525494001861129},
+        {"_step": 20, "AUC": 0.7954392273583136, "AP": 0.32951752995207007},
+        {"_step": 30, "AUC": 0.8810897407305773, "AP": 0.4800081965797623},
+        {"_step": 40, "AUC": 0.9007241725551484, "AP": 0.6576483240310368}
+      ]
+    },
+    {
+      "seed": 1,
+      "gpu": 1,
+      "pane": "%9",
+      "run_id": "1smy9jeq",
+      "name": "cool-sweep-2",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/1smy9jeq",
+      "state": "finished",
+      "agent_start_utc": "2026-07-29T03:10:01Z",
+      "agent_finish_utc": "2026-07-29T03:10:59Z",
+      "agent_wall_seconds": 58,
+      "agent_exit_code": 0,
+      "wandb_runtime_seconds": 37.707556762,
+      "AUC.last": 0.9023773477030808,
+      "AP.last": 0.6179107309759142,
+      "baseline_AUC.last": 0.9030300142950548,
+      "baseline_AP.last": 0.6323573841312963,
+      "delta_AUC.last": -0.0006526665919740493,
+      "delta_AP.last": -0.014446653155382072,
+      "history": [
+        {"_step": 0, "AUC": 0.7528640645635278, "AP": 0.09006288298318293},
+        {"_step": 10, "AUC": 0.6713792661228157, "AP": 0.06295343946986873},
+        {"_step": 20, "AUC": 0.8800560663712176, "AP": 0.4410344940790731},
+        {"_step": 30, "AUC": 0.9004702014770384, "AP": 0.5064467609482725},
+        {"_step": 40, "AUC": 0.9023773477030808, "AP": 0.6179107309759142}
+      ]
+    },
+    {
+      "seed": 2,
+      "gpu": 2,
+      "pane": "%10",
+      "run_id": "xrqpnqbu",
+      "name": "hopeful-sweep-3",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/xrqpnqbu",
+      "state": "finished",
+      "agent_start_utc": "2026-07-29T03:10:02Z",
+      "agent_finish_utc": "2026-07-29T03:11:00Z",
+      "agent_wall_seconds": 58,
+      "agent_exit_code": 0,
+      "wandb_runtime_seconds": 38.39324243,
+      "AUC.last": 0.9019033590636678,
+      "AP.last": 0.6673770657857934,
+      "baseline_AUC.last": 0.9006482553969007,
+      "baseline_AP.last": 0.6620247970736751,
+      "delta_AUC.last": 0.0012551036667670656,
+      "delta_AP.last": 0.005352268712118247,
+      "history": [
+        {"_step": 0, "AUC": 0.4171941243372671, "AP": 0.035410434853763745},
+        {"_step": 10, "AUC": 0.575075286987523, "AP": 0.04874149516236074},
+        {"_step": 20, "AUC": 0.8702057613808628, "AP": 0.4245258285513465},
+        {"_step": 30, "AUC": 0.9014725719010475, "AP": 0.5524094350163704},
+        {"_step": 40, "AUC": 0.9019033590636678, "AP": 0.6673770657857934}
+      ]
+    },
+    {
+      "seed": 3,
+      "gpu": 3,
+      "pane": "%11",
+      "run_id": "knhyf3m7",
+      "name": "hearty-sweep-4",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/knhyf3m7",
+      "state": "finished",
+      "agent_start_utc": "2026-07-29T03:10:02Z",
+      "agent_finish_utc": "2026-07-29T03:11:09Z",
+      "agent_wall_seconds": 67,
+      "agent_exit_code": 0,
+      "wandb_runtime_seconds": 36.57997552,
+      "AUC.last": 0.8855968833883806,
+      "AP.last": 0.6535736747492829,
+      "baseline_AUC.last": 0.8938798023817345,
+      "baseline_AP.last": 0.6410958853668718,
+      "delta_AUC.last": -0.008282918993353872,
+      "delta_AP.last": 0.012477789382411064,
+      "history": [
+        {"_step": 0, "AUC": 0.12281078076434143, "AP": 0.024566541461096214},
+        {"_step": 10, "AUC": 0.1274841821010072, "AP": 0.0246150917655976},
+        {"_step": 20, "AUC": 0.7439586985288623, "AP": 0.22590020059682056},
+        {"_step": 30, "AUC": 0.8948115752704967, "AP": 0.4868824687287344},
+        {"_step": 40, "AUC": 0.8855968833883806, "AP": 0.6535736747492829}
+      ]
+    },
+    {
+      "seed": 4,
+      "gpu": 4,
+      "pane": "%12",
+      "run_id": "88j4a5va",
+      "name": "distinctive-sweep-5",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/88j4a5va",
+      "state": "finished",
+      "agent_start_utc": "2026-07-29T03:10:02Z",
+      "agent_finish_utc": "2026-07-29T03:11:05Z",
+      "agent_wall_seconds": 63,
+      "agent_exit_code": 0,
+      "wandb_runtime_seconds": 37.144464905,
+      "AUC.last": 0.8968212776899674,
+      "AP.last": 0.6336637314569272,
+      "baseline_AUC.last": 0.8988293637624499,
+      "baseline_AP.last": 0.6303765186745383,
+      "delta_AUC.last": -0.0020080860724824845,
+      "delta_AP.last": 0.0032872127823889707,
+      "history": [
+        {"_step": 0, "AUC": 0.6030559003989798, "AP": 0.05231351684831489},
+        {"_step": 10, "AUC": 0.6655865547265218, "AP": 0.06380526573868403},
+        {"_step": 20, "AUC": 0.8711929913394082, "AP": 0.44752779698953604},
+        {"_step": 30, "AUC": 0.9024152807070942, "AP": 0.5578915495035933},
+        {"_step": 40, "AUC": 0.8968212776899674, "AP": 0.6336637314569272}
+      ]
+    }
+  ],
+  "aggregate": {
+    "ddof": 1,
+    "AUC.last": {
+      "mean": 0.897484608080049,
+      "sample_std": 0.006994945403890782,
+      "baseline_mean": 0.8988065200736793,
+      "delta": -0.001321911993630298
+    },
+    "AP.last": {
+      "mean": 0.6460347053997909,
+      "sample_std": 0.019944971027181832,
+      "baseline_mean": 0.6419317282665288,
+      "delta": 0.004102977133262131
+    }
+  },
+  "validation": {
+    "run_count": 5,
+    "unique_seeds": [0, 1, 2, 3, 4],
+    "all_run_states_finished": true,
+    "all_agent_exit_codes_zero": true,
+    "all_resolved_configs_equal_candidate": true,
+    "all_source_commits_equal_authoritative": true,
+    "all_programs_equal_run_py": true,
+    "all_histories_have_steps": [0, 10, 20, 30, 40],
+    "post_hoc_selection_used": false,
+    "custom_artifacts_uploaded": false
+  },
+  "wandb_transmission_audit": {
+    "standard_files_per_run": [
+      "config.yaml",
+      "requirements.txt",
+      "wandb-metadata.json",
+      "wandb-summary.json",
+      "artifact/<internal-id>/wandb_manifest.json"
+    ],
+    "automatic_history_artifact_per_run": "run-<run-id>-history:v0",
+    "automatic_history_artifact_contains_authorized_metric_history": true,
+    "source_code_uploaded": false,
+    "raw_data_uploaded": false,
+    "media_uploaded": false,
+    "checkpoint_uploaded": false,
+    "custom_artifact_uploaded": false
+  },
+  "protocol_deviations": [
+    {
+      "kind": "tmux_remain_on_exit_scope",
+      "detail": "remain-on-exit preserved pane %8 only; panes %9-%12 were removed after clean exit, while their IDs, timestamp files, logs, exitcode files, and W&B identities remained available",
+      "scientific_impact": "none"
+    }
+  ]
+}

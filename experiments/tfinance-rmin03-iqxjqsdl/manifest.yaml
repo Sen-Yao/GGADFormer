@@ -1,11 +1,11 @@
 schema_version: 1
-state: launched
-formal_launch_allowed: true
+state: completed
+formal_launch_allowed: false
 investigation_id: tfinance-rmin03-iqxjqsdl
 owner_thread_id: 019fabbd-35b1-7321-951c-2106f73e2e6b
 source_task_id: 019fab15-761f-7891-b99c-278341dd4d08
 prepared_at_utc: 2026-07-29T02:50:00Z
-last_material_transition_at_utc: 2026-07-29T03:10:22Z
+last_material_transition_at_utc: 2026-07-29T03:17:28Z
 
 objective:
   dataset: t_finance
@@ -42,6 +42,7 @@ git:
     protocol_branch_remote: origin/codex/tfinance-rmin03-iqxjqsdl
     authorization_checkpoint_sha: 17cb96b3a1206e1261da66839083ea3398ef7495
     launcher_checkpoint_sha: bffa49a8b52532a1c45aed46eb73becfa6195ce5
+    launch_checkpoint_sha: 597bfd58b53c08ed8b98f936473cba104c0524d9
 
 config:
   baseline_path: experiments/tfinance-rmin03-iqxjqsdl/resolved-config-baseline.json
@@ -53,6 +54,10 @@ config:
   sweep_sha256: 1910c86f17c7dfc9ad8a4880e84e9bb06febaacebd7c5465e051c6276fc7830f
   authoritative_evidence_path: experiments/tfinance-rmin03-iqxjqsdl/authoritative-sweep.json
   authoritative_evidence_sha256: b40a75b318363f71038116746f376a5a0739e3c39187453ae0766eb3ad07d38e
+  results_path: experiments/tfinance-rmin03-iqxjqsdl/results.json
+  results_sha256: b3b3ab1ba3f54f64c21bd9610019739b62d1652d406b06bdbc71fe364a0444ff
+  remote_log_checksums_path: experiments/tfinance-rmin03-iqxjqsdl/remote-log-sha256.txt
+  remote_log_checksums_sha256: 6b9d738b5eec09027fb450e1d2138bd28bb9e39386a6966403b214bbc8bed40a
 
 execution:
   execution_host: HCCS-90
@@ -81,7 +86,8 @@ execution:
   logs_dir: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/logs
   wandb_dir: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/wandb
   tmux_session: vecgad_tfinance_rmin03_019fabbd
-  tmux_remain_on_exit: true
+  tmux_remain_on_exit_requested: true
+  tmux_remain_on_exit_observed: partial
   prelaunch_manifest_commit: 80bc2ca19c171375e63a658316e40deb5164dc08
   launcher: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/protocol/launch-agent.sh
   launcher_sha256: 2dd5b344d94ae8b31bcc576170929ac83a48f4831d6c7bcb0eba26d85fe99b69
@@ -89,12 +95,14 @@ execution:
     /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/protocol/launch-agent.sh
     <gpu> n30dxpp2
   pane_records:
-    - {pane: "%8", window: gpu0, gpu: 0, seed: 0, run_id: uvluzm4a, start_utc: "2026-07-29T03:10:01Z"}
-    - {pane: "%9", window: gpu1, gpu: 1, seed: 1, run_id: 1smy9jeq, start_utc: "2026-07-29T03:10:01Z"}
-    - {pane: "%10", window: gpu2, gpu: 2, seed: 2, run_id: xrqpnqbu, start_utc: "2026-07-29T03:10:02Z"}
-    - {pane: "%11", window: gpu3, gpu: 3, seed: 3, run_id: knhyf3m7, start_utc: "2026-07-29T03:10:02Z"}
-    - {pane: "%12", window: gpu4, gpu: 4, seed: 4, run_id: 88j4a5va, start_utc: "2026-07-29T03:10:02Z"}
+    - {pane: "%8", window: gpu0, gpu: 0, seed: 0, run_id: uvluzm4a, start_utc: "2026-07-29T03:10:01Z", finish_utc: "2026-07-29T03:11:04Z", exit_code: 0, retained_dead: true}
+    - {pane: "%9", window: gpu1, gpu: 1, seed: 1, run_id: 1smy9jeq, start_utc: "2026-07-29T03:10:01Z", finish_utc: "2026-07-29T03:10:59Z", exit_code: 0, retained_dead: false}
+    - {pane: "%10", window: gpu2, gpu: 2, seed: 2, run_id: xrqpnqbu, start_utc: "2026-07-29T03:10:02Z", finish_utc: "2026-07-29T03:11:00Z", exit_code: 0, retained_dead: false}
+    - {pane: "%11", window: gpu3, gpu: 3, seed: 3, run_id: knhyf3m7, start_utc: "2026-07-29T03:10:02Z", finish_utc: "2026-07-29T03:11:09Z", exit_code: 0, retained_dead: false}
+    - {pane: "%12", window: gpu4, gpu: 4, seed: 4, run_id: 88j4a5va, start_utc: "2026-07-29T03:10:02Z", finish_utc: "2026-07-29T03:11:05Z", exit_code: 0, retained_dead: false}
   first_agent_start_utc: 2026-07-29T03:10:01Z
+  last_agent_finish_utc: 2026-07-29T03:11:09Z
+  batch_wall_seconds: 68
   exact_agent_command_template: >-
     env -C /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/worktree-e071ae66
     PATH=/root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -172,6 +180,10 @@ wandb:
   new_sweep_initial_run_count: 0
   current_state_at_launch: RUNNING
   assigned_run_count_at_launch: 5
+  final_state: FINISHED
+  final_run_count: 5
+  final_finished_run_count: 5
+  stop_after_expected_trials: true
   sweep_creation_count: 1
   create_exactly_once: true
   write_authorization: approved
@@ -190,27 +202,46 @@ wandb:
     - custom or undeclared artifacts
   code_upload_disabled: true
   console_upload_disabled: true
+  standard_files_per_run: [config.yaml, requirements.txt, wandb-metadata.json, wandb-summary.json]
+  automatic_authorized_history_artifacts: 5
+  custom_artifacts_uploaded: 0
+  raw_data_uploaded: false
+  source_code_uploaded: false
 
 trials:
-  - {seed: 0, gpu: 0, pane: "%8", run_id: uvluzm4a, state: running, exit_code: pending}
-  - {seed: 1, gpu: 1, pane: "%9", run_id: 1smy9jeq, state: running, exit_code: pending}
-  - {seed: 2, gpu: 2, pane: "%10", run_id: xrqpnqbu, state: running, exit_code: pending}
-  - {seed: 3, gpu: 3, pane: "%11", run_id: knhyf3m7, state: running, exit_code: pending}
-  - {seed: 4, gpu: 4, pane: "%12", run_id: 88j4a5va, state: running, exit_code: pending}
+  - {seed: 0, gpu: 0, pane: "%8", run_id: uvluzm4a, state: finished, exit_code: 0, runtime_seconds: 38.08475322, AUC.last: 0.9007241725551484, AP.last: 0.6576483240310368}
+  - {seed: 1, gpu: 1, pane: "%9", run_id: 1smy9jeq, state: finished, exit_code: 0, runtime_seconds: 37.707556762, AUC.last: 0.9023773477030808, AP.last: 0.6179107309759142}
+  - {seed: 2, gpu: 2, pane: "%10", run_id: xrqpnqbu, state: finished, exit_code: 0, runtime_seconds: 38.39324243, AUC.last: 0.9019033590636678, AP.last: 0.6673770657857934}
+  - {seed: 3, gpu: 3, pane: "%11", run_id: knhyf3m7, state: finished, exit_code: 0, runtime_seconds: 36.57997552, AUC.last: 0.8855968833883806, AP.last: 0.6535736747492829}
+  - {seed: 4, gpu: 4, pane: "%12", run_id: 88j4a5va, state: finished, exit_code: 0, runtime_seconds: 37.144464905, AUC.last: 0.8968212776899674, AP.last: 0.6336637314569272}
 
 result_validation:
-  forward_entered: pending
-  backward_entered: pending
-  evaluation_entered: pending
-  all_expected_trials_terminal: false
-  config_identity_valid: pending
-  code_identity_valid: pending
+  forward_entered: true
+  backward_entered: true
+  backward_code_evidence: "run.py:204 loss.backward; run.py:205 optimizer.step"
+  evaluation_entered: true
+  evaluation_code_evidence: "run.py:318-325 roc_auc_score and average_precision_score"
+  all_expected_trials_terminal: true
+  config_identity_valid: true
+  code_identity_valid: true
   artifacts_required: []
-  independent_replay: pending
-  aggregate: pending
-  baseline_delta: pending
-  task_owned_residual_processes: pending
-  final_occupancy_state: pending
+  independent_replay: passed
+  remote_log_checksum_verification: passed_20_of_20
+  aggregate:
+    ddof: 1
+    AUC.last: {mean: 0.897484608080049, sample_std: 0.006994945403890782}
+    AP.last: {mean: 0.6460347053997909, sample_std: 0.019944971027181832}
+  baseline_delta:
+    AUC.last: -0.001321911993630298
+    AP.last: 0.004102977133262131
+  scientific_evidence_status: formal_five_seed_complete
+  task_owned_residual_processes: none
+  final_occupancy_state: release_pending
+
+protocol_deviations:
+  - kind: tmux_remain_on_exit_scope
+    detail: "remain-on-exit retained %8 only; %9-%12 were removed after exit, with IDs, timestamp files, logs, exitcode files, and W&B identities preserved"
+    scientific_impact: none
 
 blockers:
   - id: git_remote_publication
