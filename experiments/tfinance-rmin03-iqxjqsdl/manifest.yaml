@@ -1,11 +1,11 @@
 schema_version: 1
 state: prepared
-formal_launch_allowed: false
+formal_launch_allowed: true
 investigation_id: tfinance-rmin03-iqxjqsdl
 owner_thread_id: 019fabbd-35b1-7321-951c-2106f73e2e6b
 source_task_id: 019fab15-761f-7891-b99c-278341dd4d08
 prepared_at_utc: 2026-07-29T02:50:00Z
-last_material_transition_at_utc: 2026-07-29T03:02:44Z
+last_material_transition_at_utc: 2026-07-29T03:04:52Z
 
 objective:
   dataset: t_finance
@@ -40,7 +40,7 @@ git:
     user_authorization_recorded_at_utc: 2026-07-29T03:02:44Z
     origin_main_fast_forward: "28bce1a83bc87d7cd1d2dce423da7c79b296c5b7 -> 9eb3c669e2de9f11644b0e4a4a9d705354238726"
     protocol_branch_remote: origin/codex/tfinance-rmin03-iqxjqsdl
-    protocol_branch_sha: a324e6eb5ccdcef124380c583bf7769ff40043a7
+    authorization_checkpoint_sha: 17cb96b3a1206e1261da66839083ea3398ef7495
 
 config:
   baseline_path: experiments/tfinance-rmin03-iqxjqsdl/resolved-config-baseline.json
@@ -152,7 +152,12 @@ data:
 wandb:
   destination: HCCS/GGADFormer
   baseline_sweep_id: iqxjqsdl
-  new_sweep_id: pending_authorization_and_creation
+  new_sweep_id: n30dxpp2
+  new_sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/n30dxpp2
+  new_sweep_creation_recorded_at_utc: 2026-07-29T03:04:52Z
+  new_sweep_initial_state: PENDING
+  new_sweep_initial_run_count: 0
+  sweep_creation_count: 1
   create_exactly_once: true
   write_authorization: approved
   write_authorization_recorded_at_utc: 2026-07-29T03:02:44Z
