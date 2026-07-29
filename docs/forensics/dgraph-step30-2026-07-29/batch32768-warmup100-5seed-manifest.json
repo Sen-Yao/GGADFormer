@@ -88,7 +88,8 @@
     },
     "occupancy_state": "running",
     "first_formal_pane_start_utc": "2026-07-29T06:35:48.988923318Z",
-    "heartbeat_automation_id": null,
+    "heartbeat_automation_id": "vecgad-dgraph-seed-step30",
+    "heartbeat_first_schedule": "one-shot local 2026-07-29 14:57:00 Asia/Shanghai",
     "prepared_manifest_commit": "10b0a2db0b52015afd3f7bf0e95a267c4f8d4ebc",
     "preflight_commit": "48f73be"
   },
