@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "state": "complete-pending-occupancy-release",
+  "state": "complete",
   "evidence_class": "exploratory-batch-size-smoke",
   "investigation_id": "2026-07-29-vecgad-dgraph-batchsize-smoke",
   "thread_id": "019fabbe-3165-72e2-b5c2-1d658ca7e0da",
@@ -121,6 +121,11 @@
     "historical_protocol_compatibility": false,
     "reason": "Changing batch size changes optimizer updates per epoch and therefore the training trajectory."
   },
-  "final_occupancy": "pending-release-after-terminal-checkpoint-is-pushed",
+  "final_occupancy": {
+    "state": "free",
+    "released_at_utc": "2026-07-29T05:48:28Z",
+    "terminal_handoff_commit": "2c905cd",
+    "evidence": "batch 49152 pre-step-0 OOM; batch 32768 exact step-0 AUC/AP replay-valid; task pane stopped; no task-owned training process or GPU compute PID; remote worktree clean at 08fa68eb"
+  },
   "remaining_task_owned_processes": 0
 }
