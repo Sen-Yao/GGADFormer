@@ -34,17 +34,6 @@
     "backward_entered": true,
     "evaluation_entered": true
   },
-  "finalization": {
-    "occupancy_final_state": "free",
-    "occupancy_released_at_utc": "2026-07-29T03:24:57Z",
-    "task_owned_residual_processes": 0,
-    "gpu_compute_pids_after_completion": 0,
-    "retained_audit_pane": "%8",
-    "retained_audit_pane_dead_status": 0,
-    "deployment_deleted": false,
-    "environment_modified": false,
-    "dataset_modified": false
-  },
   "runs": [
     {
       "seed": 0,
