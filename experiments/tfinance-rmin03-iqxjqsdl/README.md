@@ -64,6 +64,8 @@ fixed_config.ring_R_min: 0.5 -> 0.3
   HCCS/GGADFormer/<sweep-id> --count 1`。启动前再次确认每个 GPU 没有 compute PID。
 - tmux：task-owned session，`remain-on-exit=on`；记录 pane ID、GPU、首个 agent
   启动时间、退出码和日志路径。
+- agent launcher：每个 pane 精确执行 `launch-agent.sh <gpu> n30dxpp2`；该脚本只负责
+  环境变量、native agent 和 task-owned 审计日志，不修改科学代码或监控进程。
 - W&B：获得本任务具体写授权后才能创建新 sweep。设置 `WANDB_DISABLE_CODE=true`
   和 `WANDB_CONSOLE=off`，不上传源码或 console；不声明或上传 artifact。
 - 监控：长运行仅使用一个 Codex one-shot heartbeat，不创建 watcher 或 recurring automation。
