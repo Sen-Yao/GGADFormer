@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "state": "prepared",
+  "state": "terminal-blocked",
   "evidence_class": "historical-step-30-forensic-evidence",
   "investigation_id": "2026-07-29-vecgad-dgraph-step30-forensic",
   "thread_id": "019fabbe-3165-72e2-b5c2-1d658ca7e0da",
@@ -113,7 +113,7 @@
     "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-forensic-08fa68eb",
     "tmux_session": "vecgad_dgraph_step30_08fa68eb_20260729",
     "preflight_at_utc": "2026-07-29T04:00:24Z",
-    "occupancy_state": "reserved",
+    "occupancy_state": "running",
     "worktree_sha": "08fa68eb149ab1bb9972d4e141e3c0a3857024f7",
     "worktree_clean": true,
     "runtime": {
@@ -126,68 +126,127 @@
       "wandb": "0.22.2",
       "pip_check": "passed"
     },
-    "first_formal_pane_start_utc": null,
+    "first_formal_pane_start_utc": "2026-07-29T04:10:47.659282369Z",
+    "last_trial_end_utc": "2026-07-29T04:12:45.241752669Z",
     "heartbeat_automation_id": null,
-    "prepared_manifest_commit": "fef6ff954d90d455dfb3c15545aca7870d8ad936"
+    "heartbeat_disposition": "not-created-because-all-trials-were-terminal-before-the-first-scheduled-follow-up",
+    "prepared_manifest_commit": "fef6ff954d90d455dfb3c15545aca7870d8ad936",
+    "preflight_commit": "beab0ba",
+    "launch_environment": {
+      "WANDB_MODE": "offline",
+      "WANDB_DISABLE_CODE": "true",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "MPLBACKEND": "Agg"
+    },
+    "command_template": "python run.py --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 --batch_size=65536 --train_rate=0.05 --seed=<seed>",
+    "terminal_probe": {
+      "probed_at_utc": "2026-07-29T04:17:15.804099028Z",
+      "worktree_sha_match": true,
+      "worktree_clean": true,
+      "data_sha256_match": true,
+      "task_owned_training_processes": 0,
+      "gpu_compute_processes": 0,
+      "gpu_0_through_4_utilization_percent": 0,
+      "tmux_remaining_pane": "%13 dead with status 0; the other dead windows were removed by tmux",
+      "wandb_offline_flush": "passed-for-all-five-trials"
+    }
   },
   "trials": [
     {
       "seed": 0,
       "gpu": 0,
-      "state": "prepared",
-      "pane_id": null,
-      "offline_run_id": null,
+      "state": "blocked-cuda-oom-before-first-training-update",
+      "pane_id": "%13",
+      "offline_run_id": "rmpjsuv2",
+      "started_at_utc": "2026-07-29T04:10:47.659282369Z",
+      "ended_at_utc": "2026-07-29T04:11:54.686452175Z",
       "step_30": null,
-      "stop_state": null,
-      "elapsed_seconds": null
+      "step_30_scan": "absent",
+      "stop_state": "run.py caught CUDA OOM and exited 0 after W&B offline flush",
+      "elapsed_seconds": 67.027169806,
+      "wandb_runtime_seconds": 62.893119106,
+      "oom": "allocated 22.44 GiB; reserved 22.71 GiB; 356.31 MiB free; failed 448.00 MiB allocation"
     },
     {
       "seed": 1,
       "gpu": 1,
-      "state": "prepared",
-      "pane_id": null,
-      "offline_run_id": null,
+      "state": "blocked-cuda-oom-before-first-training-update",
+      "pane_id": "%14",
+      "offline_run_id": "5yfq0tmo",
+      "started_at_utc": "2026-07-29T04:11:27.486803115Z",
+      "ended_at_utc": "2026-07-29T04:12:38.441850166Z",
       "step_30": null,
-      "stop_state": null,
-      "elapsed_seconds": null
+      "step_30_scan": "absent",
+      "stop_state": "run.py caught CUDA OOM and exited 0 after W&B offline flush",
+      "elapsed_seconds": 70.955047051,
+      "wandb_runtime_seconds": 66.342911189,
+      "oom": "allocated 22.44 GiB; reserved 22.71 GiB; 338.56 MiB free; failed 448.00 MiB allocation"
     },
     {
       "seed": 2,
       "gpu": 2,
-      "state": "prepared",
-      "pane_id": null,
-      "offline_run_id": null,
+      "state": "blocked-cuda-oom-before-first-training-update",
+      "pane_id": "%15",
+      "offline_run_id": "x2jsq1rk",
+      "started_at_utc": "2026-07-29T04:11:27.638801206Z",
+      "ended_at_utc": "2026-07-29T04:12:45.241752669Z",
       "step_30": null,
-      "stop_state": null,
-      "elapsed_seconds": null
+      "step_30_scan": "absent",
+      "stop_state": "run.py caught CUDA OOM and exited 0 after W&B offline flush",
+      "elapsed_seconds": 77.602951463,
+      "wandb_runtime_seconds": 73.11523513,
+      "oom": "allocated 22.44 GiB; reserved 22.71 GiB; 356.06 MiB free; failed 448.00 MiB allocation"
     },
     {
       "seed": 3,
       "gpu": 3,
-      "state": "prepared",
-      "pane_id": null,
-      "offline_run_id": null,
+      "state": "blocked-cuda-oom-before-first-training-update",
+      "pane_id": "%16",
+      "offline_run_id": "4by1ig40",
+      "started_at_utc": "2026-07-29T04:11:27.774799498Z",
+      "ended_at_utc": "2026-07-29T04:12:39.293838008Z",
       "step_30": null,
-      "stop_state": null,
-      "elapsed_seconds": null
+      "step_30_scan": "absent",
+      "stop_state": "run.py caught CUDA OOM and exited 0 after W&B offline flush",
+      "elapsed_seconds": 71.51903851,
+      "wandb_runtime_seconds": 67.130479199,
+      "oom": "allocated 22.44 GiB; reserved 22.71 GiB; 356.56 MiB free; failed 448.00 MiB allocation"
     },
     {
       "seed": 4,
       "gpu": 4,
-      "state": "prepared",
-      "pane_id": null,
-      "offline_run_id": null,
+      "state": "blocked-cuda-oom-before-first-training-update",
+      "pane_id": "%17",
+      "offline_run_id": "c7slznf2",
+      "started_at_utc": "2026-07-29T04:11:28.006796584Z",
+      "ended_at_utc": "2026-07-29T04:12:42.497792136Z",
       "step_30": null,
-      "stop_state": null,
-      "elapsed_seconds": null
+      "step_30_scan": "absent",
+      "stop_state": "run.py caught CUDA OOM and exited 0 after W&B offline flush",
+      "elapsed_seconds": 74.490995552,
+      "wandb_runtime_seconds": 69.79428764,
+      "oom": "allocated 22.44 GiB; reserved 22.71 GiB; 356.12 MiB free; failed 448.00 MiB allocation"
     }
   ],
-  "aggregate": null,
+  "aggregate": {
+    "status": "unavailable",
+    "reason": "all five trials exhausted RTX 4090 memory before the first training update, so no step-30 AUC/AP exists",
+    "AUC_mean": null,
+    "AUC_sample_std_ddof_1": null,
+    "AP_mean": null,
+    "AP_sample_std_ddof_1": null,
+    "seed_0_historical_delta": null
+  },
   "deviations": [
     "Historical run used NVIDIA L40 while this task is restricted to HCCS-90 RTX 4090.",
     "Historical run did not record raw-data hashes; share-2 mtime postdates the run.",
-    "New metrics remain local in W&B offline records because cloud write is not authorized."
+    "New metrics remain local in W&B offline records because cloud write is not authorized.",
+    "The historical command and resolved config do not fit a 24 GiB RTX 4090: every seed OOMed before its first training update. No unhistorical allocator setting, smaller batch, or source modification was attempted."
   ],
-  "final_occupancy": null,
-  "remaining_task_owned_processes": null
+  "blockers": [
+    "HCCS-90 is the only authorized host, and its 24 GiB RTX 4090 cannot execute the unchanged historical DGraph configuration.",
+    "Producing step-30 values would require a newly authorized higher-memory host or a protocol-changing modification, neither of which is authorized."
+  ],
+  "final_occupancy": "pending-release-after-terminal-checkpoint-is-pushed",
+  "remaining_task_owned_processes": 0
 }

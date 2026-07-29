@@ -1,6 +1,6 @@
 # DGraph 历史 step-30 取证协议
 
-状态：prepared
+状态：terminal-blocked（HCCS-90 单卡显存不足，未产生 step-30 指标）
 
 本协议只回答一个有界问题：在历史 source commit、历史 resolved config 和用户指定的 DGraph 数据候选下，仅改变训练 `seed`，能否在 seeds `0,1,2,3,4` 的精确 W&B logging step `30` 得到可核验的 AUC/AP。结果只能称为“历史 step-30 forensic evidence”，不能替代当前统一协议、fixed-last 结果、论文冻结结果或正式复现。
 
@@ -71,3 +71,33 @@ python run.py --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 --b
 ## 证据边界
 
 即使五 seed 全部完成，本次结果仍有三项不可消除的偏差：原 run 使用 L40 而本任务使用 RTX 4090；原 run 未记录数据 hash；本任务不向 W&B cloud 写入新 run，只保留本地 offline evidence。因此结果只用于历史轨迹取证，不得晋升为当前统一 operator、正式论文复现或模型稳定性结论。
+
+## 实际执行结果
+
+正式运行绑定 HCCS-90 的 GPU `0,1,2,3,4`，tmux session 为 `vecgad_dgraph_step30_08fa68eb_20260729`。每条 trial 的进程命令都由同一模板实例化，只替换 `<gpu>`、`<seed>` 和对应日志目录：
+
+```bash
+env PATH=/root/gpufree-data/linziyao/.conda/envs/VecGAD-forensic-08fa68eb/bin:$PATH \
+  CODEX_THREAD_ID=019fabbe-3165-72e2-b5c2-1d658ca7e0da \
+  CUDA_VISIBLE_DEVICES=<gpu> PYTHONDONTWRITEBYTECODE=1 \
+  WANDB_MODE=offline WANDB_DISABLE_CODE=true \
+  WANDB_DIR=/root/gpufree-data/linziyao/VecGAD-dgraph-step30-forensic-08fa68eb/trials/seed-<seed> \
+  MPLBACKEND=Agg \
+  /root/gpufree-data/linziyao/.conda/envs/VecGAD-forensic-08fa68eb/bin/python run.py \
+  --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 \
+  --batch_size=65536 --train_rate=0.05 --seed=<seed>
+```
+
+| seed | GPU | pane | offline run ID | wall time (s) | terminal state |
+| ---: | ---: | --- | --- | ---: | --- |
+| 0 | 0 | `%13` | `rmpjsuv2` | 67.027 | CUDA OOM before first update |
+| 1 | 1 | `%14` | `5yfq0tmo` | 70.955 | CUDA OOM before first update |
+| 2 | 2 | `%15` | `x2jsq1rk` | 77.603 | CUDA OOM before first update |
+| 3 | 3 | `%16` | `4by1ig40` | 71.519 | CUDA OOM before first update |
+| 4 | 4 | `%17` | `c7slznf2` | 74.491 | CUDA OOM before first update |
+
+五条 trial 均完成相同 loader split 与 tokenization，然后在 epoch `0` 的首次训练更新完成前失败。PyTorch 当时约已分配 `22.44 GiB`、保留 `22.71 GiB`，卡上仅余 `338.56--356.56 MiB`，下一次 `448.00 MiB` 申请失败。每个进程通过 `CUDA_VISIBLE_DEVICES` 只看到自己绑定的一张物理 4090；失败后的 live probe 显示 GPU 0--4 已无 compute PID，排除了 trial 间错误共卡。
+
+历史 `run.py` 捕获 CUDA OOM 后调用 `wandb.finish()` 并以状态码 `0` 返回，因此 shell/W&B 的零退出码不是训练成功证据。五份 offline `run-*.wandb` 均已 flush；使用 wandb 0.22.2 自带 `DataStore` 与 protobuf 逐条回放，没有任何同时包含 `AUC`、`AP` 的训练 history row，也没有 `_step=30`。因此 seeds 0--4 的 step-30 AUC/AP、mean、sample std (`ddof=1`) 和 seed 0 历史 delta 全部不存在，不能填零、外推或用其他 step 替代。
+
+没有尝试减小 `batch_size`、缩短 `num_epoch`、修改模型/loader、改变 scheduler，或加入历史 run 未记录的 allocator 参数。以上任何一种都会改变已冻结协议。HCCS-90 是本任务唯一获授权主机；在 24 GiB RTX 4090 上，保持历史配置的复现因显存容量不足而 fail closed。要继续取得 step-30 指标，必须另行授权具有更大单卡显存的执行主机，或明确批准会改变协议的实现/配置变更。
