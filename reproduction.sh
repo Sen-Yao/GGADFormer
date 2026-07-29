@@ -2,9 +2,16 @@
 
 ## Amazon
 
-## AUC=0.9533, AP=0.8171
+# W&B provenance: https://wandb.ai/HCCS/GGADFormer/sweeps/qiexz3vg
+# Authority subset: ablation_mode=none, seeds 0-4 (5 of 25 finished sweep runs)
+# W&B-recorded commit: 6888ce43c5dd467957678d7b9c91dfe57874f159
+# AUC.last/AP.last means: 0.939054789767243 / 0.8063589773131226
+# Sample std (ddof=1): 0.010932113034551773 / 0.005807582926117367
+# Main-table values after four-decimal rounding: 0.9391 / 0.8064
+# Key config: lambda_rec_emb=0.1, rec_loss_weight=1, ring_loss_weight=1,
+# ring_R_min=0.3, ring_R_max=1, progregate_alpha=0.4, pp_k=5.
 
-python run.py --batch_size=1024 --dataset=Amazon --end_lr=0.0001 --lambda_rec_emb=0.1 --num_epoch=100 --peak_lr=0.0003 --pp_k=5 --progregate_alpha=0.4 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
+python run.py --ablation_mode=none --batch_size=1024 --data_split_seed=42 --dataset=Amazon --end_lr=0.0001 --lambda_rec_emb=0.1 --num_epoch=100 --outlier_beta=0.3 --peak_lr=0.0003 --pp_k=5 --progregate_alpha=0.4 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
 
 ## Reddit
 
