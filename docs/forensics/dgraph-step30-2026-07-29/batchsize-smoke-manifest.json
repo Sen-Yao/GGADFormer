@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "state": "running-fallback",
+  "state": "complete-pending-occupancy-release",
   "evidence_class": "exploratory-batch-size-smoke",
   "investigation_id": "2026-07-29-vecgad-dgraph-batchsize-smoke",
   "thread_id": "019fabbe-3165-72e2-b5c2-1d658ca7e0da",
@@ -58,8 +58,14 @@
       "kind": "heartbeat",
       "schedule": "one-shot local 2026-07-29 13:36:00 Asia/Shanghai",
       "count": 1,
-      "status": "ACTIVE"
-    }
+      "status": "deleted-after-terminal-reconciliation"
+    },
+    "terminal_probe_at_utc": "2026-07-29T05:43:37.429257596Z",
+    "terminal_worktree_sha": "08fa68eb149ab1bb9972d4e141e3c0a3857024f7",
+    "terminal_worktree_clean": true,
+    "terminal_data_sha256_match": true,
+    "terminal_compute_pids": 0,
+    "terminal_task_owned_training_processes": 0
   },
   "trials": [
     {
@@ -82,16 +88,39 @@
       "seed": 0,
       "gpu": 0,
       "pane_id": "%19",
-      "offline_run_id": null,
+      "offline_run_id": "7m47vd6r",
       "started_at_utc": "2026-07-29T05:31:02.367555563Z",
-      "ended_at_utc": null,
-      "elapsed_seconds": null,
-      "state": "running",
-      "step_0": null
+      "ended_at_utc": "2026-07-29T05:42:06.086130742Z",
+      "elapsed_seconds": 663.718575179,
+      "state": "passed-step-0-then-task-owned-ctrl-c",
+      "step_0": {
+        "AUC": 0.5347581052541319,
+        "AP": 0.0043679197719612844,
+        "learning_rate": 2.0000000000000003e-06,
+        "batched_total_loss": 1264.3533935546875,
+        "bce_loss": 78.33578491210938,
+        "rec_loss": 348.92913818359375,
+        "ring_loss": 837.0884399414062,
+        "_runtime_seconds": 452.239597657
+      },
+      "observed_gpu_memory_mib": 16565,
+      "offline_replay": "passed; exactly one AUC/AP row at _step=0",
+      "stop_state": "Ctrl-C sent only to pane %19 after the exact step-0 row became replayable; W&B offline file flushed and remained parseable.",
+      "stop_timing_deviation": "The offline writer exposed step 0 after training had continued; the final file also contains a step-2 loss row but no later AUC/AP row."
     }
   ],
-  "selected_batch_size": null,
-  "result": null,
-  "final_occupancy": null,
-  "remaining_task_owned_processes": null
+  "selected_batch_size": 32768,
+  "result": {
+    "status": "smoke-passed",
+    "conclusion": "batch_size=32768 is a validated conservative setting for this HCCS-90 RTX 4090; batch_size=49152 is not viable under the unchanged runtime and source",
+    "maximum_safe_batch_size": "not-measured",
+    "tested_boundary": {
+      "passed": 32768,
+      "failed": 49152
+    },
+    "historical_protocol_compatibility": false,
+    "reason": "Changing batch size changes optimizer updates per epoch and therefore the training trajectory."
+  },
+  "final_occupancy": "pending-release-after-terminal-checkpoint-is-pushed",
+  "remaining_task_owned_processes": 0
 }
