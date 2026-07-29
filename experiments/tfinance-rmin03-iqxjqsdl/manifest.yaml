@@ -41,6 +41,7 @@ git:
     origin_main_fast_forward: "28bce1a83bc87d7cd1d2dce423da7c79b296c5b7 -> 9eb3c669e2de9f11644b0e4a4a9d705354238726"
     protocol_branch_remote: origin/codex/tfinance-rmin03-iqxjqsdl
     authorization_checkpoint_sha: 17cb96b3a1206e1261da66839083ea3398ef7495
+    launcher_checkpoint_sha: bffa49a8b52532a1c45aed46eb73becfa6195ce5
 
 config:
   baseline_path: experiments/tfinance-rmin03-iqxjqsdl/resolved-config-baseline.json
@@ -81,6 +82,11 @@ execution:
   wandb_dir: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/wandb
   tmux_session: vecgad_tfinance_rmin03_019fabbd
   tmux_remain_on_exit: true
+  launcher: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/protocol/launch-agent.sh
+  launcher_sha256: 2dd5b344d94ae8b31bcc576170929ac83a48f4831d6c7bcb0eba26d85fe99b69
+  exact_tmux_command_template: >-
+    /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/protocol/launch-agent.sh
+    <gpu> n30dxpp2
   pane_records: pending
   first_agent_start_utc: pending
   exact_agent_command_template: >-
