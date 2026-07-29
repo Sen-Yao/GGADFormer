@@ -82,7 +82,20 @@
       "edge_index_alignment": "exact-undirected-deduplicated-match",
       "restricted_unpickle": "passed"
     },
-    "remote_validation": null
+    "remote_validation": {
+      "validated_at_utc": "2026-07-29T04:00:24Z",
+      "sha256_match": true,
+      "npz_readable": true,
+      "adjacency_readable": true,
+      "loader_smoke": {
+        "adjacency_nnz": 11695070,
+        "train_normal": 184282,
+        "train_anomaly": 745,
+        "test_normal": 3132222,
+        "test_anomaly": 13246,
+        "normal_for_generation": 27642
+      }
+    }
   },
   "execution": {
     "host": "HCCS-90",
@@ -99,9 +112,23 @@
     "worktree": "/root/gpufree-data/linziyao/VecGAD-dgraph-step30-forensic-08fa68eb/worktree",
     "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-forensic-08fa68eb",
     "tmux_session": "vecgad_dgraph_step30_08fa68eb_20260729",
+    "preflight_at_utc": "2026-07-29T04:00:24Z",
+    "occupancy_state": "reserved",
+    "worktree_sha": "08fa68eb149ab1bb9972d4e141e3c0a3857024f7",
+    "worktree_clean": true,
+    "runtime": {
+      "python": "3.8.20",
+      "torch": "2.0.0+cu118",
+      "dgl": "1.1.3",
+      "numpy": "1.21.6",
+      "scipy": "1.7.3",
+      "scikit_learn": "1.0.2",
+      "wandb": "0.22.2",
+      "pip_check": "passed"
+    },
     "first_formal_pane_start_utc": null,
     "heartbeat_automation_id": null,
-    "prepared_manifest_commit": null
+    "prepared_manifest_commit": "fef6ff954d90d455dfb3c15545aca7870d8ad936"
   },
   "trials": [
     {
