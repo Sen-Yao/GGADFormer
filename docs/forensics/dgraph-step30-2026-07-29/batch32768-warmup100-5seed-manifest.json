@@ -89,7 +89,7 @@
     "occupancy_state": "free",
     "first_formal_pane_start_utc": null,
     "heartbeat_automation_id": null,
-    "prepared_manifest_commit": null
+    "prepared_manifest_commit": "10b0a2db0b52015afd3f7bf0e95a267c4f8d4ebc"
   },
   "trials": [
     {
