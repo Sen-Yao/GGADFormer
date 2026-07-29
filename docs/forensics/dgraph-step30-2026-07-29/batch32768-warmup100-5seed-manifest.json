@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "state": "prepared",
+  "evidence_class": "historical-target-calibration",
+  "investigation_id": "2026-07-29-vecgad-dgraph-b32768-warmup100-step30-5seed",
+  "thread_id": "019fabbe-3165-72e2-b5c2-1d658ca7e0da",
+  "prepared_at_utc": "2026-07-29T06:07:39Z",
+  "purpose": "Evaluate whether the recommended batch-size compensation approaches the known historical seed-0 step-30 target across seeds 0-4.",
+  "source": {
+    "code_sha": "08fa68eb149ab1bb9972d4e141e3c0a3857024f7",
+    "historical_wandb_run": "HCCS/GGADFormer/43edp77a",
+    "historical_step_30": {
+      "AUC": 0.6005969753665018,
+      "AP": 0.005738912433357575
+    }
+  },
+  "config": {
+    "path": "docs/forensics/dgraph-step30-2026-07-29/batch32768-warmup100-resolved-config.json",
+    "sha256": "43f6f90358942f7aa7d56c11c5a1f06ac113b617adae7469e896f2f2353bf4d5",
+    "base_seed": 0,
+    "only_trial_variable": "seed",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "batch_size": 32768,
+    "warmup_updates": 100,
+    "peak_lr": 0.0001,
+    "end_lr": 0.00005,
+    "num_epoch": 1000,
+    "train_rate": 0.05,
+    "data_split_seed": 42,
+    "optimizer_steps_per_epoch": 113,
+    "historical_optimizer_steps_per_epoch": 57
+  },
+  "protocol": {
+    "target_logging_step": 30,
+    "success_condition": "The offline W&B record contains one history row with _step=30, AUC, and AP.",
+    "stop_condition": "After the exact step-30 row is replayable, send Ctrl-C only to the matching task-owned pane and wait for offline W&B flush.",
+    "aggregate": "Report mean and sample standard deviation with ddof=1 across seeds 0-4, plus seed-0 delta from the historical target.",
+    "historical_protocol_reproduction": false,
+    "calibration_warning": "The configuration was selected using the known historical target and changes optimizer updates per epoch; matching the target is calibration evidence, not independent reproduction."
+  },
+  "authorization": {
+    "hccs_90_execution": true,
+    "wandb_existing_run_read": true,
+    "wandb_cloud_write": false,
+    "wandb_mode": "offline",
+    "raw_data_transfer": false,
+    "source_modification": false
+  },
+  "data": {
+    "remote_cache": "/root/gpufree-data/linziyao/VecGAD-dgraph-data-95470dab2c48-b82e16aed09f",
+    "dgraphfin_npz_sha256": "95470dab2c48523f7118a92204c090de37a957bb053bd5841c7bdba09558ba85",
+    "dgraphfin_adj_list_sha256": "b82e16aed09f00985e26e596ff894e7e43cc99d5a45357e13075a4ffa95387c1",
+    "preflight_hash_match": true
+  },
+  "execution": {
+    "host": "HCCS-90",
+    "gpu_indices": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "preflight_at_utc": "2026-07-29T06:02:34.336017023Z",
+    "preflight_occupancy": "free",
+    "preflight_compute_pids": 0,
+    "preflight_tfinance_panes": "dead",
+    "run_root": "/root/gpufree-data/linziyao/VecGAD-dgraph-b32768-warmup100-step30-5seed-08fa68eb-20260729",
+    "worktree": "/root/gpufree-data/linziyao/VecGAD-dgraph-step30-forensic-08fa68eb/worktree",
+    "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-forensic-08fa68eb",
+    "tmux_session": "vecgad_dgraph_b32768_w100_step30_08fa68eb_20260729",
+    "command_template": "python run.py --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 --batch_size=32768 --train_rate=0.05 --warmup_updates=100 --seed=<0..4>",
+    "runtime": {
+      "python": "3.8.20",
+      "torch": "2.0.0+cu118",
+      "dgl": "1.1.3",
+      "numpy": "1.21.6",
+      "scipy": "1.7.3",
+      "scikit_learn": "1.0.2",
+      "wandb": "0.22.2",
+      "pip_check": "passed"
+    },
+    "occupancy_state": "free",
+    "first_formal_pane_start_utc": null,
+    "heartbeat_automation_id": null,
+    "prepared_manifest_commit": null
+  },
+  "trials": [
+    {
+      "seed": 0,
+      "gpu": 0,
+      "state": "prepared",
+      "pane_id": null,
+      "offline_run_id": null,
+      "step_30": null,
+      "stop_state": null,
+      "elapsed_seconds": null
+    },
+    {
+      "seed": 1,
+      "gpu": 1,
+      "state": "prepared",
+      "pane_id": null,
+      "offline_run_id": null,
+      "step_30": null,
+      "stop_state": null,
+      "elapsed_seconds": null
+    },
+    {
+      "seed": 2,
+      "gpu": 2,
+      "state": "prepared",
+      "pane_id": null,
+      "offline_run_id": null,
+      "step_30": null,
+      "stop_state": null,
+      "elapsed_seconds": null
+    },
+    {
+      "seed": 3,
+      "gpu": 3,
+      "state": "prepared",
+      "pane_id": null,
+      "offline_run_id": null,
+      "step_30": null,
+      "stop_state": null,
+      "elapsed_seconds": null
+    },
+    {
+      "seed": 4,
+      "gpu": 4,
+      "state": "prepared",
+      "pane_id": null,
+      "offline_run_id": null,
+      "step_30": null,
+      "stop_state": null,
+      "elapsed_seconds": null
+    }
+  ],
+  "aggregate": null,
+  "final_occupancy": null,
+  "remaining_task_owned_processes": null
+}
