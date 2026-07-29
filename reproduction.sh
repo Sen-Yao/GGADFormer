@@ -16,9 +16,15 @@ python run.py --batch_size=1024 --dataset=reddit --end_lr=0.0001 --lambda_rec_em
 
 ## AUC=0.8972, AP=0.6439
 
+# W&B provenance for the paper's 5-seed Photo result (alpha=0.05, seeds 0-4):
+# https://wandb.ai/HCCS/GGADFormer/sweeps/v98ueupn
+
 python run.py --batch_size=128 --dataset=photo --end_lr=0.0001 --lambda_rec_emb=0.1 --num_epoch=200 --peak_lr=0.0005 --pp_k=6 --progregate_alpha=0.05 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
 
 ## Elliptic
+
+# W&B provenance for the paper's 5-seed Elliptic result (seeds 0-4):
+# https://wandb.ai/HCCS/GGADFormer/sweeps/39e3dk75
 
 ## AUC=0.7876, AP=0.3027
 
@@ -30,9 +36,13 @@ python run.py --batch_size=8192 --dataset=elliptic --end_lr=0.0001 --lambda_rec_
 
 ## T-Finance
 
-# AUC=0.8786, AP=0.4704
+# W&B provenance: https://wandb.ai/HCCS/GGADFormer/sweeps/iqxjqsdl
+# Seeds 0-4, AUC.last/AP.last means: 0.8988065201 / 0.6419317283
+# Main-table values after four-decimal rounding: 0.8988 / 0.6419
+# This historical sweep used ring_R_min=0.5; B1 must preserve or explicitly
+# reconcile this setting before the final experimental freeze.
 
-python run.py --batch_size=8192 --dataset=t_finance --end_lr=0.0001 --lambda_rec_emb=0.1 --num_epoch=40 --outlier_beta=0.3 --peak_lr=0.0005 --pp_k=7 --progregate_alpha=0.3 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
+python run.py --batch_size=8192 --dataset=t_finance --end_lr=0.0001 --lambda_rec_emb=0.1 --num_epoch=40 --outlier_beta=0.3 --peak_lr=0.0005 --pp_k=7 --progregate_alpha=0.3 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.5 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
 
 ## Tolokers
 
@@ -41,6 +51,13 @@ python run.py --batch_size=8192 --dataset=t_finance --end_lr=0.0001 --lambda_rec
 python run.py --batch_size=1024 --dataset=tolokers --end_lr=0.00001 --lambda_rec_emb=5 --num_epoch=100 --outlier_beta=0.3 --peak_lr=0.0001 --pp_k=10 --progregate_alpha=0.9 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=5
 
 ## DGraph
+
+# Historical W&B provenance only; this is not formal five-seed evidence:
+# https://wandb.ai/HCCS/GGADFormer/runs/43edp77a (lively-valley-69270)
+# https://wandb.ai/HCCS/GGADFormer/runs/m042886o
+# Both are crashed seed-0 runs from commit 08fa68eb149ab1bb9972d4e141e3c0a3857024f7.
+# Their step-30 AUC.max/AP.max are 0.6005969754/0.0057389124; seeds 1-4 and
+# sweep lineage are absent. B1 requires a unified-operator five-seed rerun.
 
 python run.py --batch_size=65536 --dataset=dgraph --end_lr=0.00001 --lambda_rec_emb=0.1 --num_epoch=200 --outlier_beta=0.3 --peak_lr=0.00005 --pp_k=10 --progregate_alpha=0.9 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=5
 
