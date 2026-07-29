@@ -1,0 +1,189 @@
+{
+  "queried_at_utc": "2026-07-29T02:41:55Z",
+  "source": "wandb.Api().sweep(\"HCCS/GGADFormer/iqxjqsdl\")",
+  "entity": "HCCS",
+  "project": "GGADFormer",
+  "sweep_id": "iqxjqsdl",
+  "state": "FINISHED",
+  "program": "run.py",
+  "method": "grid",
+  "metric": {
+    "name": "AUC.last",
+    "goal": "maximize"
+  },
+  "source_commit": "e071ae6646451d94fc8e8c9e88305eb76c393089",
+  "source_remote": "https://github.com/Sen-Yao/GGADFormer",
+  "resolved_config_common": {
+    "GNA_temp": 1,
+    "GT_attention_dropout": 0.4,
+    "GT_dropout": 0.4,
+    "GT_ffn_dim": 256,
+    "GT_num_heads": 2,
+    "GT_num_layers": 3,
+    "auc_test_rounds": 256,
+    "batch_size": 8192,
+    "bce_loss_weight": 1,
+    "con_loss_temp": 10,
+    "con_loss_weight": 0.1,
+    "confidence_margin": 2,
+    "data_split_seed": 42,
+    "dataset": "t_finance",
+    "device": 0,
+    "drop_prob": 0,
+    "embedding_dim": 256,
+    "end_lr": 0.0001,
+    "lambda_rec_emb": 0.1,
+    "lambda_rec_tok": 1,
+    "margin_loss_weight": 0,
+    "mean": 0,
+    "model_type": "GGADFormer",
+    "negsamp_ratio": 1,
+    "num_epoch": 40,
+    "outlier_beta": 0.3,
+    "peak_lr": 0.0005,
+    "pp_k": 7,
+    "progregate_alpha": 0.3,
+    "proj_R_max": 0.5,
+    "proj_R_min": 0.1,
+    "proj_dim": 64,
+    "proj_loss_weight": 0,
+    "readout": "avg",
+    "rec_loss_weight": 1,
+    "reconstruction_loss_weight": 1,
+    "ring_R_max": 1,
+    "ring_R_min": 0.5,
+    "ring_loss_weight": 1,
+    "sample_num_n": 7,
+    "sample_num_p": 7,
+    "sample_rate": 0.15,
+    "sample_size": 10000,
+    "tot_updates": 1000,
+    "train_rate": 0.05,
+    "var": 0,
+    "visualize": false,
+    "warmup_epoch": 20,
+    "warmup_updates": 50,
+    "weight_decay": 0
+  },
+  "sweep_parameters": {
+    "batch_size": {"value": 8192},
+    "dataset": {"value": "t_finance"},
+    "end_lr": {"value": 0.0001},
+    "lambda_rec_emb": {"value": 0.1},
+    "num_epoch": {"value": 40},
+    "outlier_beta": {"value": 0.3},
+    "peak_lr": {"value": 0.0005},
+    "pp_k": {"value": 7},
+    "progregate_alpha": {"value": 0.3},
+    "rec_loss_weight": {"value": 1},
+    "ring_R_max": {"value": 1},
+    "ring_R_min": {"value": 0.5},
+    "ring_loss_weight": {"value": 1},
+    "seed": {"values": [0, 1, 2, 3, 4]},
+    "train_rate": {"value": 0.05},
+    "warmup_updates": {"value": 50}
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "run_id": "u23q4y5p",
+      "name": "copper-sweep-1",
+      "state": "finished",
+      "created_at": "2025-10-16T07:49:29Z",
+      "runtime_seconds": 67.874640258,
+      "argv": ["--batch_size=8192", "--dataset=t_finance", "--end_lr=0.0001", "--lambda_rec_emb=0.1", "--num_epoch=40", "--outlier_beta=0.3", "--peak_lr=0.0005", "--pp_k=7", "--progregate_alpha=0.3", "--rec_loss_weight=1", "--ring_R_max=1", "--ring_R_min=0.5", "--ring_loss_weight=1", "--seed=0", "--train_rate=0.05", "--warmup_updates=50"],
+      "AUC.last": 0.8976451645322565,
+      "AP.last": 0.6438040560862622,
+      "history": [
+        {"_step": 0, "AUC": 0.31497864253205543, "AP": 0.03125896916820501},
+        {"_step": 10, "AUC": 0.17143987913489178, "AP": 0.025398882964057724},
+        {"_step": 20, "AUC": 0.7874168675915554, "AP": 0.3023595745716666},
+        {"_step": 30, "AUC": 0.8757863528100008, "AP": 0.42646570786387233},
+        {"_step": 40, "AUC": 0.8976451645322565, "AP": 0.6438040560862622}
+      ]
+    },
+    {
+      "seed": 1,
+      "run_id": "4tlo98yu",
+      "name": "polar-sweep-2",
+      "state": "finished",
+      "created_at": "2025-10-16T07:49:30Z",
+      "runtime_seconds": 69.299013673,
+      "argv": ["--batch_size=8192", "--dataset=t_finance", "--end_lr=0.0001", "--lambda_rec_emb=0.1", "--num_epoch=40", "--outlier_beta=0.3", "--peak_lr=0.0005", "--pp_k=7", "--progregate_alpha=0.3", "--rec_loss_weight=1", "--ring_R_max=1", "--ring_R_min=0.5", "--ring_loss_weight=1", "--seed=1", "--train_rate=0.05", "--warmup_updates=50"],
+      "AUC.last": 0.9030300142950548,
+      "AP.last": 0.6323573841312963,
+      "history": [
+        {"_step": 0, "AUC": 0.752096381584251, "AP": 0.08965194394473516},
+        {"_step": 10, "AUC": 0.7060972536750615, "AP": 0.0722360288824377},
+        {"_step": 20, "AUC": 0.882641914651805, "AP": 0.4183940192632936},
+        {"_step": 30, "AUC": 0.901937015909192, "AP": 0.5353783914218397},
+        {"_step": 40, "AUC": 0.9030300142950547, "AP": 0.6323573841312963}
+      ]
+    },
+    {
+      "seed": 2,
+      "run_id": "b7q1e0sg",
+      "name": "desert-sweep-3",
+      "state": "finished",
+      "created_at": "2025-10-16T07:49:30Z",
+      "runtime_seconds": 68.144058738,
+      "argv": ["--batch_size=8192", "--dataset=t_finance", "--end_lr=0.0001", "--lambda_rec_emb=0.1", "--num_epoch=40", "--outlier_beta=0.3", "--peak_lr=0.0005", "--pp_k=7", "--progregate_alpha=0.3", "--rec_loss_weight=1", "--ring_R_max=1", "--ring_R_min=0.5", "--ring_loss_weight=1", "--seed=2", "--train_rate=0.05", "--warmup_updates=50"],
+      "AUC.last": 0.9006482553969007,
+      "AP.last": 0.6620247970736751,
+      "history": [
+        {"_step": 0, "AUC": 0.42358355421362837, "AP": 0.035786515531979715},
+        {"_step": 10, "AUC": 0.6158940534880727, "AP": 0.05447170101486354},
+        {"_step": 20, "AUC": 0.8688476718588096, "AP": 0.4063171004840155},
+        {"_step": 30, "AUC": 0.8991759576610386, "AP": 0.5320604398539911},
+        {"_step": 40, "AUC": 0.9006482553969007, "AP": 0.6620247970736751}
+      ]
+    },
+    {
+      "seed": 3,
+      "run_id": "mkfgrxpw",
+      "name": "glorious-sweep-4",
+      "state": "finished",
+      "created_at": "2025-10-16T07:49:30Z",
+      "runtime_seconds": 68.890437864,
+      "argv": ["--batch_size=8192", "--dataset=t_finance", "--end_lr=0.0001", "--lambda_rec_emb=0.1", "--num_epoch=40", "--outlier_beta=0.3", "--peak_lr=0.0005", "--pp_k=7", "--progregate_alpha=0.3", "--rec_loss_weight=1", "--ring_R_max=1", "--ring_R_min=0.5", "--ring_loss_weight=1", "--seed=3", "--train_rate=0.05", "--warmup_updates=50"],
+      "AUC.last": 0.8938798023817345,
+      "AP.last": 0.6410958853668718,
+      "history": [
+        {"_step": 0, "AUC": 0.12332028811732895, "AP": 0.024570418864613815},
+        {"_step": 10, "AUC": 0.1397287880237445, "AP": 0.024919854211357638},
+        {"_step": 20, "AUC": 0.7309368854556679, "AP": 0.18520494141034996},
+        {"_step": 30, "AUC": 0.89346945484749, "AP": 0.44915656059253345},
+        {"_step": 40, "AUC": 0.8938798023817345, "AP": 0.6410958853668718}
+      ]
+    },
+    {
+      "seed": 4,
+      "run_id": "6snuqhrf",
+      "name": "divine-sweep-5",
+      "state": "finished",
+      "created_at": "2025-10-16T07:50:51Z",
+      "runtime_seconds": 48.856782982,
+      "argv": ["--batch_size=8192", "--dataset=t_finance", "--end_lr=0.0001", "--lambda_rec_emb=0.1", "--num_epoch=40", "--outlier_beta=0.3", "--peak_lr=0.0005", "--pp_k=7", "--progregate_alpha=0.3", "--rec_loss_weight=1", "--ring_R_max=1", "--ring_R_min=0.5", "--ring_loss_weight=1", "--seed=4", "--train_rate=0.05", "--warmup_updates=50"],
+      "AUC.last": 0.8988293637624499,
+      "AP.last": 0.6303765186745383,
+      "history": [
+        {"_step": 0, "AUC": 0.6068470627210558, "AP": 0.05285594124720407},
+        {"_step": 10, "AUC": 0.6632000900080212, "AP": 0.0629281556585186},
+        {"_step": 20, "AUC": 0.8731674307964106, "AP": 0.3841138413317004},
+        {"_step": 30, "AUC": 0.9005875093942496, "AP": 0.46393648298224355},
+        {"_step": 40, "AUC": 0.8988293637624499, "AP": 0.6303765186745383}
+      ]
+    }
+  ],
+  "aggregate": {
+    "ddof": 1,
+    "AUC.last": {
+      "mean": 0.8988065200736793,
+      "sample_std": 0.0034224153818109976
+    },
+    "AP.last": {
+      "mean": 0.6419317282665288,
+      "sample_std": 0.012581003469923047
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "baseline": "resolved-config-baseline.json",
+  "candidate": "resolved-config-rmin03.json",
+  "scientific_difference_count": 1,
+  "differences": [
+    {
+      "json_path": "fixed_config.ring_R_min",
+      "baseline": 0.5,
+      "candidate": 0.3
+    }
+  ]
+}
