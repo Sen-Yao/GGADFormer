@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "state": "fallback-prepared",
+  "state": "running-fallback",
   "evidence_class": "exploratory-batch-size-smoke",
   "investigation_id": "2026-07-29-vecgad-dgraph-batchsize-smoke",
   "thread_id": "019fabbe-3165-72e2-b5c2-1d658ca7e0da",
@@ -53,7 +53,13 @@
     "command_template": "python run.py --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 --batch_size=<49152-or-32768> --train_rate=0.05 --seed=0",
     "occupancy_state": "running",
     "first_formal_pane_start_utc": "2026-07-29T05:21:55.574388177Z",
-    "heartbeat": "A one-shot heartbeat card was suggested because the app rejected silent anchored creation; it was not activated, and the smoke remained under this active turn."
+    "heartbeat": {
+      "automation_id": "check-vecgad-dgraph-batch-smoke",
+      "kind": "heartbeat",
+      "schedule": "one-shot local 2026-07-29 13:36:00 Asia/Shanghai",
+      "count": 1,
+      "status": "ACTIVE"
+    }
   },
   "trials": [
     {
@@ -70,6 +76,18 @@
       "step_0": null,
       "offline_replay": "No AUC/AP history row; only the caught-OOM AUC.max=0 and AP.max=0 sentinel rows were present.",
       "oom": "22.63 GiB allocated; 22.83 GiB reserved; 236.31 MiB free; failed 336.00 MiB allocation"
+    },
+    {
+      "batch_size": 32768,
+      "seed": 0,
+      "gpu": 0,
+      "pane_id": "%19",
+      "offline_run_id": null,
+      "started_at_utc": "2026-07-29T05:31:02.367555563Z",
+      "ended_at_utc": null,
+      "elapsed_seconds": null,
+      "state": "running",
+      "step_0": null
     }
   ],
   "selected_batch_size": null,
