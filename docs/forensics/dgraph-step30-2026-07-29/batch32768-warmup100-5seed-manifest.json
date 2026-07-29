@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "state": "running",
+  "state": "completed",
   "evidence_class": "historical-target-calibration",
   "investigation_id": "2026-07-29-vecgad-dgraph-b32768-warmup100-step30-5seed",
   "thread_id": "019fabbe-3165-72e2-b5c2-1d658ca7e0da",
@@ -86,10 +86,13 @@
       "wandb": "0.22.2",
       "pip_check": "passed"
     },
-    "occupancy_state": "running",
+    "occupancy_state": "running_handoff_complete_pending_release",
     "first_formal_pane_start_utc": "2026-07-29T06:35:48.988923318Z",
     "heartbeat_automation_id": "vecgad-dgraph-seed-step30",
     "heartbeat_first_schedule": "one-shot local 2026-07-29 14:57:00 Asia/Shanghai",
+    "heartbeat_final_state": "deleted_after_all_target_rows_were_replayable",
+    "target_rows_detected_at_utc": "2026-07-29T08:01:56Z",
+    "stop_confirmed_at_utc": "2026-07-29T08:10:29Z",
     "prepared_manifest_commit": "10b0a2db0b52015afd3f7bf0e95a267c4f8d4ebc",
     "preflight_commit": "48f73be"
   },
@@ -97,60 +100,153 @@
     {
       "seed": 0,
       "gpu": 0,
-      "state": "running",
+      "state": "completed",
       "pane_id": "%20",
       "started_at_utc": "2026-07-29T06:35:48.988923318Z",
-      "offline_run_id": null,
-      "step_30": null,
-      "stop_state": null,
-      "elapsed_seconds": null
+      "command": "python run.py --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 --batch_size=32768 --train_rate=0.05 --warmup_updates=100 --seed=0",
+      "offline_run_id": "w6mgxmx0",
+      "offline_run_file": "/root/gpufree-data/linziyao/VecGAD-dgraph-b32768-warmup100-step30-5seed-08fa68eb-20260729/trials/seed-0/wandb/offline-run-20260729_143552-w6mgxmx0/run-w6mgxmx0.wandb",
+      "offline_run_file_bytes": 1182146,
+      "offline_run_file_sha256": "f3f240d67184e8045e759635a3973c49d71e5bfc219a3710cea9a788561fbeba",
+      "step_30": {
+        "_step": 30,
+        "AUC": 0.5869529759372047,
+        "AP": 0.005361836409280496,
+        "_runtime_seconds": 4058.046019373,
+        "_timestamp": 1785310785.1030438,
+        "timestamp_utc": "2026-07-29T07:39:45.103Z",
+        "matching_history_row_count": 1,
+        "verified_in_pre_stop_and_post_flush_replays": true
+      },
+      "stop_command": "tmux send-keys -t %20 C-c",
+      "stop_state": "ctrl_c_after_target_replay; pane_dead; offline_exit_code_255; no_remaining_process",
+      "max_persisted_step_after_flush": 42,
+      "elapsed_seconds": 5680.012
     },
     {
       "seed": 1,
       "gpu": 1,
-      "state": "running",
+      "state": "completed",
       "pane_id": "%21",
       "started_at_utc": "2026-07-29T06:35:49.020922446Z",
-      "offline_run_id": null,
-      "step_30": null,
-      "stop_state": null,
-      "elapsed_seconds": null
+      "command": "python run.py --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 --batch_size=32768 --train_rate=0.05 --warmup_updates=100 --seed=1",
+      "offline_run_id": "7u325i2n",
+      "offline_run_file": "/root/gpufree-data/linziyao/VecGAD-dgraph-b32768-warmup100-step30-5seed-08fa68eb-20260729/trials/seed-1/wandb/offline-run-20260729_143552-7u325i2n/run-7u325i2n.wandb",
+      "offline_run_file_bytes": 1192866,
+      "offline_run_file_sha256": "3e6d96a46bb7bc361c8f281c0552a4af27e5c11a18a9193263dcd769fa484341",
+      "step_30": {
+        "_step": 30,
+        "AUC": 0.5762290305981639,
+        "AP": 0.004953988606063625,
+        "_runtime_seconds": 4011.080877384,
+        "_timestamp": 1785310741.7861884,
+        "timestamp_utc": "2026-07-29T07:39:01.786Z",
+        "matching_history_row_count": 1,
+        "verified_in_pre_stop_and_post_flush_replays": true
+      },
+      "stop_command": "tmux send-keys -t %21 C-c",
+      "stop_state": "ctrl_c_after_target_replay; pane_closed; offline_exit_code_255; no_remaining_process",
+      "max_persisted_step_after_flush": 44,
+      "elapsed_seconds": 5679.98
     },
     {
       "seed": 2,
       "gpu": 2,
-      "state": "running",
+      "state": "completed",
       "pane_id": "%22",
       "started_at_utc": "2026-07-29T06:35:49.056921465Z",
-      "offline_run_id": null,
-      "step_30": null,
-      "stop_state": null,
-      "elapsed_seconds": null
+      "command": "python run.py --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 --batch_size=32768 --train_rate=0.05 --warmup_updates=100 --seed=2",
+      "offline_run_id": "cawha9db",
+      "offline_run_file": "/root/gpufree-data/linziyao/VecGAD-dgraph-b32768-warmup100-step30-5seed-08fa68eb-20260729/trials/seed-2/wandb/offline-run-20260729_143552-cawha9db/run-cawha9db.wandb",
+      "offline_run_file_bytes": 1202041,
+      "offline_run_file_sha256": "7f7b05c943f1001b3de8d1926cd70a9b5f58af5778f43f669f881e9d5fd55879",
+      "step_30": {
+        "_step": 30,
+        "AUC": 0.5790334380403255,
+        "AP": 0.0051269541813399235,
+        "_runtime_seconds": 4070.932556553,
+        "_timestamp": 1785310798.5712843,
+        "timestamp_utc": "2026-07-29T07:39:58.571Z",
+        "matching_history_row_count": 1,
+        "verified_in_pre_stop_and_post_flush_replays": true
+      },
+      "stop_command": "tmux send-keys -t %22 C-c",
+      "stop_state": "ctrl_c_after_target_replay; pane_closed; offline_exit_code_255; no_remaining_process",
+      "max_persisted_step_after_flush": 44,
+      "elapsed_seconds": 5679.944
     },
     {
       "seed": 3,
       "gpu": 3,
-      "state": "running",
+      "state": "completed",
       "pane_id": "%23",
       "started_at_utc": "2026-07-29T06:35:49.036922010Z",
-      "offline_run_id": null,
-      "step_30": null,
-      "stop_state": null,
-      "elapsed_seconds": null
+      "command": "python run.py --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 --batch_size=32768 --train_rate=0.05 --warmup_updates=100 --seed=3",
+      "offline_run_id": "b5rd6lo0",
+      "offline_run_file": "/root/gpufree-data/linziyao/VecGAD-dgraph-b32768-warmup100-step30-5seed-08fa68eb-20260729/trials/seed-3/wandb/offline-run-20260729_143552-b5rd6lo0/run-b5rd6lo0.wandb",
+      "offline_run_file_bytes": 1205156,
+      "offline_run_file_sha256": "d4c653d729f10d23b11824dc305a8a7853f8b1ff58b5610beb9a548d7204f6f5",
+      "step_30": {
+        "_step": 30,
+        "AUC": 0.5921513527741336,
+        "AP": 0.005388125762990682,
+        "_runtime_seconds": 4026.252473949,
+        "_timestamp": 1785310756.8097627,
+        "timestamp_utc": "2026-07-29T07:39:16.809Z",
+        "matching_history_row_count": 1,
+        "verified_in_pre_stop_and_post_flush_replays": true
+      },
+      "stop_command": "tmux send-keys -t %23 C-c",
+      "stop_state": "ctrl_c_after_target_replay; pane_closed; offline_exit_code_255; no_remaining_process",
+      "max_persisted_step_after_flush": 44,
+      "elapsed_seconds": 5679.964
     },
     {
       "seed": 4,
       "gpu": 4,
-      "state": "running",
+      "state": "completed",
       "pane_id": "%24",
       "started_at_utc": "2026-07-29T06:35:49.004922882Z",
-      "offline_run_id": null,
-      "step_30": null,
-      "stop_state": null,
-      "elapsed_seconds": null
+      "command": "python run.py --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 --batch_size=32768 --train_rate=0.05 --warmup_updates=100 --seed=4",
+      "offline_run_id": "wmpgjt1m",
+      "offline_run_file": "/root/gpufree-data/linziyao/VecGAD-dgraph-b32768-warmup100-step30-5seed-08fa68eb-20260729/trials/seed-4/wandb/offline-run-20260729_143552-wmpgjt1m/run-wmpgjt1m.wandb",
+      "offline_run_file_bytes": 1208366,
+      "offline_run_file_sha256": "571931b5f23934ff0cef05a911f86ca664a10c24661dae29b82b25a745024692",
+      "step_30": {
+        "_step": 30,
+        "AUC": 0.5748068272025216,
+        "AP": 0.004951058468402257,
+        "_runtime_seconds": 4099.676405023,
+        "_timestamp": 1785310824.5329716,
+        "timestamp_utc": "2026-07-29T07:40:24.532Z",
+        "matching_history_row_count": 1,
+        "verified_in_pre_stop_and_post_flush_replays": true
+      },
+      "stop_command": "tmux send-keys -t %24 C-c",
+      "stop_state": "ctrl_c_after_target_replay; pane_closed; offline_exit_code_255; no_remaining_process",
+      "max_persisted_step_after_flush": 44,
+      "elapsed_seconds": 5679.996
     }
   ],
-  "aggregate": null,
-  "final_occupancy": null,
-  "remaining_task_owned_processes": null
+  "aggregate": {
+    "AUC": {
+      "mean": 0.5818347249104698,
+      "sample_std_ddof1": 0.007437937669395356
+    },
+    "AP": {
+      "mean": 0.005156392685615396,
+      "sample_std_ddof1": 0.00021207517561875987
+    },
+    "seed_0_delta_from_historical": {
+      "AUC": -0.01364399942929706,
+      "AP": -0.00037707602407707937
+    }
+  },
+  "protocol_deviations": [
+    "This is historical-target calibration, not reproduction of the historical batch-65536/warmup-50 protocol.",
+    "The one-shot heartbeat observed the target rows after training had advanced beyond _step=30; only the immutable same-row _step=30/AUC/AP values are reported.",
+    "W&B remained offline and was never synced; Ctrl-C produced offline exit_code=255 after the target rows were replayable."
+  ],
+  "final_occupancy": "pending_release_after_result_manifest_push",
+  "remaining_task_owned_processes": 0
 }
