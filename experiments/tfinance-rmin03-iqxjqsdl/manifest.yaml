@@ -5,7 +5,7 @@ investigation_id: tfinance-rmin03-iqxjqsdl
 owner_thread_id: 019fabbd-35b1-7321-951c-2106f73e2e6b
 source_task_id: 019fab15-761f-7891-b99c-278341dd4d08
 prepared_at_utc: 2026-07-29T02:50:00Z
-last_material_transition_at_utc: 2026-07-29T03:17:28Z
+last_material_transition_at_utc: 2026-07-29T03:24:57Z
 
 objective:
   dataset: t_finance
@@ -43,6 +43,7 @@ git:
     authorization_checkpoint_sha: 17cb96b3a1206e1261da66839083ea3398ef7495
     launcher_checkpoint_sha: bffa49a8b52532a1c45aed46eb73becfa6195ce5
     launch_checkpoint_sha: 597bfd58b53c08ed8b98f936473cba104c0524d9
+    terminal_handoff_checkpoint_sha: 1e5d41d9522b80a9d8452db2220b76ab5e1eed58
 
 config:
   baseline_path: experiments/tfinance-rmin03-iqxjqsdl/resolved-config-baseline.json
@@ -55,7 +56,7 @@ config:
   authoritative_evidence_path: experiments/tfinance-rmin03-iqxjqsdl/authoritative-sweep.json
   authoritative_evidence_sha256: b40a75b318363f71038116746f376a5a0739e3c39187453ae0766eb3ad07d38e
   results_path: experiments/tfinance-rmin03-iqxjqsdl/results.json
-  results_sha256: b3b3ab1ba3f54f64c21bd9610019739b62d1652d406b06bdbc71fe364a0444ff
+  results_sha256: ea40a9ce49d405eb8f46ac5c02431e3fd9422c82187fed49ddf3b7e25fc64c97
   remote_log_checksums_path: experiments/tfinance-rmin03-iqxjqsdl/remote-log-sha256.txt
   remote_log_checksums_sha256: 6b9d738b5eec09027fb450e1d2138bd28bb9e39386a6966403b214bbc8bed40a
 
@@ -130,14 +131,16 @@ execution:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  observed_state: running
-  observed_updated_at: 2026-07-29T03:09:05+00:00
-  observed_reason: "sweep started"
+  observed_state: free
+  observed_updated_at: 2026-07-29T03:24:57+00:00
+  observed_reason: "sweep terminal and handoff complete"
+  release_evidence: "W&B n30dxpp2 FINISHED 5/5; configs/code/history replay-valid; exits 0; no task process or GPU compute PID; remote hashes verified; terminal commit 1e5d41d pushed; dead %8 status 0 retained"
   transition_history:
     - {from: free, to: pending_approval, at: "2026-07-29T02:52:02+00:00"}
     - {from: pending_approval, to: reserved, at: "2026-07-29T02:52:19+00:00"}
     - {from: reserved, to: running, at: "2026-07-29T03:09:05+00:00"}
-  required_next_transition: free_only_after_terminal_handoff
+    - {from: running, to: free, at: "2026-07-29T03:24:57+00:00"}
+  required_next_transition: none
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
@@ -236,7 +239,7 @@ result_validation:
     AP.last: 0.004102977133262131
   scientific_evidence_status: formal_five_seed_complete
   task_owned_residual_processes: none
-  final_occupancy_state: release_pending
+  final_occupancy_state: free
 
 protocol_deviations:
   - kind: tmux_remain_on_exit_scope
