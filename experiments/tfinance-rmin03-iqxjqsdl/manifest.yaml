@@ -5,6 +5,7 @@ investigation_id: tfinance-rmin03-iqxjqsdl
 owner_thread_id: 019fabbd-35b1-7321-951c-2106f73e2e6b
 source_task_id: 019fab15-761f-7891-b99c-278341dd4d08
 prepared_at_utc: 2026-07-29T02:50:00Z
+last_material_transition_at_utc: 2026-07-29T02:53:45Z
 
 objective:
   dataset: t_finance
@@ -53,7 +54,7 @@ config:
 execution:
   execution_host: HCCS-90
   observed_hostname: gpufree-container
-  host_probe_at: 2026-07-29T10:41:15+08:00
+  host_probe_at: 2026-07-29T10:52:11+08:00
   tmux_version: 3.2a
   gpu_model: NVIDIA GeForce RTX 4090
   gpu_indices: [0, 1, 2, 3, 4]
@@ -66,8 +67,14 @@ execution:
     available_at_probe: 5.1T
   task_root: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd
   source_bundle: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/source.bundle
-  source_bundle_staging_sha256: f00d7158d531c1d0a9dc24be5186c598d4a57abd79a2e1193705e3587b4b56e5
+  source_bundle_sha256: f00d7158d531c1d0a9dc24be5186c598d4a57abd79a2e1193705e3587b4b56e5
+  source_repo: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/source.git
   detached_worktree: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/worktree-e071ae66
+  detached_worktree_head: e071ae6646451d94fc8e8c9e88305eb76c393089
+  detached_worktree_tree: 2aa69dbe4871db17633766a214b7c09b8a9e62ab
+  detached_worktree_clean: true
+  source_import_preflight: "PYTHONDONTWRITEBYTECODE=1 WANDB_MODE=disabled python run.py --help passed"
+  training_executed_during_preflight: false
   logs_dir: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/logs
   wandb_dir: /root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/wandb
   tmux_session: vecgad_tfinance_rmin03_019fabbd
@@ -101,11 +108,13 @@ execution:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  observed_state: free
-  observed_updated_at: 2026-07-29T01:54:11+00:00
-  observed_reason: "user approved HCCS-85 instead"
-  transition_history: []
-  required_next_transition: pending_approval
+  observed_state: reserved
+  observed_updated_at: 2026-07-29T02:52:19+00:00
+  observed_reason: "user approved host recommendation"
+  transition_history:
+    - {from: free, to: pending_approval, at: "2026-07-29T02:52:02+00:00"}
+    - {from: pending_approval, to: reserved, at: "2026-07-29T02:52:19+00:00"}
+  required_next_transition: running_immediately_before_native_sweep_launch
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
