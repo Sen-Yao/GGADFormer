@@ -23,10 +23,12 @@ python run.py --batch_size=128 --dataset=photo --end_lr=0.0001 --lambda_rec_emb=
 
 ## Elliptic
 
-# W&B provenance for the paper's 5-seed Elliptic result (seeds 0-4):
-# https://wandb.ai/HCCS/GGADFormer/sweeps/39e3dk75
-
-## AUC=0.7876, AP=0.3027
+# W&B provenance: https://wandb.ai/HCCS/GGADFormer/sweeps/v7cug4b2
+# Authoritative subset: ablation_mode=none, seeds 0-4 (5 of 10 finished runs).
+# W&B source commit: 820393e06641b8bacd06f071dcea5d9c1259303b
+# AUC.last/AP.last means: 0.7627034155300458 / 0.2812562199950205
+# Sample std (ddof=1): 0.0257334546347181 / 0.06465971668252339
+# Main-table values after four-decimal rounding: 0.7627 / 0.2813
 
 python run.py --batch_size=32768 --dataset=elliptic --end_lr=0.0003 --lambda_rec_emb=2 --num_epoch=150 --outlier_beta=0.3 --peak_lr=0.0005 --pp_k=7 --progregate_alpha=0.6 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=20 --seed=0 --train_rate=0.05 --warmup_updates=50
 
