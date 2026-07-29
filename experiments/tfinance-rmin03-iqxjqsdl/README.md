@@ -99,3 +99,11 @@ mean delta 为 `-0.001321911993630298`。AP mean/sample std 为
 运维偏差：tmux `remain-on-exit` 仅保留 `%8`，正常退出后的 `%9-%12` 被 tmux
 回收。五个 panes 的 ID、timestamp、完整日志、exitcode 和 W&B identity 均已保留
 并通过 hash/配置回放，因此该偏差无科学影响。
+
+## 论文 authority 裁决
+
+2026-07-29，用户明确指定以正式五 seed sweep `HCCS/GGADFormer/n30dxpp2`
+替代 `iqxjqsdl` 作为论文 T-Finance 主结果 authority。论文主表及正文采用五 seed
+`AUC.last`/`AP.last` 均值的四位小数 `0.8975/0.6460`；`reproduction.sh`
+同步采用 `ring_R_min=0.3` 并记录本 sweep 的完整 provenance。`iqxjqsdl` 继续作为
+单变量对照基准保留，不改写其历史配置或结果。

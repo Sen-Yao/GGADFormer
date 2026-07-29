@@ -56,7 +56,7 @@
 - [ ] 在 AAAI 2027 最终实验结果冻结前，完成 VecGAD 内部结果的严格复现与 provenance 审计。
   - 对 Amazon、Elliptic 和 Tolokers 完成严格受控的五随机种子消融复现。
   - 对每个数据集，以权威完整模型配置为唯一基础配置，运行完整模型及 `W/O HSC`、`W/O REC`、`W/O alpha-residual`、`W/O Directional Guide` 四个变体。
-  - T-Finance 当前主表结果来自 W&B sweep `HCCS/GGADFormer/iqxjqsdl`，其 seeds `0-4` 的 `AUC.last`/`AP.last` 均值为 `0.8988065201/0.6419317283`，且该 sweep 实际使用 `ring_R_min=0.5`。B1 审计与后续复现必须显式保留或裁决这一设置，不得将 `ring_R_min=0.3` 的运行视为同一 lineage；最终冻结时同步统一主表、补充材料和 `reproduction.sh`。
+  - T-Finance 主表 authority 已裁决为 W&B sweep `HCCS/GGADFormer/n30dxpp2`：科学代码 SHA `e071ae6646451d94fc8e8c9e88305eb76c393089`，seeds `0-4`，`AUC.last`/`AP.last` 均值 `0.897484608080049/0.6460347053997909`，sample std (ddof=1) `0.006994945403890782/0.019944971027181832`，`ring_R_min=0.3`。该 sweep 相对原 `iqxjqsdl` 只改变 `ring_R_min: 0.5 -> 0.3`；旧 sweep 仅保留为受控基准 lineage，不再作为论文主表 authority。主表、实验分析和 `reproduction.sh` 已按四位小数 `0.8975/0.6460` 统一。
   - 每个变体只改变其定义对应的单一因素；数据划分、seeds `0-4`、epoch 数、学习率、batch size、`alpha`、`K`、壳层半径和其余 loss 权重必须与该数据集的完整模型一致。
   - 统一报告固定训练轮数结束时的 `AUC.last` 和 `AP.last` 五种子均值，不使用测试集最优 epoch 指标。
   - 在 W&B 中保留完整模型和全部变体的永久 run/sweep 链接、完整配置、逐 seed 原始结果及聚合值，并核验 Tolokers 完整模型结果的原始 provenance。

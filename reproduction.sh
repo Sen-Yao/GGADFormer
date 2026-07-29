@@ -36,13 +36,13 @@ python run.py --batch_size=8192 --dataset=elliptic --end_lr=0.0001 --lambda_rec_
 
 ## T-Finance
 
-# W&B provenance: https://wandb.ai/HCCS/GGADFormer/sweeps/iqxjqsdl
-# Seeds 0-4, AUC.last/AP.last means: 0.8988065201 / 0.6419317283
-# Main-table values after four-decimal rounding: 0.8988 / 0.6419
-# This historical sweep used ring_R_min=0.5; B1 must preserve or explicitly
-# reconcile this setting before the final experimental freeze.
+# W&B provenance: https://wandb.ai/HCCS/GGADFormer/sweeps/n30dxpp2
+# Scientific code: e071ae6646451d94fc8e8c9e88305eb76c393089
+# Seeds 0-4, AUC.last/AP.last means: 0.897484608080049 / 0.6460347053997909
+# Sample std (ddof=1): 0.006994945403890782 / 0.019944971027181832
+# Main-table values after four-decimal rounding: 0.8975 / 0.6460
 
-python run.py --batch_size=8192 --dataset=t_finance --end_lr=0.0001 --lambda_rec_emb=0.1 --num_epoch=40 --outlier_beta=0.3 --peak_lr=0.0005 --pp_k=7 --progregate_alpha=0.3 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.5 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
+python run.py --batch_size=8192 --dataset=t_finance --end_lr=0.0001 --lambda_rec_emb=0.1 --num_epoch=40 --outlier_beta=0.3 --peak_lr=0.0005 --pp_k=7 --progregate_alpha=0.3 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
 
 ## Tolokers
 
