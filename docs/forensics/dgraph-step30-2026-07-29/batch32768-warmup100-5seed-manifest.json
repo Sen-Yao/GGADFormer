@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "state": "prepared",
+  "state": "running",
   "evidence_class": "historical-target-calibration",
   "investigation_id": "2026-07-29-vecgad-dgraph-b32768-warmup100-step30-5seed",
   "thread_id": "019fabbe-3165-72e2-b5c2-1d658ca7e0da",
@@ -86,17 +86,19 @@
       "wandb": "0.22.2",
       "pip_check": "passed"
     },
-    "occupancy_state": "free",
-    "first_formal_pane_start_utc": null,
+    "occupancy_state": "running",
+    "first_formal_pane_start_utc": "2026-07-29T06:35:48.988923318Z",
     "heartbeat_automation_id": null,
-    "prepared_manifest_commit": "10b0a2db0b52015afd3f7bf0e95a267c4f8d4ebc"
+    "prepared_manifest_commit": "10b0a2db0b52015afd3f7bf0e95a267c4f8d4ebc",
+    "preflight_commit": "48f73be"
   },
   "trials": [
     {
       "seed": 0,
       "gpu": 0,
-      "state": "prepared",
-      "pane_id": null,
+      "state": "running",
+      "pane_id": "%20",
+      "started_at_utc": "2026-07-29T06:35:48.988923318Z",
       "offline_run_id": null,
       "step_30": null,
       "stop_state": null,
@@ -105,8 +107,9 @@
     {
       "seed": 1,
       "gpu": 1,
-      "state": "prepared",
-      "pane_id": null,
+      "state": "running",
+      "pane_id": "%21",
+      "started_at_utc": "2026-07-29T06:35:49.020922446Z",
       "offline_run_id": null,
       "step_30": null,
       "stop_state": null,
@@ -115,8 +118,9 @@
     {
       "seed": 2,
       "gpu": 2,
-      "state": "prepared",
-      "pane_id": null,
+      "state": "running",
+      "pane_id": "%22",
+      "started_at_utc": "2026-07-29T06:35:49.056921465Z",
       "offline_run_id": null,
       "step_30": null,
       "stop_state": null,
@@ -125,8 +129,9 @@
     {
       "seed": 3,
       "gpu": 3,
-      "state": "prepared",
-      "pane_id": null,
+      "state": "running",
+      "pane_id": "%23",
+      "started_at_utc": "2026-07-29T06:35:49.036922010Z",
       "offline_run_id": null,
       "step_30": null,
       "stop_state": null,
@@ -135,8 +140,9 @@
     {
       "seed": 4,
       "gpu": 4,
-      "state": "prepared",
-      "pane_id": null,
+      "state": "running",
+      "pane_id": "%24",
+      "started_at_utc": "2026-07-29T06:35:49.004922882Z",
       "offline_run_id": null,
       "step_30": null,
       "stop_state": null,
