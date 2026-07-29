@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "state": "prepared",
+  "evidence_class": "exploratory-batch-size-smoke",
+  "investigation_id": "2026-07-29-vecgad-dgraph-batchsize-smoke",
+  "thread_id": "019fabbe-3165-72e2-b5c2-1d658ca7e0da",
+  "prepared_at_utc": "2026-07-29T05:15:23Z",
+  "purpose": "Estimate and test a DGraph batch size that fits one HCCS-90 RTX 4090 without presenting it as the historical step-30 reproduction.",
+  "source": {
+    "code_sha": "08fa68eb149ab1bb9972d4e141e3c0a3857024f7",
+    "historical_wandb_run": "HCCS/GGADFormer/43edp77a",
+    "historical_batch_size": 65536,
+    "historical_num_epoch": 1000,
+    "historical_train_rate": 0.05,
+    "seed": 0
+  },
+  "estimate": {
+    "observed_failure": "batch_size=65536 failed before the first optimizer update with 22.44 GiB allocated, 22.71 GiB reserved, 338.56-356.56 MiB free, and a failed 448 MiB allocation",
+    "primary_batch_size": 49152,
+    "primary_fraction_of_historical": 0.75,
+    "fallback_batch_size": 32768,
+    "fallback_policy": "Run only if batch_size=49152 terminates with CUDA OOM before a complete step-0 AUC/AP record.",
+    "rationale": "Batch-scaled Transformer, reconstruction, and autograd tensors dominate the observed peak; reducing the batch by 25 percent should recover several GiB while retaining a larger batch than an immediate halving. Full-graph tensors create a fixed memory floor, so this is an empirical estimate, not a guarantee."
+  },
+  "protocol": {
+    "only_changed_field": "batch_size",
+    "target_logging_step": 0,
+    "success_condition": "One offline W&B history record containing _step=0, AUC, and AP, followed by a task-owned stop and successful local record replay.",
+    "scheduler_num_epoch": 1000,
+    "wandb_mode": "offline",
+    "wandb_cloud_write": false,
+    "source_modification": false,
+    "raw_data_transfer": false,
+    "historical_reproduction": false,
+    "optimizer_steps_per_epoch": {
+      "batch_65536": 57,
+      "batch_49152": 76,
+      "batch_32768": 113
+    }
+  },
+  "execution": {
+    "host": "HCCS-90",
+    "gpu_index": 0,
+    "preflight_at_utc": "2026-07-29T05:14:23.388043268Z",
+    "preflight_occupancy": "free",
+    "preflight_compute_pids": 0,
+    "preflight_tfinance_panes": "dead",
+    "run_root": "/root/gpufree-data/linziyao/VecGAD-dgraph-batchsize-smoke-08fa68eb-20260729",
+    "worktree": "/root/gpufree-data/linziyao/VecGAD-dgraph-step30-forensic-08fa68eb/worktree",
+    "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-forensic-08fa68eb",
+    "data_cache": "/root/gpufree-data/linziyao/VecGAD-dgraph-data-95470dab2c48-b82e16aed09f",
+    "tmux_session": "vecgad_dgraph_batch_smoke_08fa68eb_20260729",
+    "command_template": "python run.py --dataset dgraph --num_epoch=1000 --peak_lr=1e-4 --end_lr=5e-5 --batch_size=<49152-or-32768> --train_rate=0.05 --seed=0"
+  },
+  "trials": [],
+  "selected_batch_size": null,
+  "result": null,
+  "final_occupancy": null,
+  "remaining_task_owned_processes": null
+}
