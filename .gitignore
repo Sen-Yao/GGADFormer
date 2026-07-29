@@ -9,3 +9,6 @@ sweep_config/
 pretrain/
 logs/
 pytorch_models/
+
+# Local, agent-friendly paper library. Keep PDFs and extracted notes out of Git.
+/literature/

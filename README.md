@@ -2,6 +2,18 @@
 
 > **注意：** 本项目已从 `GGADFormer` 重命名为 `VecGAD`。如果您在代码或文档中看到对 GGADFormer 的引用，请将其视为 VecGAD 的旧名称。
 
+本仓库是 VecGAD 的独立主工作区。VecGAD 由 Ziyao Lin 提出，曾投稿 KDD 2026，当前面向 AAAI 2027 进行方法、实验和论文迭代。这里的代码来自 [`Sen-Yao/GGADFormer`](https://github.com/Sen-Yao/GGADFormer)，DualRefGAD 仅作为历史资料来源，不定义 VecGAD 的当前方法或实验结论。
+
+工作区入口：
+
+- [`docs/WORKSPACE.md`](docs/WORKSPACE.md)：工作区定义、事实边界和资料优先级。
+- [`docs/VecGAD.md`](docs/VecGAD.md)：当前仓库已有的详细方法说明。
+- [`docs/submission/KDD-2026.md`](docs/submission/KDD-2026.md)：KDD 2026 投稿表面与复用审计。
+- [`docs/submission/AAAI-2027.md`](docs/submission/AAAI-2027.md)：AAAI 2027 流程、字段和填写建议。
+- [`docs/history/dualrefgad/README.md`](docs/history/dualrefgad/README.md)：从 DualRefGAD 迁入的历史资料与来源说明。
+
+本地论文库位于 `literature/`，其中包含 KDD 版本 PDF 与阅读卡。该目录被 Git 忽略；可追踪的投稿结论以 `docs/submission/` 为准。
+
 ## Requirements
 
 - CUDA 11.8
