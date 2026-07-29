@@ -46,9 +46,14 @@ python run.py --batch_size=8192 --dataset=t_finance --end_lr=0.0001 --lambda_rec
 
 ## Tolokers
 
-# Epoch=201/200, AUC=0.6683, AP=0.3120
+# W&B provenance: https://wandb.ai/HCCS/GGADFormer/sweeps/sewavh79
+# Scientific code: fe8170818722330fc1cb4b2278feb687d162ff11
+# Full-model config uses rec_loss_weight=0.1; seeds 0-4.
+# AUC.last/AP.last means: 0.6612209152100295 / 0.3103230516865111
+# Sample std (ddof=1): 0.023250265200771652 / 0.015817746098583805
+# Main-table values after four-decimal rounding: 0.6612 / 0.3103
 
-python run.py --batch_size=1024 --dataset=tolokers --end_lr=0.00001 --lambda_rec_emb=5 --num_epoch=100 --outlier_beta=0.3 --peak_lr=0.0001 --pp_k=10 --progregate_alpha=0.9 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=5
+python run.py --batch_size=1024 --dataset=tolokers --end_lr=0.0001 --lambda_rec_emb=0.5 --lambda_rec_tok=1 --num_epoch=70 --outlier_beta=0.3 --peak_lr=0.0001 --pp_k=3 --progregate_alpha=0.3 --rec_loss_weight=0.1 --ring_R_max=0.5 --ring_R_min=0.5 --ring_loss_weight=20 --seed=0 --train_rate=0.05 --warmup_updates=50
 
 ## DGraph
 
