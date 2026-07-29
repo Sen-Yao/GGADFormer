@@ -5,7 +5,7 @@ investigation_id: tfinance-rmin03-iqxjqsdl
 owner_thread_id: 019fabbd-35b1-7321-951c-2106f73e2e6b
 source_task_id: 019fab15-761f-7891-b99c-278341dd4d08
 prepared_at_utc: 2026-07-29T02:50:00Z
-last_material_transition_at_utc: 2026-07-29T02:53:45Z
+last_material_transition_at_utc: 2026-07-29T03:02:44Z
 
 objective:
   dataset: t_finance
@@ -32,13 +32,15 @@ git:
   research_protocol_commit: 7de86adbbf8c945016a782c0d2f3c9dbb4e34610
   research_protocol_branch: codex/tfinance-rmin03-iqxjqsdl
   local_main_sha: 9eb3c669e2de9f11644b0e4a4a9d705354238726
-  observed_origin_main_sha: 28bce1a83bc87d7cd1d2dce423da7c79b296c5b7
-  local_main_ahead_by: 3
+  observed_origin_main_sha: 9eb3c669e2de9f11644b0e4a4a9d705354238726
+  local_main_ahead_by: 0
   remote_publication:
-    state: blocked_pending_explicit_authorization
+    state: pushed
     attempted: true
-    remote_changed: false
-    reason: "safety review requires explicit approval to publish three existing commits to origin/main"
+    user_authorization_recorded_at_utc: 2026-07-29T03:02:44Z
+    origin_main_fast_forward: "28bce1a83bc87d7cd1d2dce423da7c79b296c5b7 -> 9eb3c669e2de9f11644b0e4a4a9d705354238726"
+    protocol_branch_remote: origin/codex/tfinance-rmin03-iqxjqsdl
+    protocol_branch_sha: a324e6eb5ccdcef124380c583bf7769ff40043a7
 
 config:
   baseline_path: experiments/tfinance-rmin03-iqxjqsdl/resolved-config-baseline.json
@@ -152,7 +154,8 @@ wandb:
   baseline_sweep_id: iqxjqsdl
   new_sweep_id: pending_authorization_and_creation
   create_exactly_once: true
-  write_authorization: pending
+  write_authorization: approved
+  write_authorization_recorded_at_utc: 2026-07-29T03:02:44Z
   allowed_transmission_if_authorized:
     - resolved experiment config
     - seed
@@ -191,8 +194,8 @@ result_validation:
 
 blockers:
   - id: git_remote_publication
-    state: attention_required
-    detail: "main and protocol commits must be pushed before formal launch"
+    state: resolved
+    detail: "origin/main fast-forward and protocol branch push completed"
   - id: wandb_write_authorization
-    state: attention_required
-    detail: "new native sweep and run writes require explicit user authorization"
+    state: resolved
+    detail: "user approved declared HCCS/GGADFormer fields and experiment launch"
