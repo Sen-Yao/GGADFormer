@@ -86,15 +86,17 @@
       "wandb": "0.22.2",
       "pip_check": "passed"
     },
-    "occupancy_state": "running_handoff_complete_pending_release",
+    "occupancy_state": "free",
     "first_formal_pane_start_utc": "2026-07-29T06:35:48.988923318Z",
     "heartbeat_automation_id": "vecgad-dgraph-seed-step30",
     "heartbeat_first_schedule": "one-shot local 2026-07-29 14:57:00 Asia/Shanghai",
     "heartbeat_final_state": "deleted_after_all_target_rows_were_replayable",
     "target_rows_detected_at_utc": "2026-07-29T08:01:56Z",
     "stop_confirmed_at_utc": "2026-07-29T08:10:29Z",
+    "occupancy_released_at_utc": "2026-07-29T08:17:10Z",
     "prepared_manifest_commit": "10b0a2db0b52015afd3f7bf0e95a267c4f8d4ebc",
-    "preflight_commit": "48f73be"
+    "preflight_commit": "48f73be",
+    "result_manifest_commit": "3704b1418aa242f2a5d0a1310cadc505e33887a3"
   },
   "trials": [
     {
@@ -247,6 +249,11 @@
     "The one-shot heartbeat observed the target rows after training had advanced beyond _step=30; only the immutable same-row _step=30/AUC/AP values are reported.",
     "W&B remained offline and was never synced; Ctrl-C produced offline exit_code=255 after the target rows were replayable."
   ],
-  "final_occupancy": "pending_release_after_result_manifest_push",
+  "final_occupancy": {
+    "state": "free",
+    "released_at_utc": "2026-07-29T08:17:10Z",
+    "owner": "019fabbe-3165-72e2-b5c2-1d658ca7e0da",
+    "evidence": "Five offline W&B target rows replay-valid before and after Ctrl-C; GPU0-4 have no compute PID; task-owned panes dead/closed; result manifest commit 3704b14 pushed to origin/codex/dgraph-step30-forensic."
+  },
   "remaining_task_owned_processes": 0
 }
