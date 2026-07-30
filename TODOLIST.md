@@ -24,7 +24,7 @@
 - [x] 统一修正引言、图注和摘要对 label scarcity 的证据叙事。删除 GGAD/RHO 在比例低于 5% 后 `significant/severe/monotonic degradation` 的表述，因为已冻结均值在 5% 到 1% 间基本持平；图注仅说明 VecGAD 在全部比例（含 1%）均取得更高 mean AUROC。引言改为现有方法在低标签区间表现有限或不稳定，提示其可能未充分提取稀缺正常标签中的监督价值；摘要将 `fail to achieve competitive performance with gradually decreasing size of labeled samples` 最小改为 `fail to maintain competitive performance under low-label regimes`，并将后续判断改为 `current approaches may not fully capture the underlying patterns of normality under label scarcity`。摘要的 RDV 句删除 `precisely`，仅保留 `captures how each node deviates from normality`。保留 label scarcity 作为 research gap，但将 reconstruction overfitting、generation unreliability 等未直接隔离验证的因果解释改为带 `may` 的设计分析。
 - [x] 将摘要最后一句改为：`Extensive experiments on seven datasets demonstrate that VecGAD achieves strong overall performance compared with existing methods, while label-ratio analysis further shows its clear advantage under scarce normal supervision.` 删除 `significantly outperforms state-of-the-art methods under various label-scarce settings`，避免在不报告方差或显著性检验、Elliptic 存在例外且多比例比较仅覆盖 Tolokers 时形成全面统计显著或全数据集多比例领先的暗示。
 - [x] 为满足 AAAI 2027 正文页数限制，将 $K$ 与 $\alpha$ 的敏感性图及详细分析移入补充材料；正文仅保留搜索范围和一句总体结论，并优先保留主结果、Ablation Study 与 label-ratio 实验。
-- [x] 从当前 AAAI 正文和 Technical Supplement 的提交路径中删除未经 B3 统一审计的效率表及定量效率、显存和 OOM 对比结论。正文仅保留离线 token construction 与训练阶段解耦的架构事实，不作经验性 scalability 保证。删除前材料备份于 `tmp/aaai-migration/backups/2026-07-28-efficiency-pre-b3/`，不在 Overleaf 项目目录中保留未引用的效率源文件。
+- [x] 按 2026-07-29 的最新用户授权，在不将 B3 作为本次恢复前置条件的情况下，将 KDD 版本的五数据集效率表和 `Efficiency Analysis` 恢复到 AAAI 正文。完整保留 dataset statistics、GPU memory、time per epoch、L40 48GB、full-batch 和 OOM 口径；将原三段分析适度压缩为两段，最大限度保留 KDD 原有结构、边界、故事性和 novelty，仅微调明显过强的绝对 claim。删除 `Performance Comparison` 中重复的 OOM/scalability 段落，不加入 DGraph 效率 claim。恢复前的 AAAI 稿件和本决策账本备份于 `tmp/aaai-migration/backups/2026-07-29-pre-efficiency-restoration/`；更早删除的历史材料仍保留于 `tmp/aaai-migration/backups/2026-07-28-efficiency-pre-b3/`。
 - [x] 压缩正文的 Anomaly Scoring and Joint Optimization：保留异常分数定义、正常/伪异常标签规则和总目标函数；标准 BCE 的多行展开公式、重复的逐 loss 解释及完整优化细节移入补充材料。
 - [x] 压缩 HSC 小节中的重复叙述：保留一次“扰动过小/过大”的动机、球壳定义、完整 HSC 公式和一次 pushing/pulling 解释，删除第三次重复总结，不改变公式、机制或 claim 主线。
 - [x] 保留 RDV 作为有效方向信号的核心 claim，但降低 Dual-Space Reconstruction Constraint 的绝对化措辞：将 `guarantees`、`strictly reflects true deviation` 和 `precise direction` 改为鼓励双空间一致性、减少编码失配并提供更稳定的方向信号；有效性由右半图和严格受控消融共同支撑。
@@ -87,7 +87,7 @@
 
 ### B3. 统一效率实验与硬件口径
 
-- [ ] 作为后续版本的严谨性工作，完成历史计时 provenance 审计，并在统一 GPU 环境下重跑 VecGAD、GGAD 和 RHO 的可复现权威效率基准；具体 GPU 型号在执行本 TODO 时根据实际可用资源确定。当前 AAAI 投稿不包含效率表及定量效率结论，只有在本项完成后才讨论恢复。
+- [ ] 作为后续版本的严谨性工作，完成历史计时 provenance 审计，并在统一 GPU 环境下重跑 VecGAD、GGAD 和 RHO 的可复现权威效率基准；具体 GPU 型号在执行本 TODO 时根据实际可用资源确定。按 2026-07-29 的最新用户授权，本项不再阻塞当前 AAAI 稿件恢复 KDD 历史效率表；完成后以统一重测结果替换或复核当前恢复的历史结果。
   - 最终横向训练时间比较仅覆盖 Tolokers、Amazon、T-Finance 和 Elliptic，Questions 不再纳入。DGraph 不进入训练速度排名，而是作为独立的 full-batch 可行性实验：验证 VecGAD 能够完成训练，并验证 GGAD/RHO 在同一 GPU 显存预算下不可行。
   - 尽可能恢复旧 `22--84 ms/epoch` 与新 T-Finance、Elliptic、DGraph 计时数据对应的机器、环境、source commit、配置、命令、计时代码和 W&B run/sweep；恢复前仅将二者视为历史观测，不直接作为最终论文证据。
   - 若历史 provenance 无法完整恢复，或两组历史结果的实验口径不一致，以统一 GPU 重跑结果作为 AAAI 稿件唯一权威的拓展性结果。
