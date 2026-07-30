@@ -38,6 +38,8 @@ def get_git_head_sha():
 
 
 def infer_run_variant(args):
+    if abs(args.lambda_rec_emb - 2.0) < 1e-12 and abs(args.ring_loss_weight - 20.0) < 1e-12:
+        return "control_2_20"
     if abs(args.lambda_rec_emb - 5.0) < 1e-12 and abs(args.ring_loss_weight - 1.0) < 1e-12:
         return "control"
     if abs(args.lambda_rec_emb - 0.1) < 1e-12 and abs(args.ring_loss_weight - 1.0) < 1e-12:
