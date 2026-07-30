@@ -1,5 +1,5 @@
 schema_version: 1
-state: prepared
+state: launched
 investigation_id: direction-mag-hccs90-019fb1c9
 owner_thread_id: 019fb1c9-fd57-7962-ac54-d864531504ef
 source_thread_id: 019fb06a-227d-7b43-b0b0-f1479261e21b
@@ -129,7 +129,17 @@ execution:
     gpu3: 6
   tmux_session: vecgad_dir_mag_019fb1c9
   remain_on_exit: true
-  formal_launch_allowed: false
+  formal_launch_allowed: true
+  first_agent_start_utc: 2026-07-30T07:11:33Z
+  launch_checkpoint:
+    occupancy_state: running
+    first_sweep_state: RUNNING
+    first_sweep_assigned_run_count: 4
+  pane_records:
+    - {pane: "%25", window: gpu0, gpu: 0, per_sweep_count: 7}
+    - {pane: "%26", window: gpu1, gpu: 1, per_sweep_count: 6}
+    - {pane: "%27", window: gpu2, gpu: 2, per_sweep_count: 6}
+    - {pane: "%28", window: gpu3, gpu: 3, per_sweep_count: 6}
 
 data:
   source_dir: /root/gpufree-data/linziyao/DualRefGAD/dataset
