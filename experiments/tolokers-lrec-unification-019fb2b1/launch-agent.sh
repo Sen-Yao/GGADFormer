@@ -8,7 +8,7 @@ fi
 
 gpu_index="$1"
 sweep_id="$2"
-expected_sweep_id="PENDING_WANDB_SWEEP_ID"
+expected_sweep_id="2acum2mg"
 
 case "$gpu_index" in
   0|1|2|7) ;;
@@ -69,4 +69,3 @@ printf 'agent_finished_utc=%s gpu=%s sweep=%s exit_code=%s\n' \
   "$finished_at" "$gpu_index" "$sweep_id" "$agent_exit_code" | tee -a "$log_path"
 
 exit "$agent_exit_code"
-

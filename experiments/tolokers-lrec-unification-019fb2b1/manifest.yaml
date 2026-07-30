@@ -1,11 +1,11 @@
 schema_version: 1
 state: prepared
-formal_launch_allowed: false
+formal_launch_allowed: true
 investigation_id: tolokers-lrec-unification-019fb2b1
 owner_thread_id: 019fb2b1-f9d2-7742-bbb1-49b6494e94f4
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-30T11:14:35Z
-last_material_transition_at_utc: 2026-07-30T11:14:35Z
+last_material_transition_at_utc: 2026-07-30T11:24:02Z
 
 objective:
   dataset: tolokers
@@ -36,9 +36,9 @@ git:
   code_remote: https://github.com/Sen-Yao/GGADFormer.git
   base_main_sha_at_task_start: 0f81d27555c67a25067e85153a51d9cf9693db87
   protocol_branch: codex/tolokers-lrec-hccs90-019fad7c
-  protocol_commit: PENDING_PROTOCOL_COMMIT
+  protocol_commit: 2e66f19e124e7778a45ea5d62ee0bf265a829bcb
   remote_publication:
-    state: pending
+    state: pushed
     protocol_branch_remote: origin/codex/tolokers-lrec-hccs90-019fad7c
 
 config:
@@ -51,7 +51,7 @@ config:
   sweep_path: experiments/tolokers-lrec-unification-019fb2b1/sweep.yaml
   sweep_sha256: d061a14b6008984c1787501e70cc0fcb293080168c200831348257c49c9020cf
   launcher_path: experiments/tolokers-lrec-unification-019fb2b1/launch-agent.sh
-  launcher_sha256: f955caaec1bba29e42340682b82463ca6a215dd0bc83c8cced10d5470c6618bb
+  launcher_sha256: b1e8bca0bd2adf0c9faa650794df99ab975a90a26492b5cfc5dbe7a48ad2735f
   results_path: experiments/tolokers-lrec-unification-019fb2b1/results.json
   results_sha256: null
   remote_log_checksums_path: experiments/tolokers-lrec-unification-019fb2b1/remote-log-sha256.txt
@@ -60,7 +60,7 @@ config:
 execution:
   execution_host: HCCS-90
   observed_hostname: gpufree-container
-  host_probe_at: 2026-07-30T19:05:41+08:00
+  host_probe_at: 2026-07-30T19:23:46+08:00
   tmux_version: 3.2a
   gpu_model: NVIDIA GeForce RTX 4090
   gpu_indices: [0, 1, 2, 7]
@@ -77,11 +77,14 @@ execution:
     size: 5.8T
     available_at_probe: 5.0T
   task_root: /root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1
+  source_bundle: /root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/source.bundle
+  source_bundle_sha256: f2fe8597153b54319d13436574da691230a5b0d9d40d573b854ba04374c6c106
   source_repo: /root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/source.git
   detached_worktree: /root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/worktree-bb798db0
   detached_worktree_head: bb798db0e32615abd8504da7ccb21a124102b363
-  detached_worktree_clean: null
-  source_import_preflight: pending
+  detached_worktree_tree: 36cbc8d6f09789cbb6cbe6dc5ec6f189b9ee16ad
+  detached_worktree_clean: true
+  source_import_preflight: "PYTHONDONTWRITEBYTECODE=1 WANDB_MODE=disabled python run.py --help passed; python -m py_compile run.py passed; scipy.io.loadmat(dataset/tolokers.mat) passed"
   training_executed_during_preflight: false
   logs_dir: /root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs
   wandb_dir: /root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/wandb
@@ -131,12 +134,13 @@ data:
 
 wandb:
   destination: HCCS/GGADFormer
-  sweep_id: null
-  sweep_url: null
-  sweep_creation_count: 0
+  sweep_id: 2acum2mg
+  sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/2acum2mg
+  sweep_creation_recorded_at_utc: 2026-07-30T11:24:02Z
+  sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 10
-  current_state: not_created
+  current_state: PENDING
   write_authorization: user_delegation
   code_upload_disabled: true
   console_upload_disabled: true
