@@ -1,0 +1,17 @@
+# HCCS-90 task root: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu0-20260730T130417Z.exitcode
+8991633e306410ed5d6f97fe8d52427380fbbd8559ebd8f07001fff5f587a20b  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu0-20260730T130417Z.finish-utc
+14086f29fa5dc48d28eca1d5f4c814ed952f9271dad8bf18fa5b110fa99cded1  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu0-20260730T130417Z.log
+da01406c3821fa8fffee8e2ac2a1673ade7eaa2cf841a88bac43f89de2255f1b  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu0-20260730T130417Z.start-utc
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu1-20260730T130416Z.exitcode
+3d3930ee0b188adae6ff6875acb2bdb6c9c899479a66ac4222502171e10abaaf  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu1-20260730T130416Z.finish-utc
+9236afccf0d36dabacf546c736c86015c8d99e31e2cbe7c8a53940e73b7433c1  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu1-20260730T130416Z.log
+416482636036348af0a0ad0708c3aaabfb248f686168ed892a7cd9b945c3df9a  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu1-20260730T130416Z.start-utc
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu2-20260730T130417Z.exitcode
+c6c0b0a6df1d9b99775b43f904b3b0a5825a4f79b37ef4cdebfe97d3f42f101a  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu2-20260730T130417Z.finish-utc
+119674f5e1d965f42f21f015696ab89b7db60954b3bfd3e580b685cccbcd4dd6  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu2-20260730T130417Z.log
+da01406c3821fa8fffee8e2ac2a1673ade7eaa2cf841a88bac43f89de2255f1b  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu2-20260730T130417Z.start-utc
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu7-20260730T130417Z.exitcode
+f806007fe91571a6d37b02d337ad97a8fa71ceabcf39b6befd6654446eb5aab8  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu7-20260730T130417Z.finish-utc
+2759dd0ed530726f4cefe993f66de613dc49a34b91487e21ffd63613134adf34  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu7-20260730T130417Z.log
+da01406c3821fa8fffee8e2ac2a1673ade7eaa2cf841a88bac43f89de2255f1b  /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu7-20260730T130417Z.start-utc

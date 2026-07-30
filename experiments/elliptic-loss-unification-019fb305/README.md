@@ -81,3 +81,42 @@ Final results must be written to `results.json`, W&B replay evidence to
 `authoritative-sweep.json`, and remote log hashes to `remote-log-sha256.txt`.
 This experiment does not modify the paper main table, Supplement, or
 `reproduction.sh`.
+
+## Formal outcome
+
+W&B sweep: [HCCS/GGADFormer/l6ubfjxt](https://wandb.ai/HCCS/GGADFormer/sweeps/l6ubfjxt).
+All 10 runs finished successfully. Every run matched the committed code SHA,
+dataset, variant, seed, effective configuration, host, GPU, split identity and
+metric policy; every W&B history contained exactly one final row at `_step=150`.
+
+| Variant | Seed | Run | AUC.last | AP.last |
+|---|---:|---|---:|---:|
+| `control_2_20` | 0 | [27vg0m3g](https://wandb.ai/HCCS/GGADFormer/runs/27vg0m3g) | 0.8138869401 | 0.4031653396 |
+| `control_2_20` | 1 | [d5818dpg](https://wandb.ai/HCCS/GGADFormer/runs/d5818dpg) | 0.7605318736 | 0.2320502575 |
+| `control_2_20` | 2 | [4iq0q6ew](https://wandb.ai/HCCS/GGADFormer/runs/4iq0q6ew) | 0.7481187174 | 0.3138529234 |
+| `control_2_20` | 3 | [fmplzj9d](https://wandb.ai/HCCS/GGADFormer/runs/fmplzj9d) | 0.7779013920 | 0.3234603053 |
+| `control_2_20` | 4 | [20ni08r3](https://wandb.ai/HCCS/GGADFormer/runs/20ni08r3) | 0.7398626576 | 0.2020723209 |
+| `unified_0p1_1` | 0 | [y9wz9q9x](https://wandb.ai/HCCS/GGADFormer/runs/y9wz9q9x) | 0.5740399702 | 0.1028485481 |
+| `unified_0p1_1` | 1 | [chlavgv0](https://wandb.ai/HCCS/GGADFormer/runs/chlavgv0) | 0.5882983557 | 0.1073180959 |
+| `unified_0p1_1` | 2 | [8re70ocx](https://wandb.ai/HCCS/GGADFormer/runs/8re70ocx) | 0.6195653164 | 0.1146246739 |
+| `unified_0p1_1` | 3 | [l53pk0pa](https://wandb.ai/HCCS/GGADFormer/runs/l53pk0pa) | 0.6146241323 | 0.1141297082 |
+| `unified_0p1_1` | 4 | [cz8v5hlo](https://wandb.ai/HCCS/GGADFormer/runs/cz8v5hlo) | 0.5770277853 | 0.1067040926 |
+
+| Variant | Mean AUC.last | Sample std | Mean AP.last | Sample std |
+|---|---:|---:|---:|---:|
+| `control_2_20` | 0.7680603161 | 0.0293529342 | 0.2949202293 | 0.0797862053 |
+| `unified_0p1_1` | 0.5947111120 | 0.0211859590 | 0.1091250237 | 0.0050944347 |
+
+The paired mean differences (`unified - control`) are `-0.1733492041` for
+AUROC and `-0.1857952056` for AUPRC. Both exceed the predeclared tolerated
+drops (`0.01` and `0.02`), so the unified candidate fails practical
+equivalence on Elliptic under this protocol. Its mean AUROC and AUPRC are also
+below GGAD's current main-table references (`0.7006/0.2565`), so it does not
+retain the runner-up ranking on either metric.
+
+This is a bounded conclusion about the jointly changed `0.1/1` candidate under
+the declared Elliptic protocol. No intermediate loss-weight search was run,
+and the result does not identify which of the two changed weights is causal.
+There were no scientific protocol deviations. A transient W&B TLS EOF occurred
+during evidence collection; the identical direct-HTTPS query succeeded on a
+bounded retry. The experiment completed before a one-shot heartbeat was needed.

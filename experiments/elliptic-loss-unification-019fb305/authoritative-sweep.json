@@ -1,0 +1,1812 @@
+{
+  "queried_at_utc": "2026-07-30T13:26:08Z",
+  "source": "wandb.Api().sweep(\"HCCS/GGADFormer/l6ubfjxt\") plus run.scan_history(keys=[\"_step\",\"AUC\",\"AP\"])",
+  "entity": "HCCS",
+  "project": "GGADFormer",
+  "sweep_id": "l6ubfjxt",
+  "sweep_url": "https://wandb.ai/HCCS/GGADFormer/sweeps/l6ubfjxt",
+  "state": "FINISHED",
+  "program": "experiments/elliptic-loss-unification-019fb305/run-sweep-trial.py",
+  "method": "grid",
+  "metric": {
+    "goal": "maximize",
+    "name": "AUC.last"
+  },
+  "sweep_parameters": {
+    "seed": {
+      "values": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "variant": {
+      "values": [
+        "control_2_20",
+        "unified_0p1_1"
+      ]
+    }
+  },
+  "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+  "expected_trials": 10,
+  "identity_validation": {
+    "all_expected_trials_present_once": true,
+    "all_runs_finished": true,
+    "all_agent_exit_codes_zero": true,
+    "all_final_history_steps_present": true,
+    "summary_matches_final_history": true,
+    "only_declared_config_axes_differ": true
+  },
+  "agent_records": [
+    {
+      "gpu": 0,
+      "pane": "%39",
+      "start_utc": "2026-07-30T13:04:17Z",
+      "finish_utc": "2026-07-30T13:12:46Z",
+      "exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu0-20260730T130417Z.log",
+      "log_sha256": "14086f29fa5dc48d28eca1d5f4c814ed952f9271dad8bf18fa5b110fa99cded1"
+    },
+    {
+      "gpu": 1,
+      "pane": "%40",
+      "start_utc": "2026-07-30T13:04:16Z",
+      "finish_utc": "2026-07-30T13:12:57Z",
+      "exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu1-20260730T130416Z.log",
+      "log_sha256": "9236afccf0d36dabacf546c736c86015c8d99e31e2cbe7c8a53940e73b7433c1"
+    },
+    {
+      "gpu": 2,
+      "pane": "%41",
+      "start_utc": "2026-07-30T13:04:17Z",
+      "finish_utc": "2026-07-30T13:10:16Z",
+      "exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu2-20260730T130417Z.log",
+      "log_sha256": "119674f5e1d965f42f21f015696ab89b7db60954b3bfd3e580b685cccbcd4dd6"
+    },
+    {
+      "gpu": 7,
+      "pane": "%42",
+      "start_utc": "2026-07-30T13:04:17Z",
+      "finish_utc": "2026-07-30T13:10:15Z",
+      "exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu7-20260730T130417Z.log",
+      "log_sha256": "2759dd0ed530726f4cefe993f66de613dc49a34b91487e21ffd63613134adf34"
+    }
+  ],
+  "runs": [
+    {
+      "variant": "control_2_20",
+      "seed": 0,
+      "run_id": "27vg0m3g",
+      "name": "eager-sweep-1",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/27vg0m3g",
+      "state": "finished",
+      "created_at": "2026-07-30T13:04:25Z",
+      "runtime_seconds": 163.281519505,
+      "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "execution_host": "HCCS-90",
+      "gpu_index": "2",
+      "pane": "%41",
+      "protocol_identity": "elliptic-loss-unification-019fb305",
+      "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0,
+      "AUC.last": 0.8138869401130959,
+      "AP.last": 0.40316533955716516,
+      "final_step": 150,
+      "config": {
+        "var": 0,
+        "mean": 0,
+        "pp_k": 7,
+        "seed": 0,
+        "device": 0,
+        "end_lr": 0.0003,
+        "dataset": "elliptic",
+        "peak_lr": 0.0005,
+        "readout": "avg",
+        "variant": "control_2_20",
+        "GNA_temp": 1,
+        "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+        "proj_dim": 64,
+        "drop_prob": 0,
+        "gpu_index": "2",
+        "num_epoch": 150,
+        "visualize": false,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "batch_size": 32768,
+        "model_type": "VecGAD",
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "train_rate": 0.05,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "tot_updates": 1000,
+        "GT_num_heads": 2,
+        "outlier_beta": 0.3,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "wandb_entity": "HCCS",
+        "warmup_epoch": 20,
+        "weight_decay": 0,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "con_loss_temp": 10,
+        "embedding_dim": 256,
+        "negsamp_ratio": 1,
+        "wandb_project": "GGADFormer",
+        "execution_host": "HCCS-90",
+        "lambda_rec_emb": 2,
+        "lambda_rec_tok": 1,
+        "warmup_updates": 50,
+        "auc_test_rounds": 256,
+        "bce_loss_weight": 1,
+        "con_loss_weight": 0.1,
+        "data_split_seed": 42,
+        "rec_loss_weight": 1,
+        "progregate_alpha": 0.6,
+        "proj_loss_weight": 0,
+        "ring_loss_weight": 20,
+        "confidence_margin": 2,
+        "protocol_identity": "elliptic-loss-unification-019fb305",
+        "margin_loss_weight": 0,
+        "GT_attention_dropout": 0.4,
+        "rec_error_filter_ratio": 1,
+        "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+        "reconstruction_loss_weight": 1,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint"
+      },
+      "config_sha256": "70a53ab87884189205d48ecfe44f03fa2fff23522064a7fd0a2c927e804e7af8",
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.5014344065357568,
+          "AP": 0.08942340588646475
+        },
+        {
+          "_step": 10,
+          "AUC": 0.3939723724868964,
+          "AP": 0.07391966666976056
+        },
+        {
+          "_step": 20,
+          "AUC": 0.3379515480501153,
+          "AP": 0.06834974745892723
+        },
+        {
+          "_step": 30,
+          "AUC": 0.39065738750588375,
+          "AP": 0.0747713456384641
+        },
+        {
+          "_step": 40,
+          "AUC": 0.4299132594122717,
+          "AP": 0.0799461209477844
+        },
+        {
+          "_step": 50,
+          "AUC": 0.4313518798888582,
+          "AP": 0.07857660708238838
+        },
+        {
+          "_step": 60,
+          "AUC": 0.4169216580001285,
+          "AP": 0.07683851666992121
+        },
+        {
+          "_step": 70,
+          "AUC": 0.44071647547153464,
+          "AP": 0.08007480942782906
+        },
+        {
+          "_step": 80,
+          "AUC": 0.3614900065374307,
+          "AP": 0.06999124943813968
+        },
+        {
+          "_step": 90,
+          "AUC": 0.38533502376164086,
+          "AP": 0.07229628132342791
+        },
+        {
+          "_step": 100,
+          "AUC": 0.2863677012716239,
+          "AP": 0.06329601674674142
+        },
+        {
+          "_step": 110,
+          "AUC": 0.3799073333305435,
+          "AP": 0.07170734495339812
+        },
+        {
+          "_step": 120,
+          "AUC": 0.3748527185831697,
+          "AP": 0.07142612301980193
+        },
+        {
+          "_step": 130,
+          "AUC": 0.7149109568465895,
+          "AP": 0.17077038789640686
+        },
+        {
+          "_step": 140,
+          "AUC": 0.7993935491407183,
+          "AP": 0.35047792493035657
+        },
+        {
+          "_step": 150,
+          "AUC": 0.8138869401130959,
+          "AP": 0.40316533955716516
+        }
+      ],
+      "history_sha256": "e177d91632960f00ebb111afb952ca7bf0c62450978de6692d63e88cd6d1dada",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu2-20260730T130417Z.log",
+      "agent_log_sha256": "119674f5e1d965f42f21f015696ab89b7db60954b3bfd3e580b685cccbcd4dd6",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "control_2_20",
+      "seed": 1,
+      "run_id": "d5818dpg",
+      "name": "easy-sweep-3",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/d5818dpg",
+      "state": "finished",
+      "created_at": "2026-07-30T13:04:26Z",
+      "runtime_seconds": 156.976847749,
+      "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "execution_host": "HCCS-90",
+      "gpu_index": "1",
+      "pane": "%40",
+      "protocol_identity": "elliptic-loss-unification-019fb305",
+      "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0,
+      "AUC.last": 0.760531873567947,
+      "AP.last": 0.23205025748588184,
+      "final_step": 150,
+      "config": {
+        "var": 0,
+        "mean": 0,
+        "pp_k": 7,
+        "seed": 1,
+        "device": 0,
+        "end_lr": 0.0003,
+        "dataset": "elliptic",
+        "peak_lr": 0.0005,
+        "readout": "avg",
+        "variant": "control_2_20",
+        "GNA_temp": 1,
+        "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+        "proj_dim": 64,
+        "drop_prob": 0,
+        "gpu_index": "1",
+        "num_epoch": 150,
+        "visualize": false,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "batch_size": 32768,
+        "model_type": "VecGAD",
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "train_rate": 0.05,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "tot_updates": 1000,
+        "GT_num_heads": 2,
+        "outlier_beta": 0.3,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "wandb_entity": "HCCS",
+        "warmup_epoch": 20,
+        "weight_decay": 0,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "con_loss_temp": 10,
+        "embedding_dim": 256,
+        "negsamp_ratio": 1,
+        "wandb_project": "GGADFormer",
+        "execution_host": "HCCS-90",
+        "lambda_rec_emb": 2,
+        "lambda_rec_tok": 1,
+        "warmup_updates": 50,
+        "auc_test_rounds": 256,
+        "bce_loss_weight": 1,
+        "con_loss_weight": 0.1,
+        "data_split_seed": 42,
+        "rec_loss_weight": 1,
+        "progregate_alpha": 0.6,
+        "proj_loss_weight": 0,
+        "ring_loss_weight": 20,
+        "confidence_margin": 2,
+        "protocol_identity": "elliptic-loss-unification-019fb305",
+        "margin_loss_weight": 0,
+        "GT_attention_dropout": 0.4,
+        "rec_error_filter_ratio": 1,
+        "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+        "reconstruction_loss_weight": 1,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint"
+      },
+      "config_sha256": "8724af8672b9a9bbc2a0c7d2bb9d90108b2e551dd2441f4e048fe4d493754a30",
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.41743963429689324,
+          "AP": 0.07614830318751188
+        },
+        {
+          "_step": 10,
+          "AUC": 0.5145351337316684,
+          "AP": 0.09010620754661117
+        },
+        {
+          "_step": 20,
+          "AUC": 0.6512038242786674,
+          "AP": 0.1263290242193741
+        },
+        {
+          "_step": 30,
+          "AUC": 0.6688242431873259,
+          "AP": 0.1372753929288465
+        },
+        {
+          "_step": 40,
+          "AUC": 0.536804279005823,
+          "AP": 0.09472043461493446
+        },
+        {
+          "_step": 50,
+          "AUC": 0.49843970289169864,
+          "AP": 0.08777224948423461
+        },
+        {
+          "_step": 60,
+          "AUC": 0.5601228047160475,
+          "AP": 0.0993488354768843
+        },
+        {
+          "_step": 70,
+          "AUC": 0.5557644545357451,
+          "AP": 0.09843385175142108
+        },
+        {
+          "_step": 80,
+          "AUC": 0.5139463028218665,
+          "AP": 0.0902407416676626
+        },
+        {
+          "_step": 90,
+          "AUC": 0.5057513596600318,
+          "AP": 0.08905880267580366
+        },
+        {
+          "_step": 100,
+          "AUC": 0.3797236011435864,
+          "AP": 0.07222470698041551
+        },
+        {
+          "_step": 110,
+          "AUC": 0.473892933515986,
+          "AP": 0.08375759533601933
+        },
+        {
+          "_step": 120,
+          "AUC": 0.3972770445937195,
+          "AP": 0.07460582140945966
+        },
+        {
+          "_step": 130,
+          "AUC": 0.4859842108222225,
+          "AP": 0.08565576413638473
+        },
+        {
+          "_step": 140,
+          "AUC": 0.6719505869950435,
+          "AP": 0.13989342141069816
+        },
+        {
+          "_step": 150,
+          "AUC": 0.760531873567947,
+          "AP": 0.23205025748588184
+        }
+      ],
+      "history_sha256": "d9194b315b9811be12a46e13976a63df13b881f173be4167272432079f599a4f",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu1-20260730T130416Z.log",
+      "agent_log_sha256": "9236afccf0d36dabacf546c736c86015c8d99e31e2cbe7c8a53940e73b7433c1",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "control_2_20",
+      "seed": 2,
+      "run_id": "4iq0q6ew",
+      "name": "laced-sweep-5",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/4iq0q6ew",
+      "state": "finished",
+      "created_at": "2026-07-30T13:07:18Z",
+      "runtime_seconds": 157.790257879,
+      "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "execution_host": "HCCS-90",
+      "gpu_index": "1",
+      "pane": "%40",
+      "protocol_identity": "elliptic-loss-unification-019fb305",
+      "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0,
+      "AUC.last": 0.7481187174117815,
+      "AP.last": 0.3138529234409316,
+      "final_step": 150,
+      "config": {
+        "var": 0,
+        "mean": 0,
+        "pp_k": 7,
+        "seed": 2,
+        "device": 0,
+        "end_lr": 0.0003,
+        "dataset": "elliptic",
+        "peak_lr": 0.0005,
+        "readout": "avg",
+        "variant": "control_2_20",
+        "GNA_temp": 1,
+        "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+        "proj_dim": 64,
+        "drop_prob": 0,
+        "gpu_index": "1",
+        "num_epoch": 150,
+        "visualize": false,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "batch_size": 32768,
+        "model_type": "VecGAD",
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "train_rate": 0.05,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "tot_updates": 1000,
+        "GT_num_heads": 2,
+        "outlier_beta": 0.3,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "wandb_entity": "HCCS",
+        "warmup_epoch": 20,
+        "weight_decay": 0,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "con_loss_temp": 10,
+        "embedding_dim": 256,
+        "negsamp_ratio": 1,
+        "wandb_project": "GGADFormer",
+        "execution_host": "HCCS-90",
+        "lambda_rec_emb": 2,
+        "lambda_rec_tok": 1,
+        "warmup_updates": 50,
+        "auc_test_rounds": 256,
+        "bce_loss_weight": 1,
+        "con_loss_weight": 0.1,
+        "data_split_seed": 42,
+        "rec_loss_weight": 1,
+        "progregate_alpha": 0.6,
+        "proj_loss_weight": 0,
+        "ring_loss_weight": 20,
+        "confidence_margin": 2,
+        "protocol_identity": "elliptic-loss-unification-019fb305",
+        "margin_loss_weight": 0,
+        "GT_attention_dropout": 0.4,
+        "rec_error_filter_ratio": 1,
+        "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+        "reconstruction_loss_weight": 1,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint"
+      },
+      "config_sha256": "36af9f4ff0f1843ff16a6ea983d436d9633393eeda866dec165b6ae83c97aa2b",
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.40353157717288607,
+          "AP": 0.07483602719553825
+        },
+        {
+          "_step": 10,
+          "AUC": 0.28675504540266517,
+          "AP": 0.06390122052086614
+        },
+        {
+          "_step": 20,
+          "AUC": 0.33110974932328585,
+          "AP": 0.06714479834680598
+        },
+        {
+          "_step": 30,
+          "AUC": 0.3317982701372606,
+          "AP": 0.06715936368383328
+        },
+        {
+          "_step": 40,
+          "AUC": 0.3113955986152219,
+          "AP": 0.06552325101487627
+        },
+        {
+          "_step": 50,
+          "AUC": 0.30471290708606175,
+          "AP": 0.06494681468511425
+        },
+        {
+          "_step": 60,
+          "AUC": 0.3305559581684495,
+          "AP": 0.06715246996418821
+        },
+        {
+          "_step": 70,
+          "AUC": 0.3399443599695272,
+          "AP": 0.06811451129842848
+        },
+        {
+          "_step": 80,
+          "AUC": 0.35008457539360593,
+          "AP": 0.06902500165618422
+        },
+        {
+          "_step": 90,
+          "AUC": 0.3393370102817609,
+          "AP": 0.06810453075453192
+        },
+        {
+          "_step": 100,
+          "AUC": 0.28271973490745983,
+          "AP": 0.06318519783457453
+        },
+        {
+          "_step": 110,
+          "AUC": 0.34167811641939483,
+          "AP": 0.0682520604481109
+        },
+        {
+          "_step": 120,
+          "AUC": 0.325079323433241,
+          "AP": 0.06698722459688909
+        },
+        {
+          "_step": 130,
+          "AUC": 0.6991574847576703,
+          "AP": 0.16308544242709272
+        },
+        {
+          "_step": 140,
+          "AUC": 0.7256845807065192,
+          "AP": 0.20537819368751487
+        },
+        {
+          "_step": 150,
+          "AUC": 0.7481187174117815,
+          "AP": 0.3138529234409316
+        }
+      ],
+      "history_sha256": "1ea3074f61a886959633a1081b4b9e353382527719fd788a1ed00c6bc9e968c4",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu1-20260730T130416Z.log",
+      "agent_log_sha256": "9236afccf0d36dabacf546c736c86015c8d99e31e2cbe7c8a53940e73b7433c1",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "control_2_20",
+      "seed": 3,
+      "run_id": "fmplzj9d",
+      "name": "polished-sweep-7",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/fmplzj9d",
+      "state": "finished",
+      "created_at": "2026-07-30T13:07:20Z",
+      "runtime_seconds": 154.537711482,
+      "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "execution_host": "HCCS-90",
+      "gpu_index": "0",
+      "pane": "%39",
+      "protocol_identity": "elliptic-loss-unification-019fb305",
+      "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0,
+      "AUC.last": 0.7779013919650919,
+      "AP.last": 0.3234603053025861,
+      "final_step": 150,
+      "config": {
+        "var": 0,
+        "mean": 0,
+        "pp_k": 7,
+        "seed": 3,
+        "device": 0,
+        "end_lr": 0.0003,
+        "dataset": "elliptic",
+        "peak_lr": 0.0005,
+        "readout": "avg",
+        "variant": "control_2_20",
+        "GNA_temp": 1,
+        "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+        "proj_dim": 64,
+        "drop_prob": 0,
+        "gpu_index": "0",
+        "num_epoch": 150,
+        "visualize": false,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "batch_size": 32768,
+        "model_type": "VecGAD",
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "train_rate": 0.05,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "tot_updates": 1000,
+        "GT_num_heads": 2,
+        "outlier_beta": 0.3,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "wandb_entity": "HCCS",
+        "warmup_epoch": 20,
+        "weight_decay": 0,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "con_loss_temp": 10,
+        "embedding_dim": 256,
+        "negsamp_ratio": 1,
+        "wandb_project": "GGADFormer",
+        "execution_host": "HCCS-90",
+        "lambda_rec_emb": 2,
+        "lambda_rec_tok": 1,
+        "warmup_updates": 50,
+        "auc_test_rounds": 256,
+        "bce_loss_weight": 1,
+        "con_loss_weight": 0.1,
+        "data_split_seed": 42,
+        "rec_loss_weight": 1,
+        "progregate_alpha": 0.6,
+        "proj_loss_weight": 0,
+        "ring_loss_weight": 20,
+        "confidence_margin": 2,
+        "protocol_identity": "elliptic-loss-unification-019fb305",
+        "margin_loss_weight": 0,
+        "GT_attention_dropout": 0.4,
+        "rec_error_filter_ratio": 1,
+        "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+        "reconstruction_loss_weight": 1,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint"
+      },
+      "config_sha256": "61f9935929690ad955ef6e74444d3a596a67245dacc11b58dd7e725bbc43e91d",
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.38795272162171945,
+          "AP": 0.07246150610085393
+        },
+        {
+          "_step": 10,
+          "AUC": 0.4929424496860741,
+          "AP": 0.0865865600254455
+        },
+        {
+          "_step": 20,
+          "AUC": 0.5954407743898655,
+          "AP": 0.11069984588981971
+        },
+        {
+          "_step": 30,
+          "AUC": 0.5366359542674611,
+          "AP": 0.0957977451535928
+        },
+        {
+          "_step": 40,
+          "AUC": 0.4934820197003553,
+          "AP": 0.0870003885388311
+        },
+        {
+          "_step": 50,
+          "AUC": 0.5048731860358443,
+          "AP": 0.08945241406642634
+        },
+        {
+          "_step": 60,
+          "AUC": 0.49556150852531533,
+          "AP": 0.0889971060098613
+        },
+        {
+          "_step": 70,
+          "AUC": 0.44940699699765807,
+          "AP": 0.08061349117278098
+        },
+        {
+          "_step": 80,
+          "AUC": 0.5249240735561931,
+          "AP": 0.09473986983561347
+        },
+        {
+          "_step": 90,
+          "AUC": 0.4898513457773166,
+          "AP": 0.08667439913185693
+        },
+        {
+          "_step": 100,
+          "AUC": 0.4948594143095314,
+          "AP": 0.08683755360780349
+        },
+        {
+          "_step": 110,
+          "AUC": 0.423706422966487,
+          "AP": 0.07682350583870826
+        },
+        {
+          "_step": 120,
+          "AUC": 0.42346174147473015,
+          "AP": 0.07726194362675796
+        },
+        {
+          "_step": 130,
+          "AUC": 0.41925749853121597,
+          "AP": 0.07651706982259265
+        },
+        {
+          "_step": 140,
+          "AUC": 0.65346402857474,
+          "AP": 0.12696704490577718
+        },
+        {
+          "_step": 150,
+          "AUC": 0.7779013919650919,
+          "AP": 0.3234603053025861
+        }
+      ],
+      "history_sha256": "aee1b13bf712190240f8444517b61c2bdc617d49ee0f535b521440d8531b2f16",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu0-20260730T130417Z.log",
+      "agent_log_sha256": "14086f29fa5dc48d28eca1d5f4c814ed952f9271dad8bf18fa5b110fa99cded1",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "control_2_20",
+      "seed": 4,
+      "run_id": "20ni08r3",
+      "name": "rose-sweep-9",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/20ni08r3",
+      "state": "finished",
+      "created_at": "2026-07-30T13:10:09Z",
+      "runtime_seconds": 143.448082216,
+      "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "execution_host": "HCCS-90",
+      "gpu_index": "0",
+      "pane": "%39",
+      "protocol_identity": "elliptic-loss-unification-019fb305",
+      "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0,
+      "AUC.last": 0.7398626575519878,
+      "AP.last": 0.2020723208521528,
+      "final_step": 150,
+      "config": {
+        "var": 0,
+        "mean": 0,
+        "pp_k": 7,
+        "seed": 4,
+        "device": 0,
+        "end_lr": 0.0003,
+        "dataset": "elliptic",
+        "peak_lr": 0.0005,
+        "readout": "avg",
+        "variant": "control_2_20",
+        "GNA_temp": 1,
+        "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+        "proj_dim": 64,
+        "drop_prob": 0,
+        "gpu_index": "0",
+        "num_epoch": 150,
+        "visualize": false,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "batch_size": 32768,
+        "model_type": "VecGAD",
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "train_rate": 0.05,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "tot_updates": 1000,
+        "GT_num_heads": 2,
+        "outlier_beta": 0.3,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "wandb_entity": "HCCS",
+        "warmup_epoch": 20,
+        "weight_decay": 0,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "con_loss_temp": 10,
+        "embedding_dim": 256,
+        "negsamp_ratio": 1,
+        "wandb_project": "GGADFormer",
+        "execution_host": "HCCS-90",
+        "lambda_rec_emb": 2,
+        "lambda_rec_tok": 1,
+        "warmup_updates": 50,
+        "auc_test_rounds": 256,
+        "bce_loss_weight": 1,
+        "con_loss_weight": 0.1,
+        "data_split_seed": 42,
+        "rec_loss_weight": 1,
+        "progregate_alpha": 0.6,
+        "proj_loss_weight": 0,
+        "ring_loss_weight": 20,
+        "confidence_margin": 2,
+        "protocol_identity": "elliptic-loss-unification-019fb305",
+        "margin_loss_weight": 0,
+        "GT_attention_dropout": 0.4,
+        "rec_error_filter_ratio": 1,
+        "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+        "reconstruction_loss_weight": 1,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint"
+      },
+      "config_sha256": "aa6e17fde0bb2f9077c7e6b8a4452a3470300acc1e37faf2bd8260bd17f8aa31",
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.4918696305687565,
+          "AP": 0.08605202807052159
+        },
+        {
+          "_step": 10,
+          "AUC": 0.42747116425399145,
+          "AP": 0.07769032859963149
+        },
+        {
+          "_step": 20,
+          "AUC": 0.43112653958493413,
+          "AP": 0.07786172742442511
+        },
+        {
+          "_step": 30,
+          "AUC": 0.39260245598515153,
+          "AP": 0.07333202812105959
+        },
+        {
+          "_step": 40,
+          "AUC": 0.37642068666493333,
+          "AP": 0.07149339962280485
+        },
+        {
+          "_step": 50,
+          "AUC": 0.37188330950103554,
+          "AP": 0.07107326728343918
+        },
+        {
+          "_step": 60,
+          "AUC": 0.4247962179335205,
+          "AP": 0.07694321287919904
+        },
+        {
+          "_step": 70,
+          "AUC": 0.4018644250054084,
+          "AP": 0.07390753604077782
+        },
+        {
+          "_step": 80,
+          "AUC": 0.48012651283841845,
+          "AP": 0.08494017006313778
+        },
+        {
+          "_step": 90,
+          "AUC": 0.36920966593601984,
+          "AP": 0.07087563113017413
+        },
+        {
+          "_step": 100,
+          "AUC": 0.31969651984163877,
+          "AP": 0.06618388579059975
+        },
+        {
+          "_step": 110,
+          "AUC": 0.40743013473511763,
+          "AP": 0.07493010325435809
+        },
+        {
+          "_step": 120,
+          "AUC": 0.44373272552634685,
+          "AP": 0.07977706856217506
+        },
+        {
+          "_step": 130,
+          "AUC": 0.6102709785931442,
+          "AP": 0.11609227926272955
+        },
+        {
+          "_step": 140,
+          "AUC": 0.7114881160864279,
+          "AP": 0.1690419150527972
+        },
+        {
+          "_step": 150,
+          "AUC": 0.7398626575519878,
+          "AP": 0.2020723208521528
+        }
+      ],
+      "history_sha256": "a94e865aa6e9c81e2bb67b736f6eddd8d45475cb4a324bc82a0a33b4ff4c8bb5",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu0-20260730T130417Z.log",
+      "agent_log_sha256": "14086f29fa5dc48d28eca1d5f4c814ed952f9271dad8bf18fa5b110fa99cded1",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "unified_0p1_1",
+      "seed": 0,
+      "run_id": "y9wz9q9x",
+      "name": "legendary-sweep-2",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/y9wz9q9x",
+      "state": "finished",
+      "created_at": "2026-07-30T13:04:25Z",
+      "runtime_seconds": 156.065997486,
+      "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "execution_host": "HCCS-90",
+      "gpu_index": "0",
+      "pane": "%39",
+      "protocol_identity": "elliptic-loss-unification-019fb305",
+      "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0,
+      "AUC.last": 0.5740399702112956,
+      "AP.last": 0.10284854812362595,
+      "final_step": 150,
+      "config": {
+        "var": 0,
+        "mean": 0,
+        "pp_k": 7,
+        "seed": 0,
+        "device": 0,
+        "end_lr": 0.0003,
+        "dataset": "elliptic",
+        "peak_lr": 0.0005,
+        "readout": "avg",
+        "variant": "unified_0p1_1",
+        "GNA_temp": 1,
+        "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+        "proj_dim": 64,
+        "drop_prob": 0,
+        "gpu_index": "0",
+        "num_epoch": 150,
+        "visualize": false,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "batch_size": 32768,
+        "model_type": "VecGAD",
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "train_rate": 0.05,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "tot_updates": 1000,
+        "GT_num_heads": 2,
+        "outlier_beta": 0.3,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "wandb_entity": "HCCS",
+        "warmup_epoch": 20,
+        "weight_decay": 0,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "con_loss_temp": 10,
+        "embedding_dim": 256,
+        "negsamp_ratio": 1,
+        "wandb_project": "GGADFormer",
+        "execution_host": "HCCS-90",
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "warmup_updates": 50,
+        "auc_test_rounds": 256,
+        "bce_loss_weight": 1,
+        "con_loss_weight": 0.1,
+        "data_split_seed": 42,
+        "rec_loss_weight": 1,
+        "progregate_alpha": 0.6,
+        "proj_loss_weight": 0,
+        "ring_loss_weight": 1,
+        "confidence_margin": 2,
+        "protocol_identity": "elliptic-loss-unification-019fb305",
+        "margin_loss_weight": 0,
+        "GT_attention_dropout": 0.4,
+        "rec_error_filter_ratio": 1,
+        "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+        "reconstruction_loss_weight": 1,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint"
+      },
+      "config_sha256": "6bfc940442cc8c9d8d652d2c932012f849b7d4a4e40eca02a0a365d04def9ab6",
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.4992330664079594,
+          "AP": 0.08905231209019182
+        },
+        {
+          "_step": 10,
+          "AUC": 0.3673922784083021,
+          "AP": 0.07112729482170264
+        },
+        {
+          "_step": 20,
+          "AUC": 0.3903095772722302,
+          "AP": 0.07456254541277556
+        },
+        {
+          "_step": 30,
+          "AUC": 0.483833237840388,
+          "AP": 0.09019076858467531
+        },
+        {
+          "_step": 40,
+          "AUC": 0.5130987002830947,
+          "AP": 0.09628506637339433
+        },
+        {
+          "_step": 50,
+          "AUC": 0.4902414482565002,
+          "AP": 0.09076514970564237
+        },
+        {
+          "_step": 60,
+          "AUC": 0.5099769888991044,
+          "AP": 0.09158095621252592
+        },
+        {
+          "_step": 70,
+          "AUC": 0.5531815344239482,
+          "AP": 0.09930542104336779
+        },
+        {
+          "_step": 80,
+          "AUC": 0.5917434597946195,
+          "AP": 0.10821476788989254
+        },
+        {
+          "_step": 90,
+          "AUC": 0.611036321950174,
+          "AP": 0.11379911824807054
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6215729607646812,
+          "AP": 0.11744104143621341
+        },
+        {
+          "_step": 110,
+          "AUC": 0.6335290353441558,
+          "AP": 0.12192382059321338
+        },
+        {
+          "_step": 120,
+          "AUC": 0.6188438591182783,
+          "AP": 0.11653309306204113
+        },
+        {
+          "_step": 130,
+          "AUC": 0.5943127919486801,
+          "AP": 0.1082775218940082
+        },
+        {
+          "_step": 140,
+          "AUC": 0.5861052142423194,
+          "AP": 0.10562621139741883
+        },
+        {
+          "_step": 150,
+          "AUC": 0.5740399702112956,
+          "AP": 0.10284854812362595
+        }
+      ],
+      "history_sha256": "f254af4ba1829ea3be98e2b3407c0054ec610f612db62e61d2f3374aa732b5b3",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu0-20260730T130417Z.log",
+      "agent_log_sha256": "14086f29fa5dc48d28eca1d5f4c814ed952f9271dad8bf18fa5b110fa99cded1",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "unified_0p1_1",
+      "seed": 1,
+      "run_id": "chlavgv0",
+      "name": "colorful-sweep-4",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/chlavgv0",
+      "state": "finished",
+      "created_at": "2026-07-30T13:04:26Z",
+      "runtime_seconds": 156.12009983,
+      "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "execution_host": "HCCS-90",
+      "gpu_index": "7",
+      "pane": "%42",
+      "protocol_identity": "elliptic-loss-unification-019fb305",
+      "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0,
+      "AUC.last": 0.5882983557443056,
+      "AP.last": 0.1073180958536688,
+      "final_step": 150,
+      "config": {
+        "var": 0,
+        "mean": 0,
+        "pp_k": 7,
+        "seed": 1,
+        "device": 0,
+        "end_lr": 0.0003,
+        "dataset": "elliptic",
+        "peak_lr": 0.0005,
+        "readout": "avg",
+        "variant": "unified_0p1_1",
+        "GNA_temp": 1,
+        "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+        "proj_dim": 64,
+        "drop_prob": 0,
+        "gpu_index": "7",
+        "num_epoch": 150,
+        "visualize": false,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "batch_size": 32768,
+        "model_type": "VecGAD",
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "train_rate": 0.05,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "tot_updates": 1000,
+        "GT_num_heads": 2,
+        "outlier_beta": 0.3,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "wandb_entity": "HCCS",
+        "warmup_epoch": 20,
+        "weight_decay": 0,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "con_loss_temp": 10,
+        "embedding_dim": 256,
+        "negsamp_ratio": 1,
+        "wandb_project": "GGADFormer",
+        "execution_host": "HCCS-90",
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "warmup_updates": 50,
+        "auc_test_rounds": 256,
+        "bce_loss_weight": 1,
+        "con_loss_weight": 0.1,
+        "data_split_seed": 42,
+        "rec_loss_weight": 1,
+        "progregate_alpha": 0.6,
+        "proj_loss_weight": 0,
+        "ring_loss_weight": 1,
+        "confidence_margin": 2,
+        "protocol_identity": "elliptic-loss-unification-019fb305",
+        "margin_loss_weight": 0,
+        "GT_attention_dropout": 0.4,
+        "rec_error_filter_ratio": 1,
+        "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+        "reconstruction_loss_weight": 1,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint"
+      },
+      "config_sha256": "fe3369c206783b7a8906690f71fd934222eeabadee9f99a111b091862a1b211c",
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.4165569592523203,
+          "AP": 0.07603777752667684
+        },
+        {
+          "_step": 10,
+          "AUC": 0.5402230550234051,
+          "AP": 0.09457080581036037
+        },
+        {
+          "_step": 20,
+          "AUC": 0.6895160427238287,
+          "AP": 0.1423024827033155
+        },
+        {
+          "_step": 30,
+          "AUC": 0.6974883311502476,
+          "AP": 0.15386909938364882
+        },
+        {
+          "_step": 40,
+          "AUC": 0.6034496818893156,
+          "AP": 0.11086855189936683
+        },
+        {
+          "_step": 50,
+          "AUC": 0.5672627852438563,
+          "AP": 0.10166388360399602
+        },
+        {
+          "_step": 60,
+          "AUC": 0.5732041106665287,
+          "AP": 0.1027456508828658
+        },
+        {
+          "_step": 70,
+          "AUC": 0.5379326762909242,
+          "AP": 0.09470595139415883
+        },
+        {
+          "_step": 80,
+          "AUC": 0.5786295340120156,
+          "AP": 0.10420271028800186
+        },
+        {
+          "_step": 90,
+          "AUC": 0.5696583378259594,
+          "AP": 0.10172755946232208
+        },
+        {
+          "_step": 100,
+          "AUC": 0.5696684141663375,
+          "AP": 0.10137773197669421
+        },
+        {
+          "_step": 110,
+          "AUC": 0.5642859853898523,
+          "AP": 0.10002925471871701
+        },
+        {
+          "_step": 120,
+          "AUC": 0.5693560003078578,
+          "AP": 0.10126287324918143
+        },
+        {
+          "_step": 130,
+          "AUC": 0.5805104217707175,
+          "AP": 0.10436096860339278
+        },
+        {
+          "_step": 140,
+          "AUC": 0.5779885091874281,
+          "AP": 0.1042153976038545
+        },
+        {
+          "_step": 150,
+          "AUC": 0.5882983557443056,
+          "AP": 0.1073180958536688
+        }
+      ],
+      "history_sha256": "e66d94b0c64a675a12088b7d0ddc2697f3ba0af9116bb5d1052953d2ea957cba",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu7-20260730T130417Z.log",
+      "agent_log_sha256": "2759dd0ed530726f4cefe993f66de613dc49a34b91487e21ffd63613134adf34",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "unified_0p1_1",
+      "seed": 2,
+      "run_id": "8re70ocx",
+      "name": "northern-sweep-6",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/8re70ocx",
+      "state": "finished",
+      "created_at": "2026-07-30T13:07:20Z",
+      "runtime_seconds": 155.614488353,
+      "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "execution_host": "HCCS-90",
+      "gpu_index": "7",
+      "pane": "%42",
+      "protocol_identity": "elliptic-loss-unification-019fb305",
+      "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0,
+      "AUC.last": 0.6195653163557854,
+      "AP.last": 0.11462467392848902,
+      "final_step": 150,
+      "config": {
+        "var": 0,
+        "mean": 0,
+        "pp_k": 7,
+        "seed": 2,
+        "device": 0,
+        "end_lr": 0.0003,
+        "dataset": "elliptic",
+        "peak_lr": 0.0005,
+        "readout": "avg",
+        "variant": "unified_0p1_1",
+        "GNA_temp": 1,
+        "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+        "proj_dim": 64,
+        "drop_prob": 0,
+        "gpu_index": "7",
+        "num_epoch": 150,
+        "visualize": false,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "batch_size": 32768,
+        "model_type": "VecGAD",
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "train_rate": 0.05,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "tot_updates": 1000,
+        "GT_num_heads": 2,
+        "outlier_beta": 0.3,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "wandb_entity": "HCCS",
+        "warmup_epoch": 20,
+        "weight_decay": 0,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "con_loss_temp": 10,
+        "embedding_dim": 256,
+        "negsamp_ratio": 1,
+        "wandb_project": "GGADFormer",
+        "execution_host": "HCCS-90",
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "warmup_updates": 50,
+        "auc_test_rounds": 256,
+        "bce_loss_weight": 1,
+        "con_loss_weight": 0.1,
+        "data_split_seed": 42,
+        "rec_loss_weight": 1,
+        "progregate_alpha": 0.6,
+        "proj_loss_weight": 0,
+        "ring_loss_weight": 1,
+        "confidence_margin": 2,
+        "protocol_identity": "elliptic-loss-unification-019fb305",
+        "margin_loss_weight": 0,
+        "GT_attention_dropout": 0.4,
+        "rec_error_filter_ratio": 1,
+        "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+        "reconstruction_loss_weight": 1,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint"
+      },
+      "config_sha256": "b3988632aa20717566b7e1c07a499250887df60fa2cc27dce35696033e16a2dc",
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.40199848145292894,
+          "AP": 0.07465431328630043
+        },
+        {
+          "_step": 10,
+          "AUC": 0.3031587926076998,
+          "AP": 0.06510810824696088
+        },
+        {
+          "_step": 20,
+          "AUC": 0.3663003910267806,
+          "AP": 0.07045345889673246
+        },
+        {
+          "_step": 30,
+          "AUC": 0.3840859178139618,
+          "AP": 0.07216555153614491
+        },
+        {
+          "_step": 40,
+          "AUC": 0.3735986272305366,
+          "AP": 0.07113907311472227
+        },
+        {
+          "_step": 50,
+          "AUC": 0.3997506023879362,
+          "AP": 0.0741229321730642
+        },
+        {
+          "_step": 60,
+          "AUC": 0.428815353154988,
+          "AP": 0.07741011093183366
+        },
+        {
+          "_step": 70,
+          "AUC": 0.4449740840819477,
+          "AP": 0.07990997236679859
+        },
+        {
+          "_step": 80,
+          "AUC": 0.49593626177961125,
+          "AP": 0.08825882759249985
+        },
+        {
+          "_step": 90,
+          "AUC": 0.5443090237831109,
+          "AP": 0.09666655607171235
+        },
+        {
+          "_step": 100,
+          "AUC": 0.571053799979367,
+          "AP": 0.10209853474932362
+        },
+        {
+          "_step": 110,
+          "AUC": 0.5964231211437029,
+          "AP": 0.10809923041241053
+        },
+        {
+          "_step": 120,
+          "AUC": 0.6013812155399804,
+          "AP": 0.10933625348671656
+        },
+        {
+          "_step": 130,
+          "AUC": 0.6172360077968823,
+          "AP": 0.11382695535543057
+        },
+        {
+          "_step": 140,
+          "AUC": 0.6196917709704965,
+          "AP": 0.11444622419612614
+        },
+        {
+          "_step": 150,
+          "AUC": 0.6195653163557854,
+          "AP": 0.11462467392848902
+        }
+      ],
+      "history_sha256": "4ba3e4e252342cb38967bb4357ee12445beff7e15e7821a9ec217b4ac02e13db",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu7-20260730T130417Z.log",
+      "agent_log_sha256": "2759dd0ed530726f4cefe993f66de613dc49a34b91487e21ffd63613134adf34",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "unified_0p1_1",
+      "seed": 3,
+      "run_id": "l53pk0pa",
+      "name": "feasible-sweep-8",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/l53pk0pa",
+      "state": "finished",
+      "created_at": "2026-07-30T13:07:24Z",
+      "runtime_seconds": 153.864290777,
+      "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "execution_host": "HCCS-90",
+      "gpu_index": "2",
+      "pane": "%41",
+      "protocol_identity": "elliptic-loss-unification-019fb305",
+      "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0,
+      "AUC.last": 0.614624132307553,
+      "AP.last": 0.11412970816443922,
+      "final_step": 150,
+      "config": {
+        "var": 0,
+        "mean": 0,
+        "pp_k": 7,
+        "seed": 3,
+        "device": 0,
+        "end_lr": 0.0003,
+        "dataset": "elliptic",
+        "peak_lr": 0.0005,
+        "readout": "avg",
+        "variant": "unified_0p1_1",
+        "GNA_temp": 1,
+        "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+        "proj_dim": 64,
+        "drop_prob": 0,
+        "gpu_index": "2",
+        "num_epoch": 150,
+        "visualize": false,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "batch_size": 32768,
+        "model_type": "VecGAD",
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "train_rate": 0.05,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "tot_updates": 1000,
+        "GT_num_heads": 2,
+        "outlier_beta": 0.3,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "wandb_entity": "HCCS",
+        "warmup_epoch": 20,
+        "weight_decay": 0,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "con_loss_temp": 10,
+        "embedding_dim": 256,
+        "negsamp_ratio": 1,
+        "wandb_project": "GGADFormer",
+        "execution_host": "HCCS-90",
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "warmup_updates": 50,
+        "auc_test_rounds": 256,
+        "bce_loss_weight": 1,
+        "con_loss_weight": 0.1,
+        "data_split_seed": 42,
+        "rec_loss_weight": 1,
+        "progregate_alpha": 0.6,
+        "proj_loss_weight": 0,
+        "ring_loss_weight": 1,
+        "confidence_margin": 2,
+        "protocol_identity": "elliptic-loss-unification-019fb305",
+        "margin_loss_weight": 0,
+        "GT_attention_dropout": 0.4,
+        "rec_error_filter_ratio": 1,
+        "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+        "reconstruction_loss_weight": 1,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint"
+      },
+      "config_sha256": "5f0abc2c3503c707a4fce1f5709d5944e6f48e410d287d2af60873bb9a847ae0",
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.3857694599550986,
+          "AP": 0.07222787805366014
+        },
+        {
+          "_step": 10,
+          "AUC": 0.4973507085006431,
+          "AP": 0.08750601771780224
+        },
+        {
+          "_step": 20,
+          "AUC": 0.6216824104178225,
+          "AP": 0.11910605359074843
+        },
+        {
+          "_step": 30,
+          "AUC": 0.5865605491077854,
+          "AP": 0.10811010497432752
+        },
+        {
+          "_step": 40,
+          "AUC": 0.5387123936257413,
+          "AP": 0.09544104535966022
+        },
+        {
+          "_step": 50,
+          "AUC": 0.5447890782513892,
+          "AP": 0.09759353182647208
+        },
+        {
+          "_step": 60,
+          "AUC": 0.5273832792065127,
+          "AP": 0.09392959970524833
+        },
+        {
+          "_step": 70,
+          "AUC": 0.5530700141902092,
+          "AP": 0.09968159314391783
+        },
+        {
+          "_step": 80,
+          "AUC": 0.6003519950626296,
+          "AP": 0.11166646617000654
+        },
+        {
+          "_step": 90,
+          "AUC": 0.591102474998831,
+          "AP": 0.10839077815134864
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6022427662956784,
+          "AP": 0.11104817270720528
+        },
+        {
+          "_step": 110,
+          "AUC": 0.6050468418824234,
+          "AP": 0.11132516424401107
+        },
+        {
+          "_step": 120,
+          "AUC": 0.6033772916259934,
+          "AP": 0.11049044661283573
+        },
+        {
+          "_step": 130,
+          "AUC": 0.6035392335904214,
+          "AP": 0.11043559387240764
+        },
+        {
+          "_step": 140,
+          "AUC": 0.6050917651117359,
+          "AP": 0.11076796734772418
+        },
+        {
+          "_step": 150,
+          "AUC": 0.614624132307553,
+          "AP": 0.11412970816443922
+        }
+      ],
+      "history_sha256": "9100ed2024f7a8a84f7fb9527f8385a695bee2cb7149e0550f8cd75479c272cd",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu2-20260730T130417Z.log",
+      "agent_log_sha256": "119674f5e1d965f42f21f015696ab89b7db60954b3bfd3e580b685cccbcd4dd6",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "unified_0p1_1",
+      "seed": 4,
+      "run_id": "cz8v5hlo",
+      "name": "leafy-sweep-10",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/cz8v5hlo",
+      "state": "finished",
+      "created_at": "2026-07-30T13:10:16Z",
+      "runtime_seconds": 143.577139573,
+      "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "execution_host": "HCCS-90",
+      "gpu_index": "1",
+      "pane": "%40",
+      "protocol_identity": "elliptic-loss-unification-019fb305",
+      "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0,
+      "AUC.last": 0.5770277852629611,
+      "AP.last": 0.10670409258220598,
+      "final_step": 150,
+      "config": {
+        "var": 0,
+        "mean": 0,
+        "pp_k": 7,
+        "seed": 4,
+        "device": 0,
+        "end_lr": 0.0003,
+        "dataset": "elliptic",
+        "peak_lr": 0.0005,
+        "readout": "avg",
+        "variant": "unified_0p1_1",
+        "GNA_temp": 1,
+        "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+        "proj_dim": 64,
+        "drop_prob": 0,
+        "gpu_index": "1",
+        "num_epoch": 150,
+        "visualize": false,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "batch_size": 32768,
+        "model_type": "VecGAD",
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "train_rate": 0.05,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "tot_updates": 1000,
+        "GT_num_heads": 2,
+        "outlier_beta": 0.3,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "wandb_entity": "HCCS",
+        "warmup_epoch": 20,
+        "weight_decay": 0,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "con_loss_temp": 10,
+        "embedding_dim": 256,
+        "negsamp_ratio": 1,
+        "wandb_project": "GGADFormer",
+        "execution_host": "HCCS-90",
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "warmup_updates": 50,
+        "auc_test_rounds": 256,
+        "bce_loss_weight": 1,
+        "con_loss_weight": 0.1,
+        "data_split_seed": 42,
+        "rec_loss_weight": 1,
+        "progregate_alpha": 0.6,
+        "proj_loss_weight": 0,
+        "ring_loss_weight": 1,
+        "confidence_margin": 2,
+        "protocol_identity": "elliptic-loss-unification-019fb305",
+        "margin_loss_weight": 0,
+        "GT_attention_dropout": 0.4,
+        "rec_error_filter_ratio": 1,
+        "split_protocol_identity": "elliptic:train_rate=0.05:val_rate=0.1:data_split_seed=42",
+        "reconstruction_loss_weight": 1,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint"
+      },
+      "config_sha256": "05ae259e02533ed26f3d703dadba0624ca08ef4be2aa2355fa2be52be0f40995",
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.48975344989113073,
+          "AP": 0.08571952218435828
+        },
+        {
+          "_step": 10,
+          "AUC": 0.42150269566668236,
+          "AP": 0.07699100795514707
+        },
+        {
+          "_step": 20,
+          "AUC": 0.472904174876361,
+          "AP": 0.08390971179750464
+        },
+        {
+          "_step": 30,
+          "AUC": 0.4018236392983098,
+          "AP": 0.07450047404912984
+        },
+        {
+          "_step": 40,
+          "AUC": 0.4060062303005999,
+          "AP": 0.07494803104710929
+        },
+        {
+          "_step": 50,
+          "AUC": 0.40038651444320944,
+          "AP": 0.0742080677421093
+        },
+        {
+          "_step": 60,
+          "AUC": 0.3800084242426778,
+          "AP": 0.07206157163624528
+        },
+        {
+          "_step": 70,
+          "AUC": 0.44749315825949687,
+          "AP": 0.08010851720025998
+        },
+        {
+          "_step": 80,
+          "AUC": 0.4492046259463399,
+          "AP": 0.08030401238392405
+        },
+        {
+          "_step": 90,
+          "AUC": 0.5132447362584318,
+          "AP": 0.09034140359410647
+        },
+        {
+          "_step": 100,
+          "AUC": 0.5263983305807469,
+          "AP": 0.09305023004745308
+        },
+        {
+          "_step": 110,
+          "AUC": 0.5659344695811149,
+          "AP": 0.10264709078438412
+        },
+        {
+          "_step": 120,
+          "AUC": 0.5831718674690136,
+          "AP": 0.10724502422461796
+        },
+        {
+          "_step": 130,
+          "AUC": 0.609777565422978,
+          "AP": 0.11616938244623692
+        },
+        {
+          "_step": 140,
+          "AUC": 0.5938173518656968,
+          "AP": 0.11016462575920666
+        },
+        {
+          "_step": 150,
+          "AUC": 0.5770277852629611,
+          "AP": 0.10670409258220598
+        }
+      ],
+      "history_sha256": "6c66b95144f98d998b554508ac5bd94ab270af1f752396220bbc515d606ebf09",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/logs/agent-gpu1-20260730T130416Z.log",
+      "agent_log_sha256": "9236afccf0d36dabacf546c736c86015c8d99e31e2cbe7c8a53940e73b7433c1",
+      "agent_exit_code": 0
+    }
+  ]
+}
