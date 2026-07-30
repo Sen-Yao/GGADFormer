@@ -1,0 +1,41 @@
+{
+  "dataset": "elliptic",
+  "control_variant": "control_2_20",
+  "candidate_variant": "unified_0p1_1",
+  "allowed_scientific_differences": {
+    "lambda_rec_emb": {
+      "control": 2.0,
+      "candidate": 0.1
+    },
+    "ring_loss_weight": {
+      "control": 20.0,
+      "candidate": 1.0
+    }
+  },
+  "forbidden_differences": [
+    "dataset",
+    "LR schedule",
+    "pp_k",
+    "progregate_alpha",
+    "num_epoch",
+    "batch_size",
+    "warmup_updates",
+    "train_rate",
+    "split",
+    "sampler",
+    "ring radius",
+    "outlier_beta",
+    "rec_loss_weight",
+    "seed list",
+    "algorithm code"
+  ],
+  "equivalence_threshold": {
+    "AUROC_mean_drop_max": 0.01,
+    "AUPRC_mean_drop_max": 0.02
+  },
+  "main_table_rank_check": {
+    "GGAD_AUROC": 0.7006,
+    "GGAD_AUPRC": 0.2565,
+    "candidate_must_remain_above_GGAD": true
+  }
+}
