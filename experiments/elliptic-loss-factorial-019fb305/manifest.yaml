@@ -26,10 +26,10 @@ git:
   code_tree: 74fc4c103902c65d5d511b5afe2e67d3a5492816
   code_remote: https://github.com/Sen-Yao/GGADFormer.git
   protocol_branch: codex/elliptic-loss-factorial-hccs90-019fb305
-  protocol_commit: pending_after_commit
+  protocol_commit: 02b9bd5fdd2df833e1c612f3c57d8df59a306600
   parent_results_commit: da3f76ce1987342c52f23c9dcb3d786cfde912f8
   remote_publication:
-    state: pending
+    state: pushed
     protocol_branch_remote: origin/codex/elliptic-loss-factorial-hccs90-019fb305
 
 config:
