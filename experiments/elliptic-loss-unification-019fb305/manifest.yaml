@@ -1,11 +1,11 @@
 schema_version: 1
-state: launch_ready
+state: launched
 formal_launch_allowed: true
 investigation_id: elliptic-loss-unification-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-30T12:37:21Z
-last_material_transition_at_utc: 2026-07-30T12:37:21Z
+last_material_transition_at_utc: 2026-07-30T13:04:16Z
 
 objective:
   dataset: elliptic
@@ -40,6 +40,7 @@ git:
   metadata_code_commit: a1e02572998042b673fd7dec9b30be60c4dd346c
   protocol_branch: codex/tolokers-lrec-hccs90-019fad7c
   protocol_commit: 655d6293bb76633bc6aa6fd21166a49c3b91d504
+  launch_checkpoint_commit: 8410b1684bd3460cbc0d060325200fa46ba2b3ee
   remote_publication:
     state: pushed
     protocol_branch_remote: origin/codex/tolokers-lrec-hccs90-019fad7c
@@ -94,6 +95,8 @@ execution:
   wandb_dir: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/wandb
   tmux_session: vecgad_elliptic_loss_019fb305
   tmux_remain_on_exit_requested: true
+  remote_launcher_path: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/protocol/launch-agent.sh
+  remote_launcher_sha256: 574c5e955a4cc98476202241084c7bb1fc14e7e40399263dcabe86a821760315
   agent_trial_count_total: 10
   agent_trial_count_plan:
     - {gpu: 0, count: 3}
@@ -113,8 +116,12 @@ execution:
     WANDB_CONSOLE=off
     WANDB_DIR=/root/gpufree-data/linziyao/VecGAD-elliptic-loss-unification-019fb305/wandb
     wandb agent HCCS/GGADFormer/l6ubfjxt --count <trial-count>
-  pane_records: []
-  first_agent_start_utc: pending
+  pane_records:
+    - {pane: "%39", gpu: 0, count: 3, pane_pid: 2411749, first_run_id: y9wz9q9x}
+    - {pane: "%40", gpu: 1, count: 3, pane_pid: 2411755, first_run_id: d5818dpg}
+    - {pane: "%41", gpu: 2, count: 2, pane_pid: 2411766, first_run_id: 27vg0m3g}
+    - {pane: "%42", gpu: 7, count: 2, pane_pid: 2411777, first_run_id: chlavgv0}
+  first_agent_start_utc: 2026-07-30T13:04:16Z
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
@@ -153,7 +160,7 @@ wandb:
   sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 10
-  current_state: PENDING
+  current_state: RUNNING
   project_access_preflight: passed
   authenticated_user: jerryyoursister
   write_authorization: user_delegation
@@ -174,6 +181,11 @@ wandb:
     - credentials
     - model checkpoints
     - custom or undeclared artifacts
+  initial_run_records:
+    - {run_id: y9wz9q9x, url: "https://wandb.ai/HCCS/GGADFormer/runs/y9wz9q9x", variant: unified_0p1_1, seed: 0, gpu: 0, state: running}
+    - {run_id: d5818dpg, url: "https://wandb.ai/HCCS/GGADFormer/runs/d5818dpg", variant: control_2_20, seed: 1, gpu: 1, state: running}
+    - {run_id: 27vg0m3g, url: "https://wandb.ai/HCCS/GGADFormer/runs/27vg0m3g", variant: control_2_20, seed: 0, gpu: 2, state: running}
+    - {run_id: chlavgv0, url: "https://wandb.ai/HCCS/GGADFormer/runs/chlavgv0", variant: unified_0p1_1, seed: 1, gpu: 7, state: running}
 
 trials:
   expected:
@@ -204,5 +216,6 @@ occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
   initial_state_read_at_utc: 2026-07-30T12:37:21Z
   selected_host_state_before_claim: free
-  claim_state: pending
+  claim_state: running
   reserved_at_utc: 2026-07-30T12:46:13Z
+  running_at_utc: 2026-07-30T13:04:04Z
