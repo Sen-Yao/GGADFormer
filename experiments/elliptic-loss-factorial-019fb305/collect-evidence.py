@@ -26,9 +26,9 @@ PANE_BY_GPU = {
     "6": "%49",
     "7": "%50",
 }
-PRIOR_RESULTS_PATH = WORKTREE / "experiments/elliptic-loss-unification-019fb305/results.json"
+PRIOR_RESULTS_PATH = EVIDENCE_DIR / "prior" / "results.json"
 PRIOR_RESULTS_SHA256 = "8e27e0dc0f723c4ff7be729a5f73caa852021b39885b0da945342adf11d621b2"
-PRIOR_AUTH_PATH = WORKTREE / "experiments/elliptic-loss-unification-019fb305/authoritative-sweep.json"
+PRIOR_AUTH_PATH = EVIDENCE_DIR / "prior" / "authoritative-sweep.json"
 PRIOR_AUTH_SHA256 = "efe5263a3666ad4287a3047ae722eadf1d401553a3644d081c60e51c05c6fb54"
 
 COMMON_CONFIG = {
