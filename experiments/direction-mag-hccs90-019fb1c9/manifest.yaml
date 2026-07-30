@@ -1,5 +1,5 @@
 schema_version: 1
-state: launched
+state: completed
 investigation_id: direction-mag-hccs90-019fb1c9
 owner_thread_id: 019fb1c9-fd57-7962-ac54-d864531504ef
 source_thread_id: 019fb06a-227d-7b43-b0b0-f1479261e21b
@@ -107,6 +107,10 @@ config_artifacts:
   sweep_tolokers_sha256: 59d25c30e586b2682c52d2e2a3c7b3f11d14ef068ee5ccbc938e86e3e9a0e995
   launcher_sha256: 1e101f1ef82b9d7a2abbd8a27052c50ca7b81f797b00f3547895ec07b9959470
   config_digest_sha256: 91393b3d3fb3204055f528c475374f0003e523bb7c79499c8cfbd2b6186e91e1
+  results_path: experiments/direction-mag-hccs90-019fb1c9/results.json
+  results_sha256: 3348e3fac85fbea96a922b7302a4cd9167f491c48d2c8531aacaa5ebebb23b6b
+  remote_log_checksums_path: experiments/direction-mag-hccs90-019fb1c9/remote-log-sha256.txt
+  remote_log_checksums_sha256: c5551a2713944a985d9eabd9fd05b3d1aa1a6665352402f5ca91ee125f6f5d9f
 
 execution:
   execution_host: HCCS-90
@@ -183,12 +187,33 @@ wandb:
     elliptic: q7j5snr0
     tolokers: njo17tej
   sweep_creation_recorded_at_utc: 2026-07-30T07:09:59Z
+  final_state:
+    Amazon: FINISHED
+    elliptic: FINISHED
+    tolokers: FINISHED
+  final_finished_run_count:
+    Amazon: 25
+    elliptic: 25
+    tolokers: 25
 
 validation:
   local_py_compile: passed
   hccs90_unittest: "python -m unittest tests.test_ablation passed, 8 tests"
   hccs90_run_help: passed
+  independent_wandb_replay: passed
+  expected_trials: 75
+  finished_trials: 75
+  duplicate_trials: 0
+  missing_trials: 0
+  all_agent_exitcodes_zero: true
+  all_final_steps_present: true
+  all_configs_match_manifest: true
+  all_rng_seeds_match_formula: true
 
 protocol_deviations:
   - kind: missing_input_files
     detail: requested Overleaf tmp files were absent from this independent worktree; authority config was resolved from available repo and W&B evidence
+  - kind: tmux_dead_pane_retention
+    detail: tmux retained only pane %28 after normal terminal exit; all pane logs, start/finish timestamps, exitcode files, W&B run identities, and log hashes were preserved
+  - kind: nvidia_smi_stale_pid_rows_after_completion
+    detail: after completion, ps and /proc showed no task-owned process, but nvidia-smi still listed non-existent compute PID rows; no process was killed or signaled
