@@ -1,0 +1,31 @@
+{
+  "source_protocol": "tolokers-lrec-unification-019fb2b1",
+  "control_variant": "control",
+  "candidate_variant": "unified_0p1_1",
+  "scientific_difference": [
+    {
+      "path": "fixed_config.lambda_rec_emb",
+      "control": 5.0,
+      "unified_0p1_1": 0.1
+    }
+  ],
+  "invariants": {
+    "dataset": "tolokers",
+    "seed_axis": [0, 1, 2, 3, 4],
+    "train_rate": 0.05,
+    "data_split_seed": 42,
+    "num_epoch": 100,
+    "batch_size": 1024,
+    "peak_lr": 0.0001,
+    "end_lr": 0.00001,
+    "warmup_updates": 5,
+    "pp_k": 10,
+    "progregate_alpha": 0.9,
+    "outlier_beta": 0.3,
+    "rec_loss_weight": 1,
+    "ring_loss_weight": 1,
+    "ring_R_min": 0.3,
+    "ring_R_max": 1
+  }
+}
+
