@@ -6,7 +6,9 @@ from SGT import SGT
 from utils import *
 
 from sklearn.metrics import roc_auc_score
+import os
 import random
+import subprocess
 import dgl
 from sklearn.metrics import average_precision_score
 import argparse
@@ -23,6 +25,47 @@ from ablation_rec_error import evaluate_with_rec_error_filter
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
 # os.environ["KMP_DUPLICATE_LnIB_OK"] = "TRUE"
 # Set argument
+
+def get_git_head_sha():
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+    except Exception:
+        return "unknown"
+
+
+def infer_run_variant(args):
+    if abs(args.lambda_rec_emb - 5.0) < 1e-12 and abs(args.ring_loss_weight - 1.0) < 1e-12:
+        return "control"
+    if abs(args.lambda_rec_emb - 0.1) < 1e-12 and abs(args.ring_loss_weight - 1.0) < 1e-12:
+        return "unified_0p1_1"
+    return f"lambda_rec_emb={args.lambda_rec_emb:g};ring_loss_weight={args.ring_loss_weight:g}"
+
+
+def build_wandb_audit_config(args):
+    wandb_entity = os.environ.get("WANDB_ENTITY", "HCCS")
+    wandb_project = os.environ.get("WANDB_PROJECT", "GGADFormer")
+    code_sha = os.environ.get("CODE_SHA") or get_git_head_sha()
+    gpu_index = os.environ.get("GPU_INDEX") or os.environ.get("CUDA_VISIBLE_DEVICES") or str(args.device)
+
+    return {
+        "variant": infer_run_variant(args),
+        "protocol_identity": os.environ.get("PROTOCOL_ID", "unrecorded"),
+        "split_protocol_identity": (
+            f"{args.dataset}:train_rate={args.train_rate}:val_rate=0.1:"
+            f"data_split_seed={args.data_split_seed}"
+        ),
+        "code_sha": code_sha,
+        "execution_host": os.environ.get("EXECUTION_HOST", "unknown"),
+        "gpu_index": gpu_index,
+        "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+        "wandb_entity": wandb_entity,
+        "wandb_project": wandb_project,
+    }
+
 
 def train(args):
     # Set random seed
@@ -517,12 +560,13 @@ if __name__ == "__main__":
 
 
     run = wandb.init(
-        entity="HCCS",
+        entity=os.environ.get("WANDB_ENTITY", "HCCS"),
         # Set the wandb project where this run will be logged.
-        project="VecGAD",
+        project=os.environ.get("WANDB_PROJECT", "GGADFormer"),
         # Track hyperparameters and run metadata.
         config=args,
     )
+    wandb.config.update(build_wandb_audit_config(args), allow_val_change=True)
 
     wandb.define_metric("AUC", summary="max")
     wandb.define_metric("AP", summary="max")
