@@ -17,7 +17,59 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-def apply_perturbation_ablation(reconstruction_error_proj, ablation_mode):
+def _randn_like_with_generator(tensor, generator):
+    if generator is None:
+        return torch.randn_like(tensor)
+    return torch.randn(
+        tensor.shape,
+        dtype=tensor.dtype,
+        device=tensor.device,
+        generator=generator,
+    )
+
+
+def normalize_direction(vectors, eps=1e-12):
+    """
+    L2-normalize row vectors without producing NaNs for zero rows.
+    """
+    norms = torch.norm(vectors, p=2, dim=1, keepdim=True)
+    return vectors / norms.clamp_min(eps)
+
+
+def permute_magnitudes_cyclic(magnitudes, generator=None):
+    """
+    Permute node magnitudes by a non-zero cyclic shift within the current
+    generation subset.
+
+    For n >= 2 this preserves the exact magnitude multiset and creates no fixed
+    points. For n < 2 the identity is explicit because no association can be
+    broken.
+    """
+    if magnitudes.dim() != 2 or magnitudes.size(1) != 1:
+        raise ValueError(
+            f"magnitudes must have shape [n, 1], got {tuple(magnitudes.shape)}"
+        )
+
+    n = magnitudes.size(0)
+    if n < 2:
+        return magnitudes.clone()
+
+    if generator is None:
+        shift_tensor = torch.randint(1, n, (1,), device=magnitudes.device)
+    else:
+        shift_tensor = torch.randint(
+            1, n, (1,), device=magnitudes.device, generator=generator
+        )
+    shift = int(shift_tensor.item())
+    return torch.roll(magnitudes, shifts=shift, dims=0)
+
+
+def apply_perturbation_ablation(
+    reconstruction_error_proj,
+    ablation_mode,
+    direction_generator=None,
+    magnitude_generator=None,
+):
     """
     针对重构误差扰动向量的消融实验。
 
@@ -29,9 +81,11 @@ def apply_perturbation_ablation(reconstruction_error_proj, ablation_mode):
         ablation_mode: 消融模式
             - 'none': 不做消融，直接返回原向量
             - 'random_dir': 保留模长，随机方向
-            - 'random_mag': 保留方向，随机模长（采样范围由数据决定）
-            - 'random_both': 完全随机向量（均值和方差与原向量一致）
+            - 'random_mag': 保留方向，使用当前生成子集内的精确模长置换
+            - 'random_both': 随机方向 + 同一精确模长置换机制
             - 'constant_mag': 保留方向，用 batch 平均模长替换
+        direction_generator: random_dir/random_both 使用的独立显式 RNG
+        magnitude_generator: random_mag/random_both 使用的独立显式 RNG
 
     Returns:
         处理后的 reconstruction_error_proj
@@ -39,38 +93,37 @@ def apply_perturbation_ablation(reconstruction_error_proj, ablation_mode):
     if ablation_mode is None or ablation_mode == 'none':
         return reconstruction_error_proj
 
-    # 从当前 batch 自动提取模长统计量
+    # 从当前生成子集自动提取模长；后续置换不 detach，保持 projection head 梯度路径。
     norms = torch.norm(reconstruction_error_proj, p=2, dim=1, keepdim=True)
     mean_norm = norms.mean()
-    std_norm = norms.std()
 
     if ablation_mode == 'random_dir':
         # 保留 learned magnitude，randomize direction
-        random_dir = F.normalize(torch.randn_like(reconstruction_error_proj), p=2, dim=1)
+        random_vec = _randn_like_with_generator(
+            reconstruction_error_proj, direction_generator
+        )
+        random_dir = normalize_direction(random_vec)
         return norms * random_dir
 
     elif ablation_mode == 'random_mag':
-        # 保留 learned direction，randomize magnitude
-        # 使用高斯分布，保持均值和方差与原向量一致
-        direction = F.normalize(reconstruction_error_proj, p=2, dim=1)
-        # 从 N(mean_norm, std_norm^2) 采样，并截断负值
-        random_mag = torch.randn_like(norms) * std_norm + mean_norm
-        random_mag = torch.clamp(random_mag, min=0)  # 确保非负
-        return direction * random_mag
+        # 保留 learned direction，用精确置换后的 donor magnitude 打破 node-magnitude association。
+        direction = normalize_direction(reconstruction_error_proj)
+        permuted_mag = permute_magnitudes_cyclic(norms, magnitude_generator)
+        return direction * permuted_mag
 
     elif ablation_mode == 'random_both':
-        # 完全随机的 perturbation
-        # 方向和模长都独立随机化，但保持模长的统计量一致
-        random_vec = torch.randn_like(reconstruction_error_proj)
-        random_dirs = F.normalize(random_vec, p=2, dim=1)
-        random_mags = torch.randn_like(norms) * std_norm + mean_norm
-        random_mags = torch.clamp(random_mags, min=0.01)  # 避免0模长
-        return random_dirs * random_mags
+        # 随机方向与 random_mag 完全相同的精确模长置换边界语义。
+        random_vec = _randn_like_with_generator(
+            reconstruction_error_proj, direction_generator
+        )
+        random_dirs = normalize_direction(random_vec)
+        permuted_mag = permute_magnitudes_cyclic(norms, magnitude_generator)
+        return random_dirs * permuted_mag
 
     elif ablation_mode == 'constant_mag':
         # 保留 learned direction，用 batch 平均模长替换
         # 控制了模长的统计量，仅测试方向信息的贡献
-        direction = F.normalize(reconstruction_error_proj, p=2, dim=1)
+        direction = normalize_direction(reconstruction_error_proj)
         return direction * mean_norm
 
     else:

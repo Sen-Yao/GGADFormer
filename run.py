@@ -427,6 +427,8 @@ if __name__ == "__main__":
     parser.add_argument('--weight_decay', type=float, default=0.0)
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--data_split_seed', type=int, default=42)
+    parser.add_argument('--ablation_direction_seed', type=int, default=None)
+    parser.add_argument('--ablation_magnitude_seed', type=int, default=None)
     parser.add_argument('--train_rate', type=float, default=0.05)
     parser.add_argument('--batch_size', type=int, default=8192)
 
@@ -485,6 +487,8 @@ if __name__ == "__main__":
     parser.add_argument('--end_lr', type=float, default=1e-4)
 
     parser.add_argument('--warmup_epoch', type=int, default=20)
+    parser.add_argument('--wandb_entity', type=str, default='HCCS')
+    parser.add_argument('--wandb_project', type=str, default='GGADFormer')
 
     # Ablation Study (perturbation + h_mean center computation + token fusion)
     parser.add_argument('--ablation_mode', type=str, default='none',
@@ -517,18 +521,26 @@ if __name__ == "__main__":
 
 
     run = wandb.init(
-        entity="HCCS",
+        entity=args.wandb_entity,
         # Set the wandb project where this run will be logged.
-        project="VecGAD",
+        project=args.wandb_project,
         # Track hyperparameters and run metadata.
         config=args,
     )
 
-    wandb.define_metric("AUC", summary="max")
-    wandb.define_metric("AP", summary="max")
     wandb.define_metric("AUC", summary="last")
     wandb.define_metric("AP", summary="last")
     print('Dataset: ', args.dataset)
+    print(
+        'Ablation RNG seeds: direction={}, magnitude={}'.format(
+            args.ablation_direction_seed
+            if args.ablation_direction_seed is not None
+            else args.seed * 1000003 + 1729,
+            args.ablation_magnitude_seed
+            if args.ablation_magnitude_seed is not None
+            else args.seed * 1000003 + 7919,
+        )
+    )
         
     try:
         train(args)
@@ -539,16 +551,19 @@ if __name__ == "__main__":
     except torch.cuda.OutOfMemoryError as e:
         print(f"显存不足!：{e}")
         send_notification(f"【VecFormer】出现显存不足!：{e}")
-        wandb.log({"AUC.max": 0})
-        wandb.log({"AP.max": 0})
+        wandb.summary["failure_type"] = "cuda_oom"
+        wandb.summary["failure_message"] = str(e)
         start_time = time.time()
-        wandb.finish()
+        wandb.finish(exit_code=1)
+        raise
     
     except Exception as e:
         import traceback
         print(f"其他错误：{e}")
         traceback.print_exc()  # 打印详细的错误堆栈，包括出错的代码行
-        wandb.log({"AUC.max": 0})
+        wandb.summary["failure_type"] = "exception"
+        wandb.summary["failure_message"] = str(e)
         start_time = time.time()
-        wandb.finish()
+        wandb.finish(exit_code=1)
+        raise
     print(f"WandB finish took {time.time() - start_time:.2f} seconds")

@@ -7,6 +7,13 @@ import time
 from check_gpu_memory import print_gpu_memory_usage, print_tensor_memory, clear_gpu_memory
 from ablation import apply_perturbation_ablation, apply_h_mean_ablation, GPRGNNFusion, should_use_gprgnn_fusion
 
+
+def _make_ablation_generator(seed, device):
+    generator = torch.Generator(device=device)
+    generator.manual_seed(int(seed))
+    return generator
+
+
 class FeedForwardNetwork(nn.Module):
     def __init__(self, hidden_size, ffn_size, dropout_rate):
         super(FeedForwardNetwork, self).__init__()
@@ -228,6 +235,22 @@ class VecGAD(nn.Module):
         else:
             self.gprgnn_fusion = None
 
+        base_seed = int(getattr(args, 'seed', 0))
+        direction_seed = getattr(args, 'ablation_direction_seed', None)
+        magnitude_seed = getattr(args, 'ablation_magnitude_seed', None)
+        if direction_seed is None:
+            direction_seed = base_seed * 1000003 + 1729
+        if magnitude_seed is None:
+            magnitude_seed = base_seed * 1000003 + 7919
+        self.ablation_direction_seed = int(direction_seed)
+        self.ablation_magnitude_seed = int(magnitude_seed)
+        self.ablation_direction_generator = _make_ablation_generator(
+            self.ablation_direction_seed, self.device
+        )
+        self.ablation_magnitude_generator = _make_ablation_generator(
+            self.ablation_magnitude_seed, self.device
+        )
+
         # 将模型移动到指定设备
         self.to(self.device)
     
@@ -313,7 +336,10 @@ class VecGAD(nn.Module):
             ablation_mode = getattr(args, 'ablation_mode', 'none')
             if ablation_mode != 'none':
                 reconstruction_error_proj = apply_perturbation_ablation(
-                    reconstruction_error_proj, ablation_mode
+                    reconstruction_error_proj,
+                    ablation_mode,
+                    direction_generator=self.ablation_direction_generator,
+                    magnitude_generator=self.ablation_magnitude_generator,
                 )
 
             outlier_emb = normal_for_generation_emb + args.outlier_beta * reconstruction_error_proj
