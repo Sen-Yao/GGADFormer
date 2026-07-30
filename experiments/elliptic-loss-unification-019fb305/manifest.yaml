@@ -41,6 +41,7 @@ git:
   protocol_branch: codex/tolokers-lrec-hccs90-019fad7c
   protocol_commit: 655d6293bb76633bc6aa6fd21166a49c3b91d504
   launch_checkpoint_commit: 8410b1684bd3460cbc0d060325200fa46ba2b3ee
+  results_commit: da3f76ce1987342c52f23c9dcb3d786cfde912f8
   remote_publication:
     state: pushed
     protocol_branch_remote: origin/codex/tolokers-lrec-hccs90-019fad7c
@@ -263,3 +264,6 @@ occupancy:
   claim_state: running
   reserved_at_utc: 2026-07-30T12:46:13Z
   running_at_utc: 2026-07-30T13:04:04Z
+  final_state: free
+  released_at_utc: 2026-07-30T13:30:55Z
+  release_evidence: "W&B l6ubfjxt FINISHED 10/10; results commit da3f76c pushed; all configs/code/history step 150 replay-valid; 4/4 agent exit codes 0; no task-owned process; GPUs 0/1/2/7 no compute PID; detached worktree 655d629 clean"
