@@ -46,9 +46,15 @@ python run.py --batch_size=8192 --dataset=t_finance --end_lr=0.0001 --lambda_rec
 
 ## Tolokers
 
-# Epoch=201/200, AUC=0.6683, AP=0.3120
+# W&B provenance for the unified Tolokers 5-seed result (lambda_rec_emb=0.1,
+# ring_loss_weight=1, seeds 0-4):
+# https://wandb.ai/HCCS/GGADFormer/sweeps/2acum2mg
+# Scientific code: bb798db0e32615abd8504da7ccb21a124102b363
+# Seeds 0-4, AUC.last/AP.last means: 0.6659020323844487 / 0.31507833656938
+# Sample std (ddof=1): 0.004186228825945539 / 0.007207500868862045
+# Audit manifest: experiments/tolokers-lrec-unification-019fb2b1/manifest.yaml
 
-python run.py --batch_size=1024 --dataset=tolokers --end_lr=0.00001 --lambda_rec_emb=5 --num_epoch=100 --outlier_beta=0.3 --peak_lr=0.0001 --pp_k=10 --progregate_alpha=0.9 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=5
+python run.py --batch_size=1024 --dataset=tolokers --end_lr=0.00001 --lambda_rec_emb=0.1 --num_epoch=100 --outlier_beta=0.3 --peak_lr=0.0001 --pp_k=10 --progregate_alpha=0.9 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=5
 
 ## DGraph
 
@@ -74,8 +80,8 @@ python run.py --batch_size=8192 --dataset=elliptic --end_lr=0.0001 --lambda_rec_
 python run.py --batch_size=8192 --dataset=elliptic --end_lr=0.0001 --lambda_rec_emb=0.1 --num_epoch=200 --outlier_beta=0.3 --peak_lr=0.0005 --pp_k=8 --progregate_alpha=0.8 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=50
 
 
-CUDA_VISIBLE_DEVICES=5 python run.py --batch_size=1024 --dataset=tolokers --end_lr=0.00001 --lambda_rec_emb=5 --num_epoch=100 --outlier_beta=0.3 --peak_lr=0.0001 --pp_k=10 --progregate_alpha=0.9 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=5  --visualize=True
+CUDA_VISIBLE_DEVICES=5 python run.py --batch_size=1024 --dataset=tolokers --end_lr=0.00001 --lambda_rec_emb=0.1 --num_epoch=100 --outlier_beta=0.3 --peak_lr=0.0001 --pp_k=10 --progregate_alpha=0.9 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=5  --visualize=True
 
-# Ablation
+# Historical ablation retained with its original lambda_rec_emb=5 setting.
 
 CUDA_VISIBLE_DEVICES=5 python run.py --batch_size=1024 --dataset=tolokers --end_lr=0.00001 --lambda_rec_emb=5 --num_epoch=100 --outlier_beta=0.3 --peak_lr=0.0001 --pp_k=10 --progregate_alpha=0.9 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=0 --train_rate=0.05 --warmup_updates=5  --rec_error_filter_ratio=0.5
