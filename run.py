@@ -519,6 +519,10 @@ if __name__ == "__main__":
         args.mean = 0.0
         args.var = 0.0
 
+    if args.ablation_direction_seed is None:
+        args.ablation_direction_seed = args.seed * 1000003 + 1729
+    if args.ablation_magnitude_seed is None:
+        args.ablation_magnitude_seed = args.seed * 1000003 + 7919
 
     run = wandb.init(
         entity=args.wandb_entity,
@@ -533,12 +537,8 @@ if __name__ == "__main__":
     print('Dataset: ', args.dataset)
     print(
         'Ablation RNG seeds: direction={}, magnitude={}'.format(
-            args.ablation_direction_seed
-            if args.ablation_direction_seed is not None
-            else args.seed * 1000003 + 1729,
-            args.ablation_magnitude_seed
-            if args.ablation_magnitude_seed is not None
-            else args.seed * 1000003 + 7919,
+            args.ablation_direction_seed,
+            args.ablation_magnitude_seed,
         )
     )
         
