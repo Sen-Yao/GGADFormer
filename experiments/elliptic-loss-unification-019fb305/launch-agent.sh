@@ -1,22 +1,29 @@
 #!/usr/bin/env bash
 set -u
 
-if [[ $# -ne 2 ]]; then
-  echo "usage: $0 <gpu-index> <sweep-id>" >&2
+if [[ $# -ne 3 ]]; then
+  echo "usage: $0 <gpu-index> <sweep-id> <trial-count>" >&2
   exit 64
 fi
 
 gpu_index="$1"
 sweep_id="$2"
-expected_sweep_id="PENDING_SWEEP_ID"
+trial_count="$3"
+expected_sweep_id="l6ubfjxt"
 
 case "$gpu_index" in
-  0|1|2|3|4|5|6|7) ;;
+  0|1) expected_trial_count=3 ;;
+  2|7) expected_trial_count=2 ;;
   *)
     echo "unsupported GPU index: $gpu_index" >&2
     exit 64
     ;;
 esac
+
+if [[ "$trial_count" != "$expected_trial_count" ]]; then
+  echo "unexpected trial count for GPU $gpu_index: $trial_count" >&2
+  exit 64
+fi
 
 if [[ "$expected_sweep_id" != "PENDING_SWEEP_ID" && "$sweep_id" != "$expected_sweep_id" ]]; then
   echo "unexpected sweep ID: $sweep_id" >&2
@@ -59,7 +66,7 @@ printf 'agent_started_utc=%s gpu=%s sweep=%s code_sha=%s protocol=%s\n' \
   "$started_at" "$gpu_index" "$sweep_id" "$(git rev-parse HEAD)" "$PROTOCOL_ID" | tee "$log_path"
 
 set -o pipefail
-wandb agent "HCCS/GGADFormer/$sweep_id" --count 1 2>&1 | tee -a "$log_path"
+wandb agent "HCCS/GGADFormer/$sweep_id" --count "$trial_count" 2>&1 | tee -a "$log_path"
 agent_exit_code="${PIPESTATUS[0]}"
 
 finished_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
