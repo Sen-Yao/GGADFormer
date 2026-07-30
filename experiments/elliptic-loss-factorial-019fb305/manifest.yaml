@@ -1,12 +1,12 @@
 schema_version: 1
-state: prepared
+state: launched
 formal_launch_allowed: true
 investigation_id: elliptic-loss-factorial-019fb305
 parent_investigation_id: elliptic-loss-unification-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-30T13:38:05Z
-last_material_transition_at_utc: 2026-07-30T13:53:01Z
+last_material_transition_at_utc: 2026-07-30T14:00:28Z
 
 objective:
   dataset: elliptic
@@ -27,6 +27,7 @@ git:
   code_remote: https://github.com/Sen-Yao/GGADFormer.git
   protocol_branch: codex/elliptic-loss-factorial-hccs90-019fb305
   protocol_commit: 02b9bd5fdd2df833e1c612f3c57d8df59a306600
+  launch_parent_commit: 7153ebed78077116ebbb77fc67db4784d9239593
   parent_results_commit: da3f76ce1987342c52f23c9dcb3d786cfde912f8
   remote_publication:
     state: pushed
@@ -87,8 +88,15 @@ execution:
     - {gpu: 5, count: 1}
     - {gpu: 6, count: 1}
     - {gpu: 7, count: 1}
-  pane_records: []
-  first_agent_start_utc: pending
+  pane_records:
+    - {window: agents, pane: "%44", gpu: 0, count: 2, pane_pid: 2456908, first_run_id: hj8tpmz5}
+    - {window: agents, pane: "%45", gpu: 1, count: 2, pane_pid: 2456914, first_run_id: czuc99ae}
+    - {window: agents, pane: "%46", gpu: 2, count: 2, pane_pid: 2456925, first_run_id: 3e28ah3j}
+    - {window: agents, pane: "%47", gpu: 4, count: 1, pane_pid: 2456936, first_run_id: e4wwtvqj}
+    - {window: agents, pane: "%48", gpu: 5, count: 1, pane_pid: 2456947, first_run_id: 3chgnnw9}
+    - {window: agents2, pane: "%49", gpu: 6, count: 1, pane_pid: 2460051, first_run_id: angkgiwr}
+    - {window: agents2, pane: "%50", gpu: 7, count: 1, pane_pid: 2460057, first_run_id: 4negdpwr}
+  first_agent_start_utc: 2026-07-30T13:55:57Z
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
@@ -128,7 +136,7 @@ wandb:
   sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 10
-  current_state: PENDING
+  current_state: RUNNING
   project_access_preflight: passed
   authenticated_user: jerryyoursister
   write_authorization: user_delegation
@@ -137,6 +145,14 @@ wandb:
   custom_artifacts_uploaded: 0
   raw_data_uploaded: false
   source_code_uploaded: false
+  initial_run_records:
+    - {run_id: 3chgnnw9, url: "https://wandb.ai/HCCS/GGADFormer/runs/3chgnnw9", factorial_cell: emb_only_0p1_20, seed: 0, gpu: 5, state: running}
+    - {run_id: czuc99ae, url: "https://wandb.ai/HCCS/GGADFormer/runs/czuc99ae", factorial_cell: emb_only_0p1_20, seed: 1, gpu: 1, state: running}
+    - {run_id: hj8tpmz5, url: "https://wandb.ai/HCCS/GGADFormer/runs/hj8tpmz5", factorial_cell: emb_only_0p1_20, seed: 2, gpu: 0, state: running}
+    - {run_id: e4wwtvqj, url: "https://wandb.ai/HCCS/GGADFormer/runs/e4wwtvqj", factorial_cell: emb_only_0p1_20, seed: 3, gpu: 4, state: running}
+    - {run_id: 3e28ah3j, url: "https://wandb.ai/HCCS/GGADFormer/runs/3e28ah3j", factorial_cell: emb_only_0p1_20, seed: 4, gpu: 2, state: running}
+    - {run_id: angkgiwr, url: "https://wandb.ai/HCCS/GGADFormer/runs/angkgiwr", factorial_cell: ring_only_2_1, seed: 0, gpu: 6, state: running}
+    - {run_id: 4negdpwr, url: "https://wandb.ai/HCCS/GGADFormer/runs/4negdpwr", factorial_cell: ring_only_2_1, seed: 1, gpu: 7, state: running}
 
 trials:
   expected:
@@ -165,7 +181,7 @@ blockers: []
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
   selected_host_state_before_claim: free
-  claim_state: reserved
+  claim_state: running
   initial_reserved_at_utc: 2026-07-30T13:38:05Z
   prelaunch_reallocation:
     reason: "GPU 3 acquired foreign compute PIDs after initial reservation and before launch"
@@ -175,3 +191,7 @@ occupancy:
     wandb_runs_started_before_reallocation: 0
     foreign_process_signaled: false
   reserved_at_utc: 2026-07-30T13:53:01Z
+  launched_at_utc: 2026-07-30T13:55:57Z
+
+operational_notes:
+  - "A second tmux window in the same session was required to accommodate seven agent panes; scientific protocol unchanged."
