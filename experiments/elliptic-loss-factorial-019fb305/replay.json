@@ -1,0 +1,293 @@
+{
+  "status": "passed",
+  "source_hashes": {
+    "new_authoritative": "c30424541e4e25200e239a8a07b60e48d75c3246964d8a644a5098f46ef7ddd8",
+    "prior_authoritative": "efe5263a3666ad4287a3047ae722eadf1d401553a3644d081c60e51c05c6fb54",
+    "prior_results": "8e27e0dc0f723c4ff7be729a5f73caa852021b39885b0da945342adf11d621b2",
+    "results": "a047ca9bc442ff299b0e6a2bf3f3f4253ea8b16a7bc04a54c058e46ecceb5f34"
+  },
+  "fixed_final_step": 150,
+  "factorial_cells": {
+    "control_2_20": {
+      "AUC.last": {
+        "mean": 0.7680603161219808,
+        "sample_std_ddof1": 0.0293529342460461
+      },
+      "AP.last": {
+        "mean": 0.2949202293277435,
+        "sample_std_ddof1": 0.07978620526021576
+      }
+    },
+    "emb_only_0p1_20": {
+      "AUC.last": {
+        "mean": 0.6030553800252291,
+        "sample_std_ddof1": 0.04029805020215062
+      },
+      "AP.last": {
+        "mean": 0.11504855995664627,
+        "sample_std_ddof1": 0.01581127781436783
+      }
+    },
+    "ring_only_2_1": {
+      "AUC.last": {
+        "mean": 0.489310834722363,
+        "sample_std_ddof1": 0.13665620935935205
+      },
+      "AP.last": {
+        "mean": 0.0924154710799405,
+        "sample_std_ddof1": 0.02379601306052132
+      }
+    },
+    "unified_0p1_1": {
+      "AUC.last": {
+        "mean": 0.5947111119763802,
+        "sample_std_ddof1": 0.02118595904166663
+      },
+      "AP.last": {
+        "mean": 0.1091250237304858,
+        "sample_std_ddof1": 0.00509443472340379
+      }
+    }
+  },
+  "paired_effects": {
+    "lambda_rec_emb_low_minus_high_at_ring_20": {
+      "formula": "+1*emb_only_0p1_20 + -1*control_2_20",
+      "paired_differences_by_seed": [
+        {
+          "seed": 0,
+          "AUC.last": -0.1683559499079611,
+          "AP.last": -0.2700642369707236
+        },
+        {
+          "seed": 1,
+          "AUC.last": -0.16845223736422732,
+          "AP.last": -0.12431348752387042
+        },
+        {
+          "seed": 2,
+          "AUC.last": -0.10315800294866684,
+          "AP.last": -0.1827133947927572
+        },
+        {
+          "seed": 3,
+          "AUC.last": -0.20377467570759533,
+          "AP.last": -0.22089498924501533
+        },
+        {
+          "seed": 4,
+          "AUC.last": -0.18128381455530818,
+          "AP.last": -0.10137223832311958
+        }
+      ],
+      "paired_mean_difference": {
+        "AUC.last": -0.16500493609675176,
+        "AP.last": -0.17987166937109722
+      }
+    },
+    "lambda_rec_emb_low_minus_high_at_ring_1": {
+      "formula": "+1*unified_0p1_1 + -1*ring_only_2_1",
+      "paired_differences_by_seed": [
+        {
+          "seed": 0,
+          "AUC.last": 0.13899115054230832,
+          "AP.last": 0.024963457372731493
+        },
+        {
+          "seed": 1,
+          "AUC.last": 0.09126895477346159,
+          "AP.last": 0.0187042639780311
+        },
+        {
+          "seed": 2,
+          "AUC.last": 0.03674357351279822,
+          "AP.last": 0.008142386752508224
+        },
+        {
+          "seed": 3,
+          "AUC.last": -0.02705585818742673,
+          "AP.last": -0.0106875341131729
+        },
+        {
+          "seed": 4,
+          "AUC.last": 0.28705356562894435,
+          "AP.last": 0.042425189262628574
+        }
+      ],
+      "paired_mean_difference": {
+        "AUC.last": 0.10540027725401716,
+        "AP.last": 0.016709552650545297
+      }
+    },
+    "ring_loss_weight_low_minus_high_at_emb_2": {
+      "formula": "+1*ring_only_2_1 + -1*control_2_20",
+      "paired_differences_by_seed": [
+        {
+          "seed": 0,
+          "AUC.last": -0.37883812044410864,
+          "AP.last": -0.3252802488062707
+        },
+        {
+          "seed": 1,
+          "AUC.last": -0.2635024725971031,
+          "AP.last": -0.14343642561024414
+        },
+        {
+          "seed": 2,
+          "AUC.last": -0.16529697456879433,
+          "AP.last": -0.20737063626495078
+        },
+        {
+          "seed": 3,
+          "AUC.last": -0.1362214014701122,
+          "AP.last": -0.198643063024974
+        },
+        {
+          "seed": 4,
+          "AUC.last": -0.44988843791797106,
+          "AP.last": -0.1377934175325754
+        }
+      ],
+      "paired_mean_difference": {
+        "AUC.last": -0.27874948139961786,
+        "AP.last": -0.202504758247803
+      }
+    },
+    "ring_loss_weight_low_minus_high_at_emb_0p1": {
+      "formula": "+1*unified_0p1_1 + -1*emb_only_0p1_20",
+      "paired_differences_by_seed": [
+        {
+          "seed": 0,
+          "AUC.last": -0.07149101999383922,
+          "AP.last": -0.03025255446281558
+        },
+        {
+          "seed": 1,
+          "AUC.last": -0.0037812804594141713,
+          "AP.last": -0.0004186741083426204
+        },
+        {
+          "seed": 2,
+          "AUC.last": -0.02539539810732927,
+          "AP.last": -0.016514854719685362
+        },
+        {
+          "seed": 3,
+          "AUC.last": 0.04049741605005641,
+          "AP.last": 0.01156439210686841
+        },
+        {
+          "seed": 4,
+          "AUC.last": 0.018448942266281465,
+          "AP.last": 0.006004010053172762
+        }
+      ],
+      "paired_mean_difference": {
+        "AUC.last": -0.008344268048848958,
+        "AP.last": -0.005923536226160478
+      }
+    },
+    "interaction_difference_of_differences": {
+      "formula": "+1*unified_0p1_1 + -1*emb_only_0p1_20 + -1*ring_only_2_1 + +1*control_2_20",
+      "paired_differences_by_seed": [
+        {
+          "seed": 0,
+          "AUC.last": 0.3073471004502695,
+          "AP.last": 0.2950276943434551
+        },
+        {
+          "seed": 1,
+          "AUC.last": 0.25972119213768885,
+          "AP.last": 0.14301775150190152
+        },
+        {
+          "seed": 2,
+          "AUC.last": 0.13990157646146506,
+          "AP.last": 0.19085578154526542
+        },
+        {
+          "seed": 3,
+          "AUC.last": 0.1767188175201686,
+          "AP.last": 0.2102074551318424
+        },
+        {
+          "seed": 4,
+          "AUC.last": 0.4683373801842525,
+          "AP.last": 0.14379742758574815
+        }
+      ],
+      "paired_mean_difference": {
+        "AUC.last": 0.2704052133507689,
+        "AP.last": 0.19658122202164252
+      }
+    },
+    "lambda_rec_emb_low_minus_high_marginal": {
+      "formula": "0.5*(lambda_rec_emb_low_minus_high_at_ring_20 + lambda_rec_emb_low_minus_high_at_ring_1)",
+      "paired_differences_by_seed": [
+        {
+          "seed": 0,
+          "AUC.last": -0.014682399682826391,
+          "AP.last": -0.12255038979899607
+        },
+        {
+          "seed": 1,
+          "AUC.last": -0.03859164129538287,
+          "AP.last": -0.05280461177291966
+        },
+        {
+          "seed": 2,
+          "AUC.last": -0.03320721471793431,
+          "AP.last": -0.08728550402012449
+        },
+        {
+          "seed": 3,
+          "AUC.last": -0.11541526694751103,
+          "AP.last": -0.11579126167909412
+        },
+        {
+          "seed": 4,
+          "AUC.last": 0.05288487553681809,
+          "AP.last": -0.0294735245302455
+        }
+      ],
+      "paired_mean_difference": {
+        "AUC.last": -0.0298023294213673,
+        "AP.last": -0.08158105836027597
+      }
+    },
+    "ring_loss_weight_low_minus_high_marginal": {
+      "formula": "0.5*(ring_loss_weight_low_minus_high_at_emb_2 + ring_loss_weight_low_minus_high_at_emb_0p1)",
+      "paired_differences_by_seed": [
+        {
+          "seed": 0,
+          "AUC.last": -0.22516457021897393,
+          "AP.last": -0.17776640163454316
+        },
+        {
+          "seed": 1,
+          "AUC.last": -0.13364187652825862,
+          "AP.last": -0.07192754985929338
+        },
+        {
+          "seed": 2,
+          "AUC.last": -0.0953461863380618,
+          "AP.last": -0.11194274549231807
+        },
+        {
+          "seed": 3,
+          "AUC.last": -0.04786199271002789,
+          "AP.last": -0.0935393354590528
+        },
+        {
+          "seed": 4,
+          "AUC.last": -0.2157197478258448,
+          "AP.last": -0.06589470373970133
+        }
+      ],
+      "paired_mean_difference": {
+        "AUC.last": -0.14354687472423341,
+        "AP.last": -0.10421414723698175
+      }
+    }
+  },
+  "matches_results_json": true
+}

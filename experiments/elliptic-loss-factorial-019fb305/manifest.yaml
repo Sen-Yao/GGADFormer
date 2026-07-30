@@ -1,12 +1,12 @@
 schema_version: 1
-state: launched
-formal_launch_allowed: true
+state: completed
+formal_launch_allowed: false
 investigation_id: elliptic-loss-factorial-019fb305
 parent_investigation_id: elliptic-loss-unification-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-30T13:38:05Z
-last_material_transition_at_utc: 2026-07-30T14:00:28Z
+last_material_transition_at_utc: 2026-07-30T14:22:15Z
 
 objective:
   dataset: elliptic
@@ -28,6 +28,7 @@ git:
   protocol_branch: codex/elliptic-loss-factorial-hccs90-019fb305
   protocol_commit: 02b9bd5fdd2df833e1c612f3c57d8df59a306600
   launch_parent_commit: 7153ebed78077116ebbb77fc67db4784d9239593
+  results_parent_commit: 363d45224f234c47605d37fbcb96a99824a3eff2
   parent_results_commit: da3f76ce1987342c52f23c9dcb3d786cfde912f8
   remote_publication:
     state: pushed
@@ -52,8 +53,15 @@ config:
   prior_authoritative_sweep_path: experiments/elliptic-loss-unification-019fb305/authoritative-sweep.json
   prior_authoritative_sweep_sha256: efe5263a3666ad4287a3047ae722eadf1d401553a3644d081c60e51c05c6fb54
   authoritative_evidence_path: experiments/elliptic-loss-factorial-019fb305/authoritative-sweep.json
+  authoritative_evidence_sha256: c30424541e4e25200e239a8a07b60e48d75c3246964d8a644a5098f46ef7ddd8
   results_path: experiments/elliptic-loss-factorial-019fb305/results.json
+  results_sha256: a047ca9bc442ff299b0e6a2bf3f3f4253ea8b16a7bc04a54c058e46ecceb5f34
   remote_log_checksums_path: experiments/elliptic-loss-factorial-019fb305/remote-log-sha256.txt
+  remote_log_checksums_sha256: ebfeff743d4ba50763b3fe9920ac1c02c2c3323527932758c7d73a583e4b7cbf
+  replay_script_path: experiments/elliptic-loss-factorial-019fb305/replay-results.py
+  replay_script_sha256: a18d10873ba544da6446286f823689e5aa31b4861e78a991aae53d720db6bdf1
+  replay_path: experiments/elliptic-loss-factorial-019fb305/replay.json
+  replay_sha256: 4cd9432b619b61ffb5a6d3ede2ac949dcd9d4aec70494f9136062ea5dcb32e0f
 
 execution:
   execution_host: HCCS-90
@@ -99,6 +107,17 @@ execution:
     - {window: agents2, pane: "%49", gpu: 6, count: 1, pane_pid: 2460051, first_run_id: angkgiwr}
     - {window: agents2, pane: "%50", gpu: 7, count: 1, pane_pid: 2460057, first_run_id: 4negdpwr}
   first_agent_start_utc: 2026-07-30T13:55:57Z
+  last_agent_finish_utc: 2026-07-30T14:02:43Z
+  all_agent_exit_codes_zero: true
+  final_task_owned_process_count: 0
+  final_selected_gpu_compute_pid_count: 0
+  final_detached_worktree_clean: true
+  evidence_collection:
+    pane: "%51"
+    exit_code: 0
+    collector_log_path: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-factorial-019fb305/evidence/collector.log
+    collector_log_sha256: aa5ebb6b07b6428f2c12728642ed6609a4057a2eeb95438ed3dcded53839fd27
+    collector_exitcode_sha256: 9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
@@ -138,7 +157,8 @@ wandb:
   sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 10
-  current_state: RUNNING
+  current_state: FINISHED
+  stopped_after_expected_trials: true
   project_access_preflight: passed
   authenticated_user: jerryyoursister
   write_authorization: user_delegation
@@ -168,14 +188,27 @@ trials:
     - {factorial_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 2}
     - {factorial_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 3}
     - {factorial_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 4}
-  observed: []
+  observed:
+    - {factorial_cell: emb_only_0p1_20, seed: 0, run_id: 3chgnnw9, url: "https://wandb.ai/HCCS/GGADFormer/runs/3chgnnw9", gpu: 5, pane: "%48", state: finished, final_step: 150, AUC.last: 0.6455309902051348, AP.last: 0.13310110258644153}
+    - {factorial_cell: emb_only_0p1_20, seed: 1, run_id: czuc99ae, url: "https://wandb.ai/HCCS/GGADFormer/runs/czuc99ae", gpu: 1, pane: "%45", state: finished, final_step: 150, AUC.last: 0.5920796362037197, AP.last: 0.10773676996201142}
+    - {factorial_cell: emb_only_0p1_20, seed: 2, run_id: hj8tpmz5, url: "https://wandb.ai/HCCS/GGADFormer/runs/hj8tpmz5", gpu: 0, pane: "%44", state: finished, final_step: 150, AUC.last: 0.6449607144631146, AP.last: 0.13113952864817438}
+    - {factorial_cell: emb_only_0p1_20, seed: 3, run_id: e4wwtvqj, url: "https://wandb.ai/HCCS/GGADFormer/runs/e4wwtvqj", gpu: 4, pane: "%47", state: finished, final_step: 150, AUC.last: 0.5741267162574966, AP.last: 0.10256531605757081}
+    - {factorial_cell: emb_only_0p1_20, seed: 4, run_id: 3e28ah3j, url: "https://wandb.ai/HCCS/GGADFormer/runs/3e28ah3j", gpu: 2, pane: "%46", state: finished, final_step: 150, AUC.last: 0.5585788429966796, AP.last: 0.10070008252903322}
+    - {factorial_cell: ring_only_2_1, seed: 0, run_id: angkgiwr, url: "https://wandb.ai/HCCS/GGADFormer/runs/angkgiwr", gpu: 6, pane: "%49", state: finished, final_step: 150, AUC.last: 0.4350488196689873, AP.last: 0.07788509075089446}
+    - {factorial_cell: ring_only_2_1, seed: 1, run_id: 4negdpwr, url: "https://wandb.ai/HCCS/GGADFormer/runs/4negdpwr", gpu: 7, pane: "%50", state: finished, final_step: 150, AUC.last: 0.49702940097084397, AP.last: 0.0886138318756377}
+    - {factorial_cell: ring_only_2_1, seed: 2, run_id: oi010imz, url: "https://wandb.ai/HCCS/GGADFormer/runs/oi010imz", gpu: 0, pane: "%44", state: finished, final_step: 150, AUC.last: 0.5828217428429872, AP.last: 0.1064822871759808}
+    - {factorial_cell: ring_only_2_1, seed: 3, run_id: 382nfiir, url: "https://wandb.ai/HCCS/GGADFormer/runs/382nfiir", gpu: 1, pane: "%45", state: finished, final_step: 150, AUC.last: 0.6416799904949797, AP.last: 0.12481724227761212}
+    - {factorial_cell: ring_only_2_1, seed: 4, run_id: cqj475k9, url: "https://wandb.ai/HCCS/GGADFormer/runs/cqj475k9", gpu: 2, pane: "%46", state: finished, final_step: 150, AUC.last: 0.2899742196340167, AP.last: 0.0642789033195774}
 
 result_validation:
-  all_expected_trials_terminal: pending
-  config_identity_valid: pending
-  code_identity_valid: pending
-  fixed_final_epoch_policy_valid: pending
-  run_count: 0
+  all_expected_trials_terminal: true
+  config_identity_valid: true
+  code_identity_valid: true
+  fixed_final_epoch_policy_valid: true
+  summary_matches_history_final_step: true
+  all_agent_exit_codes_zero: true
+  independent_local_replay_passed: true
+  run_count: 10
 
 protocol_deviations: []
 blockers: []
@@ -197,3 +230,4 @@ occupancy:
 
 operational_notes:
   - "A second tmux window in the same session was required to accommodate seven agent panes; scientific protocol unchanged."
+  - "Panes %44-%48 were no longer retained after their tmux window completed; immutable launch evidence plus zero-exit agent files and hashes were preserved."
