@@ -5,7 +5,7 @@ investigation_id: tolokers-lrec-unification-019fb2b1
 owner_thread_id: 019fb2b1-f9d2-7742-bbb1-49b6494e94f4
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-30T11:14:35Z
-last_material_transition_at_utc: 2026-07-30T11:37:50Z
+last_material_transition_at_utc: 2026-07-30T11:40:11Z
 
 objective:
   dataset: tolokers
@@ -203,3 +203,9 @@ result_validation:
 
 protocol_deviations: []
 blockers: []
+
+occupancy:
+  document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
+  final_state: free
+  released_at_utc: 2026-07-30T11:40:11Z
+  release_evidence: "W&B 2acum2mg FINISHED 10/10; results commit 792c0c0 pushed; configs/code/history final step 100 replay-valid; 10/10 agent exitcodes 0; no task-owned wandb/python run process; selected GPUs 0/1/2/7 have no compute PID; foreign PIDs on 3-6 were pre-existing and not signaled"
