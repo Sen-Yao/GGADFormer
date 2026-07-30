@@ -12,3 +12,7 @@ pytorch_models/
 
 # Local, agent-friendly paper library. Keep PDFs and extracted notes out of Git.
 /literature/
+
+# Local paper builds, migration workspaces, backups, and visual-QA artifacts.
+/output/
+/tmp/
