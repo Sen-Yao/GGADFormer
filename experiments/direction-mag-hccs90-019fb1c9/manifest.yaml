@@ -92,11 +92,11 @@ authority_config:
 
 git:
   branch: codex/vecgad-direction-mag-ablation-hccs90
-  code_sha: a5aaa858a7a80f3e2b687cf5e4a86e5e68fe7f1c
-  code_tree: 8be43de0df5e4d9178068277814532ee7269aaa9
+  code_sha: fdb150b7927f26f2e8b5270365a324d844dc8b98
+  code_tree: e631e5f3370e991f441ccc95cbae28315f7a82af
   code_remote: https://github.com/Sen-Yao/GGADFormer.git
   pushed_branch: origin/codex/vecgad-direction-mag-ablation-hccs90
-  protocol_commit: null
+  prepared_protocol_commit: fdb150b7927f26f2e8b5270365a324d844dc8b98
 
 config_artifacts:
   sweep_amazon: experiments/direction-mag-hccs90-019fb1c9/sweep-amazon.yaml
@@ -118,6 +118,8 @@ execution:
   excluded_gpu_indices_due_to_foreign_compute_pids: [4, 5, 6, 7]
   task_root: /root/gpufree-data/linziyao/VecGAD-direction-mag-hccs90-019fb1c9
   detached_worktree: /root/gpufree-data/linziyao/VecGAD-direction-mag-hccs90-019fb1c9/worktree-a5aaa858
+  detached_worktree_head: fdb150b7927f26f2e8b5270365a324d844dc8b98
+  source_bundle_sha256: d8e48c27f6ec1a6f1f277f6817f57dd4d269b38ad6d7a73adab9fc7dc7ac437e
   runtime_environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
   parallel_agents_per_sweep: 4
   per_sweep_agent_counts:
@@ -167,9 +169,10 @@ wandb:
     - model checkpoints
     - custom or undeclared artifacts
   sweeps:
-    Amazon: null
-    elliptic: null
-    tolokers: null
+    Amazon: qoxpewpp
+    elliptic: q7j5snr0
+    tolokers: njo17tej
+  sweep_creation_recorded_at_utc: 2026-07-30T07:09:59Z
 
 validation:
   local_py_compile: passed
