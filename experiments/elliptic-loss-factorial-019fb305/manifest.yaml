@@ -1,12 +1,12 @@
 schema_version: 1
 state: prepared
-formal_launch_allowed: false
+formal_launch_allowed: true
 investigation_id: elliptic-loss-factorial-019fb305
 parent_investigation_id: elliptic-loss-unification-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-30T13:38:05Z
-last_material_transition_at_utc: 2026-07-30T13:47:03Z
+last_material_transition_at_utc: 2026-07-30T13:48:33Z
 
 objective:
   dataset: elliptic
@@ -41,7 +41,7 @@ config:
   sweep_path: experiments/elliptic-loss-factorial-019fb305/sweep.yaml
   sweep_sha256: 44cf70aa7c17fe4434fc4808497b0184aaffdc195a8e5fb40c787bc372026823
   launcher_path: experiments/elliptic-loss-factorial-019fb305/launch-agent.sh
-  launcher_sha256: e790ece1e91f9675eccc93ccc42b4d9a423a1274b8834f28a80969977da03aa0
+  launcher_sha256: a5ed789432a3fd39ed2a3705a1d6cf894c8732f74c90d946b6239f1ad99a5122
   wrapper_path: experiments/elliptic-loss-factorial-019fb305/run-sweep-trial.py
   wrapper_sha256: d08da7b28d9cc0a7f28632222fbb88b26761058c790d173e95d4b9915b9322d7
   prior_results_path: experiments/elliptic-loss-unification-019fb305/results.json
@@ -121,12 +121,13 @@ data:
 wandb:
   destination: HCCS/GGADFormer
   parent_sweep_id: l6ubfjxt
-  sweep_id: pending_creation
-  sweep_url: pending_creation
-  sweep_creation_count: 0
+  sweep_id: rmhd15po
+  sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/rmhd15po
+  sweep_creation_recorded_at_utc: 2026-07-30T13:48:33Z
+  sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 10
-  current_state: pending_creation
+  current_state: PENDING
   project_access_preflight: passed
   authenticated_user: jerryyoursister
   write_authorization: user_delegation
