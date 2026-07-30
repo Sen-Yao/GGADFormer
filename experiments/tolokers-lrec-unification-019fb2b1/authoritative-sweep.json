@@ -1,0 +1,950 @@
+{
+  "queried_at_utc": "2026-07-30T11:37:28Z",
+  "source": "wandb.Api().sweep(\"HCCS/GGADFormer/2acum2mg\")",
+  "entity": "HCCS",
+  "project": "GGADFormer",
+  "sweep_id": "2acum2mg",
+  "state": "FINISHED",
+  "program": "run.py",
+  "method": "grid",
+  "metric": {
+    "name": "AUC.last",
+    "goal": "maximize"
+  },
+  "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+  "source_remote": "https://github.com/Sen-Yao/GGADFormer.git",
+  "sweep_parameters": {
+    "batch_size": {
+      "value": 1024
+    },
+    "dataset": {
+      "value": "tolokers"
+    },
+    "end_lr": {
+      "value": 1e-05
+    },
+    "lambda_rec_emb": {
+      "values": [
+        5,
+        0.1
+      ]
+    },
+    "num_epoch": {
+      "value": 100
+    },
+    "outlier_beta": {
+      "value": 0.3
+    },
+    "peak_lr": {
+      "value": 0.0001
+    },
+    "pp_k": {
+      "value": 10
+    },
+    "progregate_alpha": {
+      "value": 0.9
+    },
+    "rec_loss_weight": {
+      "value": 1
+    },
+    "ring_R_max": {
+      "value": 1
+    },
+    "ring_R_min": {
+      "value": 0.3
+    },
+    "ring_loss_weight": {
+      "value": 1
+    },
+    "seed": {
+      "values": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "train_rate": {
+      "value": 0.05
+    },
+    "warmup_updates": {
+      "value": 5
+    }
+  },
+  "runs": [
+    {
+      "variant": "control",
+      "lambda_rec_emb": 5.0,
+      "seed": 0,
+      "run_id": "vl1fovbd",
+      "name": "bright-sweep-1",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/vl1fovbd",
+      "state": "finished",
+      "created_at": "2026-07-30T11:26:06Z",
+      "runtime_seconds": 24.692372697,
+      "program": null,
+      "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+      "execution_host": "HCCS-90",
+      "gpu_index": "7",
+      "protocol_identity": "tolokers-lrec-unification-019fb2b1",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "AUC.last": 0.6664748353036235,
+      "AP.last": 0.31577429600023466,
+      "final_step": 100,
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.5126118836319349,
+          "AP": 0.24816883603937312
+        },
+        {
+          "_step": 10,
+          "AUC": 0.6405973013604362,
+          "AP": 0.2962454237412
+        },
+        {
+          "_step": 20,
+          "AUC": 0.657195839603691,
+          "AP": 0.3136469437857196
+        },
+        {
+          "_step": 30,
+          "AUC": 0.6628566774933,
+          "AP": 0.31347544621558215
+        },
+        {
+          "_step": 40,
+          "AUC": 0.660180663691761,
+          "AP": 0.3119457082091828
+        },
+        {
+          "_step": 50,
+          "AUC": 0.6562966429149909,
+          "AP": 0.3103004387674353
+        },
+        {
+          "_step": 60,
+          "AUC": 0.6629105595235492,
+          "AP": 0.3137577181305057
+        },
+        {
+          "_step": 70,
+          "AUC": 0.6651397159871737,
+          "AP": 0.31498894001180466
+        },
+        {
+          "_step": 80,
+          "AUC": 0.6662533854361035,
+          "AP": 0.3155969236390256
+        },
+        {
+          "_step": 90,
+          "AUC": 0.6669818482052329,
+          "AP": 0.3159801942947351
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6664748353036235,
+          "AP": 0.31577429600023466
+        }
+      ],
+      "gpu": 7,
+      "window": "gpu7",
+      "pane": "%32",
+      "agent_start_utc": "2026-07-30T11:25:58Z",
+      "agent_finish_utc": "2026-07-30T11:26:47Z",
+      "agent_exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs/agent-gpu7-20260730T112558Z.log",
+      "log_sha256": "9c994dd04e164f8e1bc0fb48caad137c75fd6613b6797c8b38713780919219fb"
+    },
+    {
+      "variant": "control",
+      "lambda_rec_emb": 5.0,
+      "seed": 1,
+      "run_id": "8bh1t5ot",
+      "name": "flowing-sweep-2",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/8bh1t5ot",
+      "state": "finished",
+      "created_at": "2026-07-30T11:26:07Z",
+      "runtime_seconds": 24.74371999,
+      "program": null,
+      "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+      "execution_host": "HCCS-90",
+      "gpu_index": "0",
+      "protocol_identity": "tolokers-lrec-unification-019fb2b1",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "AUC.last": 0.6658464265982809,
+      "AP.last": 0.30997329367974186,
+      "final_step": 100,
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.45931384898924876,
+          "AP": 0.19559644728767567
+        },
+        {
+          "_step": 10,
+          "AUC": 0.6191735071145094,
+          "AP": 0.2683363716935867
+        },
+        {
+          "_step": 20,
+          "AUC": 0.6857214496036798,
+          "AP": 0.3249981263058872
+        },
+        {
+          "_step": 30,
+          "AUC": 0.6687360336927441,
+          "AP": 0.31361123673177244
+        },
+        {
+          "_step": 40,
+          "AUC": 0.6598059813040495,
+          "AP": 0.3077898192152191
+        },
+        {
+          "_step": 50,
+          "AUC": 0.6566153618664969,
+          "AP": 0.3053766028822937
+        },
+        {
+          "_step": 60,
+          "AUC": 0.6587603533089869,
+          "AP": 0.30604416512849275
+        },
+        {
+          "_step": 70,
+          "AUC": 0.6635264504775771,
+          "AP": 0.3085327266471871
+        },
+        {
+          "_step": 80,
+          "AUC": 0.66319099233169,
+          "AP": 0.30835636562471325
+        },
+        {
+          "_step": 90,
+          "AUC": 0.664725516201869,
+          "AP": 0.30917634769791696
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6658464265982809,
+          "AP": 0.30997329367974186
+        }
+      ],
+      "gpu": 0,
+      "window": "gpu0",
+      "pane": "%29",
+      "agent_start_utc": "2026-07-30T11:25:58Z",
+      "agent_finish_utc": "2026-07-30T11:26:47Z",
+      "agent_exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs/agent-gpu0-20260730T112558Z.log",
+      "log_sha256": "8cc7d9fa976a727fbc2d95633acef98cefeeb4fbb387e47eaa906b3834fee0c5"
+    },
+    {
+      "variant": "control",
+      "lambda_rec_emb": 5.0,
+      "seed": 2,
+      "run_id": "1u4jt4pf",
+      "name": "kind-sweep-3",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/1u4jt4pf",
+      "state": "finished",
+      "created_at": "2026-07-30T11:26:09Z",
+      "runtime_seconds": 24.715931999,
+      "program": null,
+      "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+      "execution_host": "HCCS-90",
+      "gpu_index": "2",
+      "protocol_identity": "tolokers-lrec-unification-019fb2b1",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "AUC.last": 0.6603822962293309,
+      "AP.last": 0.3145344984691427,
+      "final_step": 100,
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.46056368929264385,
+          "AP": 0.20792084043166675
+        },
+        {
+          "_step": 10,
+          "AUC": 0.6125787922087874,
+          "AP": 0.27241345296393993
+        },
+        {
+          "_step": 20,
+          "AUC": 0.6584381751194126,
+          "AP": 0.3086217708172348
+        },
+        {
+          "_step": 30,
+          "AUC": 0.6634908320517051,
+          "AP": 0.3136084068119585
+        },
+        {
+          "_step": 40,
+          "AUC": 0.6628942600628209,
+          "AP": 0.3131412822236486
+        },
+        {
+          "_step": 50,
+          "AUC": 0.6546383779949305,
+          "AP": 0.30702328956298885
+        },
+        {
+          "_step": 60,
+          "AUC": 0.656249151680495,
+          "AP": 0.30880360517238103
+        },
+        {
+          "_step": 70,
+          "AUC": 0.6580046563689644,
+          "AP": 0.3108900921957858
+        },
+        {
+          "_step": 80,
+          "AUC": 0.6599909039628152,
+          "AP": 0.31277551491907046
+        },
+        {
+          "_step": 90,
+          "AUC": 0.659533463701658,
+          "AP": 0.3135445595490437
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6603822962293309,
+          "AP": 0.3145344984691427
+        }
+      ],
+      "gpu": 2,
+      "window": "gpu2",
+      "pane": "%31",
+      "agent_start_utc": "2026-07-30T11:25:58Z",
+      "agent_finish_utc": "2026-07-30T11:26:50Z",
+      "agent_exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs/agent-gpu2-20260730T112558Z.log",
+      "log_sha256": "a03f8d9f5f0559420c0a4295b8aba7b5850af40ee8c5551743f9ff257369e499"
+    },
+    {
+      "variant": "control",
+      "lambda_rec_emb": 5.0,
+      "seed": 3,
+      "run_id": "hm400six",
+      "name": "spring-sweep-4",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/hm400six",
+      "state": "finished",
+      "created_at": "2026-07-30T11:26:13Z",
+      "runtime_seconds": 24.358051655,
+      "program": null,
+      "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+      "execution_host": "HCCS-90",
+      "gpu_index": "1",
+      "protocol_identity": "tolokers-lrec-unification-019fb2b1",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "AUC.last": 0.5302690953019501,
+      "AP.last": 0.228087242540783,
+      "final_step": 100,
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.5170535453115334,
+          "AP": 0.2130480049642316
+        },
+        {
+          "_step": 10,
+          "AUC": 0.47845715519648785,
+          "AP": 0.20462217241815114
+        },
+        {
+          "_step": 20,
+          "AUC": 0.5062194462064735,
+          "AP": 0.21599840846287877
+        },
+        {
+          "_step": 30,
+          "AUC": 0.5204549730622096,
+          "AP": 0.22139768419376174
+        },
+        {
+          "_step": 40,
+          "AUC": 0.4957535214310646,
+          "AP": 0.20955939176005298
+        },
+        {
+          "_step": 50,
+          "AUC": 0.5118327049148561,
+          "AP": 0.2177943439469665
+        },
+        {
+          "_step": 60,
+          "AUC": 0.5134436838094583,
+          "AP": 0.21931454041654092
+        },
+        {
+          "_step": 70,
+          "AUC": 0.5187023413002713,
+          "AP": 0.22167468249248545
+        },
+        {
+          "_step": 80,
+          "AUC": 0.5219736078897363,
+          "AP": 0.22317390362559814
+        },
+        {
+          "_step": 90,
+          "AUC": 0.5241918882743497,
+          "AP": 0.22440797715159136
+        },
+        {
+          "_step": 100,
+          "AUC": 0.5302690953019501,
+          "AP": 0.228087242540783
+        }
+      ],
+      "gpu": 1,
+      "window": "gpu1",
+      "pane": "%30",
+      "agent_start_utc": "2026-07-30T11:25:58Z",
+      "agent_finish_utc": "2026-07-30T11:27:00Z",
+      "agent_exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs/agent-gpu1-20260730T112558Z.log",
+      "log_sha256": "1f44d5d05164b20eb5594ef842e1d8a96cd972fc07d32ff5ec291b347b0fb6fa"
+    },
+    {
+      "variant": "control",
+      "lambda_rec_emb": 5.0,
+      "seed": 4,
+      "run_id": "mfggyffl",
+      "name": "exalted-sweep-5",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/mfggyffl",
+      "state": "finished",
+      "created_at": "2026-07-30T11:27:42Z",
+      "runtime_seconds": 24.852178319,
+      "program": null,
+      "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+      "execution_host": "HCCS-90",
+      "gpu_index": "2",
+      "protocol_identity": "tolokers-lrec-unification-019fb2b1",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "AUC.last": 0.6741103118186509,
+      "AP.last": 0.3131630563937365,
+      "final_step": 100,
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.3951724808347951,
+          "AP": 0.17563182155892687
+        },
+        {
+          "_step": 10,
+          "AUC": 0.6130547599145134,
+          "AP": 0.26488137308727
+        },
+        {
+          "_step": 20,
+          "AUC": 0.6468829128238587,
+          "AP": 0.29027348399443
+        },
+        {
+          "_step": 30,
+          "AUC": 0.6551123522414308,
+          "AP": 0.2976799083525026
+        },
+        {
+          "_step": 40,
+          "AUC": 0.6588071702852154,
+          "AP": 0.30062515736255113
+        },
+        {
+          "_step": 50,
+          "AUC": 0.6612658970311471,
+          "AP": 0.3029169631556988
+        },
+        {
+          "_step": 60,
+          "AUC": 0.6689777406238671,
+          "AP": 0.3080154552484957
+        },
+        {
+          "_step": 70,
+          "AUC": 0.6740239481292528,
+          "AP": 0.311655280903894
+        },
+        {
+          "_step": 80,
+          "AUC": 0.671170047407392,
+          "AP": 0.31022486871977206
+        },
+        {
+          "_step": 90,
+          "AUC": 0.6706760213063265,
+          "AP": 0.3101780841874921
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6741103118186509,
+          "AP": 0.3131630563937365
+        }
+      ],
+      "gpu": 2,
+      "window": "w2-gpu2",
+      "pane": "%35",
+      "agent_start_utc": "2026-07-30T11:27:34Z",
+      "agent_finish_utc": "2026-07-30T11:28:26Z",
+      "agent_exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs/agent-gpu2-20260730T112734Z.log",
+      "log_sha256": "15ebc08a71e1a4889cf26e6e2dee6869df7e96854290754f6d8b9bc01fa7b6be"
+    },
+    {
+      "variant": "unified_0p1_1",
+      "lambda_rec_emb": 0.1,
+      "seed": 0,
+      "run_id": "mb7tkx7k",
+      "name": "avid-sweep-6",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/mb7tkx7k",
+      "state": "finished",
+      "created_at": "2026-07-30T11:27:43Z",
+      "runtime_seconds": 24.986738124,
+      "program": null,
+      "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+      "execution_host": "HCCS-90",
+      "gpu_index": "1",
+      "protocol_identity": "tolokers-lrec-unification-019fb2b1",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "AUC.last": 0.6657388091156669,
+      "AP.last": 0.31849181193715026,
+      "final_step": 100,
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.6390812463036722,
+          "AP": 0.30275010600498053
+        },
+        {
+          "_step": 10,
+          "AUC": 0.5419728116786692,
+          "AP": 0.24971060227434344
+        },
+        {
+          "_step": 20,
+          "AUC": 0.5955264488359049,
+          "AP": 0.27563283766800045
+        },
+        {
+          "_step": 30,
+          "AUC": 0.6165509062939899,
+          "AP": 0.2880801349823261
+        },
+        {
+          "_step": 40,
+          "AUC": 0.6301893921116122,
+          "AP": 0.2971133075533019
+        },
+        {
+          "_step": 50,
+          "AUC": 0.6386924631234961,
+          "AP": 0.3040163986203359
+        },
+        {
+          "_step": 60,
+          "AUC": 0.6435994802700011,
+          "AP": 0.3072567859215423
+        },
+        {
+          "_step": 70,
+          "AUC": 0.647748777701681,
+          "AP": 0.30954717947940347
+        },
+        {
+          "_step": 80,
+          "AUC": 0.6529800251281399,
+          "AP": 0.31199807487975667
+        },
+        {
+          "_step": 90,
+          "AUC": 0.6622977467050905,
+          "AP": 0.3161167425201417
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6657388091156669,
+          "AP": 0.31849181193715026
+        }
+      ],
+      "gpu": 1,
+      "window": "w2-gpu1",
+      "pane": "%34",
+      "agent_start_utc": "2026-07-30T11:27:34Z",
+      "agent_finish_utc": "2026-07-30T11:28:22Z",
+      "agent_exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs/agent-gpu1-20260730T112734Z.log",
+      "log_sha256": "e5dcfeb20a6d235cc63cef4f63fb2b6b13f2cbe6708eb632f1bfd84668741037"
+    },
+    {
+      "variant": "unified_0p1_1",
+      "lambda_rec_emb": 0.1,
+      "seed": 1,
+      "run_id": "s7yx6k2b",
+      "name": "fiery-sweep-7",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/s7yx6k2b",
+      "state": "finished",
+      "created_at": "2026-07-30T11:27:43Z",
+      "runtime_seconds": 25.343866882,
+      "program": null,
+      "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+      "execution_host": "HCCS-90",
+      "gpu_index": "7",
+      "protocol_identity": "tolokers-lrec-unification-019fb2b1",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "AUC.last": 0.6588658307544909,
+      "AP.last": 0.3159098177414972,
+      "final_step": 100,
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.4179885011408743,
+          "AP": 0.175212167195667
+        },
+        {
+          "_step": 10,
+          "AUC": 0.6175836940663924,
+          "AP": 0.2799313827161649
+        },
+        {
+          "_step": 20,
+          "AUC": 0.6129920832112095,
+          "AP": 0.2772012116123991
+        },
+        {
+          "_step": 30,
+          "AUC": 0.6187959518002666,
+          "AP": 0.28340951823852584
+        },
+        {
+          "_step": 40,
+          "AUC": 0.6256349240922973,
+          "AP": 0.28910208719337555
+        },
+        {
+          "_step": 50,
+          "AUC": 0.6449638565321467,
+          "AP": 0.30194489659425916
+        },
+        {
+          "_step": 60,
+          "AUC": 0.6505577962753856,
+          "AP": 0.3068971336906811
+        },
+        {
+          "_step": 70,
+          "AUC": 0.6537374810027733,
+          "AP": 0.31052459688030043
+        },
+        {
+          "_step": 80,
+          "AUC": 0.654716533322811,
+          "AP": 0.3125970355742718
+        },
+        {
+          "_step": 90,
+          "AUC": 0.6579763668373049,
+          "AP": 0.3151821177339298
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6588658307544909,
+          "AP": 0.3159098177414972
+        }
+      ],
+      "gpu": 7,
+      "window": "w2-gpu7",
+      "pane": "%36",
+      "agent_start_utc": "2026-07-30T11:27:34Z",
+      "agent_finish_utc": "2026-07-30T11:28:30Z",
+      "agent_exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs/agent-gpu7-20260730T112734Z.log",
+      "log_sha256": "57cbc3bdcdb6acc9acbb35a3370bdfa8393312d257c24d666838f379839e5c57"
+    },
+    {
+      "variant": "unified_0p1_1",
+      "lambda_rec_emb": 0.1,
+      "seed": 2,
+      "run_id": "uai397on",
+      "name": "flowing-sweep-8",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/uai397on",
+      "state": "finished",
+      "created_at": "2026-07-30T11:27:50Z",
+      "runtime_seconds": 24.721004797,
+      "program": null,
+      "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+      "execution_host": "HCCS-90",
+      "gpu_index": "0",
+      "protocol_identity": "tolokers-lrec-unification-019fb2b1",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "AUC.last": 0.6672466851264899,
+      "AP.last": 0.3211966374443823,
+      "final_step": 100,
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.43251340205569033,
+          "AP": 0.19683627081068678
+        },
+        {
+          "_step": 10,
+          "AUC": 0.5535716369214212,
+          "AP": 0.2482473475888404
+        },
+        {
+          "_step": 20,
+          "AUC": 0.6371874600392043,
+          "AP": 0.3006970509792248
+        },
+        {
+          "_step": 30,
+          "AUC": 0.650583799192051,
+          "AP": 0.30965849449817295
+        },
+        {
+          "_step": 40,
+          "AUC": 0.658671204639788,
+          "AP": 0.3152086552860185
+        },
+        {
+          "_step": 50,
+          "AUC": 0.6636389343459481,
+          "AP": 0.31760260346122016
+        },
+        {
+          "_step": 60,
+          "AUC": 0.6671954708137341,
+          "AP": 0.3192454893900778
+        },
+        {
+          "_step": 70,
+          "AUC": 0.6694675745974428,
+          "AP": 0.3204433639557446
+        },
+        {
+          "_step": 80,
+          "AUC": 0.6686479990154657,
+          "AP": 0.3208624213732808
+        },
+        {
+          "_step": 90,
+          "AUC": 0.667145868857705,
+          "AP": 0.32096051141904114
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6672466851264899,
+          "AP": 0.3211966374443823
+        }
+      ],
+      "gpu": 0,
+      "window": "w2-gpu0",
+      "pane": "%33",
+      "agent_start_utc": "2026-07-30T11:27:34Z",
+      "agent_finish_utc": "2026-07-30T11:28:40Z",
+      "agent_exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs/agent-gpu0-20260730T112734Z.log",
+      "log_sha256": "b5cac249a951c01d6c68d52c4a069922203b8f1e3ce54729791ca3e93d6b7119"
+    },
+    {
+      "variant": "unified_0p1_1",
+      "lambda_rec_emb": 0.1,
+      "seed": 3,
+      "run_id": "0s0ymo2s",
+      "name": "vital-sweep-9",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/0s0ymo2s",
+      "state": "finished",
+      "created_at": "2026-07-30T11:30:21Z",
+      "runtime_seconds": 24.502679384,
+      "program": null,
+      "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+      "execution_host": "HCCS-90",
+      "gpu_index": "0",
+      "protocol_identity": "tolokers-lrec-unification-019fb2b1",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "AUC.last": 0.6679305295876548,
+      "AP.last": 0.31711879005310206,
+      "final_step": 100,
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.5021538154311216,
+          "AP": 0.20798848592174793
+        },
+        {
+          "_step": 10,
+          "AUC": 0.42113804945526084,
+          "AP": 0.18837414657367418
+        },
+        {
+          "_step": 20,
+          "AUC": 0.4481727278478456,
+          "AP": 0.20021636865559428
+        },
+        {
+          "_step": 30,
+          "AUC": 0.5120003020677039,
+          "AP": 0.2267279309567603
+        },
+        {
+          "_step": 40,
+          "AUC": 0.5778699700553109,
+          "AP": 0.26375857917540524
+        },
+        {
+          "_step": 50,
+          "AUC": 0.6184371877707844,
+          "AP": 0.29089872563236274
+        },
+        {
+          "_step": 60,
+          "AUC": 0.637732759084179,
+          "AP": 0.30230989298783856
+        },
+        {
+          "_step": 70,
+          "AUC": 0.6533451506377985,
+          "AP": 0.3117359792607337
+        },
+        {
+          "_step": 80,
+          "AUC": 0.6494198828444013,
+          "AP": 0.31036689008801527
+        },
+        {
+          "_step": 90,
+          "AUC": 0.66720016130603,
+          "AP": 0.31735756910138874
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6679305295876548,
+          "AP": 0.31711879005310206
+        }
+      ],
+      "gpu": 0,
+      "window": "w3-gpu0",
+      "pane": "%37",
+      "agent_start_utc": "2026-07-30T11:30:13Z",
+      "agent_finish_utc": "2026-07-30T11:31:06Z",
+      "agent_exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs/agent-gpu0-20260730T113013Z.log",
+      "log_sha256": "84d3f4a1ee7eaff4de31e0689d3812e40644e1afb0bcad780eded77980bc9221"
+    },
+    {
+      "variant": "unified_0p1_1",
+      "lambda_rec_emb": 0.1,
+      "seed": 4,
+      "run_id": "tgm8jivx",
+      "name": "warm-sweep-10",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/tgm8jivx",
+      "state": "finished",
+      "created_at": "2026-07-30T11:30:22Z",
+      "runtime_seconds": 24.406165897,
+      "program": null,
+      "code_sha": "bb798db0e32615abd8504da7ccb21a124102b363",
+      "execution_host": "HCCS-90",
+      "gpu_index": "1",
+      "protocol_identity": "tolokers-lrec-unification-019fb2b1",
+      "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+      "AUC.last": 0.6697283073379411,
+      "AP.last": 0.3026746256707682,
+      "final_step": 100,
+      "history": [
+        {
+          "_step": 0,
+          "AUC": 0.40108886260779997,
+          "AP": 0.18356338797941163
+        },
+        {
+          "_step": 10,
+          "AUC": 0.4693694143199206,
+          "AP": 0.2126326158681504
+        },
+        {
+          "_step": 20,
+          "AUC": 0.5257377865883465,
+          "AP": 0.2367944329927444
+        },
+        {
+          "_step": 30,
+          "AUC": 0.5901458385453986,
+          "AP": 0.2691773196529879
+        },
+        {
+          "_step": 40,
+          "AUC": 0.6184790210989484,
+          "AP": 0.28494684305691087
+        },
+        {
+          "_step": 50,
+          "AUC": 0.6495545586044471,
+          "AP": 0.3033021758907197
+        },
+        {
+          "_step": 60,
+          "AUC": 0.66274753560069,
+          "AP": 0.3099784011639487
+        },
+        {
+          "_step": 70,
+          "AUC": 0.668863321927424,
+          "AP": 0.3128474519525196
+        },
+        {
+          "_step": 80,
+          "AUC": 0.6706677836292322,
+          "AP": 0.3059340098667025
+        },
+        {
+          "_step": 90,
+          "AUC": 0.6710081961076066,
+          "AP": 0.3043352162583671
+        },
+        {
+          "_step": 100,
+          "AUC": 0.6697283073379411,
+          "AP": 0.3026746256707682
+        }
+      ],
+      "gpu": 1,
+      "window": "w3-gpu1",
+      "pane": "%38",
+      "agent_start_utc": "2026-07-30T11:30:13Z",
+      "agent_finish_utc": "2026-07-30T11:31:12Z",
+      "agent_exit_code": 0,
+      "log_path": "/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/logs/agent-gpu1-20260730T113013Z.log",
+      "log_sha256": "918ab5694a3e3f96e9573ebe339d3685ff5b1ecc9da1103ed3f45f3bf99283eb"
+    }
+  ],
+  "aggregate": {
+    "ddof": 1,
+    "control": {
+      "AUC.last": {
+        "mean": 0.6394165930503672,
+        "sample_std": 0.061210856209720284
+      },
+      "AP.last": {
+        "mean": 0.2963064774167278,
+        "sample_std": 0.03819701179582657
+      }
+    },
+    "unified_0p1_1": {
+      "AUC.last": {
+        "mean": 0.6659020323844487,
+        "sample_std": 0.004186228825945539
+      },
+      "AP.last": {
+        "mean": 0.31507833656938,
+        "sample_std": 0.007207500868862045
+      }
+    }
+  }
+}

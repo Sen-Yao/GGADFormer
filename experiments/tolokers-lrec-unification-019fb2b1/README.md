@@ -76,3 +76,26 @@ seed、lambda、code SHA、host、GPU、fixed-final-epoch metric policy、histor
 tmux exit code 与 manifest 一致。任何 failed/crashed run、missing artifact、
 identity mismatch 或非 0 agent exit code 都使本实验进入诊断，不做正式聚合。
 
+## 最终结果
+
+W&B sweep：`HCCS/GGADFormer/2acum2mg`
+<https://wandb.ai/HCCS/GGADFormer/sweeps/2acum2mg>。
+
+10 个 expected trials 均为 `finished`，agent exit code 均为 0，run config 中的
+dataset、variant、seed、`lambda_rec_emb`、code SHA、execution host、GPU 和
+fixed-final-epoch metric policy 均与 protocol 一致。结果来自 W&B history 的
+固定 step 100：`AUC.last`/`AP.last`，不使用 max 或 best epoch。
+
+| Variant | AUROC mean | AUROC std | AUPRC mean | AUPRC std |
+|---|---:|---:|---:|---:|
+| `control` | 0.6394165930503672 | 0.061210856209720284 | 0.2963064774167278 | 0.03819701179582657 |
+| `unified_0p1_1` | 0.6659020323844487 | 0.004186228825945539 | 0.31507833656938 | 0.007207500868862045 |
+
+同 seed paired mean difference（`unified_0p1_1 - control`）为 AUROC
+`+0.02648543933408145`、AUPRC `+0.01877185915265226`。按预声明门槛
+（AUROC drop 不超过 `0.01`、AUPRC drop 不超过 `0.02`），Tolokers 在本 protocol
+下通过统一 `lambda_rec_emb=0.1`、`ring_loss_weight=1` 的实用等效裁决。
+
+完整逐 seed run URL、history、paired differences、log hash 和 validation 见
+`results.json`、`authoritative-sweep.json` 和 `remote-log-sha256.txt`。本实验不修改
+论文主表或 Supplement。

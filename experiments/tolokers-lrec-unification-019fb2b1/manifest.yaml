@@ -1,11 +1,11 @@
 schema_version: 1
-state: prepared
-formal_launch_allowed: true
+state: completed
+formal_launch_allowed: false
 investigation_id: tolokers-lrec-unification-019fb2b1
 owner_thread_id: 019fb2b1-f9d2-7742-bbb1-49b6494e94f4
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-30T11:14:35Z
-last_material_transition_at_utc: 2026-07-30T11:24:02Z
+last_material_transition_at_utc: 2026-07-30T11:37:50Z
 
 objective:
   dataset: tolokers
@@ -52,10 +52,12 @@ config:
   sweep_sha256: d061a14b6008984c1787501e70cc0fcb293080168c200831348257c49c9020cf
   launcher_path: experiments/tolokers-lrec-unification-019fb2b1/launch-agent.sh
   launcher_sha256: b1e8bca0bd2adf0c9faa650794df99ab975a90a26492b5cfc5dbe7a48ad2735f
+  authoritative_evidence_path: experiments/tolokers-lrec-unification-019fb2b1/authoritative-sweep.json
+  authoritative_evidence_sha256: bc7a30a5925b93336562e8cad7a727ffc418318e5c43a4163aa79bf69a0c1de9
   results_path: experiments/tolokers-lrec-unification-019fb2b1/results.json
-  results_sha256: null
+  results_sha256: 89527d4f48ce3b07bcb25dc751e25125e0c89b1337388e1d8a16919d2005c962
   remote_log_checksums_path: experiments/tolokers-lrec-unification-019fb2b1/remote-log-sha256.txt
-  remote_log_checksums_sha256: null
+  remote_log_checksums_sha256: d29b125f2ae8997620112d8a637a7d696fe4b5b5dfff59bc690c8fcca4c1d1f5
 
 execution:
   execution_host: HCCS-90
@@ -104,8 +106,8 @@ execution:
     WANDB_DIR=/root/gpufree-data/linziyao/VecGAD-tolokers-lrec-unification-019fb2b1/wandb
     wandb agent HCCS/GGADFormer/<sweep-id> --count 1
   pane_records: []
-  first_agent_start_utc: null
-  last_agent_finish_utc: null
+  first_agent_start_utc: 2026-07-30T11:25:58Z
+  last_agent_finish_utc: 2026-07-30T11:31:12Z
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
@@ -140,7 +142,8 @@ wandb:
   sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 10
-  current_state: PENDING
+  final_state: FINISHED
+  current_state: FINISHED
   write_authorization: user_delegation
   code_upload_disabled: true
   console_upload_disabled: true
@@ -175,13 +178,28 @@ trials:
   observed: []
 
 result_validation:
-  all_expected_trials_terminal: false
-  config_identity_valid: false
-  code_identity_valid: false
-  fixed_final_epoch_policy_valid: false
-  aggregate: null
-  paired_differences: null
-  equivalence_decision: null
+  all_expected_trials_terminal: true
+  config_identity_valid: true
+  code_identity_valid: true
+  fixed_final_epoch_policy_valid: true
+  run_count: 10
+  history_steps_union: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+  all_agent_exit_codes_zero: true
+  aggregate:
+    ddof: 1
+    control:
+      AUC.last: {mean: 0.6394165930503672, sample_std: 0.061210856209720284}
+      AP.last: {mean: 0.2963064774167278, sample_std: 0.03819701179582657}
+    unified_0p1_1:
+      AUC.last: {mean: 0.6659020323844487, sample_std: 0.004186228825945539}
+      AP.last: {mean: 0.31507833656938, sample_std: 0.007207500868862045}
+  paired_mean_difference_unified_minus_control:
+    AUC.last: 0.02648543933408145
+    AP.last: 0.01877185915265226
+  equivalence_decision:
+    AUROC_pass: true
+    AUPRC_pass: true
+    tolokers_can_unify_lambda_rec_emb_to_0p1_under_protocol: true
 
 protocol_deviations: []
 blockers: []
