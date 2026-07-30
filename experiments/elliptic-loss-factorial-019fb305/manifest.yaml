@@ -45,6 +45,8 @@ config:
   launcher_sha256: 936ce3304ed25f63138c39f864c964802dfada6ad1d2856fa11a6e77d95ea9dd
   wrapper_path: experiments/elliptic-loss-factorial-019fb305/run-sweep-trial.py
   wrapper_sha256: d08da7b28d9cc0a7f28632222fbb88b26761058c790d173e95d4b9915b9322d7
+  collector_path: experiments/elliptic-loss-factorial-019fb305/collect-evidence.py
+  collector_sha256: 6370b52953246696e311174a042988da9c39c939c49785472bbd4901286ab7a6
   prior_results_path: experiments/elliptic-loss-unification-019fb305/results.json
   prior_results_sha256: 8e27e0dc0f723c4ff7be729a5f73caa852021b39885b0da945342adf11d621b2
   prior_authoritative_sweep_path: experiments/elliptic-loss-unification-019fb305/authoritative-sweep.json
