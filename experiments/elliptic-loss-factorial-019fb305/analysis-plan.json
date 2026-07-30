@@ -1,0 +1,36 @@
+{
+  "design": "paired_2x2_factorial",
+  "factors": {
+    "lambda_rec_emb": [2.0, 0.1],
+    "ring_loss_weight": [20.0, 1.0]
+  },
+  "seeds": [0, 1, 2, 3, 4],
+  "metrics": ["AUC.last", "AP.last"],
+  "final_history_step": 150,
+  "cells": {
+    "control_2_20": "frozen_prior_sweep",
+    "emb_only_0p1_20": "new_sweep",
+    "ring_only_2_1": "new_sweep",
+    "unified_0p1_1": "frozen_prior_sweep"
+  },
+  "paired_effects": [
+    "emb_only_0p1_20 - control_2_20",
+    "unified_0p1_1 - ring_only_2_1",
+    "ring_only_2_1 - control_2_20",
+    "unified_0p1_1 - emb_only_0p1_20",
+    "unified_0p1_1 - emb_only_0p1_20 - ring_only_2_1 + control_2_20"
+  ],
+  "aggregation": {
+    "cell_mean": true,
+    "cell_sample_std_ddof": 1,
+    "paired_differences_by_seed": true,
+    "paired_mean_difference": true
+  },
+  "prior_authority": {
+    "sweep_id": "l6ubfjxt",
+    "code_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+    "results_sha256": "8e27e0dc0f723c4ff7be729a5f73caa852021b39885b0da945342adf11d621b2",
+    "authoritative_sweep_sha256": "efe5263a3666ad4287a3047ae722eadf1d401553a3644d081c60e51c05c6fb54"
+  }
+}
+

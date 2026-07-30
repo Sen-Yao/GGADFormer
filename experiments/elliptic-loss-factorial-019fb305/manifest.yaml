@@ -1,0 +1,143 @@
+schema_version: 1
+state: prepared
+formal_launch_allowed: false
+investigation_id: elliptic-loss-factorial-019fb305
+parent_investigation_id: elliptic-loss-unification-019fb305
+owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
+source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
+prepared_at_utc: 2026-07-30T13:38:05Z
+last_material_transition_at_utc: 2026-07-30T13:38:05Z
+
+objective:
+  dataset: elliptic
+  design: paired_2x2_factorial
+  expected_new_trials: 10
+  new_trial_axis:
+    factorial_cell: [emb_only_0p1_20, ring_only_2_1]
+    seed: [0, 1, 2, 3, 4]
+  frozen_prior_cells: [control_2_20, unified_0p1_1]
+  metrics: [AUC.last, AP.last]
+  metric_policy: fixed_final_epoch_only
+  final_history_step_required: 150
+  analysis_plan_path: experiments/elliptic-loss-factorial-019fb305/analysis-plan.json
+
+git:
+  code_sha: 655d6293bb76633bc6aa6fd21166a49c3b91d504
+  code_tree: 74fc4c103902c65d5d511b5afe2e67d3a5492816
+  code_remote: https://github.com/Sen-Yao/GGADFormer.git
+  protocol_branch: codex/elliptic-loss-factorial-hccs90-019fb305
+  protocol_commit: pending_after_commit
+  parent_results_commit: da3f76ce1987342c52f23c9dcb3d786cfde912f8
+  remote_publication:
+    state: pending
+    protocol_branch_remote: origin/codex/elliptic-loss-factorial-hccs90-019fb305
+
+config:
+  emb_only_path: experiments/elliptic-loss-factorial-019fb305/resolved-config-emb-only.json
+  emb_only_sha256: 2bc469a7312dd120115ec556384dae93d1be5b960d506f264fc677703d55fdd1
+  ring_only_path: experiments/elliptic-loss-factorial-019fb305/resolved-config-ring-only.json
+  ring_only_sha256: 0123668598e8df70b4c092191ff7302bed1b9cbc00370cf519a1dfa9cbdee8fe
+  analysis_plan_sha256: a88282a5967713d54197ed7a8951358f2e4aaf147833ac06507bf6d11198e385
+  sweep_path: experiments/elliptic-loss-factorial-019fb305/sweep.yaml
+  sweep_sha256: 44cf70aa7c17fe4434fc4808497b0184aaffdc195a8e5fb40c787bc372026823
+  launcher_path: experiments/elliptic-loss-factorial-019fb305/launch-agent.sh
+  launcher_sha256: e790ece1e91f9675eccc93ccc42b4d9a423a1274b8834f28a80969977da03aa0
+  wrapper_path: experiments/elliptic-loss-factorial-019fb305/run-sweep-trial.py
+  wrapper_sha256: d08da7b28d9cc0a7f28632222fbb88b26761058c790d173e95d4b9915b9322d7
+  prior_results_path: experiments/elliptic-loss-unification-019fb305/results.json
+  prior_results_sha256: 8e27e0dc0f723c4ff7be729a5f73caa852021b39885b0da945342adf11d621b2
+  prior_authoritative_sweep_path: experiments/elliptic-loss-unification-019fb305/authoritative-sweep.json
+  prior_authoritative_sweep_sha256: efe5263a3666ad4287a3047ae722eadf1d401553a3644d081c60e51c05c6fb54
+  authoritative_evidence_path: experiments/elliptic-loss-factorial-019fb305/authoritative-sweep.json
+  results_path: experiments/elliptic-loss-factorial-019fb305/results.json
+  remote_log_checksums_path: experiments/elliptic-loss-factorial-019fb305/remote-log-sha256.txt
+
+execution:
+  execution_host: HCCS-90
+  observed_hostname: gpufree-container
+  host_probe_at: 2026-07-30T13:36:30Z
+  tmux_version: 3.2a
+  gpu_model: NVIDIA GeForce RTX 4090
+  gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+  parallel_gpu_cap: 8
+  eligible_gpu_indices_at_probe: [0, 1, 2, 3, 4, 5, 6, 7]
+  excluded_gpu_indices_at_probe: []
+  compute_pids_at_probe: []
+  task_root: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-factorial-019fb305
+  source_bundle: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-factorial-019fb305/source.bundle
+  source_repo: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-factorial-019fb305/source.git
+  detached_worktree: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-factorial-019fb305/worktree
+  runtime_preflight: pending
+  data_preflight: pending
+  tmux_session: vecgad_elliptic_factorial_019fb305
+  tmux_remain_on_exit_requested: true
+  agent_trial_count_total: 10
+  agent_trial_count_plan:
+    - {gpu: 0, count: 2}
+    - {gpu: 1, count: 2}
+    - {gpu: 2, count: 1}
+    - {gpu: 3, count: 1}
+    - {gpu: 4, count: 1}
+    - {gpu: 5, count: 1}
+    - {gpu: 6, count: 1}
+    - {gpu: 7, count: 1}
+  pane_records: []
+  first_agent_start_utc: pending
+
+runtime:
+  environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
+  environment_reused_read_only: true
+
+data:
+  logical_path: dataset/elliptic.mat
+  readonly_source: /root/gpufree-data/linziyao/DualRefGAD/dataset/elliptic.mat
+  access_mode: symlink_read_only_reuse
+  size_bytes: 36906872
+  sha256: 2f502df4b87be8f8b5ed5ef8378876125c92b06afbc5b38ee58fe4b56b1b2023
+
+wandb:
+  destination: HCCS/GGADFormer
+  parent_sweep_id: l6ubfjxt
+  sweep_id: pending_creation
+  sweep_url: pending_creation
+  sweep_creation_count: 0
+  create_exactly_once: true
+  expected_trials: 10
+  current_state: pending_creation
+  project_access_preflight: pending
+  write_authorization: user_delegation
+  code_upload_disabled: true
+  console_upload_disabled: true
+  custom_artifacts_uploaded: 0
+  raw_data_uploaded: false
+  source_code_uploaded: false
+
+trials:
+  expected:
+    - {factorial_cell: emb_only_0p1_20, lambda_rec_emb: 0.1, ring_loss_weight: 20.0, seed: 0}
+    - {factorial_cell: emb_only_0p1_20, lambda_rec_emb: 0.1, ring_loss_weight: 20.0, seed: 1}
+    - {factorial_cell: emb_only_0p1_20, lambda_rec_emb: 0.1, ring_loss_weight: 20.0, seed: 2}
+    - {factorial_cell: emb_only_0p1_20, lambda_rec_emb: 0.1, ring_loss_weight: 20.0, seed: 3}
+    - {factorial_cell: emb_only_0p1_20, lambda_rec_emb: 0.1, ring_loss_weight: 20.0, seed: 4}
+    - {factorial_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 0}
+    - {factorial_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 1}
+    - {factorial_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 2}
+    - {factorial_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 3}
+    - {factorial_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 4}
+  observed: []
+
+result_validation:
+  all_expected_trials_terminal: pending
+  config_identity_valid: pending
+  code_identity_valid: pending
+  fixed_final_epoch_policy_valid: pending
+  run_count: 0
+
+protocol_deviations: []
+blockers: []
+
+occupancy:
+  document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
+  selected_host_state_before_claim: free
+  claim_state: reserved
+  reserved_at_utc: 2026-07-30T13:38:05Z
