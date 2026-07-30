@@ -6,7 +6,7 @@ parent_investigation_id: elliptic-loss-unification-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-30T13:38:05Z
-last_material_transition_at_utc: 2026-07-30T13:48:33Z
+last_material_transition_at_utc: 2026-07-30T13:53:01Z
 
 objective:
   dataset: elliptic
@@ -41,7 +41,7 @@ config:
   sweep_path: experiments/elliptic-loss-factorial-019fb305/sweep.yaml
   sweep_sha256: 44cf70aa7c17fe4434fc4808497b0184aaffdc195a8e5fb40c787bc372026823
   launcher_path: experiments/elliptic-loss-factorial-019fb305/launch-agent.sh
-  launcher_sha256: a5ed789432a3fd39ed2a3705a1d6cf894c8732f74c90d946b6239f1ad99a5122
+  launcher_sha256: 936ce3304ed25f63138c39f864c964802dfada6ad1d2856fa11a6e77d95ea9dd
   wrapper_path: experiments/elliptic-loss-factorial-019fb305/run-sweep-trial.py
   wrapper_sha256: d08da7b28d9cc0a7f28632222fbb88b26761058c790d173e95d4b9915b9322d7
   prior_results_path: experiments/elliptic-loss-unification-019fb305/results.json
@@ -55,14 +55,16 @@ config:
 execution:
   execution_host: HCCS-90
   observed_hostname: gpufree-container
-  host_probe_at: 2026-07-30T13:36:30Z
+  host_probe_at: 2026-07-30T13:50:00Z
   tmux_version: 3.2a
   gpu_model: NVIDIA GeForce RTX 4090
-  gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
-  parallel_gpu_cap: 8
-  eligible_gpu_indices_at_probe: [0, 1, 2, 3, 4, 5, 6, 7]
-  excluded_gpu_indices_at_probe: []
-  compute_pids_at_probe: []
+  gpu_indices: [0, 1, 2, 4, 5, 6, 7]
+  parallel_gpu_cap: 7
+  eligible_gpu_indices_at_probe: [0, 1, 2, 4, 5, 6, 7]
+  excluded_gpu_indices_at_probe: [3]
+  compute_pids_at_probe:
+    - {gpu: 3, pid: 3218505, used_gpu_memory_mb: 396}
+    - {gpu: 3, pid: 3219921, used_gpu_memory_mb: 23304}
   task_root: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-factorial-019fb305
   source_bundle: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-factorial-019fb305/source.bundle
   source_bundle_sha256: 4435f7ef8afea8ff3acafef0b4a8c9ed7a72b8582095e04285401a0385f0cf43
@@ -80,8 +82,7 @@ execution:
   agent_trial_count_plan:
     - {gpu: 0, count: 2}
     - {gpu: 1, count: 2}
-    - {gpu: 2, count: 1}
-    - {gpu: 3, count: 1}
+    - {gpu: 2, count: 2}
     - {gpu: 4, count: 1}
     - {gpu: 5, count: 1}
     - {gpu: 6, count: 1}
@@ -165,4 +166,12 @@ occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
   selected_host_state_before_claim: free
   claim_state: reserved
-  reserved_at_utc: 2026-07-30T13:38:05Z
+  initial_reserved_at_utc: 2026-07-30T13:38:05Z
+  prelaunch_reallocation:
+    reason: "GPU 3 acquired foreign compute PIDs after initial reservation and before launch"
+    original_gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+    final_gpu_indices: [0, 1, 2, 4, 5, 6, 7]
+    task_process_started_before_reallocation: false
+    wandb_runs_started_before_reallocation: 0
+    foreign_process_signaled: false
+  reserved_at_utc: 2026-07-30T13:53:01Z

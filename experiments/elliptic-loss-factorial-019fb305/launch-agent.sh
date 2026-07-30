@@ -12,8 +12,8 @@ trial_count="$3"
 expected_sweep_id="rmhd15po"
 
 case "$gpu_index" in
-  0|1) expected_trial_count=2 ;;
-  2|3|4|5|6|7) expected_trial_count=1 ;;
+  0|1|2) expected_trial_count=2 ;;
+  4|5|6|7) expected_trial_count=1 ;;
   *)
     echo "unsupported GPU index: $gpu_index" >&2
     exit 64
