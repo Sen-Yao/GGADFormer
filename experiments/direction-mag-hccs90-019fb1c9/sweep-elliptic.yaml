@@ -1,0 +1,63 @@
+program: run.py
+method: grid
+metric:
+  name: AUC
+  goal: maximize
+parameters:
+  ablation_mode:
+    values: [none, random_dir, random_mag, random_both, constant_mag]
+  batch_size:
+    value: 32768
+  bce_loss_weight:
+    value: 1.0
+  data_split_seed:
+    value: 42
+  dataset:
+    value: elliptic
+  end_lr:
+    value: 0.0003
+  lambda_rec_emb:
+    value: 2
+  lambda_rec_tok:
+    value: 1.0
+  margin_loss_weight:
+    value: 0
+  model_type:
+    value: VecGAD
+  num_epoch:
+    value: 150
+  outlier_beta:
+    value: 0.3
+  peak_lr:
+    value: 0.0005
+  pp_k:
+    value: 7
+  progregate_alpha:
+    value: 0.6
+  proj_loss_weight:
+    value: 0
+  rec_error_filter_ratio:
+    value: 1.0
+  rec_loss_weight:
+    value: 1
+  reconstruction_loss_weight:
+    value: 1.0
+  ring_R_max:
+    value: 1
+  ring_R_min:
+    value: 0.3
+  ring_loss_weight:
+    value: 20
+  sample_rate:
+    value: 0.15
+  seed:
+    values: [0, 1, 2, 3, 4]
+  train_rate:
+    value: 0.05
+  warmup_updates:
+    value: 50
+  wandb_entity:
+    value: HCCS
+  wandb_project:
+    value: GGADFormer
+

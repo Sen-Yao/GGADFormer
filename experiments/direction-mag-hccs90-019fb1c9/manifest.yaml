@@ -1,0 +1,181 @@
+schema_version: 1
+state: prepared
+investigation_id: direction-mag-hccs90-019fb1c9
+owner_thread_id: 019fb1c9-fd57-7962-ac54-d864531504ef
+source_thread_id: 019fb06a-227d-7b43-b0b0-f1479261e21b
+prepared_at_utc: 2026-07-30T07:20:00Z
+
+objective:
+  expected_trials: 75
+  datasets: [Amazon, elliptic, tolokers]
+  variants: [none, random_dir, random_mag, random_both, constant_mag]
+  seeds: [0, 1, 2, 3, 4]
+  metrics: [AUC.last, AP.last]
+  aggregation:
+    mean: true
+    sample_std_ddof: 1
+  post_hoc_selection_allowed: false
+  smoke_counts_as_formal: false
+
+scientific_protocol:
+  perturbation_space: projected reconstruction error p_i
+  pseudo_anomaly_formula: h_i + beta * magnitude * direction
+  beta: 0.3
+  sample_rate: 0.15
+  ring_R_min: 0.3
+  ring_R_max: 1
+  data_split_seed: 42
+  rng:
+    every_forward_random_controls: true
+    direction_rng: independent torch.Generator
+    magnitude_rng: independent torch.Generator
+    default_direction_seed_formula: seed * 1000003 + 1729
+    default_magnitude_seed_formula: seed * 1000003 + 7919
+  magnitude_permutation:
+    mechanism: nonzero cyclic shift in current generation subset
+    n_ge_2: exact multiset preserved and no fixed points
+    n_lt_2: explicit identity clone
+    detach_magnitudes: false
+    random_mag_gradient_path: learned direction and permuted donor magnitude
+    random_both_gradient_path: permuted donor magnitude only
+
+authority_config:
+  missing_requested_sources:
+    - tmp/aaai-migration/overleaf-project/04_Method.tex
+    - tmp/aaai-migration/overleaf-project/05_EXP.tex
+    - tmp/aaai-migration/overleaf-project/supplement.tex
+    - tmp/aaai-migration/overleaf-project/tables/ablation.tex
+  decision_rule: use reproduction.sh plus W&B config/run evidence; do not use unprovenanced historical means as authority
+  Amazon:
+    basis: reproduction.sh command and matching HCCS/GGADFormer historical finished runs
+    config:
+      batch_size: 1024
+      num_epoch: 100
+      peak_lr: 0.0003
+      end_lr: 0.0001
+      pp_k: 5
+      progregate_alpha: 0.4
+      lambda_rec_emb: 0.1
+      rec_loss_weight: 1
+      ring_loss_weight: 1
+      train_rate: 0.05
+      warmup_updates: 50
+  elliptic:
+    basis: reproduction.sh W&B provenance comment for HCCS/GGADFormer/39e3dk75 and matching finished runs
+    rejected_alternative: later reproduction.sh elliptic commands without equivalent five-seed authority comment
+    config:
+      batch_size: 32768
+      num_epoch: 150
+      peak_lr: 0.0005
+      end_lr: 0.0003
+      pp_k: 7
+      progregate_alpha: 0.6
+      lambda_rec_emb: 2
+      rec_loss_weight: 1
+      ring_loss_weight: 20
+      train_rate: 0.05
+      warmup_updates: 50
+  tolokers:
+    basis: reproduction.sh final config; W&B contains seed-0 and exploratory/probe runs but no usable five-seed full authority
+    config:
+      batch_size: 1024
+      num_epoch: 100
+      peak_lr: 0.0001
+      end_lr: 0.00001
+      pp_k: 10
+      progregate_alpha: 0.9
+      lambda_rec_emb: 5
+      rec_loss_weight: 1
+      ring_loss_weight: 1
+      train_rate: 0.05
+      warmup_updates: 5
+
+git:
+  branch: codex/vecgad-direction-mag-ablation-hccs90
+  code_sha: a5aaa858a7a80f3e2b687cf5e4a86e5e68fe7f1c
+  code_tree: 8be43de0df5e4d9178068277814532ee7269aaa9
+  code_remote: https://github.com/Sen-Yao/GGADFormer.git
+  pushed_branch: origin/codex/vecgad-direction-mag-ablation-hccs90
+  protocol_commit: null
+
+config_artifacts:
+  sweep_amazon: experiments/direction-mag-hccs90-019fb1c9/sweep-amazon.yaml
+  sweep_elliptic: experiments/direction-mag-hccs90-019fb1c9/sweep-elliptic.yaml
+  sweep_tolokers: experiments/direction-mag-hccs90-019fb1c9/sweep-tolokers.yaml
+  sweep_amazon_sha256: b79e6bcbf31cf8988a32d7054440a96a9567b365331c3930afcc8e7e1b612531
+  sweep_elliptic_sha256: dd1d65940637dd324639326abb8c8af034f12220868008477229cc9f92f66822
+  sweep_tolokers_sha256: 59d25c30e586b2682c52d2e2a3c7b3f11d14ef068ee5ccbc938e86e3e9a0e995
+  launcher_sha256: 1e101f1ef82b9d7a2abbd8a27052c50ca7b81f797b00f3547895ec07b9959470
+  config_digest_sha256: 91393b3d3fb3204055f528c475374f0003e523bb7c79499c8cfbd2b6186e91e1
+
+execution:
+  execution_host: HCCS-90
+  observed_hostname: gpufree-container
+  host_probe_at: 2026-07-30T15:05:00+08:00
+  tmux_version: 3.2a
+  gpu_model: NVIDIA GeForce RTX 4090
+  gpu_indices: [0, 1, 2, 3]
+  excluded_gpu_indices_due_to_foreign_compute_pids: [4, 5, 6, 7]
+  task_root: /root/gpufree-data/linziyao/VecGAD-direction-mag-hccs90-019fb1c9
+  detached_worktree: /root/gpufree-data/linziyao/VecGAD-direction-mag-hccs90-019fb1c9/worktree-a5aaa858
+  runtime_environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
+  parallel_agents_per_sweep: 4
+  per_sweep_agent_counts:
+    gpu0: 7
+    gpu1: 6
+    gpu2: 6
+    gpu3: 6
+  tmux_session: vecgad_dir_mag_019fb1c9
+  remain_on_exit: true
+  formal_launch_allowed: false
+
+data:
+  source_dir: /root/gpufree-data/linziyao/DualRefGAD/dataset
+  worktree_access: symlink_read_only_reuse
+  files:
+    Amazon.mat:
+      size_bytes: 107799064
+      sha256: 749110e891df8bcb0015c51fb18193821f3f0e379d547c9180b2f8fa309d0fe8
+      inventory:
+        Attributes: {shape: [11944, 25], dtype: float64}
+        Label: {shape: [1, 11944], dtype: float64}
+        Network: {shape: [11944, 11944], dtype: float64}
+    elliptic.mat:
+      size_bytes: 36906872
+      sha256: 2f502df4b87be8f8b5ed5ef8378876125c92b06afbc5b38ee58fe4b56b1b2023
+      inventory:
+        Attributes: {shape: [46564, 93], dtype: float32}
+        Label: {shape: [1, 46564], dtype: int64}
+        Network: {shape: [46564, 46564], dtype: int32}
+    tolokers.mat:
+      size_bytes: 4763768
+      sha256: d6ec34984d4db3f52b53606a447f6101a74d8e9aad2ae8644dfe2ff33227a1d0
+      inventory:
+        Attributes: {shape: [11758, 8], dtype: float32}
+        Label: {shape: [1, 11758], dtype: int64}
+        Network: {shape: [11758, 11758], dtype: float32}
+
+wandb:
+  destination: HCCS/GGADFormer
+  write_authorization: approved_by_user_for_this_task
+  code_upload_disabled: true
+  console_upload_disabled: true
+  forbidden_transmission:
+    - raw dataset
+    - source code
+    - credentials
+    - model checkpoints
+    - custom or undeclared artifacts
+  sweeps:
+    Amazon: null
+    elliptic: null
+    tolokers: null
+
+validation:
+  local_py_compile: passed
+  hccs90_unittest: "python -m unittest tests.test_ablation passed, 8 tests"
+  hccs90_run_help: passed
+
+protocol_deviations:
+  - kind: missing_input_files
+    detail: requested Overleaf tmp files were absent from this independent worktree; authority config was resolved from available repo and W&B evidence
