@@ -16,9 +16,9 @@
     "allowed_upload_classes": []
   },
   "source": {
-    "vecgad_code_commit": "81500968ae39233464e237110e605c73a988c74e",
-    "research_protocol_commit": "2e3b2682fc31e392eaee6e919424283d7e4471e6",
-    "prepared_manifest_parent_commit": "81500968ae39233464e237110e605c73a988c74e",
+    "vecgad_code_commit": "4483749e118769bf094436ab5ba8bb24bcdf2c9b",
+    "research_protocol_commit": "4483749e118769bf094436ab5ba8bb24bcdf2c9b",
+    "prepared_manifest_parent_commit": "4483749e118769bf094436ab5ba8bb24bcdf2c9b",
     "rho_repository": "https://github.com/mala-lab/RHO.git",
     "rho_commit": "a394d5575dea6745215b15e0453e1f925ffcc1f2",
     "vecgad_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/vec-worktree",
@@ -26,14 +26,15 @@
   },
   "digests": {
     "registry_sha256": "e3486248c059bf3a0dd7457a736e8dee50c7fdec1c778210d6c00e52360b33b9",
-    "protocol_sha256": "2c9fef984bb088312eb5915853e51386ec8cdf4ca676eb437702f27127234b95",
+    "protocol_sha256": "78a92ee333269bc6920d87542710401868dbbd6e102b8df955242f10a078bcbe",
     "run_py_sha256": "cb9fbbdee884cba8ac97bb7cf3f930588d620d31d8a4700272a0d4d476930069",
     "utils_py_sha256": "5c26377373ef63cc482d874e9708ea9df7fc8ee179ab565bdd4286043754f602",
     "rho_harness_sha256": "5d850535b40ebbd5e72f765881383da2379e304b23fc934463d9b343ba4a8312",
     "runner_sha256": "1cb55ab02c3a99a9baf29a058da957ead2ecb4a6dce3ed9b1348f4f7d22cf798",
     "equivalence_gate_sha256": "d10f399713bfed3a9f927b781b23b078d6a20d87edce3894108d379defc0b1f9",
     "rho_data_preparation_sha256": "c5a94a8e64100ecbc72ccc8b295c205c5958336e1777ed1b52c6901dcd7ac915",
-    "token_validator_sha256": "72a871246f43c4dd917e0450e4005ed754ee438de430127d1ad2ee84b8ad4fe2"
+    "token_validator_sha256": "72a871246f43c4dd917e0450e4005ed754ee438de430127d1ad2ee84b8ad4fe2",
+    "five_seed_gate_sha256": "daa407f718acf618b47f3ad292f110d134639ed4166bce8483bf12a5a239fafe"
   },
   "datasets": {
     "Amazon.mat": {
@@ -63,11 +64,11 @@
     "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8"
   },
   "equivalence_gate": {
-    "status": "ready_after_numeric_smoke",
+    "status": "five_seed_escalation_ready",
     "rtol": 1e-5,
     "atol": 1e-6,
     "auc_ap_delta_threshold": 0.005,
-    "tmux_session": "vecgad-efficiency-gate-019fad8b-a3",
+    "tmux_session": "vecgad-efficiency-gate-019fad8b-5seed",
     "prior_attempts": [
       {
         "tmux_session": "vecgad-efficiency-gate-019fad8b",
@@ -82,12 +83,24 @@
         "terminal_status": 1,
         "failure_class": "validator_missing_sample_rate",
         "scientific_gate_reached": false
+      },
+      {
+        "tmux_session": "vecgad-efficiency-gate-019fad8b-a3",
+        "pane_id": "%54",
+        "terminal_status": 2,
+        "failure_class": "five_seed_escalation_required",
+        "scientific_gate_reached": true,
+        "amazon_auc_delta": 0.005325558102851735,
+        "amazon_ap_delta": 0.0014948959740187506,
+        "t_finance_auc_delta": 0.0,
+        "t_finance_ap_delta": 0.0
       }
     ],
     "numeric_smoke": {
       "Amazon": "passed",
       "t_finance": "passed"
     },
+    "five_seed_criterion": "absolute mean paired signed delta <= 0.005 for AUC and AP",
     "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/gate"
   },
   "formal_execution": {
