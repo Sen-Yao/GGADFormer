@@ -4,7 +4,6 @@ import hashlib
 import json
 import math
 import statistics
-from collections.abc import Mapping
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -86,9 +85,10 @@ def assert_equal(actual, expected, label):
 
 
 def summary_last(summary_value, label):
-    if not isinstance(summary_value, Mapping) or "last" not in summary_value:
-        raise AssertionError(f"missing {label}.last summary")
-    return float(summary_value["last"])
+    try:
+        return float(summary_value["last"])
+    except (KeyError, TypeError, ValueError) as exc:
+        raise AssertionError(f"missing or invalid {label}.last summary") from exc
 
 
 def terminal_diagnostics(row):
