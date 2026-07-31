@@ -1,12 +1,12 @@
 schema_version: 1
 state: prepared
-formal_launch_allowed: false
+formal_launch_allowed: true
 investigation_id: elliptic-mixed-replication-019fb305
 parent_investigation_id: elliptic-loss-factorial-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T13:46:01Z
-last_material_transition_at_utc: 2026-07-31T13:46:01Z
+last_material_transition_at_utc: 2026-07-31T14:01:41Z
 
 objective:
   dataset: elliptic
@@ -34,9 +34,10 @@ git:
   execution_code_tree: 333c7d64bcf21a8628541a65911b4b3b57db7e44
   protocol_branch: codex/elliptic-mixed-replication-hccs90-019fb305
   protocol_commit: 40986c9f8b460f8fd9baaefb985573209f96e572
+  identity_bind_commit: 3cd5deedb672b47449506b51db2020a618a46213
   launch_checkpoint_commit: PENDING_LAUNCH_COMMIT
   code_remote: https://github.com/Sen-Yao/GGADFormer.git
-  remote_publication: pending
+  remote_publication: pushed
 
 observation_layer:
   source_files: [run.py, hsc_diagnostics.py]
@@ -77,6 +78,12 @@ execution:
   eligible_gpu_indices_at_selection_probe: [0, 1, 2, 3, 4, 5, 6, 7]
   compute_pids_at_selection_probe: []
   task_root: /root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305
+  source_handoff:
+    method: verified_git_bundle_after_direct_github_timeout
+    direct_github_probe_result: timeout
+    source_bundle: /root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/source.bundle
+    source_bundle_size_bytes: 12412617
+    source_bundle_sha256: da6fb2b4a6b6828ec1ad8c0ab6901f677d70774529f4beddeffcb6130d666cd4
   detached_worktree: /root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/worktree
   protocol_root: /root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/protocol
   tmux_session: vecgad_elliptic_mixed_019fb305
@@ -104,7 +111,18 @@ runtime:
     numpy: 1.21.6
     scipy: 1.7.3
     sklearn: 1.0.2
-  preflight: pending
+  preflight: passed
+  unit_tests:
+    command: python -m unittest tests.test_hsc_diagnostics
+    tests_run: 2
+    result: passed
+  import_compile_check: passed
+  disabled_wandb_smoke:
+    purpose: code_path_only
+    num_epoch: 0
+    result: passed
+    log_path: /root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/evidence/smoke-disabled-wandb.log
+    log_sha256: 857c8be7c7927bbf8c37b0f2ec6037d4471fcf0442962940fa4465c74101b80e
 
 data:
   logical_path: dataset/elliptic.mat
@@ -122,6 +140,8 @@ wandb:
   sweep_url: null
   expected_trials: 10
   current_state: pending
+  project_access_preflight: passed
+  network_path: direct
   code_upload_disabled: true
   console_upload_disabled: true
   custom_artifacts_uploaded: 0
