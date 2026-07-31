@@ -65,9 +65,12 @@ def test_historical_wandb_configuration_provenance_is_preserved():
     assert tfinance['config']['progregate_alpha'] == 0.3
 
 
-def test_manifest_keeps_forensic_internal_and_unlaunched():
+def test_manifest_keeps_forensic_internal_and_lifecycle_consistent():
     manifest = json.loads((EXPERIMENT / 'RUN_MANIFEST.json').read_text(encoding='utf-8'))
-    assert manifest['state'] == 'prepared'
+    assert manifest['state'] in {'prepared', 'launched', 'completed'}
     assert manifest['scope']['evidence_class'] == 'internal_diagnostic'
     assert manifest['scope']['expected_trials'] == 24
-    assert manifest['wandb']['sweep_id'] is None
+    if manifest['state'] == 'prepared':
+        assert manifest['wandb']['sweep_id'] is None
+    else:
+        assert manifest['wandb']['sweep_id']

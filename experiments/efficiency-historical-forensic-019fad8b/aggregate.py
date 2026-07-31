@@ -96,6 +96,8 @@ def main():
             observed = result.get(key)
             if key == 'source_commit' and status == 'completed':
                 observed = result.get('source', {}).get('commit')
+            elif key == 'batch_mode' and status == 'completed':
+                observed = result.get('config', {}).get('batch_mode')
             if observed != expected:
                 errors.append(
                     f"{trial['id']}: {key} mismatch: expected {expected!r}, got {observed!r}"
