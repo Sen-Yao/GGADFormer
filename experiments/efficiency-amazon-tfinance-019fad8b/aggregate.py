@@ -27,14 +27,24 @@ def percentile(values, fraction):
 
 
 def summarize(values):
-    return {
+    summary = {
         'count': len(values),
+        'mean': statistics.mean(values),
         'median': statistics.median(values),
         'min': min(values),
         'max': max(values),
         'p25': percentile(values, 0.25),
         'p75': percentile(values, 0.75),
     }
+    summary['sample_std'] = statistics.stdev(values) if len(values) > 1 else 0.0
+    return summary
+
+
+def nested(payload, *keys):
+    value = payload
+    for key in keys:
+        value = value[key]
+    return value
 
 
 def atomic_write(path, payload):
@@ -92,15 +102,60 @@ def main():
                 errors.append(f'{trial["id"]}: unexpected hostname {runtime.get("hostname")!r}')
             if gpu.get('name') != args.expected_gpu:
                 errors.append(f'{trial["id"]}: unexpected GPU {gpu.get("name")!r}')
+            if gpu.get('index') != 0:
+                errors.append(f'{trial["id"]}: unexpected GPU index {gpu.get("index")!r}')
             epochs = result.get('training', {}).get('epoch_seconds', [])
             if len(epochs) != trial['measured_epochs'] or any(value <= 0 for value in epochs):
                 errors.append(f'{trial["id"]}: invalid measured epoch vector')
+            if trial['method'] == 'VecGAD' and result.get('config', {}).get(
+                'tokenization_reference'
+            ) != 'sequential_sparse':
+                errors.append(f'{trial["id"]}: non-formal tokenization mode')
             terminal.append({
                 'trial': trial,
                 'status': 'completed',
                 'offline_seconds': result['offline']['seconds'],
                 'epoch_seconds': epochs,
                 'epoch_median_seconds': statistics.median(epochs) if epochs else None,
+                'metrics': {
+                    'offline_rss_baseline_bytes': nested(result, 'offline', 'rss', 'baseline_bytes'),
+                    'offline_rss_peak_bytes': nested(result, 'offline', 'rss', 'peak_bytes'),
+                    'offline_rss_delta_bytes': nested(result, 'offline', 'rss', 'delta_bytes'),
+                    'offline_gpu_allocated_peak_bytes': nested(
+                        result, 'offline', 'gpu_peak', 'peak', 'allocated_bytes'
+                    ),
+                    'offline_gpu_reserved_peak_bytes': nested(
+                        result, 'offline', 'gpu_peak', 'peak', 'reserved_bytes'
+                    ),
+                    'offline_gpu_allocated_delta_bytes': nested(
+                        result, 'offline', 'gpu_peak', 'delta', 'allocated_bytes'
+                    ),
+                    'offline_gpu_reserved_delta_bytes': nested(
+                        result, 'offline', 'gpu_peak', 'delta', 'reserved_bytes'
+                    ),
+                    'training_rss_baseline_bytes': nested(
+                        result, 'training', 'rss', 'baseline_bytes'
+                    ),
+                    'training_rss_peak_bytes': nested(result, 'training', 'rss', 'peak_bytes'),
+                    'training_rss_delta_bytes': nested(result, 'training', 'rss', 'delta_bytes'),
+                    'training_gpu_allocated_peak_bytes': nested(
+                        result, 'training', 'gpu_peak', 'peak', 'allocated_bytes'
+                    ),
+                    'training_gpu_reserved_peak_bytes': nested(
+                        result, 'training', 'gpu_peak', 'peak', 'reserved_bytes'
+                    ),
+                    'training_gpu_allocated_delta_bytes': nested(
+                        result, 'training', 'gpu_peak', 'delta', 'allocated_bytes'
+                    ),
+                    'training_gpu_reserved_delta_bytes': nested(
+                        result, 'training', 'gpu_peak', 'delta', 'reserved_bytes'
+                    ),
+                    'token_payload_bytes': nested(result, 'offline', 'token_payload_bytes'),
+                    'parameter_count': nested(result, 'model', 'parameter_count'),
+                    'trainable_parameter_count': nested(
+                        result, 'model', 'trainable_parameter_count'
+                    ),
+                },
                 'source_attempt': source_attempt,
             })
         elif len(attempts) >= 2 and all(item[1].get('status') == 'gpu_oom' for item in attempts):
@@ -124,6 +179,13 @@ def main():
                 cell['per_run_epoch_median_seconds'] = summarize(
                     [item['epoch_median_seconds'] for item in completed]
                 )
+                cell['all_measured_epoch_seconds'] = summarize([
+                    value for item in completed for value in item['epoch_seconds']
+                ])
+                cell['resources'] = {
+                    metric: summarize([item['metrics'][metric] for item in completed])
+                    for metric in completed[0]['metrics']
+                }
             elif statuses and all(status == 'gpu_oom' for status in statuses):
                 cell['terminal_status'] = 'gpu_oom'
             else:
