@@ -16,8 +16,9 @@
     "allowed_upload_classes": []
   },
   "source": {
-    "vecgad_code_commit": "2e3b2682fc31e392eaee6e919424283d7e4471e6",
+    "vecgad_code_commit": "9b8e9fe9cf09364568c5591d7256d1086bdc4b3c",
     "research_protocol_commit": "2e3b2682fc31e392eaee6e919424283d7e4471e6",
+    "prepared_manifest_parent_commit": "9b8e9fe9cf09364568c5591d7256d1086bdc4b3c",
     "rho_repository": "https://github.com/mala-lab/RHO.git",
     "rho_commit": "a394d5575dea6745215b15e0453e1f925ffcc1f2",
     "vecgad_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/vec-worktree",
@@ -31,7 +32,8 @@
     "rho_harness_sha256": "5d850535b40ebbd5e72f765881383da2379e304b23fc934463d9b343ba4a8312",
     "runner_sha256": "1cb55ab02c3a99a9baf29a058da957ead2ecb4a6dce3ed9b1348f4f7d22cf798",
     "equivalence_gate_sha256": "d10f399713bfed3a9f927b781b23b078d6a20d87edce3894108d379defc0b1f9",
-    "rho_data_preparation_sha256": "c5a94a8e64100ecbc72ccc8b295c205c5958336e1777ed1b52c6901dcd7ac915"
+    "rho_data_preparation_sha256": "c5a94a8e64100ecbc72ccc8b295c205c5958336e1777ed1b52c6901dcd7ac915",
+    "token_validator_sha256": "011748dce9c839ff5aaf73091f79efcce971ed162e0e6e3d289340a527381067"
   },
   "datasets": {
     "Amazon.mat": {
@@ -61,11 +63,20 @@
     "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8"
   },
   "equivalence_gate": {
-    "status": "pending",
+    "status": "retry_pending_after_harness_fix",
     "rtol": 1e-5,
     "atol": 1e-6,
     "auc_ap_delta_threshold": 0.005,
-    "tmux_session": "vecgad-efficiency-gate-019fad8b",
+    "tmux_session": "vecgad-efficiency-gate-019fad8b-a2",
+    "prior_attempts": [
+      {
+        "tmux_session": "vecgad-efficiency-gate-019fad8b",
+        "pane_id": "%52",
+        "terminal_status": 1,
+        "failure_class": "validator_import_path",
+        "scientific_gate_reached": false
+      }
+    ],
     "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/gate"
   },
   "formal_execution": {
