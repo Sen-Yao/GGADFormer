@@ -1,12 +1,12 @@
 schema_version: 1
 state: prepared
-formal_launch_allowed: false
+formal_launch_allowed: true
 investigation_mode: lightweight
 investigation_id: elliptic-loss-mechanism-019fad7c
 owner_thread_id: 019fb720-b85a-7ae3-8390-a0ab2b2345ad
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T08:27:44Z
-last_material_transition_at_utc: 2026-07-31T08:35:46Z
+last_material_transition_at_utc: 2026-07-31T08:39:04Z
 
 status_axes:
   lifecycle: active
@@ -62,7 +62,7 @@ config:
   sweep_path: experiments/elliptic-loss-mechanism-019fad7c/sweep.yaml
   sweep_sha256: 81dda3c26fd7d1d2e4dfbb66261256201313270777d982dc63c4167bf287dc5f
   launcher_path: experiments/elliptic-loss-mechanism-019fad7c/launch-agent.sh
-  launcher_sha256: 8d6af96dff16f9fd1948c27d7082e6dcf65636fe70d9fc0ff7c26f683ea27001
+  launcher_sha256: 9dc486dee068dec9802b4601c4b03cb9f401fe8372be46d5fa16cc317c4a43cc
   collector_path: experiments/elliptic-loss-mechanism-019fad7c/collect-evidence.py
   collector_sha256: a89b72e81bb4c107aa0b666ec788c73efb18e9b33a72403a0a21bd7b54cb3d35
   replay_path: experiments/elliptic-loss-mechanism-019fad7c/replay-results.py
@@ -86,6 +86,8 @@ execution:
   tmux_remain_on_exit_requested: true
   pane_records: []
   first_agent_start_utc: null
+  final_preflight_at_utc: 2026-07-31T08:38:25Z
+  final_preflight_result: passed
 
 candidate_selection:
   HCCS-25:
@@ -143,11 +145,13 @@ data:
 
 wandb:
   destination: HCCS/GGADFormer
-  sweep_id: PENDING_SWEEP_ID
-  sweep_creation_count: 0
+  sweep_id: mufbddb1
+  sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/mufbddb1
+  sweep_created_at_utc: 2026-07-31T08:39:04Z
+  sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 4
-  current_state: not_created
+  current_state: pending_agents
   code_upload_disabled: true
   console_upload_disabled: true
   custom_artifacts_uploaded: 0
@@ -170,10 +174,10 @@ evidence:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  selected_host_state: pending_approval
-  claim_state: pending_approval
+  selected_host_state: reserved
+  claim_state: reserved
   pending_recorded_at_utc: 2026-07-31T08:35:46Z
+  approved_at_utc: 2026-07-31T08:37:33Z
 
 protocol_deviations: []
-blockers:
-  - host_approval_and_final_prelaunch_claim_pending
+blockers: []

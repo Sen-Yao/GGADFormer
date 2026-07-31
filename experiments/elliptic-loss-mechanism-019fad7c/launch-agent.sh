@@ -8,7 +8,7 @@ fi
 
 gpu_index="$1"
 sweep_id="$2"
-expected_sweep_id="PENDING_SWEEP_ID"
+expected_sweep_id="mufbddb1"
 
 case "$gpu_index" in
   0|1|2|3) ;;
@@ -18,10 +18,6 @@ case "$gpu_index" in
     ;;
 esac
 
-if [[ "$expected_sweep_id" == "PENDING_SWEEP_ID" ]]; then
-  echo "sweep ID has not been frozen" >&2
-  exit 65
-fi
 if [[ "$sweep_id" != "$expected_sweep_id" ]]; then
   echo "unexpected sweep ID: $sweep_id" >&2
   exit 65
