@@ -25,7 +25,7 @@ def load_trials(registry_path):
     return trials
 
 
-def run_attempt(repo_root, rho_root, output_root, trial, attempt):
+def run_attempt(repo_root, rho_root, rho_data_root, output_root, trial, attempt):
     result_path = output_root / 'raw' / f"{trial['id']}.attempt{attempt}.json"
     log_path = output_root / 'logs' / f"{trial['id']}.attempt{attempt}.log"
     if trial['method'] == 'RHO':
@@ -33,6 +33,7 @@ def run_attempt(repo_root, rho_root, output_root, trial, attempt):
             sys.executable,
             str(Path(__file__).with_name('rho_efficiency.py')),
             f'--rho-root={rho_root}',
+            f'--rho-data-root={rho_data_root}',
             *trial['args'],
             '--cuda=0',
             f"--warmup-epochs={trial['warmup_epochs']}",
@@ -40,7 +41,7 @@ def run_attempt(repo_root, rho_root, output_root, trial, attempt):
             f"--repeat={trial['repeat']}",
             f'--output={result_path}',
         ]
-        cwd = rho_root
+        cwd = rho_data_root
     else:
         command = [
             sys.executable,
@@ -77,6 +78,7 @@ def main():
     parser.add_argument('--registry', type=Path, required=True)
     parser.add_argument('--output-root', type=Path, required=True)
     parser.add_argument('--rho-root', type=Path, required=True)
+    parser.add_argument('--rho-data-root', type=Path, required=True)
     parser.add_argument('--shard-index', type=int, required=True)
     parser.add_argument('--num-shards', type=int, required=True)
     args = parser.parse_args()
@@ -95,7 +97,12 @@ def main():
         attempts = []
         for attempt in (1, 2):
             returncode, result = run_attempt(
-                repo_root, args.rho_root.resolve(), args.output_root, trial, attempt
+                repo_root,
+                args.rho_root.resolve(),
+                args.rho_data_root.resolve(),
+                args.output_root,
+                trial,
+                attempt,
             )
             attempts.append({
                 'attempt': attempt,

@@ -10,6 +10,7 @@
 - Epoch time includes data-loader iteration, CPU-to-GPU batch transfer, forward, backward, optimizer step, and scheduler step. Evaluation, checkpoints, terminal rendering, and logging are outside the timer.
 - RHO's method-native center recomputation and full-graph forward are inside its measured epoch; evaluation is omitted from all methods.
 - The RHO harness imports the upstream `Dataset` and `RHO` classes at the recorded SHA. It mirrors upstream `init_params` and `get_split` locally because upstream `utils.py` hard-imports unused OGB functionality unavailable in the frozen runtime; the mirrored functions are covered by the harness digest.
+- RHO source and generated data are separate: the official repository remains a clean detached checkout, while its source-native relative `./datasets` reads resolve from an explicit external runtime directory.
 - CUDA timing is synchronized. CPU memory is sampled from process RSS. CUDA allocated and reserved peaks are reset and recorded separately for offline and training phases.
 - A CUDA OOM is accepted only after two fresh-process failures under the identical configuration. Other failure classes remain distinct.
 - VecGAD uses the paper operator `D^-1/2 A D^-1/2 + I`, a sparse COO representation, and sequential hop reuse. Formal timing is gated on token equivalence.

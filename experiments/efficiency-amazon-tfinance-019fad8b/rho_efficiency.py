@@ -54,9 +54,6 @@ class PeakRSS:
 
 
 def cuda_current(device):
-    config = vars(args).copy()
-    config['rho_root'] = str(rho_root)
-    config['output'] = str(args.output)
     return {
         'allocated_bytes': torch.cuda.memory_allocated(device),
         'reserved_bytes': torch.cuda.memory_reserved(device),
@@ -116,6 +113,7 @@ def get_split(num_nodes, labels, train_ratio, val_ratio=0.1):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--rho-root', type=Path, required=True)
+    parser.add_argument('--rho-data-root', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--dataset', choices=['amazon', 'tfinance'], required=True)
     parser.add_argument('--cuda', type=int, default=0)
@@ -137,6 +135,11 @@ def parse_args():
 
 def run(args):
     rho_root = args.rho_root.resolve()
+    rho_data_root = args.rho_data_root.resolve()
+    datasets_dir = rho_data_root / 'datasets'
+    if not datasets_dir.is_dir():
+        raise FileNotFoundError(f'missing RHO datasets directory: {datasets_dir}')
+    os.chdir(rho_data_root)
     sys.path.insert(0, str(rho_root))
     from dataset import Dataset
     from model import RHO
@@ -219,6 +222,10 @@ def run(args):
         laplacian.indices().untyped_storage().nbytes()
         + laplacian.values().untyped_storage().nbytes()
     )
+    config = vars(args).copy()
+    config['rho_root'] = str(rho_root)
+    config['rho_data_root'] = str(rho_data_root)
+    config['output'] = str(args.output)
     return {
         'schema_version': 1,
         'status': 'completed',
