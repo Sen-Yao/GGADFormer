@@ -16,9 +16,9 @@
     "allowed_upload_classes": []
   },
   "source": {
-    "vecgad_code_commit": "4483749e118769bf094436ab5ba8bb24bcdf2c9b",
-    "research_protocol_commit": "4483749e118769bf094436ab5ba8bb24bcdf2c9b",
-    "prepared_manifest_parent_commit": "4483749e118769bf094436ab5ba8bb24bcdf2c9b",
+    "vecgad_code_commit": "2a6afd381f7049baac90be7d46766c996c865fc0",
+    "research_protocol_commit": "2a6afd381f7049baac90be7d46766c996c865fc0",
+    "prepared_manifest_parent_commit": "2a6afd381f7049baac90be7d46766c996c865fc0",
     "rho_repository": "https://github.com/mala-lab/RHO.git",
     "rho_commit": "a394d5575dea6745215b15e0453e1f925ffcc1f2",
     "vecgad_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/vec-worktree",
@@ -26,11 +26,12 @@
   },
   "digests": {
     "registry_sha256": "e3486248c059bf3a0dd7457a736e8dee50c7fdec1c778210d6c00e52360b33b9",
-    "protocol_sha256": "78a92ee333269bc6920d87542710401868dbbd6e102b8df955242f10a078bcbe",
+    "protocol_sha256": "0b5971117f96fd576f3b691f7c52e154b6824ad1a26b8f3a4579f258d7c5b6ed",
     "run_py_sha256": "cb9fbbdee884cba8ac97bb7cf3f930588d620d31d8a4700272a0d4d476930069",
     "utils_py_sha256": "5c26377373ef63cc482d874e9708ea9df7fc8ee179ab565bdd4286043754f602",
     "rho_harness_sha256": "5d850535b40ebbd5e72f765881383da2379e304b23fc934463d9b343ba4a8312",
-    "runner_sha256": "1cb55ab02c3a99a9baf29a058da957ead2ecb4a6dce3ed9b1348f4f7d22cf798",
+    "runner_sha256": "824b8d99687c1834d097e5a5ca6a3d24ed72f349b8953946e5faf4b058b1b5c1",
+    "aggregate_sha256": "e4980509843843b5fb84a5a08182be102d0c9db71e70e6a0ab3ccdf97c301522",
     "equivalence_gate_sha256": "d10f399713bfed3a9f927b781b23b078d6a20d87edce3894108d379defc0b1f9",
     "rho_data_preparation_sha256": "c5a94a8e64100ecbc72ccc8b295c205c5958336e1777ed1b52c6901dcd7ac915",
     "token_validator_sha256": "72a871246f43c4dd917e0450e4005ed754ee438de430127d1ad2ee84b8ad4fe2",
@@ -115,12 +116,30 @@
     "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/gate"
   },
   "formal_execution": {
-    "status": "ready",
+    "status": "rho_retry_ready_after_harness_failure",
     "expected_trials": 18,
     "warmup_epochs": 10,
     "measured_epochs": 30,
     "fresh_process_repeats": 3,
-    "tmux_session": "vecgad-efficiency-formal-019fad8b",
+    "tmux_session": "vecgad-efficiency-formal-019fad8b-rho-retry1",
+    "prior_attempts": [
+      {
+        "tmux_session": "vecgad-efficiency-formal-019fad8b",
+        "pane_id": "%56",
+        "terminal_status": 1,
+        "completed_trials": 9,
+        "double_cuda_oom_trials": 3,
+        "rho_harness_failures": 6,
+        "failure_class": "relative_rho_harness_path",
+        "rho_model_reached": false
+      }
+    ],
+    "retry_scope": {
+      "method": "RHO",
+      "attempt_offset": 1,
+      "summary_label": "rho-retry1",
+      "preserve_completed_trials": true
+    },
     "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/results"
   },
   "prelaunch_smoke": {
