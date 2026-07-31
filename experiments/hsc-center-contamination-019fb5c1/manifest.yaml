@@ -245,6 +245,18 @@ result_validation:
   repeated_diagnostic_replay_valid: false
   independent_aggregate_replay_valid: false
 
+heartbeat:
+  automation_id: monitor-vecgad-hsc-center-sweep
+  kind: heartbeat
+  target_thread_id: 019fb5c1-2c04-7f40-ac8a-121ee993cbd4
+  schedule_generation: 1
+  state: active
+  first_schedule_created_at_utc: 2026-07-31T03:18:57Z
+  first_delay_minutes: 5
+  reference_smoke_seconds: 27.3
+  one_future_occurrence: true
+  policy: experiment-runner_dynamic_heartbeat
+
 protocol_deviations: []
 blockers: []
 operational_notes:
