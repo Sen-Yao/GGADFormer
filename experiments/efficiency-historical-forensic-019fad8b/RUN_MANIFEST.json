@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "state": "prepared",
+  "state": "launched",
   "investigation_id": "2026-07-31-vecgad-historical-efficiency-forensic",
   "thread_id": "019fad8b-cbf2-7481-a0b7-077753148fd1",
   "prepared_at": "2026-07-31T08:12:37Z",
@@ -57,7 +57,7 @@
     "parent_commit": "7a346d439ebef11a0b43b32348e05aac3f829895",
     "prepared_protocol_commit": "004d47d0ec16b9deb452c70212560c44b7a8472b",
     "launch_manifest_commit": "e8588670d05295ab6e930ad7efe1c34fc00cbecf",
-    "execution_harness_commit": null,
+    "execution_harness_commit": "889688d87f5931e7660f53f1e4a8c8810e296bba",
     "remote_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-historical-forensic-019fad8b",
     "harness_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-historical-forensic-019fad8b/harness-worktree",
     "historical_e071_worktree": "/root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/worktree-e071ae66",
@@ -116,11 +116,33 @@
     "project": "VecGAD",
     "sweep_id": "y7tn68lj",
     "created_at": "2026-07-31T08:15:04Z",
-    "status": "created_once"
+    "status": "running",
+    "expected_trials": 24,
+    "first_assigned_run_ids": [
+      "qrnf1kf5",
+      "kuyw0za6",
+      "o7ra5603",
+      "s8apumyj",
+      "qffqkfhb",
+      "3g5m752o",
+      "pcb4uv5k",
+      "ek6zror1"
+    ]
   },
   "tmux": {
     "session": "vecgad-efficiency-historical-forensic-019fad8b",
-    "panes": {},
-    "first_agent_started_at": null
+    "panes": {
+      "0": {"pane_id": "%66", "agent_count": 3, "gpu": 0},
+      "1": {"pane_id": "%67", "agent_count": 3, "gpu": 1},
+      "2": {"pane_id": "%68", "agent_count": 3, "gpu": 2},
+      "3": {"pane_id": "%69", "agent_count": 3, "gpu": 3},
+      "4": {"pane_id": "%70", "agent_count": 3, "gpu": 4},
+      "5": {"pane_id": "%71", "agent_count": 3, "gpu": 5},
+      "6": {"pane_id": "%72", "agent_count": 3, "gpu": 6},
+      "7": {"pane_id": "%73", "agent_count": 3, "gpu": 7}
+    },
+    "first_agent_started_at": "2026-07-31T08:17:05Z",
+    "launch_observed_at": "2026-07-31T08:18:06Z",
+    "remain_on_exit": true
   }
 }
