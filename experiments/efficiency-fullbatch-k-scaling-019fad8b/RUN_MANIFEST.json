@@ -1,9 +1,10 @@
 {
   "schema_version": 2,
-  "state": "launched",
+  "state": "completed",
   "investigation_id": "2026-07-31-vecgad-efficiency-fullbatch-k-scaling",
   "thread_id": "019fad8b-cbf2-7481-a0b7-077753148fd1",
   "prepared_at": "2026-07-31T03:50:49Z",
+  "completed_at": "2026-07-31T06:11:17Z",
   "execution_host": "HCCS-90",
   "hostname": "gpufree-container",
   "gpu_indices": [0, 1, 2, 3, 4, 5, 6, 7],
@@ -102,7 +103,7 @@
     "hccs_25_excluded_reason": "foreign compute PIDs and cooperative reservation"
   },
   "fullbatch_sweep": {
-    "status": "launched",
+    "status": "completed",
     "sweep_id": "qt7e3a3n",
     "created_at": "2026-07-31T04:05:04Z",
     "expected_trials": 18,
@@ -136,7 +137,39 @@
       "wandb_run_id": "it0xz5sh",
       "sidecar": "fullbatch-results/wandb/vecgad-amazon-r0.json"
     },
-    "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-fullbatch-k-scaling-019fad8b/fullbatch-results"
+    "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-fullbatch-k-scaling-019fad8b/fullbatch-results",
+    "completion": {
+      "wandb_sweep_state": "FINISHED",
+      "wandb_finished_runs": 18,
+      "terminal_trials": 18,
+      "completed_trials": 12,
+      "gpu_oom_trials": 6,
+      "sweep_stop_mode": "wandb --stop after all 18 declared runs finished",
+      "remote_aggregate": "/root/gpufree-data/linziyao/VecGAD-efficiency-fullbatch-k-scaling-019fad8b/fullbatch-results/aggregate.json",
+      "aggregate_sha256": "ac7adf0ffc44150993969fd45b972f24003756eae350bc504a4fe428b89b8c20",
+      "local_evidence_root": "/Users/oliver/.codex/worktrees/eff-fullbatch-019fad8b/VecGAD/tmp/efficiency-fullbatch-qt7e3a3n",
+      "independent_replay_sha256": "d8d09a4955837ea2816801255bdce6260c25ef12105003441d24e68b0a95a71a",
+      "wandb_snapshot_sha256": "60253cd2bf5c8e2a1be9f54399fe6a0432bc289b4910bb980116f6bc12bdfce2",
+      "evidence_archive": "/Users/oliver/.codex/worktrees/eff-fullbatch-019fad8b/VecGAD/tmp/vecgad-efficiency-fullbatch-qt7e3a3n.tar.gz",
+      "evidence_archive_sha256": "90200b03f35cbf4c4e99222c5869cc63c920a775c064b2c124b795adca7d72f9",
+      "terminal_processes": 0,
+      "terminal_gpu_compute_pids": 0,
+      "execution_worktree_clean": true,
+      "tmux_terminal_evidence": {
+        "retained_pane": "%58",
+        "retained_exit_status": 0,
+        "auto_removed_panes": ["%59", "%60", "%61", "%62", "%63", "%64", "%65"],
+        "impact": "All eight pane identities and rendered commands were verified while live; W&B, sidecar, raw-result, aggregate, and replay identities are complete."
+      },
+      "cell_summary": [
+        {"method": "VecGAD", "dataset": "Amazon", "status": "completed", "offline_median_seconds": 4.0704979095608, "epoch_median_seconds": 0.25187084171921015},
+        {"method": "VecGAD", "dataset": "t_finance", "status": "completed", "offline_median_seconds": 21.218425154685974, "epoch_median_seconds": 0.8395777195692062},
+        {"method": "GGAD", "dataset": "Amazon", "status": "completed", "offline_median_seconds": 2.652526108548045, "epoch_median_seconds": 0.02151573821902275},
+        {"method": "GGAD", "dataset": "t_finance", "status": "gpu_oom"},
+        {"method": "RHO", "dataset": "amazon", "status": "completed", "offline_median_seconds": 0.6109063625335693, "epoch_median_seconds": 1.1062980340793729},
+        {"method": "RHO", "dataset": "tfinance", "status": "gpu_oom"}
+      ]
+    }
   },
   "k_scaling_successor": {
     "status": "designed_not_created",
