@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "state": "prepared",
+  "state": "launched",
   "investigation_id": "2026-07-31-vecgad-efficiency-fullbatch-k-scaling",
   "thread_id": "019fad8b-cbf2-7481-a0b7-077753148fd1",
   "prepared_at": "2026-07-31T03:50:49Z",
@@ -44,7 +44,7 @@
     "parent_evidence_commit": "560b5f22803e0be283e18da954357988a4126e33",
     "vecgad_scientific_code_commit": "4483749e118769bf094436ab5ba8bb24bcdf2c9b",
     "prepared_protocol_commit": "9c851dfd07ab5b1275253a55ef56dd42cbc370f9",
-    "launch_manifest_commit": null,
+    "launch_manifest_commit": "3a8884d713bd6463c64d77bc087b2a5ffb7b9dc5",
     "rho_repository": "https://github.com/mala-lab/RHO.git",
     "rho_commit": "a394d5575dea6745215b15e0453e1f925ffcc1f2",
     "remote_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-fullbatch-k-scaling-019fad8b",
@@ -102,7 +102,7 @@
     "hccs_25_excluded_reason": "foreign compute PIDs and cooperative reservation"
   },
   "fullbatch_sweep": {
-    "status": "created",
+    "status": "launched",
     "sweep_id": "qt7e3a3n",
     "created_at": "2026-07-31T04:05:04Z",
     "expected_trials": 18,
@@ -120,8 +120,22 @@
       "7": 2
     },
     "tmux_session": "vecgad-efficiency-fullbatch-019fad8b",
-    "panes": {},
-    "first_agent_started_at": null,
+    "panes": {
+      "0": {"pane_id": "%58", "agent_count": 3},
+      "1": {"pane_id": "%59", "agent_count": 3},
+      "2": {"pane_id": "%60", "agent_count": 2},
+      "3": {"pane_id": "%61", "agent_count": 2},
+      "4": {"pane_id": "%62", "agent_count": 2},
+      "5": {"pane_id": "%63", "agent_count": 2},
+      "6": {"pane_id": "%64", "agent_count": 2},
+      "7": {"pane_id": "%65", "agent_count": 2}
+    },
+    "first_agent_started_at": "2026-07-31T04:08:30Z",
+    "first_valid_completion": {
+      "trial_id": "vecgad-amazon-r0",
+      "wandb_run_id": "it0xz5sh",
+      "sidecar": "fullbatch-results/wandb/vecgad-amazon-r0.json"
+    },
     "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-fullbatch-k-scaling-019fad8b/fullbatch-results"
   },
   "k_scaling_successor": {
