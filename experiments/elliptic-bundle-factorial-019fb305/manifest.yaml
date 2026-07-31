@@ -41,7 +41,7 @@ git:
   execution_code_sha: 7c15f33265950abba9db3f130256a2d8e5245ec5
   prepared_protocol_commit: 3c2bc7f654b78560c3bea87b421aab927648ae29
   sweep_bind_commit: b02d5c620c1ab5e4422bf567450d3f69ff9e1c31
-  launch_checkpoint_commit: PENDING_LAUNCH_COMMIT
+  launch_checkpoint_commit: 235b20c6344e5c53b8c60ebcc3779c86148971a6
   preflight_commit: 6636ebf035aa7d0306db4a8966686b933bd313f8
   code_remote: https://github.com/Sen-Yao/GGADFormer.git
   protocol_branch: codex/elliptic-mixed-replication-hccs90-019fb305
@@ -207,6 +207,12 @@ occupancy:
 
 result_validation:
   status: pending
+
+heartbeat:
+  automation_id: elliptic-bundle-factorial-019fb305-heartbeat
+  schedule_generation: 1
+  scheduled_local_time: 2026-07-31T23:08:00+08:00
+  policy: one_shot_dynamic_heartbeat
 
 protocol_deviations: []
 operational_notes:
