@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "authoritative_sweep_sha256": "194fa89326f876a35c5abd78e404929c8297cd4dc2e71a9e5186a44f014cca4a",
+  "results_sha256": "c3d0d4cc33ce116b55fc4e99c5abfa939c33c3296116fc1f001208946b99a19d",
+  "fixed_final_step": 200,
+  "aggregate": {
+    "control_2_20": {
+      "AUC.last": {
+        "mean": 0.6458877079382385,
+        "sample_std_ddof1": 0.05508331098488456
+      },
+      "AP.last": {
+        "mean": 0.1304778375620271,
+        "sample_std_ddof1": 0.021404156592041892
+      }
+    },
+    "unified_0p1_1": {
+      "AUC.last": {
+        "mean": 0.6386365703470661,
+        "sample_std_ddof1": 0.05821989078276185
+      },
+      "AP.last": {
+        "mean": 0.1266347460673458,
+        "sample_std_ddof1": 0.022009645996615194
+      }
+    }
+  },
+  "paired_mean_difference_unified_minus_control": {
+    "AUC.last": -0.00725113759117244,
+    "AP.last": -0.0038430914946813222
+  },
+  "matches_results_json": true
+}

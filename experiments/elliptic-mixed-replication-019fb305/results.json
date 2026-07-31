@@ -1,0 +1,555 @@
+{
+  "sweep_id": "k5lbpsg9",
+  "sweep_url": "https://wandb.ai/HCCS/GGADFormer/sweeps/k5lbpsg9",
+  "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+  "execution_code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+  "fixed_final_step": 200,
+  "aggregate": {
+    "control_2_20": {
+      "AUC.last": {
+        "mean": 0.6458877079382385,
+        "sample_std_ddof1": 0.05508331098488456
+      },
+      "AP.last": {
+        "mean": 0.1304778375620271,
+        "sample_std_ddof1": 0.021404156592041892
+      }
+    },
+    "unified_0p1_1": {
+      "AUC.last": {
+        "mean": 0.6386365703470661,
+        "sample_std_ddof1": 0.05821989078276185
+      },
+      "AP.last": {
+        "mean": 0.1266347460673458,
+        "sample_std_ddof1": 0.022009645996615194
+      }
+    }
+  },
+  "paired_differences_unified_minus_control": [
+    {
+      "seed": 0,
+      "AUC.last": -0.0052240857649767936,
+      "AP.last": -0.007495988975131596
+    },
+    {
+      "seed": 1,
+      "AUC.last": 0.11051294176555737,
+      "AP.last": 0.04567564618435811
+    },
+    {
+      "seed": 2,
+      "AUC.last": 0.02231503283362224,
+      "AP.last": -0.0017240132601721025
+    },
+    {
+      "seed": 3,
+      "AUC.last": -0.041827620344309424,
+      "AP.last": -0.01345943983007028
+    },
+    {
+      "seed": 4,
+      "AUC.last": -0.1220319564457556,
+      "AP.last": -0.042211661592390745
+    }
+  ],
+  "paired_mean_difference_unified_minus_control": {
+    "AUC.last": -0.00725113759117244,
+    "AP.last": -0.0038430914946813222
+  },
+  "terminal_diagnostic_aggregate": {
+    "control_2_20": {
+      "hsc/shell_hit_rate": {
+        "mean": 0.963838061369886,
+        "sample_std_ddof1": 0.01747440861597885
+      },
+      "hsc/inner_violation_rate": {
+        "mean": 0.0,
+        "sample_std_ddof1": 0.0
+      },
+      "hsc/outer_violation_rate": {
+        "mean": 0.03616193874531852,
+        "sample_std_ddof1": 0.017474421915029452
+      },
+      "hsc/distance_mean": {
+        "mean": 0.8403789458650207,
+        "sample_std_ddof1": 0.054116695452193435
+      },
+      "loss/bce_raw": {
+        "mean": 0.007458568268430967,
+        "sample_std_ddof1": 0.004236941319136439
+      },
+      "loss/rec_combined_raw": {
+        "mean": 8.305008639465274,
+        "sample_std_ddof1": 2.557802285370738
+      },
+      "loss/hsc_raw": {
+        "mean": 0.0035527769613485465,
+        "sample_std_ddof1": 0.0013656152454878424
+      },
+      "loss/bce_weighted": {
+        "mean": 0.007458568268430967,
+        "sample_std_ddof1": 0.004236941319136439
+      },
+      "loss/rec_combined_weighted": {
+        "mean": 8.305008639465274,
+        "sample_std_ddof1": 2.557802285370738
+      },
+      "loss/hsc_weighted": {
+        "mean": 0.07105553918532968,
+        "sample_std_ddof1": 0.02731230537730525
+      },
+      "loss/true_weighted_total": {
+        "mean": 8.383522652502455,
+        "sample_std_ddof1": 2.5772481526162316
+      }
+    },
+    "unified_0p1_1": {
+      "hsc/shell_hit_rate": {
+        "mean": 0.9772031753404352,
+        "sample_std_ddof1": 0.007804848223213167
+      },
+      "hsc/inner_violation_rate": {
+        "mean": 0.0,
+        "sample_std_ddof1": 0.0
+      },
+      "hsc/outer_violation_rate": {
+        "mean": 0.02279683029442494,
+        "sample_std_ddof1": 0.007804849837828211
+      },
+      "hsc/distance_mean": {
+        "mean": 0.7711958571442962,
+        "sample_std_ddof1": 0.04925271080196049
+      },
+      "loss/bce_raw": {
+        "mean": 0.0007376295256353812,
+        "sample_std_ddof1": 0.00016623938056537922
+      },
+      "loss/rec_combined_raw": {
+        "mean": 2.863832115662915,
+        "sample_std_ddof1": 2.0126130796324637
+      },
+      "loss/hsc_raw": {
+        "mean": 0.006397108608096095,
+        "sample_std_ddof1": 0.0018916133049585056
+      },
+      "loss/bce_weighted": {
+        "mean": 0.0007376295256353812,
+        "sample_std_ddof1": 0.00016623938056537922
+      },
+      "loss/rec_combined_weighted": {
+        "mean": 2.863832115662915,
+        "sample_std_ddof1": 2.0126130796324637
+      },
+      "loss/hsc_weighted": {
+        "mean": 0.006397108608096095,
+        "sample_std_ddof1": 0.0018916133049585056
+      },
+      "loss/true_weighted_total": {
+        "mean": 2.870966822254457,
+        "sample_std_ddof1": 2.012382013870668
+      }
+    }
+  },
+  "decision": {
+    "AUROC_equivalence_pass": true,
+    "AUPRC_equivalence_pass": true,
+    "joint_practical_equivalence_pass": true,
+    "candidate_above_GGAD_AUROC": false,
+    "candidate_above_GGAD_AUPRC": false,
+    "optimization_x_propagation_followup_allowed": true
+  },
+  "runs": [
+    {
+      "variant": "control_2_20",
+      "seed": 0,
+      "run_id": "1q8nsc72",
+      "name": "celestial-sweep-1",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/1q8nsc72",
+      "state": "finished",
+      "created_at": "2026-07-31T14:05:54Z",
+      "runtime_seconds": 241.002877435,
+      "gpu_index": "3",
+      "pane": "%77",
+      "code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0,
+      "AUC.last": 0.7102623214556364,
+      "AP.last": 0.15801051586233822,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3471,
+        "hsc/shell_hit_rate": 0.9446845300532115,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.05531547028808558,
+        "hsc/distance_mean": 0.8771982077939543,
+        "loss/bce_raw": 0.011671448282058182,
+        "loss/rec_combined_raw": 12.27513281078443,
+        "loss/hsc_raw": 0.0052424486078809195,
+        "loss/bce_weighted": 0.011671448282058182,
+        "loss/rec_combined_weighted": 12.27513281078443,
+        "loss/hsc_weighted": 0.10484897367413674,
+        "loss/true_weighted_total": 12.391652931640898
+      },
+      "config_sha256": "c6c120e1a855738719eaf6a2615c46e8f7c780b3389582f397259683db2fecad",
+      "performance_history_sha256": "68ccf376cc1048d1147ddc2225678b2dd787ac78f0e819dee6ac3cadab8ec45a",
+      "diagnostic_history_sha256": "281e0cbe32fd1f68a1fca418905e6775cd238c9702eed2d8b36fd29e6c1f4b33",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/logs/agent-gpu3-20260731T140546Z.log",
+      "agent_log_sha256": "7c9c2dd66da81a84812505e7c7fe5dfedb84d4d29fa9a11c9651fcf47fa5d2e2",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "control_2_20",
+      "seed": 1,
+      "run_id": "hdf6dnnr",
+      "name": "electric-sweep-3",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/hdf6dnnr",
+      "state": "finished",
+      "created_at": "2026-07-31T14:05:55Z",
+      "runtime_seconds": 236.553335428,
+      "gpu_index": "4",
+      "pane": "%78",
+      "code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0,
+      "AUC.last": 0.5804318743503282,
+      "AP.last": 0.10399197137961393,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3477,
+        "hsc/shell_hit_rate": 0.9695139379894936,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.030486051509087717,
+        "hsc/distance_mean": 0.8515901932230893,
+        "loss/bce_raw": 0.005289661158186962,
+        "loss/rec_combined_raw": 6.260105704932093,
+        "loss/hsc_raw": 0.003725909852300365,
+        "loss/bce_weighted": 0.005289661158186962,
+        "loss/rec_combined_weighted": 6.260105704932093,
+        "loss/hsc_weighted": 0.07451819660405096,
+        "loss/true_weighted_total": 6.339913627146166
+      },
+      "config_sha256": "711b325b5ad69f5ae71471b2b7ae00efda984bda496213573d808cd355e1eeb1",
+      "performance_history_sha256": "06a1dafe2be4d3f913e5860cc2f85ebe5baf3b72f47b49c0331f2975c45641d2",
+      "diagnostic_history_sha256": "a07387d1903c1eda85b1c6748fcb9286edeac255cf44c209f46da1d0e83c4f28",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/logs/agent-gpu4-20260731T140546Z.log",
+      "agent_log_sha256": "eb6561c2f1b61c0926de629ea8f2e423fdd27fb6d340d9d201e0b5b916638636",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "control_2_20",
+      "seed": 2,
+      "run_id": "oloomr6b",
+      "name": "winter-sweep-5",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/oloomr6b",
+      "state": "finished",
+      "created_at": "2026-07-31T14:05:56Z",
+      "runtime_seconds": 235.204523415,
+      "gpu_index": "2",
+      "pane": "%76",
+      "code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0,
+      "AUC.last": 0.6043213781260446,
+      "AP.last": 0.11852274273388544,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3514,
+        "hsc/shell_hit_rate": 0.9652817246414547,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.0347182704321298,
+        "hsc/distance_mean": 0.8552125790408205,
+        "loss/bce_raw": 0.0056696313752182675,
+        "loss/rec_combined_raw": 5.941626837257641,
+        "loss/hsc_raw": 0.003136705173914706,
+        "loss/bce_weighted": 0.0056696313752182675,
+        "loss/rec_combined_weighted": 5.941626837257641,
+        "loss/hsc_weighted": 0.0627341035013519,
+        "loss/true_weighted_total": 6.010030524460647
+      },
+      "config_sha256": "9eeb8cd26be2c2f455a5eb07f6529d376d6184d7411a231f878617d498710b3d",
+      "performance_history_sha256": "3f7d7dfaad602d0a9da6f7278bf530a18cdd9010a7d2889e34f72da2fd58923f",
+      "diagnostic_history_sha256": "319e1348b0ce211f29f189bd43c3d364c5ff34fc6dc12c79c213fcdca487b091",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/logs/agent-gpu2-20260731T140546Z.log",
+      "agent_log_sha256": "4a220c3e8cfad2d70ab1d7060ae3f9938e89f2d1fd2f1531f664467461d0bb86",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "control_2_20",
+      "seed": 3,
+      "run_id": "znjg2pjd",
+      "name": "genial-sweep-7",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/znjg2pjd",
+      "state": "finished",
+      "created_at": "2026-07-31T14:06:45Z",
+      "runtime_seconds": 226.267294689,
+      "gpu_index": "5",
+      "pane": "%79",
+      "code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0,
+      "AUC.last": 0.6440710307397521,
+      "AP.last": 0.12669665034550842,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3476,
+        "hsc/shell_hit_rate": 0.9505178668762378,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.04948216553357343,
+        "hsc/distance_mean": 0.8723390268031144,
+        "loss/bce_raw": 0.012133203635219445,
+        "loss/rec_combined_raw": 9.045783417683065,
+        "loss/hsc_raw": 0.004124598056629892,
+        "loss/bce_weighted": 0.012133203635219445,
+        "loss/rec_combined_weighted": 9.045783417683065,
+        "loss/hsc_weighted": 0.08249196014501009,
+        "loss/true_weighted_total": 9.140408536644333
+      },
+      "config_sha256": "6f61981f83ba5beb0e1bd45cb02fdb5ecff1094f3f0d8c84871e834324404800",
+      "performance_history_sha256": "cd9ac96319060a5985e1edeca8f0b423fb6efdf9b88202d553fdd2cba1cdc0b4",
+      "diagnostic_history_sha256": "41c9c9c29cc8848ceedc24d5a1de8c96325c0fb0889e9fdcd7246fdfaf240dda",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/logs/agent-gpu5-20260731T140635Z.log",
+      "agent_log_sha256": "ce4c2919f05aae9b7833d85a8945814d1e9149f3b9d3b6a688c7482b9d514ef9",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "control_2_20",
+      "seed": 4,
+      "run_id": "63syr8uy",
+      "name": "helpful-sweep-9",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/63syr8uy",
+      "state": "finished",
+      "created_at": "2026-07-31T14:10:05Z",
+      "runtime_seconds": 213.732088965,
+      "gpu_index": "0",
+      "pane": "%74",
+      "code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0,
+      "AUC.last": 0.6903519350194313,
+      "AP.last": 0.1451673074887895,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3516,
+        "hsc/shell_hit_rate": 0.9891922472890327,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.010807735963716078,
+        "hsc/distance_mean": 0.7455547224641254,
+        "loss/bce_raw": 0.0025288968914719797,
+        "loss/rec_combined_raw": 8.002394426669142,
+        "loss/hsc_raw": 0.0015342231160168501,
+        "loss/bce_weighted": 0.0025288968914719797,
+        "loss/rec_combined_weighted": 8.002394426669142,
+        "loss/hsc_weighted": 0.0306844620020987,
+        "loss/true_weighted_total": 8.035607642620226
+      },
+      "config_sha256": "25d670570248d89242e47559de41865d019b6c414a5dae61613aa7468bc321b6",
+      "performance_history_sha256": "e8168dfc146d78d00bc6e931cc4f1500cfd57f559c015d7a52df46ad2d530ef0",
+      "diagnostic_history_sha256": "ef43aad49e4b00167558d391a97241c1b5b011833a2751c8960ad36b872dee8f",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/logs/agent-gpu0-20260731T140546Z.log",
+      "agent_log_sha256": "7535006d7d926cdd6d518cc673f00f380fd297eced1b5e7fb57628201ab45491",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "unified_0p1_1",
+      "seed": 0,
+      "run_id": "6t91vzmc",
+      "name": "distinctive-sweep-2",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/6t91vzmc",
+      "state": "finished",
+      "created_at": "2026-07-31T14:05:55Z",
+      "runtime_seconds": 234.02200019,
+      "gpu_index": "0",
+      "pane": "%74",
+      "code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0,
+      "AUC.last": 0.7050382356906596,
+      "AP.last": 0.15051452688720662,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3471,
+        "hsc/shell_hit_rate": 0.9749351802561889,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.02506482303550387,
+        "hsc/distance_mean": 0.7996443549895005,
+        "loss/bce_raw": 0.0008605859836429847,
+        "loss/rec_combined_raw": 5.68802410230208,
+        "loss/hsc_raw": 0.006818248410257091,
+        "loss/bce_weighted": 0.0008605859836429847,
+        "loss/rec_combined_weighted": 5.68802410230208,
+        "loss/hsc_weighted": 0.006818248410257091,
+        "loss/true_weighted_total": 5.695702939555886
+      },
+      "config_sha256": "d60358fc34fabbdeda551518a9a4035a7b725b7d1b82d63bf1a8d8f6d99fee5a",
+      "performance_history_sha256": "744934d5adb12353b2e4b5edcca80fddd4353ce7486b4b9e6e6a65cc29b6bd51",
+      "diagnostic_history_sha256": "796db36cba6d7886ca7d05b597e780a956faf5718cc86e08050dcd7af28b7ecb",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/logs/agent-gpu0-20260731T140546Z.log",
+      "agent_log_sha256": "7535006d7d926cdd6d518cc673f00f380fd297eced1b5e7fb57628201ab45491",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "unified_0p1_1",
+      "seed": 1,
+      "run_id": "ro3j1yqw",
+      "name": "twilight-sweep-4",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/ro3j1yqw",
+      "state": "finished",
+      "created_at": "2026-07-31T14:05:56Z",
+      "runtime_seconds": 228.708449968,
+      "gpu_index": "1",
+      "pane": "%75",
+      "code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0,
+      "AUC.last": 0.6909448161158855,
+      "AP.last": 0.14966761756397204,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3477,
+        "hsc/shell_hit_rate": 0.9853321789220931,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.014667817306278131,
+        "hsc/distance_mean": 0.7405026147582937,
+        "loss/bce_raw": 0.0006646290818744398,
+        "loss/rec_combined_raw": 0.7830913862364025,
+        "loss/hsc_raw": 0.004682223531726918,
+        "loss/bce_weighted": 0.0006646290818744398,
+        "loss/rec_combined_weighted": 0.7830913862364025,
+        "loss/hsc_weighted": 0.004682223531726918,
+        "loss/true_weighted_total": 0.7884382506554449
+      },
+      "config_sha256": "44c7eea7ac48e65708abf7031adef9f69612183598cc7e61eb87c5f16ae51f12",
+      "performance_history_sha256": "2778b7edf0cc51789644444ce94b73fff5d810136d1351b36059c9d65400bbc8",
+      "diagnostic_history_sha256": "b4c0554813aed06bce56a7ee0757c881a283fcb141f6df718915cd6cd030d26e",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/logs/agent-gpu1-20260731T140546Z.log",
+      "agent_log_sha256": "93ed479141345c91051a5455de68f7720c89c042c51152ab838c260cfe1205a5",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "unified_0p1_1",
+      "seed": 2,
+      "run_id": "rc3ch5wa",
+      "name": "sweet-sweep-6",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/rc3ch5wa",
+      "state": "finished",
+      "created_at": "2026-07-31T14:06:42Z",
+      "runtime_seconds": 223.640328089,
+      "gpu_index": "6",
+      "pane": "%80",
+      "code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0,
+      "AUC.last": 0.6266364109596668,
+      "AP.last": 0.11679872947371334,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3514,
+        "hsc/shell_hit_rate": 0.9664200287042997,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.03357996686171437,
+        "hsc/distance_mean": 0.8310395913769999,
+        "loss/bce_raw": 0.0009583737560544973,
+        "loss/rec_combined_raw": 1.0427901177292327,
+        "loss/hsc_raw": 0.009477918477825434,
+        "loss/bce_weighted": 0.0009583737560544973,
+        "loss/rec_combined_weighted": 1.0427901177292327,
+        "loss/hsc_weighted": 0.009477918477825434,
+        "loss/true_weighted_total": 1.0532263950251284
+      },
+      "config_sha256": "9fdebf99a329d65cad93fcacaa9b92b6217815d64ec1ae1fcc8d9682f0548d08",
+      "performance_history_sha256": "39f013a72384a7d1c5e6a64d0ea3c08f2641d8f309863605f18e01195696a4d4",
+      "diagnostic_history_sha256": "21fcbb44fda5a691190c25a1190e95ecb6bbcd61c83c95f4606f57c79d0a3eaf",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/logs/agent-gpu6-20260731T140635Z.log",
+      "agent_log_sha256": "6959e94310c339473085f8bcbae3028bb39160e53636052fccc1e6e12dffeb3b",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "unified_0p1_1",
+      "seed": 3,
+      "run_id": "jjvw4sli",
+      "name": "dulcet-sweep-8",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/jjvw4sli",
+      "state": "finished",
+      "created_at": "2026-07-31T14:06:45Z",
+      "runtime_seconds": 222.133810063,
+      "gpu_index": "7",
+      "pane": "%81",
+      "code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0,
+      "AUC.last": 0.6022434103954427,
+      "AP.last": 0.11323721051543814,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3476,
+        "hsc/shell_hit_rate": 0.974971263006038,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.025028768616596662,
+        "hsc/distance_mean": 0.7792191242389767,
+        "loss/bce_raw": 0.0005536612752349179,
+        "loss/rec_combined_raw": 3.4099899671706013,
+        "loss/hsc_raw": 0.005272898357160608,
+        "loss/bce_weighted": 0.0005536612752349179,
+        "loss/rec_combined_weighted": 3.4099899671706013,
+        "loss/hsc_weighted": 0.005272898357160608,
+        "loss/true_weighted_total": 3.4158165066474053
+      },
+      "config_sha256": "fa942a622fd0d2955104e356a17fbdd578f9b7f7e78db6d5b0724169ef0c373f",
+      "performance_history_sha256": "829e2d1c3d3df20fcb1f6f90fe09f39bf5d7180f0f5f59f8cc9ce91fab0e8a42",
+      "diagnostic_history_sha256": "f2206b8b4341fcec274aa222017ad80ec37887b2a75a3f140a02276936825626",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/logs/agent-gpu7-20260731T140635Z.log",
+      "agent_log_sha256": "65848039873f4a62fb0199dacbcc186bcbd6042218e0c14c11eb009a3dce215a",
+      "agent_exit_code": 0
+    },
+    {
+      "variant": "unified_0p1_1",
+      "seed": 4,
+      "run_id": "jrxa4wcd",
+      "name": "fresh-sweep-10",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/jrxa4wcd",
+      "state": "finished",
+      "created_at": "2026-07-31T14:10:10Z",
+      "runtime_seconds": 213.699856104,
+      "gpu_index": "1",
+      "pane": "%75",
+      "code_sha": "40986c9f8b460f8fd9baaefb985573209f96e572",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0,
+      "AUC.last": 0.5683199785736757,
+      "AP.last": 0.10295564589639876,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3516,
+        "hsc/shell_hit_rate": 0.9843572258135564,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.015642775652031662,
+        "hsc/distance_mean": 0.7055736003577099,
+        "loss/bce_raw": 0.0006508975313700665,
+        "loss/rec_combined_raw": 3.3952650048762596,
+        "loss/hsc_raw": 0.005734254263510421,
+        "loss/bce_weighted": 0.0006508975313700665,
+        "loss/rec_combined_weighted": 3.3952650048762596,
+        "loss/hsc_weighted": 0.005734254263510421,
+        "loss/true_weighted_total": 3.401650019388421
+      },
+      "config_sha256": "f161eea1779a8ff69e979dbb939ce58d823c47b21e3e58f7f8c7e2fc28bb956c",
+      "performance_history_sha256": "7c98fb7354e0388451e1403f01a55d100fff7693b245c8faddc968b4f568a1e8",
+      "diagnostic_history_sha256": "cca6415a5c3e3579d3134706ceffff2f944364715666ae347ce0b0693cf31b8b",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/logs/agent-gpu1-20260731T140546Z.log",
+      "agent_log_sha256": "93ed479141345c91051a5455de68f7720c89c042c51152ab838c260cfe1205a5",
+      "agent_exit_code": 0
+    }
+  ],
+  "protocol_deviations": []
+}

@@ -1,12 +1,12 @@
 schema_version: 1
-state: launched
+state: completed
 formal_launch_allowed: true
 investigation_id: elliptic-mixed-replication-019fb305
 parent_investigation_id: elliptic-loss-factorial-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T13:46:01Z
-last_material_transition_at_utc: 2026-07-31T14:11:28Z
+last_material_transition_at_utc: 2026-07-31T14:24:58Z
 
 objective:
   dataset: elliptic
@@ -36,7 +36,11 @@ git:
   protocol_commit: 40986c9f8b460f8fd9baaefb985573209f96e572
   identity_bind_commit: 3cd5deedb672b47449506b51db2020a618a46213
   sweep_bind_commit: 4a232ccc99347642d86f8d9eaa4164e9cbaa85c1
-  launch_checkpoint_commit: PENDING_LAUNCH_COMMIT
+  launch_checkpoint_commit: a267711fdac0560b87e7fc4a43ee07f09f771e7a
+  evidence_collector_compatibility_commits:
+    - b89a1deba90057afc3c14423e3eb6f502669132a
+    - 89e9048b95f12b950334a44080fac410e76930f6
+  completion_evidence_commit: PENDING_COMPLETION_COMMIT
   code_remote: https://github.com/Sen-Yao/GGADFormer.git
   remote_publication: pushed
 
@@ -65,7 +69,7 @@ config:
   launcher_path: experiments/elliptic-mixed-replication-019fb305/launch-agent.sh
   launcher_sha256: cf8ffe01c35906563effaa6396c2ea79733c8efae48c8ead67e573143a79a98c
   collector_path: experiments/elliptic-mixed-replication-019fb305/collect-evidence.py
-  collector_sha256: c135e4e8a06209edc789c6d5ccf3883358125f6073e5897041d35d0d81a73f40
+  collector_sha256: f3237806af7bd24dacf9d99d9e0c1e32c73ef83a5f67366e3a68dca70d4f416f
   replay_path: experiments/elliptic-mixed-replication-019fb305/replay-results.py
   replay_sha256: d99a6beefc5caf3bd2ab8f18ca3231d08bc74fb6d3b33ce133f57aab16955880
   observation_module_sha256: 9acd57a42f8262114aeef0cc9db41e964a8ab1a4f36535430813110163a6d57f
@@ -124,6 +128,14 @@ execution:
     active_task_gpus: [0, 1]
     terminal_agent_exit_zero_gpus: [2, 3, 4, 5, 6, 7]
     note: GPU 5-7 panes completed in the second window before this probe; durable start/finish/exit/log markers remain authoritative.
+  terminal_handoff:
+    last_agent_finish_utc: 2026-07-31T14:14:03Z
+    all_agent_exit_codes_zero: true
+    task_owned_process_count: 0
+    detached_worktree_sha: 40986c9f8b460f8fd9baaefb985573209f96e572
+    detached_worktree_clean_after_dataset_unbind: true
+    tmux_session_removed: true
+    tmux_session_removed_at_utc: 2026-07-31T14:24:58Z
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
@@ -167,8 +179,8 @@ wandb:
   sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 10
-  current_state: running
-  last_observed_at_utc: 2026-07-31T14:11:28Z
+  current_state: finished
+  last_observed_at_utc: 2026-07-31T14:22:57Z
   project_access_preflight: passed
   network_path: direct
   code_upload_disabled: true
@@ -191,12 +203,12 @@ wandb:
     - {run_id: hdf6dnnr, variant: control_2_20, seed: 1, gpu: 4, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/hdf6dnnr"}
     - {run_id: "oloomr6b", variant: control_2_20, seed: 2, gpu: 2, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/oloomr6b"}
     - {run_id: znjg2pjd, variant: control_2_20, seed: 3, gpu: 5, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/znjg2pjd"}
-    - {run_id: 63syr8uy, variant: control_2_20, seed: 4, gpu: 0, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/63syr8uy"}
+    - {run_id: 63syr8uy, variant: control_2_20, seed: 4, gpu: 0, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/63syr8uy"}
     - {run_id: 6t91vzmc, variant: unified_0p1_1, seed: 0, gpu: 0, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/6t91vzmc"}
     - {run_id: ro3j1yqw, variant: unified_0p1_1, seed: 1, gpu: 1, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/ro3j1yqw"}
     - {run_id: rc3ch5wa, variant: unified_0p1_1, seed: 2, gpu: 6, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/rc3ch5wa"}
     - {run_id: jjvw4sli, variant: unified_0p1_1, seed: 3, gpu: 7, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/jjvw4sli"}
-    - {run_id: jrxa4wcd, variant: unified_0p1_1, seed: 4, gpu: 1, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/jrxa4wcd"}
+    - {run_id: jrxa4wcd, variant: unified_0p1_1, seed: 4, gpu: 1, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/jrxa4wcd"}
 
 diagnostics:
   expected_batches_per_epoch: 6
@@ -221,6 +233,7 @@ occupancy:
   claim_sweep_id: PENDING_SWEEP_ID
   authoritative_sweep_id: k5lbpsg9
   metadata_note: The validated helper cannot mutate sweep_id after the reserved-to-running transition; owner, host, GPUs, and running state remain correct until terminal release.
+  terminal_release: pending_evidence_commit_and_push
 
 trials:
   expected:
@@ -234,10 +247,48 @@ trials:
     - {variant: unified_0p1_1, seed: 2, lambda_rec_emb: 0.1, ring_loss_weight: 1.0}
     - {variant: unified_0p1_1, seed: 3, lambda_rec_emb: 0.1, ring_loss_weight: 1.0}
     - {variant: unified_0p1_1, seed: 4, lambda_rec_emb: 0.1, ring_loss_weight: 1.0}
-  observed: []
+  observed:
+    - {variant: control_2_20, seed: 0, run_id: 1q8nsc72, AUC.last: 0.7102623214556364, AP.last: 0.15801051586233822}
+    - {variant: control_2_20, seed: 1, run_id: hdf6dnnr, AUC.last: 0.5804318743503282, AP.last: 0.10399197137961393}
+    - {variant: control_2_20, seed: 2, run_id: "oloomr6b", AUC.last: 0.6043213781260446, AP.last: 0.11852274273388544}
+    - {variant: control_2_20, seed: 3, run_id: znjg2pjd, AUC.last: 0.6440710307397521, AP.last: 0.12669665034550842}
+    - {variant: control_2_20, seed: 4, run_id: 63syr8uy, AUC.last: 0.6903519350194313, AP.last: 0.1451673074887895}
+    - {variant: unified_0p1_1, seed: 0, run_id: 6t91vzmc, AUC.last: 0.7050382356906596, AP.last: 0.15051452688720662}
+    - {variant: unified_0p1_1, seed: 1, run_id: ro3j1yqw, AUC.last: 0.6909448161158855, AP.last: 0.14966761756397204}
+    - {variant: unified_0p1_1, seed: 2, run_id: rc3ch5wa, AUC.last: 0.6266364109596668, AP.last: 0.11679872947371334}
+    - {variant: unified_0p1_1, seed: 3, run_id: jjvw4sli, AUC.last: 0.6022434103954427, AP.last: 0.11323721051543814}
+    - {variant: unified_0p1_1, seed: 4, run_id: jrxa4wcd, AUC.last: 0.5683199785736757, AP.last: 0.10295564589639876}
 
 result_validation:
-  status: pending
+  status: passed
+  queried_at_utc: 2026-07-31T14:22:57.698527Z
+  fixed_final_step_200_verified_for_all_runs: true
+  performance_history_steps_verified: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
+  diagnostic_history_steps_verified: 0..200
+  config_seed_code_identity_verified: true
+  aggregate_replay_verified: true
+  authoritative_sweep_path: experiments/elliptic-mixed-replication-019fb305/authoritative-sweep.json
+  authoritative_sweep_sha256: 194fa89326f876a35c5abd78e404929c8297cd4dc2e71a9e5186a44f014cca4a
+  results_path: experiments/elliptic-mixed-replication-019fb305/results.json
+  results_sha256: c3d0d4cc33ce116b55fc4e99c5abfa939c33c3296116fc1f001208946b99a19d
+  replay_path: experiments/elliptic-mixed-replication-019fb305/replay.json
+  replay_sha256: bf61787578a5b6787759c1f6e3573b1ff56b2f47d4b85db3cd8f46afffabd12a
+  agent_records_path: experiments/elliptic-mixed-replication-019fb305/agent-records.json
+  agent_records_sha256: 4c7e3d870556f510c34284a454b4b5c91261f8d8057af5609bf97774e22edb0d
+  remote_log_hashes_path: experiments/elliptic-mixed-replication-019fb305/remote-log-sha256.txt
+  gate:
+    AUROC_paired_mean_difference: -0.00725113759117244
+    AUROC_pass: true
+    AUPRC_paired_mean_difference: -0.0038430914946813222
+    AUPRC_pass: true
+    joint_practical_equivalence_pass: true
+    optimization_x_propagation_followup_allowed: true
 
-protocol_deviations: []
+protocol_deviations:
+  - scope: terminal_tmux_retention
+    detail: Panes %79-%81 in the second tmux window were not retained at the post-launch audit despite remain-on-exit being requested; their durable start, finish, exit-code, and hashed agent logs were complete.
+    scientific_impact: none
+operational_notes:
+  - The evidence collector failed closed twice on the W&B SummarySubDict proxy type before commit 89e9048 switched to explicit ["last"] access; no run was omitted or rerun.
+  - W&B summary last values were required to equal explicit scan_history values at _step 200; AUC.max and AP.max were never used.
 blockers: []
