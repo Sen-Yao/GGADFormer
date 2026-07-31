@@ -12,7 +12,7 @@ import wandb
 
 ROOT = Path(__file__).resolve().parent
 SCIENTIFIC_BASE_SHA = "655d6293bb76633bc6aa6fd21166a49c3b91d504"
-EXECUTION_SHA = "PENDING_EXECUTION_SHA"
+EXECUTION_SHA = "7c15f33265950abba9db3f130256a2d8e5245ec5"
 PROTOCOL_ID = "elliptic-bundle-factorial-019fb305"
 PARENT_SWEEP_ID = "k5lbpsg9"
 DATASET_SHA256 = "2f502df4b87be8f8b5ed5ef8378876125c92b06afbc5b38ee58fe4b56b1b2023"
@@ -393,4 +393,3 @@ print(json.dumps({
     "authoritative_sha256": sha256_file(authoritative_path),
     "results_sha256": sha256_file(results_path),
 }, sort_keys=True))
-

@@ -1,12 +1,12 @@
 schema_version: 1
-state: protocol_draft
+state: prepared
 formal_launch_allowed: false
 investigation_id: elliptic-bundle-factorial-019fb305
 parent_investigation_id: elliptic-mixed-replication-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
-prepared_at_utc: null
-last_material_transition_at_utc: 2026-07-31T14:32:33Z
+prepared_at_utc: 2026-07-31T14:40:36Z
+last_material_transition_at_utc: 2026-07-31T14:40:36Z
 
 parent_gate:
   sweep_id: k5lbpsg9
@@ -38,7 +38,7 @@ objective:
 git:
   scientific_base_sha: 655d6293bb76633bc6aa6fd21166a49c3b91d504
   parent_observation_sha: 40986c9f8b460f8fd9baaefb985573209f96e572
-  execution_code_sha: PENDING_EXECUTION_SHA
+  execution_code_sha: 7c15f33265950abba9db3f130256a2d8e5245ec5
   prepared_protocol_commit: PENDING_PREPARED_COMMIT
   sweep_bind_commit: PENDING_SWEEP_BIND_COMMIT
   launch_checkpoint_commit: PENDING_LAUNCH_COMMIT
@@ -56,19 +56,19 @@ observation_layer:
 
 config:
   analysis_plan_path: experiments/elliptic-bundle-factorial-019fb305/analysis-plan.json
-  analysis_plan_sha256: PENDING
+  analysis_plan_sha256: 03625d14437b07997e3fd3fce9fca6f48adcc4e37d1ee81d59d3f68d1090a96a
   resolved_configs_path: experiments/elliptic-bundle-factorial-019fb305/resolved-configs.json
-  resolved_configs_sha256: PENDING
+  resolved_configs_sha256: 74e7833aaac950154ba61e7932dd0be9743fd6eb745767b51469f8b63b2e7d35
   sweep_path: experiments/elliptic-bundle-factorial-019fb305/sweep.yaml
-  sweep_sha256: PENDING
+  sweep_sha256: 6fed61aaa887452fadeb3de7848973e6d185166546617dc6e2c13a5bef62f474
   wrapper_path: experiments/elliptic-bundle-factorial-019fb305/run-sweep-trial.py
-  wrapper_sha256: PENDING
+  wrapper_sha256: 982a6efeeb743f09dac951b3112488e2b7eff9043ececf4f7bc5ba90d5af1b56
   launcher_path: experiments/elliptic-bundle-factorial-019fb305/launch-agent.sh
-  launcher_sha256: PENDING
+  launcher_sha256: 3e5d6d40cdd19f729972cc0d299d0818b49adc8cb0b5bbb723b8df78f3b5c12e
   collector_path: experiments/elliptic-bundle-factorial-019fb305/collect-evidence.py
-  collector_sha256: PENDING
+  collector_sha256: 2833c57f3779041bdea41a9a3364969044ff814469ee9dd925e4349827139cae
   replay_path: experiments/elliptic-bundle-factorial-019fb305/replay-results.py
-  replay_sha256: PENDING
+  replay_sha256: 69ff7169b33bbb6b0a8d59214b719bad9ec0169c69ea24f272a8e6b5b0d2d5c3
 
 execution:
   execution_host: HCCS-90

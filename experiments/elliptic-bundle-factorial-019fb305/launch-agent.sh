@@ -10,7 +10,7 @@ gpu_index="$1"
 sweep_id="$2"
 trial_count="$3"
 expected_sweep_id="PENDING_SWEEP_ID"
-expected_code_sha="PENDING_EXECUTION_SHA"
+expected_code_sha="7c15f33265950abba9db3f130256a2d8e5245ec5"
 
 case "$gpu_index" in
   0|1|2|3) expected_trial_count=3 ;;
@@ -84,4 +84,3 @@ printf '%s\n' "$finished_at" > "$finish_path"
 printf 'agent_finished_utc=%s gpu=%s sweep=%s exit_code=%s\n' \
   "$finished_at" "$gpu_index" "$sweep_id" "$agent_exit_code" | tee -a "$log_path"
 exit "$agent_exit_code"
-
