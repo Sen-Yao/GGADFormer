@@ -14,8 +14,8 @@ decision_scope:
 git:
   repository: https://github.com/Sen-Yao/GGADFormer.git
   scientific_base_sha: 0f81d27555c67a25067e85153a51d9cf9693db87
-  execution_code_sha: pending_protocol_commit
-  manifest_binding_commit: pending
+  execution_code_sha: b4373042cc0fdec4bed0ecae16681dddcd9dab02
+  prepared_protocol_commit: b4373042cc0fdec4bed0ecae16681dddcd9dab02
   branch: codex/reddit-photo-alpha01-paired-019fb832
 
 protocol:
