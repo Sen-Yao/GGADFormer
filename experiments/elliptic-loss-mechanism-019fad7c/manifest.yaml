@@ -1,12 +1,12 @@
 schema_version: 1
-state: prepared
-formal_launch_allowed: true
+state: launched
+formal_launch_allowed: false
 investigation_mode: lightweight
 investigation_id: elliptic-loss-mechanism-019fad7c
 owner_thread_id: 019fb720-b85a-7ae3-8390-a0ab2b2345ad
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T08:27:44Z
-last_material_transition_at_utc: 2026-07-31T08:39:04Z
+last_material_transition_at_utc: 2026-07-31T08:41:48Z
 
 status_axes:
   lifecycle: active
@@ -84,8 +84,12 @@ execution:
   protocol_root: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-mechanism-019fad7c/protocol
   tmux_session: vecgad_elliptic_mechanism_019fad7c
   tmux_remain_on_exit_requested: true
-  pane_records: []
-  first_agent_start_utc: null
+  pane_records:
+    - {window: agents, pane: "%228", pane_pid: 2099027, gpu: 0, count: 1, run_id: 9gnmdde9, mechanism_cell: emb_only_0p1_20}
+    - {window: agents, pane: "%229", pane_pid: 2099040, gpu: 1, count: 1, run_id: q94sewkd, mechanism_cell: ring_only_2_1}
+    - {window: agents, pane: "%230", pane_pid: 2099047, gpu: 2, count: 1, run_id: 9n7w76kh, mechanism_cell: unified_0p1_1}
+    - {window: agents, pane: "%231", pane_pid: 2099058, gpu: 3, count: 1, run_id: a6w0waem, mechanism_cell: control_2_20}
+  first_agent_start_utc: 2026-07-31T08:40:42Z
   final_preflight_at_utc: 2026-07-31T08:38:25Z
   final_preflight_result: passed
 
@@ -151,7 +155,7 @@ wandb:
   sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 4
-  current_state: pending_agents
+  current_state: RUNNING
   code_upload_disabled: true
   console_upload_disabled: true
   custom_artifacts_uploaded: 0
@@ -162,7 +166,11 @@ trials:
     - {mechanism_cell: emb_only_0p1_20, lambda_rec_emb: 0.1, ring_loss_weight: 20.0, seed: 0}
     - {mechanism_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 0}
     - {mechanism_cell: unified_0p1_1, lambda_rec_emb: 0.1, ring_loss_weight: 1.0, seed: 0}
-  observed: []
+  observed:
+    - {mechanism_cell: control_2_20, seed: 0, run_id: a6w0waem, gpu: 3, pane: "%231", state: running}
+    - {mechanism_cell: emb_only_0p1_20, seed: 0, run_id: 9gnmdde9, gpu: 0, pane: "%228", state: running}
+    - {mechanism_cell: ring_only_2_1, seed: 0, run_id: q94sewkd, gpu: 1, pane: "%229", state: running}
+    - {mechanism_cell: unified_0p1_1, seed: 0, run_id: 9n7w76kh, gpu: 2, pane: "%230", state: running}
 
 evidence:
   directory: experiments/elliptic-loss-mechanism-019fad7c
@@ -178,6 +186,7 @@ occupancy:
   claim_state: reserved
   pending_recorded_at_utc: 2026-07-31T08:35:46Z
   approved_at_utc: 2026-07-31T08:37:33Z
+  running_at_utc: 2026-07-31T08:40:18Z
 
 protocol_deviations: []
 blockers: []
