@@ -6,7 +6,7 @@ investigation_id: elliptic-loss-mechanism-019fad7c
 owner_thread_id: 019fb720-b85a-7ae3-8390-a0ab2b2345ad
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T08:27:44Z
-last_material_transition_at_utc: 2026-07-31T08:35:05Z
+last_material_transition_at_utc: 2026-07-31T08:35:46Z
 
 status_axes:
   lifecycle: active
@@ -170,8 +170,9 @@ evidence:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  selected_host_state: free
-  claim_state: not_claimed
+  selected_host_state: pending_approval
+  claim_state: pending_approval
+  pending_recorded_at_utc: 2026-07-31T08:35:46Z
 
 protocol_deviations: []
 blockers:
