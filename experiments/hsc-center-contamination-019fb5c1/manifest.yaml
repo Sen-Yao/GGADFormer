@@ -5,7 +5,7 @@ investigation_id: 2026-07-31-vecgad-hsc-center-contamination
 owner_thread_id: 019fb5c1-2c04-7f40-ac8a-121ee993cbd4
 protocol_id: hsc-center-contamination-019fb5c1-v1
 prepared_at_utc: 2026-07-31T03:05:53Z
-last_material_transition_at_utc: 2026-07-31T03:35:46Z
+last_material_transition_at_utc: 2026-07-31T03:37:08Z
 
 objective:
   design: paired_batch_center_contamination_stress_test
@@ -294,8 +294,9 @@ operational_notes:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  state: running
-  release_state: pending_completed_manifest_publication
+  state: free
+  released_at_utc: 2026-07-31T03:37:08Z
+  release_evidence: "W&B 25agh73h FINISHED 60/60; collector and independent replay passed; 60 checkpoint/diagnostic bundles valid; 8/8 agent exit codes 0; no task-owned process or GPU compute PID; detached worktree 89e96d5 clean; completed manifest d4b5398 pushed"
 blockers: []
 operational_notes:
   - "The local occupancy helper preserves the pre-creation placeholder sweep_id; the actual immutable sweep binding is 25agh73h in this manifest."
