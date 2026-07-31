@@ -1,0 +1,76 @@
+{
+  "collected_at_utc": "2026-07-31T14:17:52Z",
+  "hosts": [
+    {
+      "host": "HCCS-25",
+      "status": "ok",
+      "occupancy_state": "running",
+      "exclusion_reason": "cooperative occupancy owned by another formal sweep",
+      "preflight": {
+        "git_clean": false,
+        "runtime_ok": false,
+        "cache_ok": false,
+        "wandb_ok": false
+      },
+      "gpus": [
+        {"index": 0, "compute_pids": [3166897, 1174504, 849348, 852550, 1768201]},
+        {"index": 1, "compute_pids": [1174504]},
+        {"index": 2, "compute_pids": [851352]},
+        {"index": 3, "compute_pids": [852550]},
+        {"index": 4, "compute_pids": []},
+        {"index": 5, "compute_pids": [1768201]},
+        {"index": 6, "compute_pids": []},
+        {"index": 7, "compute_pids": [3166897]}
+      ]
+    },
+    {
+      "host": "HCCS-85",
+      "status": "ok",
+      "occupancy_state": "free",
+      "preflight": {
+        "git_clean": true,
+        "runtime_ok": true,
+        "cache_ok": true,
+        "wandb_ok": true
+      },
+      "preflight_evidence": {
+        "git": "remote branch 8ceca9e626e37eef644334992a0a263d313ead0b reachable; execution SHA b4373042cc0fdec4bed0ecae16681dddcd9dab02 is its parent",
+        "runtime": "Python 3.8.19; torch 2.0.0+cu118; DGL 1.1.3; W&B 0.21.1",
+        "cache": "reddit.mat and photo.mat readable with recorded SHA-256 and matrix inventory",
+        "wandb": "authenticated viewer and HCCS/GGADFormer project access passed over direct HTTPS"
+      },
+      "gpus": [
+        {"index": 0, "compute_pids": []},
+        {"index": 1, "compute_pids": []},
+        {"index": 2, "compute_pids": []},
+        {"index": 3, "compute_pids": []},
+        {"index": 4, "compute_pids": []},
+        {"index": 5, "compute_pids": []},
+        {"index": 6, "compute_pids": []},
+        {"index": 7, "compute_pids": []}
+      ]
+    },
+    {
+      "host": "HCCS-90",
+      "status": "ok",
+      "occupancy_state": "running",
+      "exclusion_reason": "cooperative occupancy owned by another formal sweep",
+      "preflight": {
+        "git_clean": false,
+        "runtime_ok": false,
+        "cache_ok": false,
+        "wandb_ok": false
+      },
+      "gpus": [
+        {"index": 0, "compute_pids": []},
+        {"index": 1, "compute_pids": []},
+        {"index": 2, "compute_pids": []},
+        {"index": 3, "compute_pids": []},
+        {"index": 4, "compute_pids": []},
+        {"index": 5, "compute_pids": []},
+        {"index": 6, "compute_pids": []},
+        {"index": 7, "compute_pids": []}
+      ]
+    }
+  ]
+}

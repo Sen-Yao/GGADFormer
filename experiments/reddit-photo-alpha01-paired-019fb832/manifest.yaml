@@ -40,26 +40,66 @@ data:
   split_seed: 42
   train_rate: 0.05
   artifacts:
-    reddit: {logical_path: dataset/reddit.mat, source_path: pending_host_selection, sha256: pending_live_probe}
-    photo: {logical_path: dataset/photo.mat, source_path: pending_host_selection, sha256: pending_live_probe}
+    reddit:
+      logical_path: dataset/reddit.mat
+      source_path: /root/gpufree-data/linziyao/DualRefGAD/dataset/reddit.mat
+      size_bytes: 10848176
+      sha256: 533a739caa38939dff51f1902e6705fbb4e727badf1d408fc0d1b45467cf4fd3
+      inventory:
+        Attributes: {shape: [10984, 64], dtype: float64}
+        Class: {shape: [1, 10984], dtype: float64}
+        Label: {shape: [1, 10984], dtype: float64}
+        Network: {shape: [10984, 10984], dtype: float64}
+        attr_anomaly_label: {shape: [1, 10984], dtype: float64}
+        str_anomaly_label: {shape: [1, 10984], dtype: float64}
+    photo:
+      logical_path: dataset/photo.mat
+      source_path: /root/gpufree-data/linziyao/DualRefGAD/dataset/photo.mat
+      size_bytes: 17842928
+      sha256: 3c940fc79515c85ecef24ed4a90e4ee982fbe8629a134bd51c70f99718ba276b
+      inventory:
+        Attributes: {shape: [7535, 745], dtype: float32}
+        Class: {shape: [1, 7535], dtype: int64}
+        Label: {shape: [1, 7535], dtype: int64}
+        Network: {shape: [7535, 7535], dtype: float32}
+        attr_anomaly_label: {shape: [1, 7535], dtype: int64}
+        str_anomaly_label: {shape: [1, 7535], dtype: int64}
   hash_mismatch_action: stop
   regeneration_allowed: false
 
 selection:
   candidate_pool: [HCCS-25, HCCS-85, HCCS-90]
   occupancy_document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  execution_host: null
-  gpu_indices: []
-  snapshot_path: null
-  selected_host_score: null
-  selected_at_utc: null
+  execution_host: HCCS-85
+  gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+  snapshot_path: experiments/reddit-photo-alpha01-paired-019fb832/selection-snapshot.json
+  selected_host_score:
+    model: RTX 4090
+    clean_gpu_count: 8
+    aggregate_fp32_tflops: 660.64
+    speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
+  selected_at_utc: 2026-07-31T14:17:52Z
+  occupancy_state: pending_approval
+  occupancy_recorded_at_utc: 2026-07-31T14:19:36Z
+  excluded_hosts:
+    HCCS-25: cooperative occupancy owned by another formal sweep; live compute PIDs present
+    HCCS-90: cooperative occupancy owned by another formal sweep
+  nezha_probe: failed_invalid_http_response
 
 runtime:
-  environment: pending_host_selection
-  python: pending_live_probe
-  torch: pending_live_probe
-  dgl: pending_live_probe
-  wandb: pending_live_probe
+  environment: /root/gpufree-data/linziyao/.conda/envs/DualRefGAD
+  python: 3.8.19
+  torch: 2.0.0
+  torch_cuda: 11.8
+  cuda_available: true
+  cuda_device_count: 8
+  dgl: 1.1.3
+  wandb: 0.21.1
+  numpy: 1.24.4
+  scipy: 1.10.1
+  sklearn: 1.1.3
+  pyyaml: 6.0.3
+  network_path: direct_https
 
 wandb:
   entity: HCCS
