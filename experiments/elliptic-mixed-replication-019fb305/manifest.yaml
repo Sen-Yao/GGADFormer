@@ -1,12 +1,12 @@
 schema_version: 1
-state: prepared
+state: launched
 formal_launch_allowed: true
 investigation_id: elliptic-mixed-replication-019fb305
 parent_investigation_id: elliptic-loss-factorial-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T13:46:01Z
-last_material_transition_at_utc: 2026-07-31T14:04:45Z
+last_material_transition_at_utc: 2026-07-31T14:11:28Z
 
 objective:
   dataset: elliptic
@@ -94,6 +94,7 @@ execution:
   protocol_root: /root/gpufree-data/linziyao/VecGAD-elliptic-mixed-replication-019fb305/protocol
   tmux_session: vecgad_elliptic_mixed_019fb305
   tmux_remain_on_exit_requested: true
+  tmux_windows_used_at_launch: 2
   agent_trial_count_plan:
     - {gpu: 0, count: 2}
     - {gpu: 1, count: 2}
@@ -103,8 +104,26 @@ execution:
     - {gpu: 5, count: 1}
     - {gpu: 6, count: 1}
     - {gpu: 7, count: 1}
-  pane_records: []
-  first_agent_start_utc: null
+  pane_records:
+    - {pane: "%74", window_index: 0, gpu: 0, count: 2, first_start_utc: 2026-07-31T14:05:46Z}
+    - {pane: "%75", window_index: 0, gpu: 1, count: 2, first_start_utc: 2026-07-31T14:05:46Z}
+    - {pane: "%76", window_index: 0, gpu: 2, count: 1, first_start_utc: 2026-07-31T14:05:46Z}
+    - {pane: "%77", window_index: 0, gpu: 3, count: 1, first_start_utc: 2026-07-31T14:05:46Z}
+    - {pane: "%78", window_index: 0, gpu: 4, count: 1, first_start_utc: 2026-07-31T14:05:46Z}
+    - {pane: "%79", window_index: 1, gpu: 5, count: 1, first_start_utc: 2026-07-31T14:06:35Z}
+    - {pane: "%80", window_index: 1, gpu: 6, count: 1, first_start_utc: 2026-07-31T14:06:35Z}
+    - {pane: "%81", window_index: 1, gpu: 7, count: 1, first_start_utc: 2026-07-31T14:06:35Z}
+  first_agent_start_utc: 2026-07-31T14:05:46Z
+  post_launch_probe:
+    observed_at_utc: 2026-07-31T14:11:28Z
+    sweep_state: RUNNING
+    run_count: 10
+    finished_runs: 8
+    running_runs: 2
+    failed_or_crashed_runs: 0
+    active_task_gpus: [0, 1]
+    terminal_agent_exit_zero_gpus: [2, 3, 4, 5, 6, 7]
+    note: GPU 5-7 panes completed in the second window before this probe; durable start/finish/exit/log markers remain authoritative.
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
@@ -148,7 +167,8 @@ wandb:
   sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 10
-  current_state: pending
+  current_state: running
+  last_observed_at_utc: 2026-07-31T14:11:28Z
   project_access_preflight: passed
   network_path: direct
   code_upload_disabled: true
@@ -166,6 +186,17 @@ wandb:
     - credentials
     - checkpoints
     - custom artifacts
+  observed_runs:
+    - {run_id: 1q8nsc72, variant: control_2_20, seed: 0, gpu: 3, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/1q8nsc72"}
+    - {run_id: hdf6dnnr, variant: control_2_20, seed: 1, gpu: 4, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/hdf6dnnr"}
+    - {run_id: "oloomr6b", variant: control_2_20, seed: 2, gpu: 2, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/oloomr6b"}
+    - {run_id: znjg2pjd, variant: control_2_20, seed: 3, gpu: 5, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/znjg2pjd"}
+    - {run_id: 63syr8uy, variant: control_2_20, seed: 4, gpu: 0, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/63syr8uy"}
+    - {run_id: 6t91vzmc, variant: unified_0p1_1, seed: 0, gpu: 0, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/6t91vzmc"}
+    - {run_id: ro3j1yqw, variant: unified_0p1_1, seed: 1, gpu: 1, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/ro3j1yqw"}
+    - {run_id: rc3ch5wa, variant: unified_0p1_1, seed: 2, gpu: 6, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/rc3ch5wa"}
+    - {run_id: jjvw4sli, variant: unified_0p1_1, seed: 3, gpu: 7, state: finished, url: "https://wandb.ai/HCCS/GGADFormer/runs/jjvw4sli"}
+    - {run_id: jrxa4wcd, variant: unified_0p1_1, seed: 4, gpu: 1, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/jrxa4wcd"}
 
 diagnostics:
   expected_batches_per_epoch: 6
@@ -184,9 +215,12 @@ diagnostics:
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
   selected_host_state_before_claim: free
-  claim_state: reserved
+  claim_state: running
   owner: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
   selected_gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+  claim_sweep_id: PENDING_SWEEP_ID
+  authoritative_sweep_id: k5lbpsg9
+  metadata_note: The validated helper cannot mutate sweep_id after the reserved-to-running transition; owner, host, GPUs, and running state remain correct until terminal release.
 
 trials:
   expected:
