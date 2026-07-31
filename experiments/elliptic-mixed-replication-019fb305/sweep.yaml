@@ -1,0 +1,10 @@
+program: experiments/elliptic-mixed-replication-019fb305/run-sweep-trial.py
+method: grid
+metric:
+  name: AUC.last
+  goal: maximize
+parameters:
+  variant:
+    values: [control_2_20, unified_0p1_1]
+  seed:
+    values: [0, 1, 2, 3, 4]

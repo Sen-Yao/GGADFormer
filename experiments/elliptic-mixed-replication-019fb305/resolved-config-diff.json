@@ -1,0 +1,14 @@
+{
+  "allowed_scientific_differences": {
+    "lambda_rec_emb": {
+      "control_2_20": 2.0,
+      "unified_0p1_1": 0.1
+    },
+    "ring_loss_weight": {
+      "control_2_20": 20.0,
+      "unified_0p1_1": 1.0
+    }
+  },
+  "all_other_effective_fields_must_match": true,
+  "fixed_final_history_step": 200
+}

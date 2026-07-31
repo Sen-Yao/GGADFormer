@@ -1,0 +1,37 @@
+{
+  "design": "paired_historical_mixed_bundle_replication",
+  "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+  "variants": {
+    "control_2_20": {
+      "lambda_rec_emb": 2.0,
+      "ring_loss_weight": 20.0
+    },
+    "unified_0p1_1": {
+      "lambda_rec_emb": 0.1,
+      "ring_loss_weight": 1.0
+    }
+  },
+  "seeds": [0, 1, 2, 3, 4],
+  "primary_metrics": ["AUC.last", "AP.last"],
+  "fixed_final_history_step": 200,
+  "aggregation": {
+    "mean": true,
+    "sample_std_ddof": 1,
+    "paired_differences_by_seed": true,
+    "paired_mean_difference": true
+  },
+  "equivalence_thresholds": {
+    "AUROC_mean_drop_max": 0.01,
+    "AUPRC_mean_drop_max": 0.02,
+    "joint_pass_required": true
+  },
+  "ranking_reference": {
+    "GGAD_AUROC": 0.7006,
+    "GGAD_AUPRC": 0.2565
+  },
+  "conditional_followup": {
+    "allowed_only_if_joint_equivalence_passes": true,
+    "design": "optimization_bundle_x_propagation_bundle_2x2",
+    "not_part_of_this_sweep": true
+  }
+}

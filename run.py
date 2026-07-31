@@ -20,6 +20,7 @@ import wandb
 from visualization import create_tsne_visualization, visualize_attention_weights, visualize_reconstruction_analysis
 from utils import send_notification, calculate_graph_statistics
 from ablation_rec_error import evaluate_with_rec_error_filter
+from hsc_diagnostics import hsc_batch_metrics
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -64,8 +65,22 @@ def build_wandb_audit_config(args):
         "execution_host": os.environ.get("EXECUTION_HOST", "unknown"),
         "gpu_index": gpu_index,
         "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+        "final_history_step": os.environ.get("FINAL_HISTORY_STEP", "unrecorded"),
         "wandb_entity": wandb_entity,
         "wandb_project": wandb_project,
+        "scientific_base_sha": os.environ.get(
+            "SCIENTIFIC_BASE_SHA", "unrecorded"
+        ),
+        "hsc_diagnostics": bool(args.hsc_diagnostics),
+        "dataset_sha256": os.environ.get("DATASET_SHA256", "unrecorded"),
+        "optimizer_updates_per_epoch": os.environ.get(
+            "OPTIMIZER_UPDATES_PER_EPOCH", "unrecorded"
+        ),
+        "diagnostic_policy": (
+            "detached per-batch HSC geometry and loss scalars; no optimizer input"
+            if args.hsc_diagnostics
+            else "disabled"
+        ),
     }
 
 
@@ -223,11 +238,18 @@ def train(args):
         normal_for_train_idx = torch.tensor(normal_for_train_idx, dtype=torch.long, device=device)
 
 
+    if args.hsc_diagnostics:
+        if args.model_type != "VecGAD":
+            raise RuntimeError("HSC diagnostics require model_type=VecGAD")
+        if args.ablation_mode != "none":
+            raise RuntimeError("HSC diagnostics require ablation_mode=none")
+
     # Train model
     print(f"Start training! Total epochs: {args.num_epoch}")
     pbar = tqdm(total=args.num_epoch, desc='Training')
     total_time = 0
     for epoch in range(args.num_epoch + 1):
+        epoch_diagnostic_metrics = {}
         dynamic_weights = get_dynamic_loss_weights(epoch, args)
         start_time = time.time()
         train_flag = True
@@ -264,6 +286,23 @@ def train(args):
 
                 loss.backward()
                 optimizer.step()
+                if args.hsc_diagnostics:
+                    epoch_diagnostic_metrics.update(
+                        hsc_batch_metrics(
+                            batch_index=batch_idx,
+                            emb=emb,
+                            outlier_emb=outlier_emb,
+                            loss_bce=loss_bce,
+                            loss_rec=loss_rec,
+                            loss_ring=loss_ring,
+                            loss_total=loss,
+                            ring_r_min=args.ring_R_min,
+                            ring_r_max=args.ring_R_max,
+                            rec_loss_weight=dynamic_weights['rec_loss_weight'],
+                            ring_loss_weight=dynamic_weights['ring_loss_weight'],
+                            bce_loss_weight=dynamic_weights['bce_loss_weight'],
+                        )
+                    )
                 batched_bce_loss += loss_bce
                 batched_rec_loss += loss_rec
                 batched_ring_loss += loss_ring
@@ -283,12 +322,15 @@ def train(args):
                 'AP': f'{ap:.4f}'
             })
             pbar.update(1)
-            if epoch % 2 == 0:
-                wandb.log({ "batched_total_loss": batched_total_loss.item(),
-                            "bce_loss": batched_bce_loss.item(),
-                            "rec_loss": batched_rec_loss.item(),
-                            "ring_loss": batched_ring_loss.item(),
-                            "learning_rate": current_lr}, step=epoch)
+            if epoch % 2 == 0 or args.hsc_diagnostics:
+                wandb.log({
+                    "batched_total_loss": batched_total_loss.item(),
+                    "bce_loss": batched_bce_loss.item(),
+                    "rec_loss": batched_rec_loss.item(),
+                    "ring_loss": batched_ring_loss.item(),
+                    "learning_rate": current_lr,
+                    **epoch_diagnostic_metrics,
+                }, step=epoch)
         else:
             optimizer.zero_grad()
 
@@ -530,6 +572,11 @@ if __name__ == "__main__":
     parser.add_argument('--end_lr', type=float, default=1e-4)
 
     parser.add_argument('--warmup_epoch', type=int, default=20)
+    parser.add_argument(
+        '--hsc_diagnostics',
+        action='store_true',
+        help='Log detached per-batch HSC geometry and loss scalars.',
+    )
 
     # Ablation Study (perturbation + h_mean center computation + token fusion)
     parser.add_argument('--ablation_mode', type=str, default='none',

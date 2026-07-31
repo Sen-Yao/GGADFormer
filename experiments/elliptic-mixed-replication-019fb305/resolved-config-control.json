@@ -1,0 +1,24 @@
+{
+  "dataset": "elliptic",
+  "variant": "control_2_20",
+  "history_final_step_required": 200,
+  "hyperparameters": {
+    "batch_size": 8192,
+    "data_split_seed": 42,
+    "end_lr": 0.0001,
+    "lambda_rec_emb": 2.0,
+    "num_epoch": 200,
+    "outlier_beta": 0.3,
+    "peak_lr": 0.0005,
+    "pp_k": 8,
+    "progregate_alpha": 0.8,
+    "rec_loss_weight": 1.0,
+    "ring_R_max": 1.0,
+    "ring_R_min": 0.3,
+    "ring_loss_weight": 20.0,
+    "seed": [0, 1, 2, 3, 4],
+    "train_rate": 0.05,
+    "warmup_updates": 50,
+    "hsc_diagnostics": true
+  }
+}
