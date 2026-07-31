@@ -6,7 +6,7 @@ investigation_id: elliptic-loss-mechanism-019fad7c
 owner_thread_id: 019fb720-b85a-7ae3-8390-a0ab2b2345ad
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T08:27:44Z
-last_material_transition_at_utc: 2026-07-31T08:57:41Z
+last_material_transition_at_utc: 2026-07-31T09:03:10Z
 completed_at_utc: 2026-07-31T08:57:41Z
 
 status_axes:
@@ -56,6 +56,8 @@ git:
   protocol_branch: codex/elliptic-loss-mechanism-019fad7c
   protocol_source_commit: fef155f4db5b9c82751fb6f9932e293ccccda230
   code_remote_publication: pushed
+  evidence_handoff_commit: e6e0fd7f4868331dab3713caea77efa1c64b0eea
+  evidence_handoff_publication: pushed
 
 config:
   wrapper_path: experiments/elliptic-loss-mechanism-019fad7c/run-sweep-trial.py
@@ -203,11 +205,13 @@ evidence:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  selected_host_state: running
-  claim_state: running_pending_git_handoff
+  selected_host_state: free
+  claim_state: released
   pending_recorded_at_utc: 2026-07-31T08:35:46Z
   approved_at_utc: 2026-07-31T08:37:33Z
   running_at_utc: 2026-07-31T08:40:18Z
+  released_at_utc: 2026-07-31T09:03:10Z
+  release_evidence: "W&B mufbddb1 FINISHED 4/4; collector and replay passed; evidence commit e6e0fd7 pushed; four agent exits 0; tmux session removed; zero task/GPU compute PID; detached worktree clean at 65014dd"
 
 completion_validation:
   collector:
@@ -227,7 +231,7 @@ completion_validation:
   final_gpu_compute_pids: []
   detached_worktree_clean: true
   detached_worktree_sha: 65014dd11bed01b761aa7c3889c7718b7950884d
-  tmux_state: task_owned_idle_shells_retained_pending_git_handoff
+  tmux_state: exact_task_owned_session_removed_after_git_handoff
 
 terminal_candidate_probe:
   probed_at_utc: 2026-07-31T08:52:28Z
