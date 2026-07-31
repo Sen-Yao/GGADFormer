@@ -31,7 +31,7 @@ def run_attempt(repo_root, rho_root, rho_data_root, output_root, trial, attempt)
     if trial['method'] == 'RHO':
         command = [
             sys.executable,
-            str(Path(__file__).with_name('rho_efficiency.py')),
+            str(Path(__file__).resolve().with_name('rho_efficiency.py')),
             f'--rho-root={rho_root}',
             f'--rho-data-root={rho_data_root}',
             *trial['args'],
@@ -81,6 +81,9 @@ def main():
     parser.add_argument('--rho-data-root', type=Path, required=True)
     parser.add_argument('--shard-index', type=int, required=True)
     parser.add_argument('--num-shards', type=int, required=True)
+    parser.add_argument('--method', action='append', choices=['VecGAD', 'GGAD', 'RHO'])
+    parser.add_argument('--attempt-offset', type=int, default=0)
+    parser.add_argument('--summary-label')
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parents[2]
@@ -90,12 +93,13 @@ def main():
     assigned = [
         trial for index, trial in enumerate(load_trials(args.registry))
         if index % args.num_shards == args.shard_index
+        and (not args.method or trial['method'] in args.method)
     ]
     shard_summary = {'schema_version': 1, 'shard_index': args.shard_index, 'trials': []}
     failed = False
     for trial in assigned:
         attempts = []
-        for attempt in (1, 2):
+        for attempt in (args.attempt_offset + 1, args.attempt_offset + 2):
             returncode, result = run_attempt(
                 repo_root,
                 args.rho_root.resolve(),
@@ -118,7 +122,8 @@ def main():
             failed = True
         shard_summary['trials'].append({'trial': trial, 'attempts': attempts})
 
-    summary_path = args.output_root / f'shard-{args.shard_index}.json'
+    summary_label = f'.{args.summary_label}' if args.summary_label else ''
+    summary_path = args.output_root / f'shard-{args.shard_index}{summary_label}.json'
     summary_path.write_text(json.dumps(shard_summary, indent=2, sort_keys=True) + '\n', encoding='utf-8')
     return 1 if failed else 0
 

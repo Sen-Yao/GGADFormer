@@ -4,6 +4,7 @@ import hashlib
 import json
 import statistics
 from pathlib import Path
+import re
 
 from run_shard import load_trials
 
@@ -56,17 +57,19 @@ def main():
     artifact_digests = {}
     for trial in trials:
         attempts = []
-        for attempt in (1, 2):
-            path = args.output_root / 'raw' / f"{trial['id']}.attempt{attempt}.json"
-            if not path.exists():
-                continue
+        attempt_paths = sorted(
+            (args.output_root / 'raw').glob(f"{trial['id']}.attempt*.json"),
+            key=lambda path: int(re.search(r'attempt(\d+)\.json$', path.name).group(1)),
+        )
+        for path in attempt_paths:
+            attempt = int(re.search(r'attempt(\d+)\.json$', path.name).group(1))
             artifact_digests[str(path.relative_to(args.output_root))] = sha256(path)
             try:
                 payload = json.loads(path.read_text(encoding='utf-8'))
             except (OSError, json.JSONDecodeError) as error:
                 errors.append(f'{trial["id"]}: invalid JSON in attempt {attempt}: {error}')
                 continue
-            attempts.append(payload)
+            attempts.append((attempt, payload))
             if payload.get('method') != trial['method']:
                 errors.append(f'{trial["id"]}: method identity mismatch')
             if payload.get('dataset') != trial['dataset']:
@@ -77,12 +80,12 @@ def main():
         if not attempts:
             errors.append(f'{trial["id"]}: missing all attempts')
             continue
-        completed = [item for item in attempts if item.get('status') == 'completed']
+        completed = [item for item in attempts if item[1].get('status') == 'completed']
         if completed:
             if len(completed) != 1:
                 errors.append(f'{trial["id"]}: multiple completed attempts')
                 continue
-            result = completed[0]
+            source_attempt, result = completed[0]
             runtime = result.get('runtime', {})
             gpu = runtime.get('gpu') or {}
             if runtime.get('hostname') != args.expected_hostname:
@@ -98,12 +101,12 @@ def main():
                 'offline_seconds': result['offline']['seconds'],
                 'epoch_seconds': epochs,
                 'epoch_median_seconds': statistics.median(epochs) if epochs else None,
-                'source_attempt': attempts.index(result) + 1,
+                'source_attempt': source_attempt,
             })
-        elif len(attempts) == 2 and all(item.get('status') == 'gpu_oom' for item in attempts):
+        elif len(attempts) >= 2 and all(item[1].get('status') == 'gpu_oom' for item in attempts):
             terminal.append({'trial': trial, 'status': 'gpu_oom'})
         else:
-            statuses = [item.get('status') for item in attempts]
+            statuses = [item[1].get('status') for item in attempts]
             errors.append(f'{trial["id"]}: invalid terminal attempts {statuses!r}')
 
     cells = []
