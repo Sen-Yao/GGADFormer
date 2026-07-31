@@ -102,8 +102,9 @@
     "hccs_25_excluded_reason": "foreign compute PIDs and cooperative reservation"
   },
   "fullbatch_sweep": {
-    "status": "prepared",
-    "sweep_id": null,
+    "status": "created",
+    "sweep_id": "qt7e3a3n",
+    "created_at": "2026-07-31T04:05:04Z",
     "expected_trials": 18,
     "warmup_epochs": 10,
     "measured_epochs": 30,
