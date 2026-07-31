@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "state": "prepared",
+  "investigation_id": "2026-07-31-vecgad-efficiency-amazon-tfinance",
+  "thread_id": "019fad8b-cbf2-7481-a0b7-077753148fd1",
+  "execution_host": "HCCS-90",
+  "hostname": "gpufree-container",
+  "gpu_indices": [0],
+  "parallel_gpu_cap": 1,
+  "gpu_model": "NVIDIA GeForce RTX 4090",
+  "gpu_total_memory_mib": 24564,
+  "wandb": {
+    "enabled": false,
+    "mode": "disabled",
+    "project": null,
+    "allowed_upload_classes": []
+  },
+  "source": {
+    "vecgad_code_commit": "2e3b2682fc31e392eaee6e919424283d7e4471e6",
+    "research_protocol_commit": "2e3b2682fc31e392eaee6e919424283d7e4471e6",
+    "rho_repository": "https://github.com/mala-lab/RHO.git",
+    "rho_commit": "a394d5575dea6745215b15e0453e1f925ffcc1f2",
+    "vecgad_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/vec-worktree",
+    "rho_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/rho-worktree"
+  },
+  "digests": {
+    "registry_sha256": "e3486248c059bf3a0dd7457a736e8dee50c7fdec1c778210d6c00e52360b33b9",
+    "protocol_sha256": "2c9fef984bb088312eb5915853e51386ec8cdf4ca676eb437702f27127234b95",
+    "run_py_sha256": "cb9fbbdee884cba8ac97bb7cf3f930588d620d31d8a4700272a0d4d476930069",
+    "utils_py_sha256": "5c26377373ef63cc482d874e9708ea9df7fc8ee179ab565bdd4286043754f602",
+    "rho_harness_sha256": "5d850535b40ebbd5e72f765881383da2379e304b23fc934463d9b343ba4a8312",
+    "runner_sha256": "1cb55ab02c3a99a9baf29a058da957ead2ecb4a6dce3ed9b1348f4f7d22cf798",
+    "equivalence_gate_sha256": "d10f399713bfed3a9f927b781b23b078d6a20d87edce3894108d379defc0b1f9",
+    "rho_data_preparation_sha256": "c5a94a8e64100ecbc72ccc8b295c205c5958336e1777ed1b52c6901dcd7ac915"
+  },
+  "datasets": {
+    "Amazon.mat": {
+      "sha256": "749110e891df8bcb0015c51fb18193821f3f0e379d547c9180b2f8fa309d0fe8"
+    },
+    "t_finance.mat": {
+      "sha256": "ee66d63073743edaef3de46de96a517f9c3394d7ce4659f5afae8be8380bf6b9"
+    },
+    "dgl_fraud_amazon_archive": {
+      "sha256": "c1b7a1f8cd8621467d5121b690fef61a7d398e4f582232bb3e8a154424f7a5b9"
+    },
+    "rho_tfinance_graph": {
+      "sha256": "51739edc7af215aad05ebda3a6a613063c9279c54268439983f9970818cda530"
+    },
+    "rho_amazon_laplacian": {
+      "sha256": "efb171fa31a5198ae1c55ac963c30174523974d2586929597d6b21bb1fc31271"
+    },
+    "rho_tfinance_laplacian": {
+      "sha256": "69eb72ba3f1588a5fd6b8cb85ae197eca5feba91f884cee3b2d8c0248a309e3e"
+    }
+  },
+  "runtime": {
+    "python": "3.8.20",
+    "torch": "2.0.0+cu118",
+    "cuda_runtime": "11.8",
+    "dgl": "1.1.3",
+    "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8"
+  },
+  "equivalence_gate": {
+    "status": "pending",
+    "rtol": 1e-5,
+    "atol": 1e-6,
+    "auc_ap_delta_threshold": 0.005,
+    "tmux_session": "vecgad-efficiency-gate-019fad8b",
+    "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/gate"
+  },
+  "formal_execution": {
+    "status": "blocked_on_equivalence_gate",
+    "expected_trials": 18,
+    "warmup_epochs": 10,
+    "measured_epochs": 30,
+    "fresh_process_repeats": 3,
+    "tmux_session": "vecgad-efficiency-formal-019fad8b",
+    "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/results"
+  },
+  "selection_snapshot": {
+    "observed_at": "2026-07-31T09:42:22+08:00",
+    "gpu_compute_pids": 0,
+    "gpu_0_free_memory_mib": 24077,
+    "host_memory_available_gib": 489,
+    "durable_disk_free_tib": 5.0
+  }
+}
