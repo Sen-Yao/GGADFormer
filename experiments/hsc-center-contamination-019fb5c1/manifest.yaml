@@ -1,0 +1,120 @@
+schema_version: 1
+state: prepared
+formal_launch_allowed: false
+investigation_id: 2026-07-31-vecgad-hsc-center-contamination
+owner_thread_id: 019fb5c1-2c04-7f40-ac8a-121ee993cbd4
+protocol_id: hsc-center-contamination-019fb5c1-v1
+prepared_at_utc: pending
+
+objective:
+  design: paired_batch_center_contamination_stress_test
+  datasets: [Amazon, tolokers]
+  center_conditions: [default, q0, q10, q20, q30, q40]
+  seeds: [0, 1, 2, 3, 4]
+  data_split_seed: 42
+  expected_trials: 60
+  primary_metrics: [AUC.last, AP.last]
+  diagnostics:
+    - HSC.ShellHit
+    - HSC.inner_violation
+    - HSC.outer_violation
+    - HSC.mean_loss
+    - HSC.center_shift_from_default
+    - HSC.center_shift_from_normal
+  decision_threshold: null
+
+git:
+  code_sha: pending_after_code_commit
+  code_tree: pending_after_code_commit
+  protocol_branch: codex/hsc-center-contamination-019fb5c1
+  prepared_manifest_commit: pending_after_protocol_commit
+  remote_publication: pending
+
+execution:
+  execution_host: HCCS-85
+  gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+  parallel_gpu_cap: 8
+  task_root: /root/gpufree-data/linziyao/VecGAD-hsc-center-contamination-019fb5c1
+  detached_worktree: /root/gpufree-data/linziyao/VecGAD-hsc-center-contamination-019fb5c1/worktree
+  runtime: /root/gpufree-data/linziyao/.conda/envs/DualRefGAD
+  agent_trial_count_plan:
+    - {gpu: 0, count: 8}
+    - {gpu: 1, count: 8}
+    - {gpu: 2, count: 8}
+    - {gpu: 3, count: 8}
+    - {gpu: 4, count: 7}
+    - {gpu: 5, count: 7}
+    - {gpu: 6, count: 7}
+    - {gpu: 7, count: 7}
+  tmux_session: vecgad_hsc_center_019fb5c1
+  pane_records: []
+  first_agent_start_utc: null
+
+data:
+  access_mode: symlink_read_only_reuse
+  Amazon:
+    path: dataset/Amazon.mat
+    sha256: 749110e891df8bcb0015c51fb18193821f3f0e379d547c9180b2f8fa309d0fe8
+  tolokers:
+    path: dataset/tolokers.mat
+    sha256: d6ec34984d4db3f52b53606a447f6101a74d8e9aad2ae8644dfe2ff33227a1d0
+
+wandb:
+  destination: HCCS/GGADFormer
+  sweep_id: pending_creation
+  sweep_creation_count: 0
+  expected_trials: 60
+  code_upload_disabled: true
+  console_upload_disabled: true
+  raw_data_uploaded: false
+  source_code_uploaded: false
+  checkpoint_uploaded: false
+  node_level_results_uploaded: false
+  embedding_uploaded: false
+
+authorization:
+  state: explicitly_approved_by_user
+  execution_location: HCCS-85
+  destination: HCCS/GGADFormer
+  allowed_data:
+    - config_seed_status
+    - code_runtime_hardware_metadata
+    - AUROC_AUPRC
+    - aggregate_HSC_diagnostics
+    - pairing_checkpoint_diagnostic_hashes
+  excluded_data:
+    - raw_data
+    - source_code
+    - credentials
+    - node_level_results
+    - embeddings
+    - checkpoints
+    - undeclared_artifacts
+
+config_files:
+  sweep_path: experiments/hsc-center-contamination-019fb5c1/sweep.yaml
+  wrapper_path: experiments/hsc-center-contamination-019fb5c1/run-sweep-trial.py
+  launcher_path: experiments/hsc-center-contamination-019fb5c1/launch-agent.sh
+  collector_path: experiments/hsc-center-contamination-019fb5c1/collect-evidence.py
+  replay_path: experiments/hsc-center-contamination-019fb5c1/replay-results.py
+  sha256: pending_after_code_commit
+
+trials:
+  expected_axis_product:
+    dataset: [Amazon, tolokers]
+    hsc_center_condition: [default, q0, q10, q20, q30, q40]
+    seed: [0, 1, 2, 3, 4]
+  observed: []
+
+result_validation:
+  all_expected_trials_terminal: false
+  config_identity_valid: false
+  code_identity_valid: false
+  fixed_final_epoch_policy_valid: false
+  pairing_hashes_valid: false
+  all_checkpoints_and_diagnostics_valid: false
+  repeated_diagnostic_replay_valid: false
+  independent_aggregate_replay_valid: false
+
+protocol_deviations: []
+blockers: []

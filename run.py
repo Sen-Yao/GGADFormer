@@ -1,3 +1,8 @@
+import hashlib
+import json
+from pathlib import Path
+
+import torch
 import torch.nn as nn
 
 from model import Model
@@ -20,6 +25,7 @@ import wandb
 from visualization import create_tsne_visualization, visualize_attention_weights, visualize_reconstruction_analysis
 from utils import send_notification, calculate_graph_statistics
 from ablation_rec_error import evaluate_with_rec_error_filter
+from hsc_center import HSC_CENTER_Q, compute_center_components, compute_shell_statistics
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -35,6 +41,182 @@ def get_git_head_sha():
         ).strip()
     except Exception:
         return "unknown"
+
+
+def sha256_file(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def update_index_trace(digest, trace_name, epoch, batch_index, indices):
+    values = indices.detach().to(device="cpu", dtype=torch.int64).contiguous().numpy()
+    digest.update(
+        f"{trace_name}:{epoch}:{batch_index}:{values.size}\n".encode("ascii")
+    )
+    digest.update(values.tobytes())
+
+
+def model_state_sha256(model):
+    digest = hashlib.sha256()
+    for name, tensor in sorted(model.state_dict().items()):
+        value = tensor.detach().cpu().contiguous()
+        digest.update(name.encode("utf-8"))
+        digest.update(str(value.dtype).encode("ascii"))
+        digest.update(str(tuple(value.shape)).encode("ascii"))
+        digest.update(value.numpy().tobytes())
+    return digest.hexdigest()
+
+
+def save_and_reload_final_checkpoint(model, args):
+    checkpoint_dir = Path(os.environ.get("CHECKPOINT_DIR", "checkpoints"))
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+    run_id = wandb.run.id if wandb.run is not None else "local"
+    checkpoint_path = checkpoint_dir / f"{run_id}.pt"
+    identity = {
+        "run_id": run_id,
+        "dataset": args.dataset,
+        "hsc_center_condition": args.hsc_center_condition,
+        "seed": args.seed,
+        "data_split_seed": args.data_split_seed,
+        "code_sha": os.environ.get("CODE_SHA") or get_git_head_sha(),
+        "protocol_identity": os.environ.get("PROTOCOL_ID", "unrecorded"),
+        "final_training_epoch": args.num_epoch,
+    }
+    torch.save({"identity": identity, "model_state_dict": model.state_dict()}, checkpoint_path)
+    checkpoint_sha256 = sha256_file(checkpoint_path)
+
+    payload = torch.load(checkpoint_path, map_location=model.device)
+    if payload.get("identity") != identity:
+        raise RuntimeError("final checkpoint identity mismatch")
+    model.load_state_dict(payload["model_state_dict"], strict=True)
+    return checkpoint_path, checkpoint_sha256, identity
+
+
+def run_hsc_diagnostic_replay(model, batch_data_train, weights, normal_global_idx, args, device):
+    diagnostic_seed = 1_000_000 + args.data_split_seed * 100 + args.seed
+    sampler_generator = torch.Generator(device="cpu")
+    sampler_generator.manual_seed(diagnostic_seed)
+    source_generator = torch.Generator(device="cpu")
+    source_generator.manual_seed(diagnostic_seed + 1)
+    sampler = Data.WeightedRandomSampler(
+        weights,
+        num_samples=len(batch_data_train),
+        replacement=True,
+        generator=sampler_generator,
+    )
+    loader = Data.DataLoader(
+        batch_data_train,
+        batch_size=args.batch_size,
+        sampler=sampler,
+        num_workers=0,
+        pin_memory=False,
+    )
+
+    replay_batch_trace = hashlib.sha256()
+    replay_source_trace = hashlib.sha256()
+    totals = {
+        "count": 0,
+        "shell_count": 0,
+        "inner_count": 0,
+        "outer_count": 0,
+        "hsc_loss_sum": 0.0,
+        "center_shift_from_default_sum": 0.0,
+        "center_shift_from_normal_sum": 0.0,
+        "anomaly_count": 0,
+        "node_count": 0,
+        "batch_count": 0,
+    }
+
+    cuda_devices = [device.index] if device.type == "cuda" else []
+    model.eval()
+    with torch.random.fork_rng(devices=cuda_devices):
+        torch.manual_seed(diagnostic_seed + 2)
+        if device.type == "cuda":
+            torch.cuda.manual_seed_all(diagnostic_seed + 2)
+        with torch.no_grad():
+            for batch_index, item in enumerate(loader):
+                input_tokens = item[0].to(device)
+                batch_labels = item[1].to(device)
+                batch_global_indices = item[2].to(device)
+                update_index_trace(
+                    replay_batch_trace,
+                    "diagnostic_batch",
+                    0,
+                    batch_index,
+                    batch_global_indices,
+                )
+
+                is_known_normal = torch.isin(batch_global_indices, normal_global_idx)
+                local_normal_idx = torch.nonzero(
+                    is_known_normal, as_tuple=False
+                ).squeeze(-1)
+                source_count = int(local_normal_idx.numel() * args.sample_rate)
+                if source_count == 0:
+                    raise RuntimeError("diagnostic replay selected no pseudo-anomaly sources")
+                permutation = torch.randperm(
+                    local_normal_idx.numel(), generator=source_generator
+                ).to(device)
+                local_source_idx = local_normal_idx[permutation[:source_count]]
+                update_index_trace(
+                    replay_source_trace,
+                    "diagnostic_source",
+                    0,
+                    batch_index,
+                    batch_global_indices[local_source_idx],
+                )
+
+                emb = model.TransformerEncoder(input_tokens)
+                centers = compute_center_components(
+                    emb, batch_labels, args.hsc_center_condition
+                )
+                outlier_emb, _, _, _ = model.build_pseudo_outliers(
+                    input_tokens, emb, local_source_idx, args
+                )
+                shell = compute_shell_statistics(
+                    outlier_emb,
+                    centers.selected,
+                    args.ring_R_min,
+                    args.ring_R_max,
+                )
+                for key in (
+                    "count",
+                    "shell_count",
+                    "inner_count",
+                    "outer_count",
+                    "hsc_loss_sum",
+                ):
+                    totals[key] += shell[key]
+                totals["center_shift_from_default_sum"] += float(
+                    torch.norm(centers.selected - centers.default, p=2).item()
+                )
+                totals["center_shift_from_normal_sum"] += float(
+                    torch.norm(centers.selected - centers.normal, p=2).item()
+                )
+                totals["anomaly_count"] += int((batch_labels == 1).sum().item())
+                totals["node_count"] += int(batch_labels.numel())
+                totals["batch_count"] += 1
+
+    if totals["count"] == 0 or totals["batch_count"] == 0:
+        raise RuntimeError("diagnostic replay produced no HSC observations")
+    count = totals["count"]
+    batch_count = totals["batch_count"]
+    return {
+        "diagnostic_seed": diagnostic_seed,
+        "pseudo_anomaly_count": count,
+        "batch_count": batch_count,
+        "ShellHit": totals["shell_count"] / count,
+        "inner_violation": totals["inner_count"] / count,
+        "outer_violation": totals["outer_count"] / count,
+        "mean_hsc_loss": totals["hsc_loss_sum"] / count,
+        "center_shift_from_default": totals["center_shift_from_default_sum"] / batch_count,
+        "center_shift_from_normal": totals["center_shift_from_normal_sum"] / batch_count,
+        "sampled_anomaly_fraction": totals["anomaly_count"] / totals["node_count"],
+        "batch_trace_sha256": replay_batch_trace.hexdigest(),
+        "source_trace_sha256": replay_source_trace.hexdigest(),
+    }
 
 
 def infer_run_variant(args):
@@ -55,6 +237,10 @@ def build_wandb_audit_config(args):
 
     return {
         "variant": infer_run_variant(args),
+        "hsc_center_condition": args.hsc_center_condition,
+        "hsc_oracle_q": HSC_CENTER_Q[args.hsc_center_condition],
+        "hsc_label_usage_scope": "oracle center construction only; excluded from all other losses and scoring",
+        "pair_id": f"{args.dataset}:seed={args.seed}:data_split_seed={args.data_split_seed}",
         "protocol_identity": os.environ.get("PROTOCOL_ID", "unrecorded"),
         "split_protocol_identity": (
             f"{args.dataset}:train_rate={args.train_rate}:val_rate=0.1:"
@@ -64,6 +250,7 @@ def build_wandb_audit_config(args):
         "execution_host": os.environ.get("EXECUTION_HOST", "unknown"),
         "gpu_index": gpu_index,
         "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
+        "hsc_diagnostic_policy": "final checkpoint; fixed weighted-sampler replay; sample-weighted shell metrics",
         "wandb_entity": wandb_entity,
         "wandb_project": wandb_project,
     }
@@ -81,6 +268,7 @@ def train(args):
     # os.environ['OMP_NUM_THREADS'] = '1'
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+    torch.use_deterministic_algorithms(True)
 
     # 设置设备
     device = torch.device(f'cuda:{args.device}' if torch.cuda.is_available() and args.device >= 0 else 'cpu')
@@ -168,6 +356,10 @@ def train(args):
     # 计算图的平均最短路径和有效直径（基于采样估算）
     # avg_sp, eff_diameter = calculate_graph_statistics(adj, n_samples=1000)
 
+    initial_model_sha256 = model_state_sha256(model)
+    training_batch_trace = hashlib.sha256()
+    pseudo_source_trace = hashlib.sha256()
+
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.peak_lr, weight_decay=args.weight_decay)
     lr_scheduler = PolynomialDecayLR(
         optimizer,
@@ -242,13 +434,27 @@ def train(args):
                 concated_input_features = item[0].to(device)
                 labels = item[1].to(device)
                 batch_global_indices = item[2].to(device)
+                update_index_trace(
+                    training_batch_trace,
+                    "training_batch",
+                    epoch,
+                    batch_idx,
+                    batch_global_indices,
+                )
 
                 optimizer.zero_grad()
                 is_known_normal_mask = torch.isin(batch_global_indices, normal_for_train_idx)
                 local_normal_for_train_idx = torch.nonzero(is_known_normal_mask, as_tuple=False).squeeze(-1)
                 emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, loss_rec, loss_ring = model(concated_input_features, None,
-                                                                    None, local_normal_for_train_idx,
+                                                                    labels, local_normal_for_train_idx,
                                                                     train_flag, args)
+                update_index_trace(
+                    pseudo_source_trace,
+                    "pseudo_source",
+                    epoch,
+                    batch_idx,
+                    batch_global_indices[model.last_normal_for_generation_idx],
+                )
                     # BCE loss
                 lbl = torch.unsqueeze(torch.cat(
                     (torch.zeros(len(local_normal_for_train_idx)), torch.ones(len(outlier_emb)))),
@@ -405,6 +611,76 @@ def train(args):
 
     pbar.close()  # 关闭进度条
     print(f"Training done! Total time: {total_time:.2f} seconds")
+
+    if args.model_type == "VecGAD":
+        checkpoint_path, checkpoint_sha256, checkpoint_identity = save_and_reload_final_checkpoint(
+            model, args
+        )
+        diagnostics = run_hsc_diagnostic_replay(
+            model,
+            batch_data_train,
+            weights,
+            normal_for_train_idx,
+            args,
+            device,
+        )
+        repeated_diagnostics = run_hsc_diagnostic_replay(
+            model,
+            batch_data_train,
+            weights,
+            normal_for_train_idx,
+            args,
+            device,
+        )
+        if diagnostics != repeated_diagnostics:
+            raise RuntimeError("final-checkpoint HSC diagnostic replay is not deterministic")
+        diagnostic_record = {
+            "schema_version": 1,
+            "checkpoint_identity": checkpoint_identity,
+            "checkpoint_path": str(checkpoint_path),
+            "checkpoint_sha256": checkpoint_sha256,
+            "initial_model_sha256": initial_model_sha256,
+            "training_batch_trace_sha256": training_batch_trace.hexdigest(),
+            "pseudo_source_trace_sha256": pseudo_source_trace.hexdigest(),
+            "final_model_state_sha256": model_state_sha256(model),
+            "diagnostic_replay_repeat_verified": True,
+            "final_metrics": {
+                "AUC.last": float(auc),
+                "AP.last": float(ap),
+                "final_step": args.num_epoch,
+            },
+            "hsc_diagnostics": diagnostics,
+        }
+        diagnostic_dir = Path(os.environ.get("DIAGNOSTIC_DIR", "diagnostics"))
+        diagnostic_dir.mkdir(parents=True, exist_ok=True)
+        run_id = wandb.run.id if wandb.run is not None else "local"
+        diagnostic_path = diagnostic_dir / f"{run_id}.json"
+        diagnostic_path.write_text(
+            json.dumps(diagnostic_record, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        diagnostic_sha256 = sha256_file(diagnostic_path)
+
+        if wandb.run is not None:
+            wandb.run.summary.update({
+                "run_valid": True,
+                "fixed_endpoint_epoch": args.num_epoch,
+                "initial_model_sha256": initial_model_sha256,
+                "training_batch_trace_sha256": training_batch_trace.hexdigest(),
+                "pseudo_source_trace_sha256": pseudo_source_trace.hexdigest(),
+                "checkpoint_sha256": checkpoint_sha256,
+                "diagnostic_sha256": diagnostic_sha256,
+                "HSC.diagnostic_replay_repeat_verified": True,
+                "HSC.ShellHit": diagnostics["ShellHit"],
+                "HSC.inner_violation": diagnostics["inner_violation"],
+                "HSC.outer_violation": diagnostics["outer_violation"],
+                "HSC.mean_loss": diagnostics["mean_hsc_loss"],
+                "HSC.center_shift_from_default": diagnostics["center_shift_from_default"],
+                "HSC.center_shift_from_normal": diagnostics["center_shift_from_normal"],
+                "HSC.sampled_anomaly_fraction": diagnostics["sampled_anomaly_fraction"],
+                "HSC.diagnostic_batch_trace_sha256": diagnostics["batch_trace_sha256"],
+                "HSC.diagnostic_source_trace_sha256": diagnostics["source_trace_sha256"],
+            })
     
     # 在最后一次eval时进行重构误差分析可视化
     if args.visualize and args.model_type == "VecGAD":
@@ -542,6 +818,14 @@ if __name__ == "__main__":
                              'h_mean_labeled_normal (center from labeled normal nodes only), '
                              'h_mean_trimmed (trimmed mean, drop furthest 10%% nodes), '
                              'gprgnn_weighted_sum (GPRGNN-style learnable weighted sum fusion instead of Transformer)')
+
+    parser.add_argument(
+        '--hsc_center_condition',
+        type=str,
+        default='default',
+        choices=list(HSC_CENTER_Q),
+        help='HSC center intervention: default batch mean or oracle q mixture.',
+    )
     
     # Ablation Study: Reconstruction Error Filter
     parser.add_argument('--rec_error_filter_ratio', type=float, default=1.0,
@@ -552,6 +836,11 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
+
+    if args.hsc_center_condition != 'default' and args.ablation_mode != 'none':
+        parser.error('oracle HSC center conditions require --ablation_mode=none')
+    if args.num_epoch is None or args.num_epoch % 10 != 0:
+        parser.error('--num_epoch must be a multiple of 10 for fixed AUC.last/AP.last')
 
     if args.dataset in ['reddit', 'photo']:
         args.mean = 0.02
@@ -578,23 +867,9 @@ if __name__ == "__main__":
         
     try:
         train(args)
-        start_time = time.time()
-        wandb.finish()
-        
-        
-    except torch.cuda.OutOfMemoryError as e:
-        print(f"显存不足!：{e}")
-        send_notification(f"【VecFormer】出现显存不足!：{e}")
-        wandb.log({"AUC.max": 0})
-        wandb.log({"AP.max": 0})
-        start_time = time.time()
-        wandb.finish()
-    
-    except Exception as e:
-        import traceback
-        print(f"其他错误：{e}")
-        traceback.print_exc()  # 打印详细的错误堆栈，包括出错的代码行
-        wandb.log({"AUC.max": 0})
-        start_time = time.time()
-        wandb.finish()
-    print(f"WandB finish took {time.time() - start_time:.2f} seconds")
+    except Exception:
+        if wandb.run is not None:
+            wandb.run.summary["run_valid"] = False
+        wandb.finish(exit_code=1)
+        raise
+    wandb.finish(exit_code=0)

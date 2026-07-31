@@ -6,6 +6,7 @@ import time
 
 from check_gpu_memory import print_gpu_memory_usage, print_tensor_memory, clear_gpu_memory
 from ablation import apply_perturbation_ablation, apply_h_mean_ablation, GPRGNNFusion, should_use_gprgnn_fusion
+from hsc_center import compute_hsc_center
 
 class FeedForwardNetwork(nn.Module):
     def __init__(self, hidden_size, ffn_size, dropout_rate):
@@ -229,6 +230,7 @@ class VecGAD(nn.Module):
             self.gprgnn_fusion = None
 
         # 将模型移动到指定设备
+        self.last_normal_for_generation_idx = None
         self.to(self.device)
     
     def TransformerEncoder(self, tokens):
@@ -270,14 +272,50 @@ class VecGAD(nn.Module):
 
         return emb
 
-    def forward(self, input_tokens, adj, _, normal_for_train_idx, train_flag, args, sparse=False):
+    def build_pseudo_outliers(self, input_tokens, emb, normal_for_generation_idx, args):
+        normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
+        noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
+        noised_normal_for_generation_emb = normal_for_generation_emb + noise
+
+        reconstructed_tokens = self.token_decoder(emb).squeeze(0)
+        flattened_tokens = input_tokens.view(-1, (args.pp_k + 1) * self.n_in)
+        reconstruction_error = reconstructed_tokens - flattened_tokens
+        reconstruction_error_proj = self.reconstruction_proj(
+            reconstruction_error[normal_for_generation_idx, :]
+        )
+
+        ablation_mode = getattr(args, 'ablation_mode', 'none')
+        if ablation_mode != 'none':
+            reconstruction_error_proj = apply_perturbation_ablation(
+                reconstruction_error_proj, ablation_mode
+            )
+
+        outlier_emb = (
+            normal_for_generation_emb + args.outlier_beta * reconstruction_error_proj
+        ).squeeze(0)
+        return (
+            outlier_emb,
+            noised_normal_for_generation_emb,
+            normal_for_generation_emb,
+            reconstructed_tokens,
+        )
+
+    def forward(self, input_tokens, adj, batch_labels, normal_for_train_idx, train_flag, args, sparse=False):
 
         # input_tokens: (N, args.pp_k+1, d)
         emb = self.TransformerEncoder(input_tokens)
 
         # 生成全局中心点（支持消融实验：h_mean_labeled_normal / h_mean_trimmed）
         ablation_mode = getattr(args, 'ablation_mode', 'none')
-        h_mean = apply_h_mean_ablation(emb, ablation_mode, normal_for_train_idx)
+        center_condition = getattr(args, 'hsc_center_condition', 'default')
+        h_mean = None
+        if train_flag:
+            if center_condition == 'default':
+                h_mean = apply_h_mean_ablation(emb, ablation_mode, normal_for_train_idx)
+            else:
+                if ablation_mode != 'none':
+                    raise ValueError('oracle HSC center conditions require ablation_mode=none')
+                h_mean = compute_hsc_center(emb, batch_labels, center_condition)
 
         outlier_emb = None
         emb_combine = None
@@ -289,6 +327,7 @@ class VecGAD(nn.Module):
         loss_ring = torch.tensor(0.0, device=emb.device)
         con_loss = torch.tensor(0.0, device=emb.device)
         loss_rec = torch.tensor(0.0, device=emb.device)
+        self.last_normal_for_generation_idx = None
         if train_flag:
             # start_time = time.time()
             # 高效重排
@@ -296,28 +335,17 @@ class VecGAD(nn.Module):
             normal_for_train_idx = normal_for_train_idx[perm]
             # print(f"time for shuffle:{time.time() - start_time}")
             normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]            
-            normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
-            # print(f"time for normal_for_generation_emb:{time.time() - start_time}")
-            # Noise
-            noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
-            noised_normal_for_generation_emb = normal_for_generation_emb + noise
-            # print(f"time for noise:{time.time() - start_time}")
-
-            # 重构学习
-            reconstructed_tokens = self.token_decoder(emb).squeeze(0)  # [num_nodes, (args.pp_k+1)*n_in]
-            reconstruction_error = reconstructed_tokens - input_tokens.view(-1, (args.pp_k+1) * self.n_in)
-            # Project reconstruction error to embedding dimension
-            reconstruction_error_proj = self.reconstruction_proj(reconstruction_error[normal_for_generation_idx, :])
-
-            # Perturbation ablation study
-            ablation_mode = getattr(args, 'ablation_mode', 'none')
-            if ablation_mode != 'none':
-                reconstruction_error_proj = apply_perturbation_ablation(
-                    reconstruction_error_proj, ablation_mode
-                )
-
-            outlier_emb = normal_for_generation_emb + args.outlier_beta * reconstruction_error_proj
-            outlier_emb = outlier_emb.squeeze(0)
+            if normal_for_generation_idx.numel() == 0:
+                raise ValueError('sample_rate selected no pseudo-anomaly source nodes')
+            self.last_normal_for_generation_idx = normal_for_generation_idx.detach().clone()
+            (
+                outlier_emb,
+                noised_normal_for_generation_emb,
+                normal_for_generation_emb,
+                reconstructed_tokens,
+            ) = self.build_pseudo_outliers(
+                input_tokens, emb, normal_for_generation_idx, args
+            )
 
             # 中心点对齐损失，鼓励离群点距离全局中心的距离保持在一个 ring 内
             # 计算离群点嵌入与全局中心的距离
