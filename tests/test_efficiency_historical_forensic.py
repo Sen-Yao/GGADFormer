@@ -81,3 +81,14 @@ def test_wandb_validator_requires_both_timing_surfaces():
     assert 'training/tqdm_terminal_rate_it_per_second' in source
     assert 'training/synchronized_block_seconds' in source
     assert "sweep.state != 'FINISHED'" in source
+
+
+def test_replay_comparator_is_strict_except_for_float_tail_noise():
+    spec = importlib.util.spec_from_file_location(
+        'forensic_compare', EXPERIMENT / 'compare_aggregates.py'
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    assert module.compare({'x': [1.0]}, {'x': [1.0 + 1e-14]}) == []
+    assert module.compare({'x': [1.0]}, {'x': [1.1]})
+    assert module.compare({'x': [1.0]}, {'y': [1.0]})
