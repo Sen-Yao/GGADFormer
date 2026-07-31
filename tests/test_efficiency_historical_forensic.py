@@ -74,3 +74,10 @@ def test_manifest_keeps_forensic_internal_and_lifecycle_consistent():
         assert manifest['wandb']['sweep_id'] is None
     else:
         assert manifest['wandb']['sweep_id']
+
+
+def test_wandb_validator_requires_both_timing_surfaces():
+    source = (EXPERIMENT / 'validate_wandb.py').read_text(encoding='utf-8')
+    assert 'training/tqdm_terminal_rate_it_per_second' in source
+    assert 'training/synchronized_block_seconds' in source
+    assert "sweep.state != 'FINISHED'" in source
