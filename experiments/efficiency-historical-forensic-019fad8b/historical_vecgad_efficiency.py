@@ -30,7 +30,7 @@ SOURCE_CONTRACTS = {
         'files': {
             'run.py': '8aedf53ee85c0569212307eb346cb01d6f6b1664c75977a65704f865df470933',
             'utils.py': 'd4f094caac4d99ae745e97e40cf15e2c39f2edc19ea7b5159312ade56767a028',
-            'GGADFormer.py': 'c279c43159ad46f135345252472c08e2b107b66a0d9488e4540e2a7ef4829ce',
+            'GGADFormer.py': 'c279c43159ad46f135345252472c08e2b1078b66a0d9488e4540e2a7ef4829ce',
         },
     },
     '5bf8205b0d4c54d583b13c547ae62122ffdf2f6a': {
@@ -40,7 +40,7 @@ SOURCE_CONTRACTS = {
         'files': {
             'run.py': '17e87737a3dc4e8f209ff8347d68cf168cd2be038c31eb391a8e08d201e3fd1f',
             'utils.py': '2b29692117545eebec068e6543617e2d3c98bf2f626e7c533f1836ca682a7036',
-            'GGADFormer.py': 'c279c43159ad46f135345252472c08e2b107b66a0d9488e4540e2a7ef4829ce',
+            'GGADFormer.py': 'c279c43159ad46f135345252472c08e2b1078b66a0d9488e4540e2a7ef4829ce',
         },
     },
 }
