@@ -9,7 +9,7 @@ fi
 gpu_index="$1"
 sweep_id="$2"
 trial_count="$3"
-expected_sweep_id="PENDING_SWEEP_ID"
+expected_sweep_id="bghcjp76"
 expected_code_sha="7c15f33265950abba9db3f130256a2d8e5245ec5"
 
 case "$gpu_index" in
