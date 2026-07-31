@@ -100,8 +100,12 @@ runtime:
 
 wandb:
   destination: HCCS/GGADFormer
-  sweep_id: pending_creation
-  sweep_creation_count: 0
+  sweep_id: 25agh73h
+  sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/25agh73h
+  sweep_creation_recorded_at_utc: 2026-07-31T03:12:45Z
+  sweep_creation_count: 1
+  create_exactly_once: true
+  current_state: PENDING
   expected_trials: 60
   code_upload_disabled: true
   console_upload_disabled: true
