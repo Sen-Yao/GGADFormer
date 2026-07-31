@@ -3,12 +3,24 @@
   "state": "prepared",
   "investigation_id": "2026-07-31-vecgad-historical-efficiency-forensic",
   "thread_id": "019fad8b-cbf2-7481-a0b7-077753148fd1",
-  "prepared_at": "2026-07-31T08:00:00Z",
+  "prepared_at": "2026-07-31T08:12:37Z",
   "execution_host": "HCCS-90",
   "hostname": "gpufree-container",
   "gpu_indices": [0, 1, 2, 3, 4, 5, 6, 7],
   "gpu_model": "NVIDIA GeForce RTX 4090",
+  "gpu_total_memory_mib": 24564,
+  "gpu_uuids": {
+    "0": "GPU-ef3ccc4b-3d93-2e67-ff68-fb64baf630d8",
+    "1": "GPU-0b5b9af4-5282-116d-c041-d3a2cbc3beef",
+    "2": "GPU-5e6b7ec1-1f23-2afb-46e4-4fba322130f3",
+    "3": "GPU-52a38d4a-f8b1-8e11-4bde-dd6ab542fb8c",
+    "4": "GPU-17ef53a7-69aa-7d47-5276-60fce74cca10",
+    "5": "GPU-6211f92a-bb8d-6d3f-4ecf-bf210e677e2f",
+    "6": "GPU-90b5f174-7bb6-91be-d0ae-71ac33fb8b7b",
+    "7": "GPU-829887b7-4c7d-f6a3-6f4a-f19f989c70cd"
+  },
   "parallel_gpu_cap": 8,
+  "same_model_gpu_policy": "Record physical RTX 4090 index as execution metadata; do not treat within-model card variation as an experimental factor.",
   "authorization": {
     "status": "granted_by_current_user_instruction",
     "destination": "HCCS/VecGAD",
@@ -43,7 +55,7 @@
   "source": {
     "branch": "codex/vecgad-efficiency-historical-forensic-019fad8b",
     "parent_commit": "7a346d439ebef11a0b43b32348e05aac3f829895",
-    "prepared_protocol_commit": null,
+    "prepared_protocol_commit": "004d47d0ec16b9deb452c70212560c44b7a8472b",
     "launch_manifest_commit": null,
     "remote_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-historical-forensic-019fad8b",
     "harness_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-historical-forensic-019fad8b/harness-worktree",
@@ -65,6 +77,38 @@
     "dgl": "1.1.3",
     "wandb": "0.21.1",
     "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8"
+  },
+  "selection_snapshot": {
+    "observed_at": "2026-07-31T08:12:37Z",
+    "hccs_90_free_gpu_indices": [0, 1, 2, 3, 4, 5, 6, 7],
+    "hccs_90_compute_pids": 0,
+    "hccs_90_disk_free_tib": 5.0,
+    "hccs_90_cpu_count": 128,
+    "hccs_85_excluded_reason": "data volume at 100 percent usage during the approved selection audit",
+    "hccs_25_excluded_reason": "foreign compute PIDs and cooperative reservation during the approved selection audit"
+  },
+  "digests": {
+    "protocol_sha256": "56cd8f25be8019ef681fd00a9ff9347ae50e7c28f959e9a76dbed453ffea8c01",
+    "registry_sha256": "f1b4e17e490bac519bf1afa47676328f3a717c1e631bf2727aedc36b37cddfcc",
+    "sweep_sha256": "76666ba82b88115584d6944e04f3a2eef6773d1f1bbbafb1e4b93bcc28b961a5",
+    "historical_harness_sha256": "9f34e42cfc895ce3dbb4646e48239e0ae8988ebaecf404a1aedd9de83fa350e3",
+    "wandb_wrapper_sha256": "4a24e56b944d1ba9ae0626a5fc9c82408628a90171a8fa876eabfdafb1750233",
+    "aggregate_sha256": "a594ec60443c601f6e0abcad5ae6c037655fcd69d0e9fd5bf4f73906b24cf837",
+    "deployment_bundle_sha256": "4eb5787fdc33b2adce2d605b150dfba16fe889c5d53e42dbbc907fc30d67e050"
+  },
+  "validation": {
+    "local_tests": "6 passed: forensic plus full-batch protocol tests",
+    "remote_py_compile": "passed in the frozen Python 3.8 runtime",
+    "remote_pytest": "not run because the frozen runtime has no pytest package",
+    "wandb_viewer_project_probe": "passed",
+    "smoke": {
+      "status": "completed",
+      "trial_id": "smoke-e071-native-amazon",
+      "warmup_epochs": 1,
+      "measured_epochs": 2,
+      "optimizer_steps_per_epoch": 12,
+      "purpose": "implementation validation only; excluded from the 24 formal trials"
+    }
   },
   "wandb": {
     "entity": "HCCS",
