@@ -93,6 +93,13 @@ execution:
   final_preflight_at_utc: 2026-07-31T08:38:25Z
   final_preflight_result: passed
 
+heartbeat:
+  automation_id: vecgad-elliptic-mechanism-heartbeat
+  kind: one_shot_thread_heartbeat
+  scheduled_for_local: 2026-07-31T16:54:00+08:00
+  schedule_generation: 1
+  status: active
+
 candidate_selection:
   HCCS-25:
     occupancy: running
