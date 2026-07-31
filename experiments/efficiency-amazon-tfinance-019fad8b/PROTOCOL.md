@@ -15,6 +15,7 @@
 - A CUDA OOM is accepted only after two fresh-process failures under the identical configuration. Other failure classes remain distinct.
 - VecGAD uses the paper operator `D^-1/2 A D^-1/2 + I`, a sparse COO representation, and sequential hop reuse. Formal timing is gated on token equivalence.
 - The gate first checks tokens with `rtol=1e-5`, `atol=1e-6`, then compares final seed-0 AUC/AP after the same 40-epoch trajectory. Amazon uses the former dense recomputation as reference; T-Finance uses sparse recomputation from the origin. Either metric delta above `0.005` requires the predeclared five-seed escalation before timing.
+- In the five-seed escalation, seeds 0--4 are paired by initialization and data split. The implementation gate passes only when the absolute mean paired signed delta is at most `0.005` for both AUC and AP. Per-seed signed deltas, their sample standard deviations, and maximum absolute seed deltas remain in the raw artifact regardless of the verdict.
 - No DGraph or K-scaling experiment is part of this protocol.
 - Each raw result records hostname, Python/Torch/CUDA identity, GPU name/capacity, phase RSS baseline/absolute peak/delta, and GPU allocated/reserved baseline/peak/delta. The validator rejects unexpected host/GPU identity, missing repeats, invalid epoch vectors, and non-repeated OOMs.
 - Break-even analysis, table selection, and manuscript wording are deferred until all raw evidence is collected.
