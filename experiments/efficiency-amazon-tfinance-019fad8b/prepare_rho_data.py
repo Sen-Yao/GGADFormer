@@ -44,7 +44,10 @@ def tfinance_graph(mat_path):
     data = sio.loadmat(mat_path)
     adjacency = sp.coo_matrix(data['Network'])
     graph = dgl.from_scipy(adjacency)
-    graph.ndata['feature'] = torch.as_tensor(data['Attributes'], dtype=torch.float32)
+    features = data['Attributes']
+    if sp.issparse(features):
+        features = features.toarray()
+    graph.ndata['feature'] = torch.as_tensor(features, dtype=torch.float32)
     labels = torch.as_tensor(np.asarray(data['Label']).reshape(-1), dtype=torch.long)
     graph.ndata['label'] = torch.nn.functional.one_hot(labels, num_classes=2)
     return graph
