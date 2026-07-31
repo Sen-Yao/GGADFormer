@@ -2,10 +2,14 @@
 import argparse
 import json
 from pathlib import Path
+import sys
 from types import SimpleNamespace
 
 import scipy.sparse as sp
 import torch
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT))
 
 from utils import (
     load_mat,
