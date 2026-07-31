@@ -1,6 +1,6 @@
 schema_version: 1
 state: prepared
-formal_launch_allowed: false
+formal_launch_allowed: true
 investigation_id: 2026-07-31-vecgad-hsc-center-contamination
 owner_thread_id: 019fb5c1-2c04-7f40-ac8a-121ee993cbd4
 protocol_id: hsc-center-contamination-019fb5c1-v1
@@ -27,16 +27,41 @@ git:
   code_sha: 89e96d5ac8b088c9e4bcc85c32ff3e568f735438
   code_tree: d625bad37bf1acb25c7a0e78483498e305163b24
   protocol_branch: codex/hsc-center-contamination-019fb5c1
-  prepared_manifest_commit: pending_after_protocol_commit
-  remote_publication: pending
+  prepared_manifest_commit: f520e16435f07d9b5fb19c1ca518e20fbeacac61
+  remote_publication: pushed
 
 execution:
   execution_host: HCCS-85
+  observed_hostname: gpufree-container
+  preflight_completed_at_utc: 2026-07-31T03:10:27Z
+  tmux_version: 3.2a
+  gpu_model: NVIDIA GeForce RTX 4090
   gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
   parallel_gpu_cap: 8
+  eligible_gpu_indices_at_preflight: [0, 1, 2, 3, 4, 5, 6, 7]
+  compute_pids_at_preflight: []
   task_root: /root/gpufree-data/linziyao/VecGAD-hsc-center-contamination-019fb5c1
+  source_bundle: /root/gpufree-data/linziyao/VecGAD-hsc-center-contamination-019fb5c1/source.bundle
+  source_bundle_sha256: 75ec2fcb80aaf308e6fadb75446c42ee30366694b317e03ac35af005afda3f30
+  source_repo: /root/gpufree-data/linziyao/VecGAD-hsc-center-contamination-019fb5c1/source.git
   detached_worktree: /root/gpufree-data/linziyao/VecGAD-hsc-center-contamination-019fb5c1/worktree
+  detached_worktree_head: 89e96d5ac8b088c9e4bcc85c32ff3e568f735438
+  detached_worktree_tree: d625bad37bf1acb25c7a0e78483498e305163b24
+  detached_worktree_clean: true
   runtime: /root/gpufree-data/linziyao/.conda/envs/DualRefGAD
+  runtime_preflight: passed
+  data_preflight: passed
+  exact_sha_unit_tests: passed_13_of_13
+  exact_sha_full_config_smoke:
+    state: passed
+    evidence_tier: smoke_only_not_formal
+    dataset: tolokers
+    hsc_center_condition: q20
+    seed: 0
+    num_epoch: 70
+    wandb_mode: disabled
+    diagnostic_run_id: fdrqtipv
+    repeated_diagnostic_replay_verified: true
   agent_trial_count_plan:
     - {gpu: 0, count: 8}
     - {gpu: 1, count: 8}
@@ -58,6 +83,20 @@ data:
   tolokers:
     path: dataset/tolokers.mat
     sha256: d6ec34984d4db3f52b53606a447f6101a74d8e9aad2ae8644dfe2ff33227a1d0
+
+runtime:
+  environment: /root/gpufree-data/linziyao/.conda/envs/DualRefGAD
+  python: 3.8.19
+  torch: 2.0.0
+  torch_cuda: 11.8
+  cuda_available: true
+  cuda_device_count: 8
+  dgl: 1.1.3
+  wandb: 0.21.1
+  numpy: 1.24.4
+  scipy: 1.10.1
+  sklearn: 1.1.3
+  pyyaml: 6.0.3
 
 wandb:
   destination: HCCS/GGADFormer
