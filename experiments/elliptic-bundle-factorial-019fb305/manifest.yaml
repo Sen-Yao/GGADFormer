@@ -6,7 +6,7 @@ parent_investigation_id: elliptic-mixed-replication-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T14:40:36Z
-last_material_transition_at_utc: 2026-07-31T14:59:47Z
+last_material_transition_at_utc: 2026-07-31T15:10:38Z
 
 parent_gate:
   sweep_id: k5lbpsg9
@@ -122,6 +122,19 @@ execution:
     run_count: 8
     running_runs: 8
     failed_or_crashed_runs: 0
+  first_valid_completion_checkpoint:
+    observed_at_utc: 2026-07-31T15:09:56Z
+    sweep_state: RUNNING
+    run_count: 20
+    trial_coverage_complete: true
+    finished_runs: 17
+    running_runs: 3
+    terminal_summary_step_verified_runs: 17
+    config_code_protocol_identity_errors: 0
+    active_task_gpus: [0, 1, 2]
+    terminal_agent_exit_zero_gpus: [3, 4, 5, 6, 7]
+    estimated_remaining_seconds: 114
+    sticky_final_polling: true
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
@@ -163,7 +176,7 @@ wandb:
   create_exactly_once: true
   expected_trials: 20
   current_state: running
-  last_observed_at_utc: 2026-07-31T14:59:47Z
+  last_observed_at_utc: 2026-07-31T15:09:56Z
   project_access_preflight: passed
   network_path: direct
   code_upload_disabled: true
@@ -210,9 +223,12 @@ result_validation:
 
 heartbeat:
   automation_id: elliptic-bundle-factorial-019fb305-heartbeat
-  schedule_generation: 1
-  scheduled_local_time: 2026-07-31T23:08:00+08:00
+  consumed_generation: 1
+  consumed_at_utc: 2026-07-31T15:08:17Z
+  schedule_generation: 2
+  scheduled_local_time: 2026-07-31T23:17:00+08:00
   policy: one_shot_dynamic_heartbeat
+  mode: sticky_final_five_minute
 
 protocol_deviations: []
 operational_notes:
