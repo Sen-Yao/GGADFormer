@@ -93,7 +93,7 @@ execution:
   task_root: /root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305
   detached_worktree: /root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/worktree
   protocol_root: /root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/protocol
-  tmux_session: vecgad_elliptic_factorial_019fb305
+  tmux_session: vecgad_elliptic_bundle2x2_019fb305
   tmux_remain_on_exit_requested: true
   agent_trial_count_plan:
     - {gpu: 0, count: 3}
@@ -182,4 +182,5 @@ result_validation:
 protocol_deviations: []
 operational_notes:
   - Direct git ls-remote succeeded but the full clone hung; the exact task-owned clone PID was terminated, its partial root quarantined, and a locally verified complete Git bundle was used instead.
+  - The initially planned tmux name collided with a retained terminal session from elliptic-loss-factorial-019fb305; that session was left untouched and this sweep uses vecgad_elliptic_bundle2x2_019fb305.
 blockers: []
