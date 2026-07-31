@@ -303,9 +303,14 @@ def run(parsed):
         'persistent_workers': parsed.persistent_workers,
         'pin_memory': parsed.pin_memory,
     }
-    if observed_contract != contract:
+    expected_loader_contract = {
+        key: contract[key]
+        for key in ('num_workers', 'persistent_workers', 'pin_memory')
+    }
+    if observed_contract != expected_loader_contract:
         raise RuntimeError(
-            f'loader contract mismatch for {parsed.source_commit}: {observed_contract!r}'
+            f'loader contract mismatch for {parsed.source_commit}: '
+            f'expected {expected_loader_contract!r}, got {observed_contract!r}'
         )
     observed_commit = git_output(source_root, 'rev-parse', 'HEAD')
     if observed_commit != parsed.source_commit:
