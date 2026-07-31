@@ -64,7 +64,7 @@
     "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8"
   },
   "equivalence_gate": {
-    "status": "five_seed_escalation_ready",
+    "status": "passed",
     "rtol": 1e-5,
     "atol": 1e-6,
     "auc_ap_delta_threshold": 0.005,
@@ -101,16 +101,37 @@
       "t_finance": "passed"
     },
     "five_seed_criterion": "absolute mean paired signed delta <= 0.005 for AUC and AP",
+    "five_seed_result": {
+      "pane_id": "%55",
+      "terminal_status": 0,
+      "artifact_sha256": "fb8f3d8ffad00a2d2b049d861ce7ff3791d61e8fe29695997ed2fe18ea48c314",
+      "auc_mean_signed_delta": -0.0005931429073624539,
+      "auc_std_signed_delta": 0.004688340324642288,
+      "auc_max_absolute_seed_delta": 0.007540922996731703,
+      "ap_mean_signed_delta": -0.004151411649314413,
+      "ap_std_signed_delta": 0.009642534195922519,
+      "ap_max_absolute_seed_delta": 0.021228064207055086
+    },
     "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/gate"
   },
   "formal_execution": {
-    "status": "blocked_on_equivalence_gate",
+    "status": "ready",
     "expected_trials": 18,
     "warmup_epochs": 10,
     "measured_epochs": 30,
     "fresh_process_repeats": 3,
     "tmux_session": "vecgad-efficiency-formal-019fad8b",
     "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-amazon-tfinance-019fad8b/results"
+  },
+  "prelaunch_smoke": {
+    "rho_amazon": {
+      "status": "completed",
+      "measured_epochs": 1
+    },
+    "rho_tfinance": {
+      "status": "completed",
+      "measured_epochs": 1
+    }
   },
   "selection_snapshot": {
     "observed_at": "2026-07-31T09:42:22+08:00",
