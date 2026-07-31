@@ -1,6 +1,6 @@
 schema_version: 1
-state: prepared
-formal_launch_allowed: true
+state: launched
+formal_launch_allowed: false
 investigation_id: 2026-07-31-vecgad-hsc-center-contamination
 owner_thread_id: 019fb5c1-2c04-7f40-ac8a-121ee993cbd4
 protocol_id: hsc-center-contamination-019fb5c1-v1
@@ -62,6 +62,9 @@ execution:
     wandb_mode: disabled
     diagnostic_run_id: fdrqtipv
     repeated_diagnostic_replay_verified: true
+  final_prelaunch_probe_at_utc: 2026-07-31T03:13:21Z
+  final_prelaunch_compute_pids: []
+  launched_at_utc: 2026-07-31T03:14:45Z
   agent_trial_count_plan:
     - {gpu: 0, count: 8}
     - {gpu: 1, count: 8}
@@ -72,8 +75,17 @@ execution:
     - {gpu: 6, count: 7}
     - {gpu: 7, count: 7}
   tmux_session: vecgad_hsc_center_019fb5c1
-  pane_records: []
-  first_agent_start_utc: null
+  tmux_remain_on_exit: true
+  pane_records:
+    - {window: gpu0, pane: "%220", pane_pid: 1784670, gpu: 0, count: 8, first_run_id: ffn22hee}
+    - {window: gpu1, pane: "%221", pane_pid: 1784789, gpu: 1, count: 8, first_run_id: f2slag4a}
+    - {window: gpu2, pane: "%222", pane_pid: 1784843, gpu: 2, count: 8, first_run_id: 8tteu15w}
+    - {window: gpu3, pane: "%223", pane_pid: 1784956, gpu: 3, count: 8, first_run_id: iyiek4vu}
+    - {window: gpu4, pane: "%224", pane_pid: 1785066, gpu: 4, count: 7, first_run_id: pt5m45jy}
+    - {window: gpu5, pane: "%225", pane_pid: 1785174, gpu: 5, count: 7, first_run_id: sieeclat}
+    - {window: gpu6, pane: "%226", pane_pid: 1785278, gpu: 6, count: 7, first_run_id: ragnp5yv}
+    - {window: gpu7, pane: "%227", pane_pid: 1785393, gpu: 7, count: 7, first_run_id: ootoo6x6}
+  first_agent_start_utc: 2026-07-31T03:14:45Z
 
 data:
   access_mode: symlink_read_only_reuse
@@ -105,7 +117,7 @@ wandb:
   sweep_creation_recorded_at_utc: 2026-07-31T03:12:45Z
   sweep_creation_count: 1
   create_exactly_once: true
-  current_state: PENDING
+  current_state: RUNNING
   expected_trials: 60
   code_upload_disabled: true
   console_upload_disabled: true
@@ -114,6 +126,15 @@ wandb:
   checkpoint_uploaded: false
   node_level_results_uploaded: false
   embedding_uploaded: false
+  initial_run_records:
+    - {run_id: ffn22hee, dataset: Amazon, hsc_center_condition: default, seed: 0, gpu: 0, pane: "%220", state: running}
+    - {run_id: f2slag4a, dataset: Amazon, hsc_center_condition: default, seed: 4, gpu: 1, pane: "%221", state: running}
+    - {run_id: 8tteu15w, dataset: Amazon, hsc_center_condition: default, seed: 1, gpu: 2, pane: "%222", state: running}
+    - {run_id: iyiek4vu, dataset: Amazon, hsc_center_condition: q0, seed: 2, gpu: 3, pane: "%223", state: running}
+    - {run_id: pt5m45jy, dataset: Amazon, hsc_center_condition: default, seed: 2, gpu: 4, pane: "%224", state: running}
+    - {run_id: sieeclat, dataset: Amazon, hsc_center_condition: q0, seed: 0, gpu: 5, pane: "%225", state: running}
+    - {run_id: ragnp5yv, dataset: Amazon, hsc_center_condition: default, seed: 3, gpu: 6, pane: "%226", state: running}
+    - {run_id: ootoo6x6, dataset: Amazon, hsc_center_condition: q0, seed: 1, gpu: 7, pane: "%227", state: running}
 
 authorization:
   state: explicitly_approved_by_user
@@ -226,3 +247,5 @@ result_validation:
 
 protocol_deviations: []
 blockers: []
+operational_notes:
+  - "The local occupancy helper preserves the pre-creation placeholder sweep_id; the actual immutable sweep binding is 25agh73h in this manifest."
