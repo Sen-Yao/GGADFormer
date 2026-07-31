@@ -1,0 +1,90 @@
+schema_version: 1
+state: prepared
+formal_launch_allowed: false
+protocol_id: reddit-photo-alpha01-paired-019fb832
+owner_thread_id: 019fb832-e0e7-79e1-8748-b6f0ab3a8130
+
+decision_scope:
+  objective: paired Reddit and Photo alpha audit
+  public_preregistration: false
+  paper_authority_precommitted: false
+  disclosure_policy_precommitted: false
+  execution_manifest_frozen_before_launch: true
+
+git:
+  repository: https://github.com/Sen-Yao/GGADFormer.git
+  scientific_base_sha: 0f81d27555c67a25067e85153a51d9cf9693db87
+  execution_code_sha: pending_protocol_commit
+  manifest_binding_commit: pending
+  branch: codex/reddit-photo-alpha01-paired-019fb832
+
+protocol:
+  expected_trials: 20
+  datasets: [reddit, photo]
+  variants: [historical_control, alpha_0p1]
+  seeds: [0, 1, 2, 3, 4]
+  final_step: 200
+  primary_metrics: [AUC.last, AP.last]
+  diagnostics: [AUC.max, AUC.max_epoch, AP.max, AP.max_epoch]
+  protocol_digest_sha256: 8f6aeb77b29edec86fb7866e8fb5a120fd7bfd61111a6ac0c61ed272775e7667
+  only_scientific_axes: [dataset, progregate_alpha, seed]
+  paired_controls:
+    reddit: {historical_control: 0.0, alpha_0p1: 0.1}
+    photo: {historical_control: 0.05, alpha_0p1: 0.1}
+  retry_policy: objective_technical_invalidity_only
+  valid_low_scores_replaceable: false
+  extra_seeds_allowed: false
+  superiority_or_equivalence_threshold: null
+
+data:
+  split_seed: 42
+  train_rate: 0.05
+  artifacts:
+    reddit: {logical_path: dataset/reddit.mat, source_path: pending_host_selection, sha256: pending_live_probe}
+    photo: {logical_path: dataset/photo.mat, source_path: pending_host_selection, sha256: pending_live_probe}
+  hash_mismatch_action: stop
+  regeneration_allowed: false
+
+selection:
+  candidate_pool: [HCCS-25, HCCS-85, HCCS-90]
+  occupancy_document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
+  execution_host: null
+  gpu_indices: []
+  snapshot_path: null
+  selected_host_score: null
+  selected_at_utc: null
+
+runtime:
+  environment: pending_host_selection
+  python: pending_live_probe
+  torch: pending_live_probe
+  dgl: pending_live_probe
+  wandb: pending_live_probe
+
+wandb:
+  entity: HCCS
+  project: GGADFormer
+  sweep_id: null
+  sweep_url: null
+  create_exactly_once: true
+  code_upload_disabled: true
+  console_upload_disabled: true
+  expected_trials: 20
+  current_state: NOT_CREATED
+
+execution:
+  tmux_session: null
+  pane_records: []
+  first_agent_start_utc: null
+  last_agent_finish_utc: null
+
+result_validation:
+  all_expected_trials_terminal: false
+  config_identity_valid: false
+  code_identity_valid: false
+  data_identity_valid: false
+  fixed_final_epoch_policy_valid: false
+  independent_local_replay_valid: false
+
+protocol_deviations: []
+blockers: []

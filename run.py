@@ -10,6 +10,7 @@ import random
 import dgl
 from sklearn.metrics import average_precision_score
 import argparse
+import os
 from tqdm import tqdm
 import time
 import torch.utils.data as Data
@@ -444,7 +445,7 @@ if __name__ == "__main__":
     parser.add_argument('--sample_rate', type=float, default=0.15)
     
     parser.add_argument('--model_type', type=str, default='VecGAD')
-    parser.add_argument('--visualize', type=bool, default=False)
+    parser.add_argument('--visualize', type=str2bool, default=False)
     parser.add_argument('--device', type=int, default=0)
 
     parser.add_argument('--pp_k', type=int, default=6)
@@ -516,12 +517,20 @@ if __name__ == "__main__":
         args.var = 0.0
 
 
+    run_config = vars(args).copy()
+    run_config.update({
+        "protocol_id": os.environ.get("PROTOCOL_ID", ""),
+        "declared_variant": os.environ.get("DECLARED_SWEEP_VARIANT", ""),
+        "code_sha": os.environ.get("EXPECTED_CODE_SHA", ""),
+        "execution_host": os.environ.get("EXECUTION_HOST", ""),
+        "gpu_index": os.environ.get("CUDA_VISIBLE_DEVICES", ""),
+    })
     run = wandb.init(
-        entity="HCCS",
+        entity=os.environ.get("WANDB_ENTITY", "HCCS"),
         # Set the wandb project where this run will be logged.
-        project="VecGAD",
+        project=os.environ.get("WANDB_PROJECT", "VecGAD"),
         # Track hyperparameters and run metadata.
-        config=args,
+        config=run_config,
     )
 
     wandb.define_metric("AUC", summary="max")
@@ -539,16 +548,15 @@ if __name__ == "__main__":
     except torch.cuda.OutOfMemoryError as e:
         print(f"显存不足!：{e}")
         send_notification(f"【VecFormer】出现显存不足!：{e}")
-        wandb.log({"AUC.max": 0})
-        wandb.log({"AP.max": 0})
         start_time = time.time()
-        wandb.finish()
+        wandb.finish(exit_code=1)
+        raise
     
     except Exception as e:
         import traceback
         print(f"其他错误：{e}")
         traceback.print_exc()  # 打印详细的错误堆栈，包括出错的代码行
-        wandb.log({"AUC.max": 0})
         start_time = time.time()
-        wandb.finish()
+        wandb.finish(exit_code=1)
+        raise
     print(f"WandB finish took {time.time() - start_time:.2f} seconds")

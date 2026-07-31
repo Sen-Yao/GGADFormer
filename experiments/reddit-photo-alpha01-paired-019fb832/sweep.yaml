@@ -1,0 +1,12 @@
+program: experiments/reddit-photo-alpha01-paired-019fb832/run-sweep-trial.py
+method: grid
+metric:
+  name: AUC.last
+  goal: maximize
+parameters:
+  dataset:
+    values: [reddit, photo]
+  variant:
+    values: [historical_control, alpha_0p1]
+  seed:
+    values: [0, 1, 2, 3, 4]
