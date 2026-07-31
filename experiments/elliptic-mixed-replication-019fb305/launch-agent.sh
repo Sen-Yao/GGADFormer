@@ -10,7 +10,7 @@ gpu_index="$1"
 sweep_id="$2"
 trial_count="$3"
 expected_sweep_id="PENDING_SWEEP_ID"
-expected_code_sha="PENDING_EXECUTION_SHA"
+expected_code_sha="40986c9f8b460f8fd9baaefb985573209f96e572"
 
 case "$gpu_index" in
   0|1) expected_trial_count=2 ;;
