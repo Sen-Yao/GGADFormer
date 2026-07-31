@@ -6,7 +6,7 @@ parent_investigation_id: elliptic-mixed-replication-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T14:40:36Z
-last_material_transition_at_utc: 2026-07-31T15:27:00Z
+last_material_transition_at_utc: 2026-07-31T15:29:53Z
 
 parent_gate:
   sweep_id: k5lbpsg9
@@ -43,6 +43,7 @@ git:
   sweep_bind_commit: b02d5c620c1ab5e4422bf567450d3f69ff9e1c31
   launch_checkpoint_commit: 235b20c6344e5c53b8c60ebcc3779c86148971a6
   preflight_commit: 6636ebf035aa7d0306db4a8966686b933bd313f8
+  evidence_commit: 752314a556f7bab254e5cda799043018beb75911
   code_remote: https://github.com/Sen-Yao/GGADFormer.git
   protocol_branch: codex/elliptic-mixed-replication-hccs90-019fb305
   remote_publication: pushed
@@ -232,12 +233,23 @@ diagnostics:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  claim_state: running
+  claim_state: released
   owner: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
   selected_gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
   claim_sweep_id: PENDING_SWEEP_ID
   authoritative_sweep_id: bghcjp76
   metadata_note: The validated occupancy helper preserves the placeholder sweep_id across reserved-to-running; owner, host, GPUs, and running state are authoritative.
+  terminal_release: released
+  terminal_release_at_utc: 2026-07-31T15:29:53Z
+  terminal_release_evidence: W&B bghcjp76 FINISHED 20/20; evidence commit 752314a pushed; collector and local/remote replay passed; 8/8 agent exit files zero; task tmux removed; zero task-root cwd process and GPU compute PID; dataset symlink removed; detached worktree clean at 7c15f332.
+  final_live_audit:
+    task_tmux_session_present: false
+    retained_old_collision_session_present_and_untouched: true
+    task_root_cwd_process_count: 0
+    gpu_compute_pid_count: 0
+    task_dataset_symlink_removed: true
+    detached_worktree_clean: true
+    detached_worktree_sha: 7c15f33265950abba9db3f130256a2d8e5245ec5
 
 result_validation:
   status: passed
