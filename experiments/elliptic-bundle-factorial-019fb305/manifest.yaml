@@ -1,12 +1,12 @@
 schema_version: 1
-state: launched
+state: completed
 formal_launch_allowed: true
 investigation_id: elliptic-bundle-factorial-019fb305
 parent_investigation_id: elliptic-mixed-replication-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T14:40:36Z
-last_material_transition_at_utc: 2026-07-31T15:10:38Z
+last_material_transition_at_utc: 2026-07-31T15:27:00Z
 
 parent_gate:
   sweep_id: k5lbpsg9
@@ -175,8 +175,8 @@ wandb:
   sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 20
-  current_state: running
-  last_observed_at_utc: 2026-07-31T15:09:56Z
+  current_state: finished
+  last_observed_at_utc: 2026-07-31T15:10:54Z
   project_access_preflight: passed
   network_path: direct
   code_upload_disabled: true
@@ -191,6 +191,27 @@ wandb:
     - {run_id: focavynl, optimization: current, propagation: mixed, seed: 0, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/focavynl"}
     - {run_id: gtp722m3, optimization: current, propagation: mixed, seed: 1, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/gtp722m3"}
     - {run_id: uorje9p4, optimization: current, propagation: mixed, seed: 2, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/uorje9p4"}
+  terminal_observed_runs:
+    - {run_id: lj7mlsma, optimization: current, propagation: current, seed: 0, gpu: 0, pane: "%82", state: finished, final_step: 150, url: "https://wandb.ai/HCCS/GGADFormer/runs/lj7mlsma"}
+    - {run_id: xg0cqzkt, optimization: current, propagation: current, seed: 1, gpu: 3, pane: "%85", state: finished, final_step: 150, url: "https://wandb.ai/HCCS/GGADFormer/runs/xg0cqzkt"}
+    - {run_id: sh5t4nbb, optimization: current, propagation: current, seed: 2, gpu: 7, pane: "%89", state: finished, final_step: 150, url: "https://wandb.ai/HCCS/GGADFormer/runs/sh5t4nbb"}
+    - {run_id: xrjm9yew, optimization: current, propagation: current, seed: 3, gpu: 6, pane: "%88", state: finished, final_step: 150, url: "https://wandb.ai/HCCS/GGADFormer/runs/xrjm9yew"}
+    - {run_id: bzicu3fw, optimization: current, propagation: current, seed: 4, gpu: 1, pane: "%83", state: finished, final_step: 150, url: "https://wandb.ai/HCCS/GGADFormer/runs/bzicu3fw"}
+    - {run_id: focavynl, optimization: current, propagation: mixed, seed: 0, gpu: 5, pane: "%87", state: finished, final_step: 150, url: "https://wandb.ai/HCCS/GGADFormer/runs/focavynl"}
+    - {run_id: gtp722m3, optimization: current, propagation: mixed, seed: 1, gpu: 2, pane: "%84", state: finished, final_step: 150, url: "https://wandb.ai/HCCS/GGADFormer/runs/gtp722m3"}
+    - {run_id: uorje9p4, optimization: current, propagation: mixed, seed: 2, gpu: 4, pane: "%86", state: finished, final_step: 150, url: "https://wandb.ai/HCCS/GGADFormer/runs/uorje9p4"}
+    - {run_id: 8jqw6yp5, optimization: current, propagation: mixed, seed: 3, gpu: 7, pane: "%89", state: finished, final_step: 150, url: "https://wandb.ai/HCCS/GGADFormer/runs/8jqw6yp5"}
+    - {run_id: pjjmkiu5, optimization: current, propagation: mixed, seed: 4, gpu: 3, pane: "%85", state: finished, final_step: 150, url: "https://wandb.ai/HCCS/GGADFormer/runs/pjjmkiu5"}
+    - {run_id: q75xi7ik, optimization: mixed, propagation: current, seed: 0, gpu: 1, pane: "%83", state: finished, final_step: 200, url: "https://wandb.ai/HCCS/GGADFormer/runs/q75xi7ik"}
+    - {run_id: 6qduxzcy, optimization: mixed, propagation: current, seed: 1, gpu: 0, pane: "%82", state: finished, final_step: 200, url: "https://wandb.ai/HCCS/GGADFormer/runs/6qduxzcy"}
+    - {run_id: 2qfcmu3h, optimization: mixed, propagation: current, seed: 2, gpu: 6, pane: "%88", state: finished, final_step: 200, url: "https://wandb.ai/HCCS/GGADFormer/runs/2qfcmu3h"}
+    - {run_id: 33wp42tz, optimization: mixed, propagation: current, seed: 3, gpu: 5, pane: "%87", state: finished, final_step: 200, url: "https://wandb.ai/HCCS/GGADFormer/runs/33wp42tz"}
+    - {run_id: mv7gugtt, optimization: mixed, propagation: current, seed: 4, gpu: 4, pane: "%86", state: finished, final_step: 200, url: "https://wandb.ai/HCCS/GGADFormer/runs/mv7gugtt"}
+    - {run_id: ahf6k2fd, optimization: mixed, propagation: mixed, seed: 0, gpu: 2, pane: "%84", state: finished, final_step: 200, url: "https://wandb.ai/HCCS/GGADFormer/runs/ahf6k2fd"}
+    - {run_id: qvj1mltz, optimization: mixed, propagation: mixed, seed: 1, gpu: 3, pane: "%85", state: finished, final_step: 200, url: "https://wandb.ai/HCCS/GGADFormer/runs/qvj1mltz"}
+    - {run_id: rpby66xq, optimization: mixed, propagation: mixed, seed: 2, gpu: 0, pane: "%82", state: finished, final_step: 200, url: "https://wandb.ai/HCCS/GGADFormer/runs/rpby66xq"}
+    - {run_id: vw0nernm, optimization: mixed, propagation: mixed, seed: 3, gpu: 1, pane: "%83", state: finished, final_step: 200, url: "https://wandb.ai/HCCS/GGADFormer/runs/vw0nernm"}
+    - {run_id: 1ne6vvjq, optimization: mixed, propagation: mixed, seed: 4, gpu: 2, pane: "%84", state: finished, final_step: 200, url: "https://wandb.ai/HCCS/GGADFormer/runs/1ne6vvjq"}
 
 diagnostics:
   expected_batches_per_epoch:
@@ -219,16 +240,54 @@ occupancy:
   metadata_note: The validated occupancy helper preserves the placeholder sweep_id across reserved-to-running; owner, host, GPUs, and running state are authoritative.
 
 result_validation:
-  status: pending
+  status: passed
+  queried_at_utc: 2026-07-31T15:10:54Z
+  all_expected_trials_terminal: true
+  unique_factor_cell_seed_coverage: 20
+  sweep_state: FINISHED
+  config_seed_code_protocol_identity_verified: true
+  current_optimization_final_step_150_verified: true
+  mixed_optimization_final_step_200_verified: true
+  performance_history_steps_verified: true
+  complete_per_epoch_per_batch_diagnostic_history_verified: true
+  all_agent_exit_codes_zero: true
+  agent_records:
+    - {gpu: 0, pane: "%82", exit_code: 0, log_sha256: 8856568619331ec92999f43ef0252219b10335d68d93c1d8f9f0c717c3c743ad}
+    - {gpu: 1, pane: "%83", exit_code: 0, log_sha256: 7dfbc985a5e1135513f9397be7d5df9b159a997b3f1eaf12e37e6684167ccf0a}
+    - {gpu: 2, pane: "%84", exit_code: 0, log_sha256: 161bb376d25cc1ee5b957df217461f12f04c585da193e75490b6df509929c711}
+    - {gpu: 3, pane: "%85", exit_code: 0, log_sha256: 251a50a3d115a1aee67d94068314643036781c2bb7cc45aa47eb5c2c1bc5071b}
+    - {gpu: 4, pane: "%86", exit_code: 0, log_sha256: bb7c257b79e5904b0c4385c2cd6f38cf930523339d482ae51c043e886e5a0c26}
+    - {gpu: 5, pane: "%87", exit_code: 0, log_sha256: 9e774036c141838dd864f8e231971d260e7fc1ddae706d223912e45d48d50630}
+    - {gpu: 6, pane: "%88", exit_code: 0, log_sha256: d5a2aee91a66b15d5a482b47627e58c319e0b3a64c371a557e946bfbd322fc49}
+    - {gpu: 7, pane: "%89", exit_code: 0, log_sha256: 3279ac3d3b707012759075ec711cf10d05665c6d8874cc26f423d3daed48f8dc}
+  authoritative_sweep_path: experiments/elliptic-bundle-factorial-019fb305/authoritative-sweep.json
+  authoritative_sweep_sha256: 7ae2a5cc5eaa2f8b8886ce508707aa7ea87286decef604dd3b96644ec794d3b9
+  results_path: experiments/elliptic-bundle-factorial-019fb305/results.json
+  results_sha256: 67cd9f97c14708cda75835ad7e97722fa48f2d5007b8e10cc7d84330e0cb8a61
+  replay_path: experiments/elliptic-bundle-factorial-019fb305/replay.json
+  local_independent_replay_status: passed
+  local_independent_replay_sha256: dac07337da65309821241d8923a9e789625cffd85eaa8c433734f204b67bf3b3
+  remote_python38_replay_status: passed
+  remote_python38_replay_sha256: 21ac89809edc46622a86ec16720dd23b8fa42470df3e944387d10f253bddb3f4
+  replay_hash_note: Python 3.8 and 3.13 serialize four sample-std values at different final decimal digits; both independently satisfy the numeric replay assertions against the same authoritative/results hashes.
+  agent_records_path: experiments/elliptic-bundle-factorial-019fb305/agent-records.json
+  agent_records_sha256: 050869193254e96d908f7911e58ba89100e893660319b27f84ea0058a5604a5c
+  remote_log_hashes_path: experiments/elliptic-bundle-factorial-019fb305/remote-log-sha256.txt
+  remote_log_hashes_sha256: 2bb88381fb6ea3d8a59846b5b270a49e661cafc6137bb2f2a78f0031dd66ab46
+  per_run_config_performance_diagnostic_and_agent_log_hashes: results.json:runs
+  aggregate_replay_verified: true
+  post_result_search_launched: false
 
 heartbeat:
   automation_id: elliptic-bundle-factorial-019fb305-heartbeat
-  consumed_generation: 1
-  consumed_at_utc: 2026-07-31T15:08:17Z
   schedule_generation: 2
+  consumed_generation: 2
+  consumed_at_utc: 2026-07-31T15:17:17Z
+  prior_consumed_generations:
+    - {generation: 1, consumed_at_utc: 2026-07-31T15:08:17Z}
   scheduled_local_time: 2026-07-31T23:17:00+08:00
   policy: one_shot_dynamic_heartbeat
-  mode: sticky_final_five_minute
+  mode: completed_no_reschedule
 
 protocol_deviations: []
 operational_notes:

@@ -1,0 +1,1213 @@
+{
+  "sweep_id": "bghcjp76",
+  "sweep_url": "https://wandb.ai/HCCS/GGADFormer/sweeps/bghcjp76",
+  "parent_sweep_id": "k5lbpsg9",
+  "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+  "execution_code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+  "endpoint_policy": {
+    "current_optimization": 150,
+    "mixed_optimization": 200
+  },
+  "cell_aggregate": {
+    "opt_current__prop_current": {
+      "AUC.last": {
+        "mean": 0.5947111119763802,
+        "sample_std_ddof1": 0.02118595904166663
+      },
+      "AP.last": {
+        "mean": 0.1091250237304858,
+        "sample_std_ddof1": 0.005094434723403791
+      }
+    },
+    "opt_current__prop_mixed": {
+      "AUC.last": {
+        "mean": 0.607488376637519,
+        "sample_std_ddof1": 0.042961093300654014
+      },
+      "AP.last": {
+        "mean": 0.1145718161927128,
+        "sample_std_ddof1": 0.013370436630470795
+      }
+    },
+    "opt_mixed__prop_current": {
+      "AUC.last": {
+        "mean": 0.6472819415714178,
+        "sample_std_ddof1": 0.042395703439160846
+      },
+      "AP.last": {
+        "mean": 0.13083452992187242,
+        "sample_std_ddof1": 0.022099507553133693
+      }
+    },
+    "opt_mixed__prop_mixed": {
+      "AUC.last": {
+        "mean": 0.6386365703470661,
+        "sample_std_ddof1": 0.05821989078276185
+      },
+      "AP.last": {
+        "mean": 0.1266347460673458,
+        "sample_std_ddof1": 0.022009645996615194
+      }
+    }
+  },
+  "effects_by_seed": [
+    {
+      "seed": 0,
+      "AUC.last": {
+        "optimization_main_mixed_minus_current": 0.06746133172538865,
+        "propagation_main_mixed_minus_current": 0.06353693375397534,
+        "optimization_at_current_propagation": 0.057363918004280645,
+        "optimization_at_mixed_propagation": 0.07755874544649666,
+        "propagation_at_current_optimization": 0.05343952003286734,
+        "propagation_at_mixed_optimization": 0.07363434747508335,
+        "interaction_difference_in_differences": 0.020194827442216012,
+        "mixed_cell_minus_current_cell": 0.130998265479364
+      },
+      "AP.last": {
+        "optimization_main_mixed_minus_current": 0.024632924265778407,
+        "propagation_main_mixed_minus_current": 0.023033054497802262,
+        "optimization_at_current_propagation": 0.01643349796534413,
+        "optimization_at_mixed_propagation": 0.032832350566212684,
+        "propagation_at_current_optimization": 0.014833628197367985,
+        "propagation_at_mixed_optimization": 0.03123248079823654,
+        "interaction_difference_in_differences": 0.016398852600868555,
+        "mixed_cell_minus_current_cell": 0.04766597876358067
+      }
+    },
+    {
+      "seed": 1,
+      "AUC.last": {
+        "optimization_main_mixed_minus_current": 0.08591204981474854,
+        "propagation_main_mixed_minus_current": 0.016734410556831447,
+        "optimization_at_current_propagation": 0.13339921103237362,
+        "optimization_at_mixed_propagation": 0.03842488859712345,
+        "propagation_at_current_optimization": 0.06422157177445653,
+        "propagation_at_mixed_optimization": -0.030752750660793637,
+        "interaction_difference_in_differences": -0.09497432243525017,
+        "mixed_cell_minus_current_cell": 0.10264646037157998
+      },
+      "AP.last": {
+        "optimization_main_mixed_minus_current": 0.040890701816098426,
+        "propagation_main_mixed_minus_current": 0.0014588198942048075,
+        "optimization_at_current_propagation": 0.06291754375417066,
+        "optimization_at_mixed_propagation": 0.01886385987802619,
+        "propagation_at_current_optimization": 0.023485661832277044,
+        "propagation_at_mixed_optimization": -0.02056802204386743,
+        "interaction_difference_in_differences": -0.04405368387614447,
+        "mixed_cell_minus_current_cell": 0.042349521710303234
+      }
+    },
+    {
+      "seed": 2,
+      "AUC.last": {
+        "optimization_main_mixed_minus_current": 0.049344069906294474,
+        "propagation_main_mixed_minus_current": -0.04227297530241303,
+        "optimization_at_current_propagation": 0.01383396017825922,
+        "optimization_at_mixed_propagation": 0.08485417963432973,
+        "propagation_at_current_optimization": -0.07778308503044828,
+        "propagation_at_mixed_optimization": -0.006762865574377774,
+        "interaction_difference_in_differences": 0.07102021945607051,
+        "mixed_cell_minus_current_cell": 0.007071094603881445
+      },
+      "AP.last": {
+        "optimization_main_mixed_minus_current": 0.014362336373245653,
+        "propagation_main_mixed_minus_current": -0.012188280828021335,
+        "optimization_at_current_propagation": 0.007335050650857197,
+        "optimization_at_mixed_propagation": 0.02138962209563411,
+        "propagation_at_current_optimization": -0.01921556655040979,
+        "propagation_at_mixed_optimization": -0.005160995105632879,
+        "interaction_difference_in_differences": 0.014054571444776912,
+        "mixed_cell_minus_current_cell": 0.002174055545224318
+      }
+    },
+    {
+      "seed": 3,
+      "AUC.last": {
+        "optimization_main_mixed_minus_current": 0.016423144797083955,
+        "propagation_main_mixed_minus_current": -0.028803866709194215,
+        "optimization_at_current_propagation": 0.020577943076500627,
+        "optimization_at_mixed_propagation": 0.012268346517667283,
+        "propagation_at_current_optimization": -0.024649068429777543,
+        "propagation_at_mixed_optimization": -0.032958664988610886,
+        "interaction_difference_in_differences": -0.008309596558833343,
+        "mixed_cell_minus_current_cell": -0.01238072191211026
+      },
+      "AP.last": {
+        "optimization_main_mixed_minus_current": 0.007095848241236553,
+        "propagation_main_mixed_minus_current": -0.007988345890237634,
+        "optimization_at_current_propagation": 0.009325102395056364,
+        "optimization_at_mixed_propagation": 0.004866594087416742,
+        "propagation_at_current_optimization": -0.0057590917364178235,
+        "propagation_at_mixed_optimization": -0.010217600044057445,
+        "interaction_difference_in_differences": -0.004458508307639622,
+        "mixed_cell_minus_current_cell": -0.0008924976490010811
+      }
+    },
+    {
+      "seed": 4,
+      "AUC.last": {
+        "optimization_main_mixed_minus_current": -0.009843037982053604,
+        "propagation_main_mixed_minus_current": 0.0011352312927682129,
+        "optimization_at_current_propagation": 0.03767911568377469,
+        "optimization_at_mixed_propagation": -0.0573651916478819,
+        "propagation_at_current_optimization": 0.048657384958596506,
+        "propagation_at_mixed_optimization": -0.04638692237306008,
+        "interaction_difference_in_differences": -0.09504430733165659,
+        "mixed_cell_minus_current_cell": -0.008707806689285391
+      },
+      "AP.last": {
+        "optimization_main_mixed_minus_current": -0.002550720531310058,
+        "propagation_main_mixed_minus_current": -0.0011977261544971612,
+        "optimization_at_current_propagation": 0.01253633619150471,
+        "optimization_at_mixed_propagation": -0.017637777254124826,
+        "propagation_at_current_optimization": 0.013889330568317607,
+        "propagation_at_mixed_optimization": -0.01628478287731193,
+        "interaction_difference_in_differences": -0.030174113445629536,
+        "mixed_cell_minus_current_cell": -0.003748446685807219
+      }
+    }
+  ],
+  "effect_aggregate": {
+    "AUC.last": {
+      "optimization_main_mixed_minus_current": {
+        "mean": 0.0418595116522924,
+        "sample_std_ddof1": 0.03864020030794405
+      },
+      "propagation_main_mixed_minus_current": {
+        "mean": 0.002065946718393552,
+        "sample_std_ddof1": 0.0415740234303013
+      },
+      "optimization_at_current_propagation": {
+        "mean": 0.05257082959503776,
+        "sample_std_ddof1": 0.048223578064816315
+      },
+      "optimization_at_mixed_propagation": {
+        "mean": 0.031148193709547044,
+        "sample_std_ddof1": 0.05762441006767306
+      },
+      "propagation_at_current_optimization": {
+        "mean": 0.01277726466113891,
+        "sample_std_ddof1": 0.061622289238026144
+      },
+      "propagation_at_mixed_optimization": {
+        "mean": -0.008645371224351805,
+        "sample_std_ddof1": 0.04816065068887903
+      },
+      "interaction_difference_in_differences": {
+        "mean": -0.021422635885490714,
+        "sample_std_ddof1": 0.07293772627858225
+      },
+      "mixed_cell_minus_current_cell": {
+        "mean": 0.043925458370685955,
+        "sample_std_ddof1": 0.06769180244191676
+      }
+    },
+    "AP.last": {
+      "optimization_main_mixed_minus_current": {
+        "mean": 0.016886218033009798,
+        "sample_std_ddof1": 0.01670510849407065
+      },
+      "propagation_main_mixed_minus_current": {
+        "mean": 0.0006235043038501878,
+        "sample_std_ddof1": 0.01364284037914955
+      },
+      "optimization_at_current_propagation": {
+        "mean": 0.02170950619138661,
+        "sample_std_ddof1": 0.023292080735203963
+      },
+      "optimization_at_mixed_propagation": {
+        "mean": 0.01206292987463298,
+        "sample_std_ddof1": 0.0193554121970495
+      },
+      "propagation_at_current_optimization": {
+        "mean": 0.005446792462227004,
+        "sample_std_ddof1": 0.017454180986819938
+      },
+      "propagation_at_mixed_optimization": {
+        "mean": -0.004199783854526629,
+        "sample_std_ddof1": 0.020655204186762467
+      },
+      "interaction_difference_in_differences": {
+        "mean": -0.009646576316753632,
+        "sample_std_ddof1": 0.026796705271193676
+      },
+      "mixed_cell_minus_current_cell": {
+        "mean": 0.017509722336859983,
+        "sample_std_ddof1": 0.025259402017543058
+      }
+    }
+  },
+  "terminal_diagnostic_aggregate": {
+    "opt_current__prop_current": {
+      "hsc/shell_hit_rate": {
+        "mean": 0.0,
+        "sample_std_ddof1": 0.0
+      },
+      "hsc/inner_violation_rate": {
+        "mean": 0.0,
+        "sample_std_ddof1": 0.0
+      },
+      "hsc/outer_violation_rate": {
+        "mean": 1.0,
+        "sample_std_ddof1": 0.0
+      },
+      "hsc/distance_mean": {
+        "mean": 1.537382938918814,
+        "sample_std_ddof1": 0.055191018011916865
+      },
+      "loss/bce_raw": {
+        "mean": 0.11101051777915769,
+        "sample_std_ddof1": 0.04636457419059695
+      },
+      "loss/rec_combined_raw": {
+        "mean": 4.439203445341755,
+        "sample_std_ddof1": 0.8939615596608205
+      },
+      "loss/hsc_raw": {
+        "mean": 0.53738291511488,
+        "sample_std_ddof1": 0.055191037871086174
+      },
+      "loss/bce_weighted": {
+        "mean": 0.11101051777915769,
+        "sample_std_ddof1": 0.04636457419059695
+      },
+      "loss/rec_combined_weighted": {
+        "mean": 4.439203445341755,
+        "sample_std_ddof1": 0.8939615596608205
+      },
+      "loss/hsc_weighted": {
+        "mean": 0.53738291511488,
+        "sample_std_ddof1": 0.055191037871086174
+      },
+      "loss/true_weighted_total": {
+        "mean": 5.08759675065291,
+        "sample_std_ddof1": 0.8909865971750116
+      }
+    },
+    "opt_current__prop_mixed": {
+      "hsc/shell_hit_rate": {
+        "mean": 0.07524166396133185,
+        "sample_std_ddof1": 0.09765079829385817
+      },
+      "hsc/inner_violation_rate": {
+        "mean": 0.0,
+        "sample_std_ddof1": 0.0
+      },
+      "hsc/outer_violation_rate": {
+        "mean": 0.9247583147482789,
+        "sample_std_ddof1": 0.09765078767694484
+      },
+      "hsc/distance_mean": {
+        "mean": 1.25246155172831,
+        "sample_std_ddof1": 0.14618071590696335
+      },
+      "loss/bce_raw": {
+        "mean": 0.10084206181769835,
+        "sample_std_ddof1": 0.020115238274835516
+      },
+      "loss/rec_combined_raw": {
+        "mean": 4.405821572035129,
+        "sample_std_ddof1": 1.2186131967897798
+      },
+      "loss/hsc_raw": {
+        "mean": 0.25598761990925445,
+        "sample_std_ddof1": 0.14240281772034086
+      },
+      "loss/bce_weighted": {
+        "mean": 0.10084206181769835,
+        "sample_std_ddof1": 0.020115238274835516
+      },
+      "loss/rec_combined_weighted": {
+        "mean": 4.405821572035129,
+        "sample_std_ddof1": 1.2186131967897798
+      },
+      "loss/hsc_weighted": {
+        "mean": 0.25598761990925445,
+        "sample_std_ddof1": 0.14240281772034086
+      },
+      "loss/true_weighted_total": {
+        "mean": 4.762651184472058,
+        "sample_std_ddof1": 1.1310942349073823
+      }
+    },
+    "opt_mixed__prop_current": {
+      "hsc/shell_hit_rate": {
+        "mean": 0.9719484290182144,
+        "sample_std_ddof1": 0.0022247096899103563
+      },
+      "hsc/inner_violation_rate": {
+        "mean": 0.0,
+        "sample_std_ddof1": 0.0
+      },
+      "hsc/outer_violation_rate": {
+        "mean": 0.028051578659160838,
+        "sample_std_ddof1": 0.0022247079544483062
+      },
+      "hsc/distance_mean": {
+        "mean": 0.7547020928666327,
+        "sample_std_ddof1": 0.014722493878413725
+      },
+      "loss/bce_raw": {
+        "mean": 0.0009012192679083698,
+        "sample_std_ddof1": 0.00028853356688438237
+      },
+      "loss/rec_combined_raw": {
+        "mean": 1.6939662215367957,
+        "sample_std_ddof1": 0.6891026371378465
+      },
+      "loss/hsc_raw": {
+        "mean": 0.009825423119167924,
+        "sample_std_ddof1": 0.0016414372772180477
+      },
+      "loss/bce_weighted": {
+        "mean": 0.0009012192679083698,
+        "sample_std_ddof1": 0.00028853356688438237
+      },
+      "loss/rec_combined_weighted": {
+        "mean": 1.6939662215367957,
+        "sample_std_ddof1": 0.6891026371378465
+      },
+      "loss/hsc_weighted": {
+        "mean": 0.009825423119167924,
+        "sample_std_ddof1": 0.0016414372772180477
+      },
+      "loss/true_weighted_total": {
+        "mean": 1.704692841491434,
+        "sample_std_ddof1": 0.6891200085721109
+      }
+    },
+    "opt_mixed__prop_mixed": {
+      "hsc/shell_hit_rate": {
+        "mean": 0.9772031753404352,
+        "sample_std_ddof1": 0.007804848223213167
+      },
+      "hsc/inner_violation_rate": {
+        "mean": 0.0,
+        "sample_std_ddof1": 0.0
+      },
+      "hsc/outer_violation_rate": {
+        "mean": 0.02279683029442494,
+        "sample_std_ddof1": 0.007804849837828211
+      },
+      "hsc/distance_mean": {
+        "mean": 0.7711958571442962,
+        "sample_std_ddof1": 0.04925271080196049
+      },
+      "loss/bce_raw": {
+        "mean": 0.0007376295256353812,
+        "sample_std_ddof1": 0.00016623938056537922
+      },
+      "loss/rec_combined_raw": {
+        "mean": 2.863832115662915,
+        "sample_std_ddof1": 2.0126130796324637
+      },
+      "loss/hsc_raw": {
+        "mean": 0.006397108608096095,
+        "sample_std_ddof1": 0.0018916133049585056
+      },
+      "loss/bce_weighted": {
+        "mean": 0.0007376295256353812,
+        "sample_std_ddof1": 0.00016623938056537922
+      },
+      "loss/rec_combined_weighted": {
+        "mean": 2.863832115662915,
+        "sample_std_ddof1": 2.0126130796324637
+      },
+      "loss/hsc_weighted": {
+        "mean": 0.006397108608096095,
+        "sample_std_ddof1": 0.0018916133049585056
+      },
+      "loss/true_weighted_total": {
+        "mean": 2.870966822254457,
+        "sample_std_ddof1": 2.012382013870668
+      }
+    }
+  },
+  "decision": {
+    "descriptive_factorial_complete": true,
+    "post_result_search_allowed": false
+  },
+  "runs": [
+    {
+      "optimization_bundle": "current",
+      "propagation_bundle": "current",
+      "factorial_cell": "opt_current__prop_current",
+      "seed": 0,
+      "run_id": "lj7mlsma",
+      "name": "peachy-sweep-1",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/lj7mlsma",
+      "state": "finished",
+      "created_at": "2026-07-31T14:59:20Z",
+      "runtime_seconds": 189.503965651,
+      "gpu_index": "0",
+      "pane": "%82",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.5740399702112956,
+      "AP.last": 0.10284854812362595,
+      "final_step": 150,
+      "terminal_diagnostics": {
+        "pseudo_count": 3475,
+        "hsc/shell_hit_rate": 0.0,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 1.0,
+        "hsc/distance_mean": 1.4942309339784032,
+        "loss/bce_raw": 0.07397330033478977,
+        "loss/rec_combined_raw": 4.821103238167523,
+        "loss/hsc_raw": 0.49423093397840323,
+        "loss/bce_weighted": 0.07397330033478977,
+        "loss/rec_combined_weighted": 4.821103238167523,
+        "loss/hsc_weighted": 0.49423093397840323,
+        "loss/true_weighted_total": 5.389307309431995
+      },
+      "config_sha256": "bb216c110e447aed4d2357a69134c41b68e7cd2bcc59ff12bf8b6df331641d14",
+      "performance_history_sha256": "f254af4ba1829ea3be98e2b3407c0054ec610f612db62e61d2f3374aa732b5b3",
+      "diagnostic_history_sha256": "1a0cfa6018c459cd4a334afd6f4fe6a00b2d14ddf9adc5339097584dbbb01240",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu0-20260731T145913Z.log",
+      "agent_log_sha256": "8856568619331ec92999f43ef0252219b10335d68d93c1d8f9f0c717c3c743ad",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "current",
+      "propagation_bundle": "current",
+      "factorial_cell": "opt_current__prop_current",
+      "seed": 1,
+      "run_id": "xg0cqzkt",
+      "name": "comic-sweep-2",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/xg0cqzkt",
+      "state": "finished",
+      "created_at": "2026-07-31T14:59:21Z",
+      "runtime_seconds": 186.209873454,
+      "gpu_index": "3",
+      "pane": "%85",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.5882983557443056,
+      "AP.last": 0.1073180958536688,
+      "final_step": 150,
+      "terminal_diagnostics": {
+        "pseudo_count": 3475,
+        "hsc/shell_hit_rate": 0.0,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 1.0,
+        "hsc/distance_mean": 1.6326895859258639,
+        "loss/bce_raw": 0.07407826903698256,
+        "loss/rec_combined_raw": 3.298266645198246,
+        "loss/hsc_raw": 0.6326896100936176,
+        "loss/bce_weighted": 0.07407826903698256,
+        "loss/rec_combined_weighted": 3.298266645198246,
+        "loss/hsc_weighted": 0.6326896100936176,
+        "loss/true_weighted_total": 4.0050343976604
+      },
+      "config_sha256": "4a680848af99a44b83c21b5e0de0f0ce29c27a1ef4bcb89ebd473cb7dfc905e9",
+      "performance_history_sha256": "e66d94b0c64a675a12088b7d0ddc2697f3ba0af9116bb5d1052953d2ea957cba",
+      "diagnostic_history_sha256": "12a317ffbdb0232b4892bc03f890b15e22b89943e8198c2ad9e68702252a0f34",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu3-20260731T145913Z.log",
+      "agent_log_sha256": "251a50a3d115a1aee67d94068314643036781c2bb7cc45aa47eb5c2c1bc5071b",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "current",
+      "propagation_bundle": "current",
+      "factorial_cell": "opt_current__prop_current",
+      "seed": 2,
+      "run_id": "sh5t4nbb",
+      "name": "usual-sweep-3",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/sh5t4nbb",
+      "state": "finished",
+      "created_at": "2026-07-31T14:59:21Z",
+      "runtime_seconds": 181.924844775,
+      "gpu_index": "7",
+      "pane": "%89",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6195653163557854,
+      "AP.last": 0.11462467392848902,
+      "final_step": 150,
+      "terminal_diagnostics": {
+        "pseudo_count": 3483,
+        "hsc/shell_hit_rate": 0.0,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 1.0,
+        "hsc/distance_mean": 1.5170945802229148,
+        "loss/bce_raw": 0.10604437057729976,
+        "loss/rec_combined_raw": 3.7168173427182025,
+        "loss/hsc_raw": 0.5170945382960186,
+        "loss/bce_weighted": 0.10604437057729976,
+        "loss/rec_combined_weighted": 3.7168173427182025,
+        "loss/hsc_weighted": 0.5170945382960186,
+        "loss/true_weighted_total": 4.339956070683381
+      },
+      "config_sha256": "accd608a34e16488961c763e2e84c1f9d6cf4bbe13eccccbb442feab9aa20656",
+      "performance_history_sha256": "4ba3e4e252342cb38967bb4357ee12445beff7e15e7821a9ec217b4ac02e13db",
+      "diagnostic_history_sha256": "c820b49c3a9b620035b74e9e51f449b9ae565ec3a552001129a3fdb991c33d31",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu7-20260731T145913Z.log",
+      "agent_log_sha256": "3279ac3d3b707012759075ec711cf10d05665c6d8874cc26f423d3daed48f8dc",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "current",
+      "propagation_bundle": "current",
+      "factorial_cell": "opt_current__prop_current",
+      "seed": 3,
+      "run_id": "xrjm9yew",
+      "name": "deep-sweep-4",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/xrjm9yew",
+      "state": "finished",
+      "created_at": "2026-07-31T14:59:21Z",
+      "runtime_seconds": 189.923332317,
+      "gpu_index": "6",
+      "pane": "%88",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.614624132307553,
+      "AP.last": 0.11412970816443922,
+      "final_step": 150,
+      "terminal_diagnostics": {
+        "pseudo_count": 3478,
+        "hsc/shell_hit_rate": 0.0,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 1.0,
+        "hsc/distance_mean": 1.5340869226217133,
+        "loss/bce_raw": 0.18737595541217397,
+        "loss/rec_combined_raw": 5.434803162380633,
+        "loss/hsc_raw": 0.5340868568303875,
+        "loss/bce_weighted": 0.18737595541217397,
+        "loss/rec_combined_weighted": 5.434803162380633,
+        "loss/hsc_weighted": 0.5340868568303875,
+        "loss/true_weighted_total": 6.156266005783674
+      },
+      "config_sha256": "797fb49e97280ccb8da4d73c164b0c2761206c3f6f0e0bf576ebe3d6b3e18a78",
+      "performance_history_sha256": "9100ed2024f7a8a84f7fb9527f8385a695bee2cb7149e0550f8cd75479c272cd",
+      "diagnostic_history_sha256": "ca9a5e87c1d9e2910bf2e1214b59756521b31365b1e06f8212ef9dc239fd865e",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu6-20260731T145913Z.log",
+      "agent_log_sha256": "d5a2aee91a66b15d5a482b47627e58c319e0b3a64c371a557e946bfbd322fc49",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "current",
+      "propagation_bundle": "current",
+      "factorial_cell": "opt_current__prop_current",
+      "seed": 4,
+      "run_id": "bzicu3fw",
+      "name": "colorful-sweep-5",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/bzicu3fw",
+      "state": "finished",
+      "created_at": "2026-07-31T14:59:21Z",
+      "runtime_seconds": 184.87959863,
+      "gpu_index": "1",
+      "pane": "%83",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.5770277852629611,
+      "AP.last": 0.10670409258220598,
+      "final_step": 150,
+      "terminal_diagnostics": {
+        "pseudo_count": 3492,
+        "hsc/shell_hit_rate": 0.0,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 1.0,
+        "hsc/distance_mean": 1.508812671845175,
+        "loss/bce_raw": 0.11358069353454234,
+        "loss/rec_combined_raw": 4.925026838244168,
+        "loss/hsc_raw": 0.5088126363759734,
+        "loss/bce_weighted": 0.11358069353454234,
+        "loss/rec_combined_weighted": 4.925026838244168,
+        "loss/hsc_weighted": 0.5088126363759734,
+        "loss/true_weighted_total": 5.547419969705099
+      },
+      "config_sha256": "8d73a7686aff658a1d2f6f5dafc1d3ebe9af9303ffb75350614a814599c6a6cc",
+      "performance_history_sha256": "6c66b95144f98d998b554508ac5bd94ab270af1f752396220bbc515d606ebf09",
+      "diagnostic_history_sha256": "7b3f996a40ca878be9d474e8a64754aefa66fb593d97af5d9d8f97949b8bd159",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu1-20260731T145913Z.log",
+      "agent_log_sha256": "7dfbc985a5e1135513f9397be7d5df9b159a997b3f1eaf12e37e6684167ccf0a",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "current",
+      "propagation_bundle": "mixed",
+      "factorial_cell": "opt_current__prop_mixed",
+      "seed": 0,
+      "run_id": "focavynl",
+      "name": "polar-sweep-6",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/focavynl",
+      "state": "finished",
+      "created_at": "2026-07-31T14:59:22Z",
+      "runtime_seconds": 197.049466574,
+      "gpu_index": "5",
+      "pane": "%87",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6274794902441629,
+      "AP.last": 0.11768217632099394,
+      "final_step": 150,
+      "terminal_diagnostics": {
+        "pseudo_count": 3519,
+        "hsc/shell_hit_rate": 0.005115089576789841,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.9948848580460414,
+        "hsc/distance_mean": 1.2661314453716879,
+        "loss/bce_raw": 0.07566511180674226,
+        "loss/rec_combined_raw": 5.043938430475559,
+        "loss/hsc_raw": 0.26630132996619305,
+        "loss/bce_weighted": 0.07566511180674226,
+        "loss/rec_combined_weighted": 5.043938430475559,
+        "loss/hsc_weighted": 0.26630132996619305,
+        "loss/true_weighted_total": 5.385904689985569
+      },
+      "config_sha256": "d9b962ddf10ed00c97685c090a63ace4fb4bc97a3910581192824c5c0956122e",
+      "performance_history_sha256": "2aa13b1a22d16af3fdb12d879ae7b14a615a9e45ec16f3bbf7c927368a24b1b8",
+      "diagnostic_history_sha256": "f637ab1265d51549987aace42d6d219b41b097ea78c53775f3055d2ca94a9659",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu5-20260731T145913Z.log",
+      "agent_log_sha256": "9e774036c141838dd864f8e231971d260e7fc1ddae706d223912e45d48d50630",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "current",
+      "propagation_bundle": "mixed",
+      "factorial_cell": "opt_current__prop_mixed",
+      "seed": 1,
+      "run_id": "gtp722m3",
+      "name": "fiery-sweep-7",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/gtp722m3",
+      "state": "finished",
+      "created_at": "2026-07-31T14:59:23Z",
+      "runtime_seconds": 197.422299599,
+      "gpu_index": "2",
+      "pane": "%84",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6525199275187621,
+      "AP.last": 0.13080375768594585,
+      "final_step": 150,
+      "terminal_diagnostics": {
+        "pseudo_count": 3513,
+        "hsc/shell_hit_rate": 0.0,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 1.0,
+        "hsc/distance_mean": 1.479767829646353,
+        "loss/bce_raw": 0.08943251616682316,
+        "loss/rec_combined_raw": 2.330321743859547,
+        "loss/hsc_raw": 0.47976790491142673,
+        "loss/bce_weighted": 0.08943251616682316,
+        "loss/rec_combined_weighted": 2.330321743859547,
+        "loss/hsc_weighted": 0.47976790491142673,
+        "loss/true_weighted_total": 2.8995222366673974
+      },
+      "config_sha256": "174a6fb92e17dc46b4d3da3910ad984e874c5e3abbfddaeebc6e8ee6ea1b5f1d",
+      "performance_history_sha256": "94c82c857cb683d4248ddbc8e72b85b1ca3486cb865f93b2dd84eab3ac26f1ab",
+      "diagnostic_history_sha256": "3e42ccad8c7b2a401f9786e369f1f83bb2d7632fdadec949089e71a325c7c8a4",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu2-20260731T145913Z.log",
+      "agent_log_sha256": "161bb376d25cc1ee5b957df217461f12f04c585da193e75490b6df509929c711",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "current",
+      "propagation_bundle": "mixed",
+      "factorial_cell": "opt_current__prop_mixed",
+      "seed": 2,
+      "run_id": "uorje9p4",
+      "name": "azure-sweep-8",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/uorje9p4",
+      "state": "finished",
+      "created_at": "2026-07-31T14:59:24Z",
+      "runtime_seconds": 194.948521763,
+      "gpu_index": "4",
+      "pane": "%86",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.5417822313253371,
+      "AP.last": 0.09540910737807923,
+      "final_step": 150,
+      "terminal_diagnostics": {
+        "pseudo_count": 3490,
+        "hsc/shell_hit_rate": 0.007736389635579079,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.9922635770629675,
+        "hsc/distance_mean": 1.269636347198213,
+        "loss/bce_raw": 0.1282798368771985,
+        "loss/rec_combined_raw": 5.4825362784814695,
+        "loss/hsc_raw": 0.26983878590316007,
+        "loss/bce_weighted": 0.1282798368771985,
+        "loss/rec_combined_weighted": 5.4825362784814695,
+        "loss/hsc_weighted": 0.26983878590316007,
+        "loss/true_weighted_total": 5.8806550240448345
+      },
+      "config_sha256": "7ac4c2e9fbb5f1e1c32d3a6425a9f6575b919765a6c7d37fc9f5cc5bf0aaeaf3",
+      "performance_history_sha256": "6ebd8b700b352e7e2142fabe3e5840588fb60359708c419c879a5bb8e8c1b252",
+      "diagnostic_history_sha256": "6cf0e5249a23867f72a53f1028ec0ee1179246eddba0b68fa758f3b32d083e00",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu4-20260731T145913Z.log",
+      "agent_log_sha256": "bb7c257b79e5904b0c4385c2cd6f38cf930523339d482ae51c043e886e5a0c26",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "current",
+      "propagation_bundle": "mixed",
+      "factorial_cell": "opt_current__prop_mixed",
+      "seed": 3,
+      "run_id": "8jqw6yp5",
+      "name": "absurd-sweep-9",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/8jqw6yp5",
+      "state": "finished",
+      "created_at": "2026-07-31T15:02:41Z",
+      "runtime_seconds": 184.703610815,
+      "gpu_index": "7",
+      "pane": "%89",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.5899750638777754,
+      "AP.last": 0.1083706164280214,
+      "final_step": 150,
+      "terminal_diagnostics": {
+        "pseudo_count": 3520,
+        "hsc/shell_hit_rate": 0.16846590844744985,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.8315340646288611,
+        "hsc/distance_mean": 1.1248459226705811,
+        "loss/bce_raw": 0.09995045216584747,
+        "loss/rec_combined_raw": 4.606459331783381,
+        "loss/hsc_raw": 0.13206585170701146,
+        "loss/bce_weighted": 0.09995045216584747,
+        "loss/rec_combined_weighted": 4.606459331783381,
+        "loss/hsc_weighted": 0.13206585170701146,
+        "loss/true_weighted_total": 4.838475498286161
+      },
+      "config_sha256": "a0406fa9ce58303a2bdea4c52132d495fc97776498b184faed63d0d34b1c50ee",
+      "performance_history_sha256": "d11ec0befec44ddb3b35aabd1c1e837892c4b4fd837e0cefe6ecac1e413bdf7d",
+      "diagnostic_history_sha256": "3bfecfaf1502193febd1824a70adac15b10e133c690eca0bc8b2a4686510eeb0",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu7-20260731T145913Z.log",
+      "agent_log_sha256": "3279ac3d3b707012759075ec711cf10d05665c6d8874cc26f423d3daed48f8dc",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "current",
+      "propagation_bundle": "mixed",
+      "factorial_cell": "opt_current__prop_mixed",
+      "seed": 4,
+      "run_id": "pjjmkiu5",
+      "name": "morning-sweep-10",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/pjjmkiu5",
+      "state": "finished",
+      "created_at": "2026-07-31T15:02:42Z",
+      "runtime_seconds": 182.938060658,
+      "gpu_index": "3",
+      "pane": "%85",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6256851702215576,
+      "AP.last": 0.12059342315052358,
+      "final_step": 150,
+      "terminal_diagnostics": {
+        "pseudo_count": 3484,
+        "hsc/shell_hit_rate": 0.19489093214684047,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.8051090740035239,
+        "hsc/distance_mean": 1.1219262137547152,
+        "loss/bce_raw": 0.11088239207188037,
+        "loss/rec_combined_raw": 4.5658520755756875,
+        "loss/hsc_raw": 0.131964227058481,
+        "loss/bce_weighted": 0.11088239207188037,
+        "loss/rec_combined_weighted": 4.5658520755756875,
+        "loss/hsc_weighted": 0.131964227058481,
+        "loss/true_weighted_total": 4.80869847337633
+      },
+      "config_sha256": "09ddfbe4497fd71c591ee752fa0bd36b0a38025d0456aa1eae00fab545bc541c",
+      "performance_history_sha256": "af463cc1893ea22a8f98fa422e45226cf5622ec5b4d796d04c819d6a9f73569f",
+      "diagnostic_history_sha256": "1be38cacb1e107b169114fc30142a10ed3d7d963aeaf8ddbd87b32f9e8794217",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu3-20260731T145913Z.log",
+      "agent_log_sha256": "251a50a3d115a1aee67d94068314643036781c2bb7cc45aa47eb5c2c1bc5071b",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "mixed",
+      "propagation_bundle": "current",
+      "factorial_cell": "opt_mixed__prop_current",
+      "seed": 0,
+      "run_id": "q75xi7ik",
+      "name": "northern-sweep-11",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/q75xi7ik",
+      "state": "finished",
+      "created_at": "2026-07-31T15:02:45Z",
+      "runtime_seconds": 221.738692635,
+      "gpu_index": "1",
+      "pane": "%83",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6314038882155762,
+      "AP.last": 0.11928204608897008,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3511,
+        "hsc/shell_hit_rate": 0.9743662820484387,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.025633722409495633,
+        "hsc/distance_mean": 0.7513802692408712,
+        "loss/bce_raw": 0.0006056592312940653,
+        "loss/rec_combined_raw": 1.3687774591451356,
+        "loss/hsc_raw": 0.0109702006310789,
+        "loss/bce_weighted": 0.0006056592312940653,
+        "loss/rec_combined_weighted": 1.3687774591451356,
+        "loss/hsc_weighted": 0.0109702006310789,
+        "loss/true_weighted_total": 1.3803533275254396
+      },
+      "config_sha256": "ef550ec4e59f55b27535c4184db22104104aed3fb6b05f84267dce16c3e95ddc",
+      "performance_history_sha256": "7d48119959e337da2ea784d017a7b723597a4883500e949da41debd6d2f7e921",
+      "diagnostic_history_sha256": "f40293437c7d55dfa4e88ff4432154db4d1fdbcb75795d192debf6702507de97",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu1-20260731T145913Z.log",
+      "agent_log_sha256": "7dfbc985a5e1135513f9397be7d5df9b159a997b3f1eaf12e37e6684167ccf0a",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "mixed",
+      "propagation_bundle": "current",
+      "factorial_cell": "opt_mixed__prop_current",
+      "seed": 1,
+      "run_id": "6qduxzcy",
+      "name": "deep-sweep-12",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/6qduxzcy",
+      "state": "finished",
+      "created_at": "2026-07-31T15:02:46Z",
+      "runtime_seconds": 221.982625579,
+      "gpu_index": "0",
+      "pane": "%82",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.7216975667766792,
+      "AP.last": 0.17023563960783947,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3460,
+        "hsc/shell_hit_rate": 0.9684971077766032,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.031502890124960096,
+        "hsc/distance_mean": 0.7795645362207655,
+        "loss/bce_raw": 0.001204886117285909,
+        "loss/rec_combined_raw": 0.9212078252451957,
+        "loss/hsc_raw": 0.007673049176507495,
+        "loss/bce_weighted": 0.001204886117285909,
+        "loss/rec_combined_weighted": 0.9212078252451957,
+        "loss/hsc_weighted": 0.007673049176507495,
+        "loss/true_weighted_total": 0.9300857444546815
+      },
+      "config_sha256": "57c62b96fa269f5f413ba535f0182942bdaa2de47b59891e1afcaf11aa0f2b59",
+      "performance_history_sha256": "53111416ba190be18b2b09e4bc5f58aa865e4e3bc5ac76a55caf1e3095c4f201",
+      "diagnostic_history_sha256": "4d906e8da3924a3da9f0604807b4d4cc82439f9b1cf483b1f30042d0b8cecc31",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu0-20260731T145913Z.log",
+      "agent_log_sha256": "8856568619331ec92999f43ef0252219b10335d68d93c1d8f9f0c717c3c743ad",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "mixed",
+      "propagation_bundle": "current",
+      "factorial_cell": "opt_mixed__prop_current",
+      "seed": 2,
+      "run_id": "2qfcmu3h",
+      "name": "fiery-sweep-13",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/2qfcmu3h",
+      "state": "finished",
+      "created_at": "2026-07-31T15:02:52Z",
+      "runtime_seconds": 217.602655327,
+      "gpu_index": "6",
+      "pane": "%88",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6333992765340446,
+      "AP.last": 0.12195972457934622,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3480,
+        "hsc/shell_hit_rate": 0.9712643911441167,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.02873563282298802,
+        "hsc/distance_mean": 0.7494213511889009,
+        "loss/bce_raw": 0.0007775370756514777,
+        "loss/rec_combined_raw": 1.5034105067280517,
+        "loss/hsc_raw": 0.011889187250575372,
+        "loss/bce_weighted": 0.0007775370756514777,
+        "loss/rec_combined_weighted": 1.5034105067280517,
+        "loss/hsc_weighted": 0.011889187250575372,
+        "loss/true_weighted_total": 1.5160772235229099
+      },
+      "config_sha256": "f2337d7187b6f567642ea7b15239a00aeb950f0017e6c1433e2ac445198aa037",
+      "performance_history_sha256": "3c3613bab8f91848c900567d99dbd7c74023c9160c5ecbebd2a7843a5cd99fc7",
+      "diagnostic_history_sha256": "bcd73465ae35384bb8d2e8af7fd78235eebf8bc7e94710093e2248b5fc96348d",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu6-20260731T145913Z.log",
+      "agent_log_sha256": "d5a2aee91a66b15d5a482b47627e58c319e0b3a64c371a557e946bfbd322fc49",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "mixed",
+      "propagation_bundle": "current",
+      "factorial_cell": "opt_mixed__prop_current",
+      "seed": 3,
+      "run_id": "33wp42tz",
+      "name": "copper-sweep-14",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/33wp42tz",
+      "state": "finished",
+      "created_at": "2026-07-31T15:02:55Z",
+      "runtime_seconds": 217.424137556,
+      "gpu_index": "5",
+      "pane": "%87",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6352020753840536,
+      "AP.last": 0.12345481055949559,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3502,
+        "hsc/shell_hit_rate": 0.9725870913536054,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.02741290681513036,
+        "hsc/distance_mean": 0.7528072822475216,
+        "loss/bce_raw": 0.0007026272905911497,
+        "loss/rec_combined_raw": 2.7444904729477138,
+        "loss/hsc_raw": 0.009389991045138053,
+        "loss/bce_weighted": 0.0007026272905911497,
+        "loss/rec_combined_weighted": 2.7444904729477138,
+        "loss/hsc_weighted": 0.009389991045138053,
+        "loss/true_weighted_total": 2.7545830371855056
+      },
+      "config_sha256": "175bef1d1fb1ae77ccf05169a529e4f83af7c52bd0a804944b3ebb97073d0590",
+      "performance_history_sha256": "24ae658ddd1c2cd48bb6ebb264d850693cc999dff3948ee74a1ba775b604adf5",
+      "diagnostic_history_sha256": "579e3890b2adce8de3a9ad30282b3df8a2db264cfa879cb19df2a8954a3630db",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu5-20260731T145913Z.log",
+      "agent_log_sha256": "9e774036c141838dd864f8e231971d260e7fc1ddae706d223912e45d48d50630",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "mixed",
+      "propagation_bundle": "current",
+      "factorial_cell": "opt_mixed__prop_current",
+      "seed": 4,
+      "run_id": "mv7gugtt",
+      "name": "vivid-sweep-15",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/mv7gugtt",
+      "state": "finished",
+      "created_at": "2026-07-31T15:02:56Z",
+      "runtime_seconds": 214.93697805,
+      "gpu_index": "4",
+      "pane": "%86",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6147069009467357,
+      "AP.last": 0.11924042877371069,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3485,
+        "hsc/shell_hit_rate": 0.9730272727683079,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.026972741123230077,
+        "hsc/distance_mean": 0.7403370254351043,
+        "loss/bce_raw": 0.0012153866247192474,
+        "loss/rec_combined_raw": 1.9319448436178812,
+        "loss/hsc_raw": 0.009204687492539798,
+        "loss/bce_weighted": 0.0012153866247192474,
+        "loss/rec_combined_weighted": 1.9319448436178812,
+        "loss/hsc_weighted": 0.009204687492539798,
+        "loss/true_weighted_total": 1.9423648747686335
+      },
+      "config_sha256": "e3944c1a2fa6d8a5bc831fc896f2d16f30586c347b6880b282fc9420ab989f2b",
+      "performance_history_sha256": "9048bc0d0c993933d87870f3b0a922abe840a919ca0939b537ca44dfcd983378",
+      "diagnostic_history_sha256": "3dc68b77e1733c2a1cd05c8c2468bd1196d2ab16473a4cb6a8bba5a078f2027d",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu4-20260731T145913Z.log",
+      "agent_log_sha256": "bb7c257b79e5904b0c4385c2cd6f38cf930523339d482ae51c043e886e5a0c26",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "mixed",
+      "propagation_bundle": "mixed",
+      "factorial_cell": "opt_mixed__prop_mixed",
+      "seed": 0,
+      "run_id": "ahf6k2fd",
+      "name": "youthful-sweep-16",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/ahf6k2fd",
+      "state": "finished",
+      "created_at": "2026-07-31T15:03:03Z",
+      "runtime_seconds": 220.91402014,
+      "gpu_index": "2",
+      "pane": "%84",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.7050382356906596,
+      "AP.last": 0.15051452688720662,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3471,
+        "hsc/shell_hit_rate": 0.9749351802561889,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.02506482303550387,
+        "hsc/distance_mean": 0.7996443549895005,
+        "loss/bce_raw": 0.0008605859836429847,
+        "loss/rec_combined_raw": 5.68802410230208,
+        "loss/hsc_raw": 0.006818248410257091,
+        "loss/bce_weighted": 0.0008605859836429847,
+        "loss/rec_combined_weighted": 5.68802410230208,
+        "loss/hsc_weighted": 0.006818248410257091,
+        "loss/true_weighted_total": 5.695702939555886
+      },
+      "config_sha256": "91979956c693b59ad1481d19fd0ca282ca64296ea2be3b6b16474afacc7107a9",
+      "performance_history_sha256": "744934d5adb12353b2e4b5edcca80fddd4353ce7486b4b9e6e6a65cc29b6bd51",
+      "diagnostic_history_sha256": "796db36cba6d7886ca7d05b597e780a956faf5718cc86e08050dcd7af28b7ecb",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu2-20260731T145913Z.log",
+      "agent_log_sha256": "161bb376d25cc1ee5b957df217461f12f04c585da193e75490b6df509929c711",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "mixed",
+      "propagation_bundle": "mixed",
+      "factorial_cell": "opt_mixed__prop_mixed",
+      "seed": 1,
+      "run_id": "qvj1mltz",
+      "name": "crisp-sweep-17",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/qvj1mltz",
+      "state": "finished",
+      "created_at": "2026-07-31T15:05:57Z",
+      "runtime_seconds": 218.122002993,
+      "gpu_index": "3",
+      "pane": "%85",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6909448161158855,
+      "AP.last": 0.14966761756397204,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3477,
+        "hsc/shell_hit_rate": 0.9853321789220931,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.014667817306278131,
+        "hsc/distance_mean": 0.7405026147582937,
+        "loss/bce_raw": 0.0006646290818744398,
+        "loss/rec_combined_raw": 0.7830913862364025,
+        "loss/hsc_raw": 0.004682223531726918,
+        "loss/bce_weighted": 0.0006646290818744398,
+        "loss/rec_combined_weighted": 0.7830913862364025,
+        "loss/hsc_weighted": 0.004682223531726918,
+        "loss/true_weighted_total": 0.7884382506554449
+      },
+      "config_sha256": "e11d1bbd6974b7c2be7234cf19a75d48958d8157c1f90b188d7a56c04515a19a",
+      "performance_history_sha256": "2778b7edf0cc51789644444ce94b73fff5d810136d1351b36059c9d65400bbc8",
+      "diagnostic_history_sha256": "b4c0554813aed06bce56a7ee0757c881a283fcb141f6df718915cd6cd030d26e",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu3-20260731T145913Z.log",
+      "agent_log_sha256": "251a50a3d115a1aee67d94068314643036781c2bb7cc45aa47eb5c2c1bc5071b",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "mixed",
+      "propagation_bundle": "mixed",
+      "factorial_cell": "opt_mixed__prop_mixed",
+      "seed": 2,
+      "run_id": "rpby66xq",
+      "name": "solar-sweep-18",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/rpby66xq",
+      "state": "finished",
+      "created_at": "2026-07-31T15:06:45Z",
+      "runtime_seconds": 219.448037585,
+      "gpu_index": "0",
+      "pane": "%82",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6266364109596668,
+      "AP.last": 0.11679872947371334,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3514,
+        "hsc/shell_hit_rate": 0.9664200287042997,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.03357996686171437,
+        "hsc/distance_mean": 0.8310395913769999,
+        "loss/bce_raw": 0.0009583737560544973,
+        "loss/rec_combined_raw": 1.0427901177292327,
+        "loss/hsc_raw": 0.009477918477825434,
+        "loss/bce_weighted": 0.0009583737560544973,
+        "loss/rec_combined_weighted": 1.0427901177292327,
+        "loss/hsc_weighted": 0.009477918477825434,
+        "loss/true_weighted_total": 1.0532263950251284
+      },
+      "config_sha256": "87ce09f166e44d1725ffddffa64cb35f8b4c6f2936ae654270cba08c52c78962",
+      "performance_history_sha256": "39f013a72384a7d1c5e6a64d0ea3c08f2641d8f309863605f18e01195696a4d4",
+      "diagnostic_history_sha256": "21fcbb44fda5a691190c25a1190e95ecb6bbcd61c83c95f4606f57c79d0a3eaf",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu0-20260731T145913Z.log",
+      "agent_log_sha256": "8856568619331ec92999f43ef0252219b10335d68d93c1d8f9f0c717c3c743ad",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "mixed",
+      "propagation_bundle": "mixed",
+      "factorial_cell": "opt_mixed__prop_mixed",
+      "seed": 3,
+      "run_id": "vw0nernm",
+      "name": "breezy-sweep-19",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/vw0nernm",
+      "state": "finished",
+      "created_at": "2026-07-31T15:06:50Z",
+      "runtime_seconds": 217.311528769,
+      "gpu_index": "1",
+      "pane": "%83",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.6022434103954427,
+      "AP.last": 0.11323721051543814,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3476,
+        "hsc/shell_hit_rate": 0.974971263006038,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.025028768616596662,
+        "hsc/distance_mean": 0.7792191242389767,
+        "loss/bce_raw": 0.0005536612752349179,
+        "loss/rec_combined_raw": 3.4099899671706013,
+        "loss/hsc_raw": 0.005272898357160608,
+        "loss/bce_weighted": 0.0005536612752349179,
+        "loss/rec_combined_weighted": 3.4099899671706013,
+        "loss/hsc_weighted": 0.005272898357160608,
+        "loss/true_weighted_total": 3.4158165066474053
+      },
+      "config_sha256": "e0883e4fbfee4673c5627851b87a3d7b5ddfc9ae4630344d627a1b1de9c258cb",
+      "performance_history_sha256": "829e2d1c3d3df20fcb1f6f90fe09f39bf5d7180f0f5f59f8cc9ce91fab0e8a42",
+      "diagnostic_history_sha256": "f2206b8b4341fcec274aa222017ad80ec37887b2a75a3f140a02276936825626",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu1-20260731T145913Z.log",
+      "agent_log_sha256": "7dfbc985a5e1135513f9397be7d5df9b159a997b3f1eaf12e37e6684167ccf0a",
+      "agent_exit_code": 0
+    },
+    {
+      "optimization_bundle": "mixed",
+      "propagation_bundle": "mixed",
+      "factorial_cell": "opt_mixed__prop_mixed",
+      "seed": 4,
+      "run_id": "1ne6vvjq",
+      "name": "gallant-sweep-20",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/1ne6vvjq",
+      "state": "finished",
+      "created_at": "2026-07-31T15:07:01Z",
+      "runtime_seconds": 217.323151144,
+      "gpu_index": "2",
+      "pane": "%84",
+      "code_sha": "7c15f33265950abba9db3f130256a2d8e5245ec5",
+      "scientific_base_sha": "655d6293bb76633bc6aa6fd21166a49c3b91d504",
+      "AUC.last": 0.5683199785736757,
+      "AP.last": 0.10295564589639876,
+      "final_step": 200,
+      "terminal_diagnostics": {
+        "pseudo_count": 3516,
+        "hsc/shell_hit_rate": 0.9843572258135564,
+        "hsc/inner_violation_rate": 0.0,
+        "hsc/outer_violation_rate": 0.015642775652031662,
+        "hsc/distance_mean": 0.7055736003577099,
+        "loss/bce_raw": 0.0006508975313700665,
+        "loss/rec_combined_raw": 3.3952650048762596,
+        "loss/hsc_raw": 0.005734254263510421,
+        "loss/bce_weighted": 0.0006508975313700665,
+        "loss/rec_combined_weighted": 3.3952650048762596,
+        "loss/hsc_weighted": 0.005734254263510421,
+        "loss/true_weighted_total": 3.401650019388421
+      },
+      "config_sha256": "f3b5b5c1197fa65bcb0f51f51f825aa8001b47087c905c1d4de2d34dad0d85ba",
+      "performance_history_sha256": "7c98fb7354e0388451e1403f01a55d100fff7693b245c8faddc968b4f568a1e8",
+      "diagnostic_history_sha256": "cca6415a5c3e3579d3134706ceffff2f944364715666ae347ce0b0693cf31b8b",
+      "agent_log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu2-20260731T145913Z.log",
+      "agent_log_sha256": "161bb376d25cc1ee5b957df217461f12f04c585da193e75490b6df509929c711",
+      "agent_exit_code": 0
+    }
+  ],
+  "protocol_deviations": []
+}

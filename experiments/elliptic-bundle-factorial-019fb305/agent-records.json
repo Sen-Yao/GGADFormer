@@ -1,0 +1,74 @@
+[
+  {
+    "gpu": 0,
+    "pane": "%82",
+    "start_utc": "2026-07-31T14:59:13Z",
+    "finish_utc": "2026-07-31T15:10:44Z",
+    "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu0-20260731T145913Z.log",
+    "log_sha256": "8856568619331ec92999f43ef0252219b10335d68d93c1d8f9f0c717c3c743ad",
+    "exit_code": 0
+  },
+  {
+    "gpu": 1,
+    "pane": "%83",
+    "start_utc": "2026-07-31T14:59:13Z",
+    "finish_utc": "2026-07-31T15:10:53Z",
+    "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu1-20260731T145913Z.log",
+    "log_sha256": "7dfbc985a5e1135513f9397be7d5df9b159a997b3f1eaf12e37e6684167ccf0a",
+    "exit_code": 0
+  },
+  {
+    "gpu": 2,
+    "pane": "%84",
+    "start_utc": "2026-07-31T14:59:13Z",
+    "finish_utc": "2026-07-31T15:10:54Z",
+    "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu2-20260731T145913Z.log",
+    "log_sha256": "161bb376d25cc1ee5b957df217461f12f04c585da193e75490b6df509929c711",
+    "exit_code": 0
+  },
+  {
+    "gpu": 3,
+    "pane": "%85",
+    "start_utc": "2026-07-31T14:59:13Z",
+    "finish_utc": "2026-07-31T15:09:53Z",
+    "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu3-20260731T145913Z.log",
+    "log_sha256": "251a50a3d115a1aee67d94068314643036781c2bb7cc45aa47eb5c2c1bc5071b",
+    "exit_code": 0
+  },
+  {
+    "gpu": 4,
+    "pane": "%86",
+    "start_utc": "2026-07-31T14:59:13Z",
+    "finish_utc": "2026-07-31T15:06:52Z",
+    "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu4-20260731T145913Z.log",
+    "log_sha256": "bb7c257b79e5904b0c4385c2cd6f38cf930523339d482ae51c043e886e5a0c26",
+    "exit_code": 0
+  },
+  {
+    "gpu": 5,
+    "pane": "%87",
+    "start_utc": "2026-07-31T14:59:13Z",
+    "finish_utc": "2026-07-31T15:06:55Z",
+    "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu5-20260731T145913Z.log",
+    "log_sha256": "9e774036c141838dd864f8e231971d260e7fc1ddae706d223912e45d48d50630",
+    "exit_code": 0
+  },
+  {
+    "gpu": 6,
+    "pane": "%88",
+    "start_utc": "2026-07-31T14:59:13Z",
+    "finish_utc": "2026-07-31T15:06:55Z",
+    "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu6-20260731T145913Z.log",
+    "log_sha256": "d5a2aee91a66b15d5a482b47627e58c319e0b3a64c371a557e946bfbd322fc49",
+    "exit_code": 0
+  },
+  {
+    "gpu": 7,
+    "pane": "%89",
+    "start_utc": "2026-07-31T14:59:13Z",
+    "finish_utc": "2026-07-31T15:06:04Z",
+    "log_path": "/root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/logs/agent-gpu7-20260731T145913Z.log",
+    "log_sha256": "3279ac3d3b707012759075ec711cf10d05665c6d8874cc26f423d3daed48f8dc",
+    "exit_code": 0
+  }
+]
