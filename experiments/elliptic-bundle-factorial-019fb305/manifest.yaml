@@ -1,12 +1,12 @@
 schema_version: 1
-state: prepared
+state: launched
 formal_launch_allowed: true
 investigation_id: elliptic-bundle-factorial-019fb305
 parent_investigation_id: elliptic-mixed-replication-019fb305
 owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T14:40:36Z
-last_material_transition_at_utc: 2026-07-31T14:53:30Z
+last_material_transition_at_utc: 2026-07-31T14:59:47Z
 
 parent_gate:
   sweep_id: k5lbpsg9
@@ -80,6 +80,8 @@ execution:
   compute_pids_at_selection_probe: []
   final_preflight_at_utc: 2026-07-31T14:53:30Z
   final_preflight_result: passed
+  immediate_launch_probe_at_utc: 2026-07-31T14:57:25Z
+  immediate_launch_probe_compute_pids: []
   source_checkout_sha: a851644d06ed52d3c58bdba3cd5778156c59eaaf
   source_checkout_clean: true
   source_handoff:
@@ -104,8 +106,22 @@ execution:
     - {gpu: 5, count: 2}
     - {gpu: 6, count: 2}
     - {gpu: 7, count: 2}
-  pane_records: []
-  first_agent_start_utc: null
+  pane_records:
+    - {pane: "%82", window_index: 0, window_name: gpu0, gpu: 0, count: 3, first_start_utc: 2026-07-31T14:59:13Z, remain_on_exit: true}
+    - {pane: "%83", window_index: 1, window_name: gpu1, gpu: 1, count: 3, first_start_utc: 2026-07-31T14:59:13Z, remain_on_exit: true}
+    - {pane: "%84", window_index: 2, window_name: gpu2, gpu: 2, count: 3, first_start_utc: 2026-07-31T14:59:13Z, remain_on_exit: true}
+    - {pane: "%85", window_index: 3, window_name: gpu3, gpu: 3, count: 3, first_start_utc: 2026-07-31T14:59:13Z, remain_on_exit: true}
+    - {pane: "%86", window_index: 4, window_name: gpu4, gpu: 4, count: 2, first_start_utc: 2026-07-31T14:59:13Z, remain_on_exit: true}
+    - {pane: "%87", window_index: 5, window_name: gpu5, gpu: 5, count: 2, first_start_utc: 2026-07-31T14:59:13Z, remain_on_exit: true}
+    - {pane: "%88", window_index: 6, window_name: gpu6, gpu: 6, count: 2, first_start_utc: 2026-07-31T14:59:13Z, remain_on_exit: true}
+    - {pane: "%89", window_index: 7, window_name: gpu7, gpu: 7, count: 2, first_start_utc: 2026-07-31T14:59:13Z, remain_on_exit: true}
+  first_agent_start_utc: 2026-07-31T14:59:13Z
+  post_launch_probe:
+    observed_at_utc: 2026-07-31T14:59:47Z
+    sweep_state: RUNNING
+    run_count: 8
+    running_runs: 8
+    failed_or_crashed_runs: 0
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
@@ -146,12 +162,22 @@ wandb:
   sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 20
-  current_state: pending
+  current_state: running
+  last_observed_at_utc: 2026-07-31T14:59:47Z
   project_access_preflight: passed
   network_path: direct
   code_upload_disabled: true
   console_upload_disabled: true
   custom_artifacts_uploaded: 0
+  initially_observed_runs:
+    - {run_id: lj7mlsma, optimization: current, propagation: current, seed: 0, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/lj7mlsma"}
+    - {run_id: xg0cqzkt, optimization: current, propagation: current, seed: 1, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/xg0cqzkt"}
+    - {run_id: sh5t4nbb, optimization: current, propagation: current, seed: 2, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/sh5t4nbb"}
+    - {run_id: xrjm9yew, optimization: current, propagation: current, seed: 3, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/xrjm9yew"}
+    - {run_id: bzicu3fw, optimization: current, propagation: current, seed: 4, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/bzicu3fw"}
+    - {run_id: focavynl, optimization: current, propagation: mixed, seed: 0, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/focavynl"}
+    - {run_id: gtp722m3, optimization: current, propagation: mixed, seed: 1, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/gtp722m3"}
+    - {run_id: uorje9p4, optimization: current, propagation: mixed, seed: 2, state: running, url: "https://wandb.ai/HCCS/GGADFormer/runs/uorje9p4"}
 
 diagnostics:
   expected_batches_per_epoch:
@@ -172,9 +198,12 @@ diagnostics:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  claim_state: reserved
+  claim_state: running
   owner: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
   selected_gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+  claim_sweep_id: PENDING_SWEEP_ID
+  authoritative_sweep_id: bghcjp76
+  metadata_note: The validated occupancy helper preserves the placeholder sweep_id across reserved-to-running; owner, host, GPUs, and running state are authoritative.
 
 result_validation:
   status: pending
@@ -183,4 +212,5 @@ protocol_deviations: []
 operational_notes:
   - Direct git ls-remote succeeded but the full clone hung; the exact task-owned clone PID was terminated, its partial root quarantined, and a locally verified complete Git bundle was used instead.
   - The initially planned tmux name collided with a retained terminal session from elliptic-loss-factorial-019fb305; that session was left untouched and this sweep uses vecgad_elliptic_bundle2x2_019fb305.
+  - One immediate nvidia-smi query returned nonzero without output; the bounded retry and the final launch probe both showed all eight GPUs with zero compute PID.
 blockers: []
