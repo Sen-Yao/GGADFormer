@@ -1,9 +1,10 @@
 {
   "schema_version": 1,
-  "state": "launched",
+  "state": "completed",
   "investigation_id": "2026-07-31-vecgad-historical-efficiency-forensic",
   "thread_id": "019fad8b-cbf2-7481-a0b7-077753148fd1",
   "prepared_at": "2026-07-31T08:12:37Z",
+  "completed_at": "2026-07-31T08:28:16Z",
   "execution_host": "HCCS-90",
   "hostname": "gpufree-container",
   "gpu_indices": [0, 1, 2, 3, 4, 5, 6, 7],
@@ -116,7 +117,7 @@
     "project": "VecGAD",
     "sweep_id": "y7tn68lj",
     "created_at": "2026-07-31T08:15:04Z",
-    "status": "running",
+    "status": "finished",
     "expected_trials": 24,
     "first_assigned_run_ids": [
       "qrnf1kf5",
@@ -144,5 +145,78 @@
     "first_agent_started_at": "2026-07-31T08:17:05Z",
     "launch_observed_at": "2026-07-31T08:18:06Z",
     "remain_on_exit": true
+  },
+  "completion": {
+    "aggregate": {
+      "valid": true,
+      "errors": [],
+      "expected_trials": 24,
+      "terminal_trials": 24,
+      "completed_trials": 24,
+      "path": "/root/gpufree-data/linziyao/VecGAD-efficiency-historical-forensic-019fad8b/formal-results/aggregate.json",
+      "sha256": "ca6b4878364354ff473b9896577cb99a9e623a3c68a39c9169314d3c281ea069",
+      "finalizer_commit": "79a2d28c4b40aa63e9b83315c89b3eff7c04f225"
+    },
+    "wandb_contract": {
+      "valid": true,
+      "errors": [],
+      "sweep_state": "FINISHED",
+      "expected_runs": 24,
+      "observed_runs": 24,
+      "sha256": "071047a9ee1111507f4662c90af9aa8078f06afd0ad3e747ea60b1e0c43765ea",
+      "validator_commit": "606e9fd38098f317e67207c641f66f483353d2c5"
+    },
+    "independent_replay": {
+      "valid": true,
+      "errors": [],
+      "remote_aggregate_sha256": "ca6b4878364354ff473b9896577cb99a9e623a3c68a39c9169314d3c281ea069",
+      "local_replay_sha256": "351d88b04e37e70e9609d973c54729cbb54ea073572be334c2a375fb0f0547a1",
+      "difference_boundary": "Only Python 3.8 versus 3.11 floating-point tail serialization in statistics.stdev.",
+      "comparison_relative_tolerance": 1e-12,
+      "comparison_absolute_tolerance": 1e-15,
+      "verification_sha256": "45e48bc0e4df0f0d3a3f3576591d06d0ae54b1c8cfd30cfe5421fd18c0bc47ef",
+      "comparator_commit": "f593ba5140a144228eb905f024fa5c7ba8cf67ca"
+    },
+    "evidence": {
+      "local_root": "/Users/oliver/.codex/worktrees/eff-historical-forensic-019fad8b/VecGAD/tmp/efficiency-historical-forensic-y7tn68lj/evidence",
+      "archive": "/Users/oliver/.codex/worktrees/eff-historical-forensic-019fad8b/VecGAD/tmp/vecgad-historical-efficiency-forensic-y7tn68lj.tar.gz",
+      "archive_sha256": "bdaee30e5536a2d8f7adc88f20ff8288664de7daf2d0d0b30923715f8f3a9a93",
+      "raw_results": 24,
+      "wandb_sidecars": 24,
+      "logs": 24,
+      "invalid_first_aggregate_preserved": "aggregate.invalid-batch-mode-lookup.json"
+    },
+    "terminal_state": {
+      "agent_panes": 8,
+      "all_agent_panes_dead": true,
+      "agent_exit_statuses_observed": [0, 0, 0, 0],
+      "agent_exit_statuses_unavailable": 4,
+      "task_processes": 0,
+      "gpu_compute_pids": 0,
+      "execution_worktree_clean": true,
+      "historical_worktrees_clean": true,
+      "finalization_worktrees_clean": true
+    },
+    "finalization_digests": {
+      "aggregate_py_sha256": "216c344d96cb287228048e15f4cf849d7eadfd6d70899b7f67aa97311df38c44",
+      "validate_wandb_py_sha256": "04abba77a64443c61ed96e956cfe3408e4b73d75ccd1e7993c903288930ed0cf",
+      "compare_aggregates_py_sha256": "642e9ee24437981d710275238a78fb21306585b918002b152978419624d41219"
+    },
+    "cell_summary": [
+      {"source": "e071ae66", "mode": "native", "dataset": "Amazon", "batch_size": 1024, "optimizer_steps_per_epoch": 12, "tqdm_it_s_median": 5.539105, "synchronized_epoch_ms_median": 200.506306},
+      {"source": "e071ae66", "mode": "native", "dataset": "t_finance", "batch_size": 8192, "optimizer_steps_per_epoch": 5, "tqdm_it_s_median": 2.111760, "synchronized_epoch_ms_median": 461.065298},
+      {"source": "e071ae66", "mode": "fullbatch", "dataset": "Amazon", "batch_size": 11944, "optimizer_steps_per_epoch": 1, "tqdm_it_s_median": 4.370874, "synchronized_epoch_ms_median": 278.065087},
+      {"source": "e071ae66", "mode": "fullbatch", "dataset": "t_finance", "batch_size": 39357, "optimizer_steps_per_epoch": 1, "tqdm_it_s_median": 1.268684, "synchronized_epoch_ms_median": 823.809791},
+      {"source": "5bf8205b", "mode": "native", "dataset": "Amazon", "batch_size": 1024, "optimizer_steps_per_epoch": 12, "tqdm_it_s_median": 4.119788, "synchronized_epoch_ms_median": 244.845336},
+      {"source": "5bf8205b", "mode": "native", "dataset": "t_finance", "batch_size": 8192, "optimizer_steps_per_epoch": 5, "tqdm_it_s_median": 1.524568, "synchronized_epoch_ms_median": 650.615959},
+      {"source": "5bf8205b", "mode": "fullbatch", "dataset": "Amazon", "batch_size": 11944, "optimizer_steps_per_epoch": 1, "tqdm_it_s_median": 4.748546, "synchronized_epoch_ms_median": 207.178818},
+      {"source": "5bf8205b", "mode": "fullbatch", "dataset": "t_finance", "batch_size": 39357, "optimizer_steps_per_epoch": 1, "tqdm_it_s_median": 1.461770, "synchronized_epoch_ms_median": 723.465900}
+    ],
+    "diagnostic_boundary": {
+      "finding": "Neither frozen source commit nor either batch mode reproduces the submitted 22--68 ms VecGAD epoch values on HCCS-90.",
+      "tqdm_vs_synchronized": "Per-run tqdm-to-synchronized throughput ratios range from 0.6077 to 1.3301, not an order-of-magnitude gap.",
+      "possible_unit_clue": "Native-mode epoch time divided by optimizer steps is closer to the old table for some cells, but this does not prove the old table used batch-step rather than epoch units.",
+      "non_extrapolation": "The unavailable L40 hardware/runtime is not reproduced, and this internal diagnostic is not manuscript or supplement evidence without explicit user promotion."
+    }
   }
 }
