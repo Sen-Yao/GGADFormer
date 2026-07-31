@@ -47,3 +47,16 @@ JSONL 保存 302 个逐 update 记录。W&B 每个 epoch 以 `diagnostic/batch_0
 - `collect-evidence.py`: W&B/history/JSONL/trace 全覆盖校验。
 - `replay-results.py`: 从已收集 evidence 与原始 JSONL 独立重算固定终点和覆盖身份。
 - `PHASE1_AUDIT.md`: 第一阶段审计结论与未解决项。
+
+## 完成状态
+
+W&B sweep `mufbddb1` 已完成四个 seed-0 run；collector、trace identity 校验与独立 replay 均通过。固定 epoch-150 AUROC/AUPRC 为：
+
+| cell | AUROC | AUPRC |
+|---|---:|---:|
+| `control_2_20` | 0.8030 | 0.3796 |
+| `emb_only_0p1_20` | 0.6089 | 0.1198 |
+| `ring_only_2_1` | 0.4330 | 0.0776 |
+| `unified_0p1_1` | 0.5688 | 0.1017 |
+
+最终机制裁决见 `DIAGNOSTIC_REPORT.md`。`mechanism-analysis.py` 从冻结 evidence 确定性生成 `mechanism-summary.json`；它不访问 W&B、不选择 best epoch，也不包含性能门槛。当前科学 verdict 为 `partially-tested`：Phase 1/2 的冻结 required scope 已完成，但单 seed 不能证明因果机制，且跨数据集依赖仍未解决。

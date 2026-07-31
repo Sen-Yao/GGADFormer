@@ -1,0 +1,10 @@
+collector_utc=2026-07-31T08:55:00Z
+collector_host=HCCS-85
+collector_environment=/root/gpufree-data/linziyao/.conda/envs/DualRefGAD
+collector_command=python collect-evidence.py --sweep-id mufbddb1 --diagnostics-dir /root/gpufree-data/linziyao/VecGAD-elliptic-loss-mechanism-019fad7c/diagnostics --output-dir /root/gpufree-data/linziyao/VecGAD-elliptic-loss-mechanism-019fad7c/evidence
+collector_stdout={"authoritative_sweep_sha256": "8a16b855d1e8eacfe643909d3199d234c171a37b871a05bb11873490e7f84fa7", "results_sha256": "c8545aa78419655504198586cb1e9707215f6a100f54874e1ce58d462c11436e", "status": "passed", "sweep_id": "mufbddb1"}
+remote_local_authoritative_cmp=identical
+remote_local_results_cmp=identical
+local_replay_command=python3 replay-results.py --evidence-dir experiments/elliptic-loss-mechanism-019fad7c
+local_replay_stdout={"output": "experiments/elliptic-loss-mechanism-019fad7c/replay.json", "output_sha256": "9c41f20356179bd9523fd99d06ebcf93dca44ae3d06a598c0fa99c4e43a6e03c", "status": "passed"}
+verification_note=Mac system Python lacked wandb, so the live collector ran in the validated HCCS-85 environment. A separate remote replay attempt pointed at evidence/ without its sibling diagnostics/ directory and failed only on that path lookup; the independent replay above used the complete local evidence directory and passed.

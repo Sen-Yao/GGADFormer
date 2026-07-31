@@ -1,17 +1,18 @@
 schema_version: 1
-state: launched
-formal_launch_allowed: false
+state: completed
+formal_launch_allowed: true
 investigation_mode: lightweight
 investigation_id: elliptic-loss-mechanism-019fad7c
 owner_thread_id: 019fb720-b85a-7ae3-8390-a0ab2b2345ad
 source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
 prepared_at_utc: 2026-07-31T08:27:44Z
-last_material_transition_at_utc: 2026-07-31T08:41:48Z
+last_material_transition_at_utc: 2026-07-31T08:57:41Z
+completed_at_utc: 2026-07-31T08:57:41Z
 
 status_axes:
-  lifecycle: active
-  coverage: partial
-  scientific_verdict: unresolved
+  lifecycle: complete
+  coverage: required-complete
+  scientific_verdict: partially-tested
 
 objective:
   dataset: elliptic
@@ -98,7 +99,7 @@ heartbeat:
   kind: one_shot_thread_heartbeat
   scheduled_for_local: 2026-07-31T16:54:00+08:00
   schedule_generation: 1
-  status: active
+  status: deleted_after_terminal_completion
 
 candidate_selection:
   HCCS-25:
@@ -162,7 +163,7 @@ wandb:
   sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 4
-  current_state: RUNNING
+  current_state: FINISHED
   code_upload_disabled: true
   console_upload_disabled: true
   custom_artifacts_uploaded: 0
@@ -174,10 +175,10 @@ trials:
     - {mechanism_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 0}
     - {mechanism_cell: unified_0p1_1, lambda_rec_emb: 0.1, ring_loss_weight: 1.0, seed: 0}
   observed:
-    - {mechanism_cell: control_2_20, seed: 0, run_id: a6w0waem, gpu: 3, pane: "%231", state: running}
-    - {mechanism_cell: emb_only_0p1_20, seed: 0, run_id: 9gnmdde9, gpu: 0, pane: "%228", state: running}
-    - {mechanism_cell: ring_only_2_1, seed: 0, run_id: q94sewkd, gpu: 1, pane: "%229", state: running}
-    - {mechanism_cell: unified_0p1_1, seed: 0, run_id: 9n7w76kh, gpu: 2, pane: "%230", state: running}
+    - {mechanism_cell: control_2_20, seed: 0, run_id: a6w0waem, gpu: 3, pane: "%231", state: finished, AUC.last: 0.8030070397920831, AP.last: 0.37962087194534444}
+    - {mechanism_cell: emb_only_0p1_20, seed: 0, run_id: 9gnmdde9, gpu: 0, pane: "%228", state: finished, AUC.last: 0.6088855163614986, AP.last: 0.11977271241484683}
+    - {mechanism_cell: ring_only_2_1, seed: 0, run_id: q94sewkd, gpu: 1, pane: "%229", state: finished, AUC.last: 0.43303525463683595, AP.last: 0.07762890281965233}
+    - {mechanism_cell: unified_0p1_1, seed: 0, run_id: 9n7w76kh, gpu: 2, pane: "%230", state: finished, AUC.last: 0.5688484678886245, AP.last: 0.10166497011516748}
 
 evidence:
   directory: experiments/elliptic-loss-mechanism-019fad7c
@@ -186,14 +187,58 @@ evidence:
   results: experiments/elliptic-loss-mechanism-019fad7c/results.json
   replay: experiments/elliptic-loss-mechanism-019fad7c/replay.json
   final_report: experiments/elliptic-loss-mechanism-019fad7c/DIAGNOSTIC_REPORT.md
+  mechanism_analysis: experiments/elliptic-loss-mechanism-019fad7c/mechanism-analysis.py
+  mechanism_summary: experiments/elliptic-loss-mechanism-019fad7c/mechanism-summary.json
+  collector_log: experiments/elliptic-loss-mechanism-019fad7c/collector-live.log
+  remote_log_checksums: experiments/elliptic-loss-mechanism-019fad7c/remote-log-sha256.txt
+  sha256:
+    authoritative_sweep: 8a16b855d1e8eacfe643909d3199d234c171a37b871a05bb11873490e7f84fa7
+    results: c8545aa78419655504198586cb1e9707215f6a100f54874e1ce58d462c11436e
+    replay: 9c41f20356179bd9523fd99d06ebcf93dca44ae3d06a598c0fa99c4e43a6e03c
+    mechanism_analysis: 0e86c2245ee96016cb5fc6354e2a488b185ec93bfd9c27dba8bc8afc7c6043c8
+    mechanism_summary: fe730db142242408ce6b93ea4ec0f50de893646fb1d85812308107d719e34dea
+    diagnostic_report: 87270ee0fa2fc015414df9214a622c08ddb9ff640db9aab7b98ac3f9d30ea4d3
+    collector_log: ce79b7b9f72f7f622d5da10270aeca43814f4a9ede9ef368ffec5afd8097bb15
+    remote_log_checksums: e65f2ad1b049f314bfaab3e78e092d891ef9a8b0b7240c6949f753d09f4be17f
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  selected_host_state: reserved
-  claim_state: reserved
+  selected_host_state: running
+  claim_state: running_pending_git_handoff
   pending_recorded_at_utc: 2026-07-31T08:35:46Z
   approved_at_utc: 2026-07-31T08:37:33Z
   running_at_utc: 2026-07-31T08:40:18Z
+
+completion_validation:
+  collector:
+    status: passed
+    host: HCCS-85
+    validated_at_utc: 2026-07-31T08:55:00Z
+  independent_local_replay:
+    status: passed
+    sha256: 9c41f20356179bd9523fd99d06ebcf93dca44ae3d06a598c0fa99c4e43a6e03c
+  shared_identity:
+    initial_model_sha256: 2f6c0f5416f0a7caccf2a3b781f13a86ecc0d2869762c48da03087f42ca8b633
+    batch_trace_sha256: 1ee65df61fcbaec966e9def0beb3dd63e472c07c5d3e626d1375a33e063b808d
+    pseudo_source_trace_sha256: 4e8d5772b63cc4a07426a475f202bbd922928add43a0e4ce1788a87e41aac022
+  agent_exit_codes: {gpu0: 0, gpu1: 0, gpu2: 0, gpu3: 0}
+  final_host_probe_at_utc: 2026-07-31T08:52:28Z
+  final_task_compute_pids: []
+  final_gpu_compute_pids: []
+  detached_worktree_clean: true
+  detached_worktree_sha: 65014dd11bed01b761aa7c3889c7718b7950884d
+  tmux_state: task_owned_idle_shells_retained_pending_git_handoff
+
+terminal_candidate_probe:
+  probed_at_utc: 2026-07-31T08:52:28Z
+  HCCS-25: {ssh: ok, occupancy: running, compute_pids_present: true}
+  HCCS-85: {ssh: ok, occupancy: running_task_owned, compute_pids_present: false}
+  HCCS-90: {ssh: ok, occupancy: free, compute_pids_present: false}
+
+scientific_decision:
+  phase_1: "2/20 is an undocumented historical dataset-specific choice; no automatic Elliptic branch or objective implementation bug was found; explicit test feedback remains unresolved"
+  phase_2: "single-seed diagnostics support strong loss interaction, low-HSC shell activation insufficiency, pseudo-task/real-anomaly mismatch, and state-dependent late conflict/basin differences"
+  non_extrapolation: "no continuous response surface, cross-dataset mechanism, causal proof, best-checkpoint selection, or additional tuning"
 
 protocol_deviations: []
 blockers: []

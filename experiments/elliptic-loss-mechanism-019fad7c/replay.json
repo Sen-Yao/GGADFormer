@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "source_hashes": {
+    "authoritative_sweep_sha256": "8a16b855d1e8eacfe643909d3199d234c171a37b871a05bb11873490e7f84fa7",
+    "results_sha256": "c8545aa78419655504198586cb1e9707215f6a100f54874e1ce58d462c11436e"
+  },
+  "cell_coverage": [
+    "control_2_20",
+    "emb_only_0p1_20",
+    "ring_only_2_1",
+    "unified_0p1_1"
+  ],
+  "cells": {
+    "control_2_20": {
+      "run_id": "a6w0waem",
+      "AUC.last": 0.8030070397920831,
+      "AP.last": 0.37962087194534444,
+      "gradient_checkpoint_count": 9,
+      "optimizer_update_count": 302
+    },
+    "emb_only_0p1_20": {
+      "run_id": "9gnmdde9",
+      "AUC.last": 0.6088855163614986,
+      "AP.last": 0.11977271241484683,
+      "gradient_checkpoint_count": 9,
+      "optimizer_update_count": 302
+    },
+    "ring_only_2_1": {
+      "run_id": "q94sewkd",
+      "AUC.last": 0.43303525463683595,
+      "AP.last": 0.07762890281965233,
+      "gradient_checkpoint_count": 9,
+      "optimizer_update_count": 302
+    },
+    "unified_0p1_1": {
+      "run_id": "9n7w76kh",
+      "AUC.last": 0.5688484678886245,
+      "AP.last": 0.10166497011516748,
+      "gradient_checkpoint_count": 9,
+      "optimizer_update_count": 302
+    }
+  },
+  "shared_trace_identity": {
+    "initial_model_sha256": "2f6c0f5416f0a7caccf2a3b781f13a86ecc0d2869762c48da03087f42ca8b633",
+    "batch_trace_sha256": "1ee65df61fcbaec966e9def0beb3dd63e472c07c5d3e626d1375a33e063b808d",
+    "pseudo_source_trace_sha256": "4e8d5772b63cc4a07426a475f202bbd922928add43a0e4ce1788a87e41aac022"
+  }
+}
