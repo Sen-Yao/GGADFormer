@@ -40,7 +40,7 @@ git:
   parent_observation_sha: 40986c9f8b460f8fd9baaefb985573209f96e572
   execution_code_sha: 7c15f33265950abba9db3f130256a2d8e5245ec5
   prepared_protocol_commit: 3c2bc7f654b78560c3bea87b421aab927648ae29
-  sweep_bind_commit: PENDING_SWEEP_BIND_COMMIT
+  sweep_bind_commit: b02d5c620c1ab5e4422bf567450d3f69ff9e1c31
   launch_checkpoint_commit: PENDING_LAUNCH_COMMIT
   preflight_commit: 6636ebf035aa7d0306db4a8966686b933bd313f8
   code_remote: https://github.com/Sen-Yao/GGADFormer.git
