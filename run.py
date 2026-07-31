@@ -1,4 +1,6 @@
 import torch.nn as nn
+import hashlib
+from pathlib import Path
 
 from model import Model
 from VecGAD import VecGAD
@@ -20,6 +22,16 @@ import wandb
 from visualization import create_tsne_visualization, visualize_attention_weights, visualize_reconstruction_analysis
 from utils import send_notification, calculate_graph_statistics
 from ablation_rec_error import evaluate_with_rec_error_filter
+from mechanism_diagnostics import (
+    GRADIENT_EPOCHS,
+    append_jsonl,
+    build_update_record,
+    gradient_metrics,
+    model_state_sha256,
+    sha256_file,
+    update_index_trace,
+    wandb_update_metrics,
+)
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -40,6 +52,10 @@ def get_git_head_sha():
 def infer_run_variant(args):
     if abs(args.lambda_rec_emb - 2.0) < 1e-12 and abs(args.ring_loss_weight - 20.0) < 1e-12:
         return "control_2_20"
+    if abs(args.lambda_rec_emb - 0.1) < 1e-12 and abs(args.ring_loss_weight - 20.0) < 1e-12:
+        return "emb_only_0p1_20"
+    if abs(args.lambda_rec_emb - 2.0) < 1e-12 and abs(args.ring_loss_weight - 1.0) < 1e-12:
+        return "ring_only_2_1"
     if abs(args.lambda_rec_emb - 5.0) < 1e-12 and abs(args.ring_loss_weight - 1.0) < 1e-12:
         return "control"
     if abs(args.lambda_rec_emb - 0.1) < 1e-12 and abs(args.ring_loss_weight - 1.0) < 1e-12:
@@ -66,6 +82,18 @@ def build_wandb_audit_config(args):
         "fixed_final_epoch_metric_policy": "AUC.last/AP.last at fixed training endpoint",
         "wandb_entity": wandb_entity,
         "wandb_project": wandb_project,
+        "mechanism_diagnostics": bool(args.mechanism_diagnostics),
+        "dataset_sha256": os.environ.get("DATASET_SHA256", "unrecorded"),
+        "score_direction": "higher_logit_is_more_anomalous",
+        "metric_definition": "AUROC/AUPRC on idx_test labels; fixed final epoch only",
+        "optimizer_updates_per_epoch": os.environ.get(
+            "OPTIMIZER_UPDATES_PER_EPOCH", "unrecorded"
+        ),
+        "pseudo_outlier_source": (
+            "known_normal_nodes_in_sampled_batch"
+            if args.model_type == "VecGAD"
+            else "model_specific"
+        ),
     }
 
 
@@ -223,11 +251,43 @@ def train(args):
         normal_for_train_idx = torch.tensor(normal_for_train_idx, dtype=torch.long, device=device)
 
 
+    diagnostics_path = None
+    batch_trace = None
+    pseudo_source_trace = None
+    global_update = 0
+    if args.mechanism_diagnostics:
+        if args.model_type != "VecGAD":
+            raise RuntimeError("mechanism diagnostics require model_type=VecGAD")
+        diagnostics_dir = os.environ.get("MECHANISM_DIAGNOSTICS_DIR")
+        if not diagnostics_dir:
+            raise RuntimeError("MECHANISM_DIAGNOSTICS_DIR is required")
+        diagnostics_path = Path(diagnostics_dir) / "{}.jsonl".format(wandb.run.id)
+        if diagnostics_path.exists():
+            raise RuntimeError("diagnostics file already exists: {}".format(diagnostics_path))
+        initial_model_sha256 = model_state_sha256(model)
+        batch_trace = hashlib.sha256()
+        pseudo_source_trace = hashlib.sha256()
+        append_jsonl(diagnostics_path, {
+            "record_type": "run_start",
+            "schema_version": 1,
+            "run_id": wandb.run.id,
+            "protocol_identity": os.environ.get("PROTOCOL_ID", "unrecorded"),
+            "code_sha": os.environ.get("CODE_SHA") or get_git_head_sha(),
+            "dataset": args.dataset,
+            "seed": int(args.seed),
+            "initial_model_sha256": initial_model_sha256,
+            "gradient_epochs": sorted(GRADIENT_EPOCHS),
+        })
+        wandb.run.summary["diagnostic/initial_model_sha256"] = initial_model_sha256
+        wandb.run.summary["diagnostic/schema_version"] = 1
+
+
     # Train model
     print(f"Start training! Total epochs: {args.num_epoch}")
     pbar = tqdm(total=args.num_epoch, desc='Training')
     total_time = 0
     for epoch in range(args.num_epoch + 1):
+        epoch_wandb_metrics = {}
         dynamic_weights = get_dynamic_loss_weights(epoch, args)
         start_time = time.time()
         train_flag = True
@@ -238,10 +298,20 @@ def train(args):
             batched_ring_loss = 0
             # start_time = time.time()
             for batch_idx, item in enumerate(train_data_loader):
+                diagnostic_record = None
                 # print(f"time to start batch {time.time() - start_time}")
                 concated_input_features = item[0].to(device)
                 labels = item[1].to(device)
                 batch_global_indices = item[2].to(device)
+
+                if args.mechanism_diagnostics:
+                    update_index_trace(
+                        batch_trace,
+                        "batch_global_indices",
+                        epoch,
+                        batch_idx,
+                        batch_global_indices,
+                    )
 
                 optimizer.zero_grad()
                 is_known_normal_mask = torch.isin(batch_global_indices, normal_for_train_idx)
@@ -262,8 +332,72 @@ def train(args):
 
                 loss = dynamic_weights['bce_loss_weight'] * loss_bce + dynamic_weights['rec_loss_weight'] * loss_rec + dynamic_weights['ring_loss_weight'] * loss_ring
 
+                if args.mechanism_diagnostics:
+                    if model.last_rec_components is None:
+                        raise RuntimeError("VecGAD reconstruction components are unavailable")
+                    pseudo_source_global_indices = batch_global_indices[
+                        model.last_normal_for_generation_idx
+                    ]
+                    update_index_trace(
+                        pseudo_source_trace,
+                        "pseudo_source_global_indices",
+                        epoch,
+                        batch_idx,
+                        pseudo_source_global_indices,
+                    )
+                    primitive_losses = {
+                        "bce": loss_bce,
+                        "token_rec": model.last_rec_components["token_rec_loss"],
+                        "emb_rec": model.last_rec_components["emb_rec_loss"],
+                        "hsc": loss_ring,
+                    }
+                    primitive_weights = {
+                        "bce": dynamic_weights["bce_loss_weight"],
+                        "token_rec": (
+                            dynamic_weights["rec_loss_weight"] * args.lambda_rec_tok
+                        ),
+                        "emb_rec": (
+                            dynamic_weights["rec_loss_weight"] * args.lambda_rec_emb
+                        ),
+                        "hsc": dynamic_weights["ring_loss_weight"],
+                    }
+                    gradient_record = None
+                    if batch_idx == 0 and epoch in GRADIENT_EPOCHS:
+                        gradient_record = gradient_metrics(
+                            primitive_losses,
+                            tuple(model.parameters()),
+                            primitive_weights,
+                        )
+                    record = build_update_record(
+                        epoch=epoch,
+                        batch_index=batch_idx,
+                        global_update=global_update,
+                        model=model,
+                        emb=emb,
+                        logits=logits,
+                        outlier_emb=outlier_emb,
+                        local_normal_indices=local_normal_for_train_idx,
+                        losses={
+                            **primitive_losses,
+                            "rec_combined": loss_rec,
+                            "objective": loss,
+                        },
+                        weights={
+                            **primitive_weights,
+                            "rec_combined": dynamic_weights["rec_loss_weight"],
+                        },
+                        gradient_record=gradient_record,
+                    )
+                    diagnostic_record = record
+
                 loss.backward()
                 optimizer.step()
+                if diagnostic_record is not None:
+                    append_jsonl(diagnostics_path, diagnostic_record)
+                    epoch_wandb_metrics.update(
+                        wandb_update_metrics(diagnostic_record)
+                    )
+                    global_update += 1
                 batched_bce_loss += loss_bce
                 batched_rec_loss += loss_rec
                 batched_ring_loss += loss_ring
@@ -284,11 +418,15 @@ def train(args):
             })
             pbar.update(1)
             if epoch % 2 == 0:
-                wandb.log({ "batched_total_loss": batched_total_loss.item(),
-                            "bce_loss": batched_bce_loss.item(),
-                            "rec_loss": batched_rec_loss.item(),
-                            "ring_loss": batched_ring_loss.item(),
-                            "learning_rate": current_lr}, step=epoch)
+                training_metrics = {"batched_total_loss": batched_total_loss.item(),
+                                    "bce_loss": batched_bce_loss.item(),
+                                    "rec_loss": batched_rec_loss.item(),
+                                    "ring_loss": batched_ring_loss.item(),
+                                    "learning_rate": current_lr}
+                if args.mechanism_diagnostics:
+                    epoch_wandb_metrics.update(training_metrics)
+                else:
+                    wandb.log(training_metrics, step=epoch)
         else:
             optimizer.zero_grad()
 
@@ -394,17 +532,41 @@ def train(args):
                 auc = roc_auc_score(ano_label[idx_test], logits)
                 ap = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
             
-            wandb.log({"AUC": auc, "AP": ap}, step=epoch)
+            if args.mechanism_diagnostics:
+                epoch_wandb_metrics.update({"AUC": auc, "AP": ap})
+            else:
+                wandb.log({"AUC": auc, "AP": ap}, step=epoch)
             
             # 检查是否为最佳模型
-            if auc > best_AUC and ap > best_AP:
+            if not args.mechanism_diagnostics and auc > best_AUC and ap > best_AP:
                 best_AUC = auc
                 best_AP = ap
                 best_model_state = model.state_dict().copy()
                 best_epoch = epoch
 
+        if args.mechanism_diagnostics:
+            wandb.log(epoch_wandb_metrics, step=epoch)
+
     pbar.close()  # 关闭进度条
     print(f"Training done! Total time: {total_time:.2f} seconds")
+
+    if args.mechanism_diagnostics:
+        final_record = {
+            "record_type": "run_end",
+            "optimizer_update_count": int(global_update),
+            "batch_trace_sha256": batch_trace.hexdigest(),
+            "pseudo_source_trace_sha256": pseudo_source_trace.hexdigest(),
+            "fixed_final_epoch": int(args.num_epoch),
+        }
+        append_jsonl(diagnostics_path, final_record)
+        diagnostics_sha256 = sha256_file(diagnostics_path)
+        wandb.run.summary["diagnostic/status"] = "complete"
+        wandb.run.summary["diagnostic/optimizer_update_count"] = int(global_update)
+        wandb.run.summary["diagnostic/batch_trace_sha256"] = batch_trace.hexdigest()
+        wandb.run.summary["diagnostic/pseudo_source_trace_sha256"] = (
+            pseudo_source_trace.hexdigest()
+        )
+        wandb.run.summary["diagnostic/jsonl_sha256"] = diagnostics_sha256
     
     # 在最后一次eval时进行重构误差分析可视化
     if args.visualize and args.model_type == "VecGAD":
@@ -491,6 +653,7 @@ if __name__ == "__main__":
     parser.add_argument('--model_type', type=str, default='VecGAD')
     parser.add_argument('--visualize', type=bool, default=False)
     parser.add_argument('--device', type=int, default=0)
+    parser.add_argument('--mechanism_diagnostics', type=str2bool, default=False)
 
     parser.add_argument('--pp_k', type=int, default=6)
     parser.add_argument('--progregate_alpha', type=float, default=0.2)
@@ -579,12 +742,16 @@ if __name__ == "__main__":
     try:
         train(args)
         start_time = time.time()
-        wandb.finish()
+        wandb.finish(exit_code=0)
         
         
     except torch.cuda.OutOfMemoryError as e:
         print(f"显存不足!：{e}")
         send_notification(f"【VecFormer】出现显存不足!：{e}")
+        if args.mechanism_diagnostics:
+            wandb.run.summary["diagnostic/status"] = "failed"
+            wandb.finish(exit_code=1)
+            raise
         wandb.log({"AUC.max": 0})
         wandb.log({"AP.max": 0})
         start_time = time.time()
@@ -594,6 +761,10 @@ if __name__ == "__main__":
         import traceback
         print(f"其他错误：{e}")
         traceback.print_exc()  # 打印详细的错误堆栈，包括出错的代码行
+        if args.mechanism_diagnostics:
+            wandb.run.summary["diagnostic/status"] = "failed"
+            wandb.finish(exit_code=1)
+            raise
         wandb.log({"AUC.max": 0})
         start_time = time.time()
         wandb.finish()

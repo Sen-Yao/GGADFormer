@@ -229,6 +229,10 @@ class VecGAD(nn.Module):
             self.gprgnn_fusion = None
 
         # 将模型移动到指定设备
+        self.last_h_mean = None
+        self.last_normal_for_generation_idx = None
+        self.last_reconstruction_displacement = None
+        self.last_rec_components = None
         self.to(self.device)
     
     def TransformerEncoder(self, tokens):
@@ -278,6 +282,10 @@ class VecGAD(nn.Module):
         # 生成全局中心点（支持消融实验：h_mean_labeled_normal / h_mean_trimmed）
         ablation_mode = getattr(args, 'ablation_mode', 'none')
         h_mean = apply_h_mean_ablation(emb, ablation_mode, normal_for_train_idx)
+        self.last_h_mean = h_mean.detach()
+        self.last_normal_for_generation_idx = None
+        self.last_reconstruction_displacement = None
+        self.last_rec_components = None
 
         outlier_emb = None
         emb_combine = None
@@ -297,6 +305,7 @@ class VecGAD(nn.Module):
             # print(f"time for shuffle:{time.time() - start_time}")
             normal_for_generation_idx = normal_for_train_idx[: int(len(normal_for_train_idx) * args.sample_rate)]            
             normal_for_generation_emb = emb[:, normal_for_generation_idx, :]
+            self.last_normal_for_generation_idx = normal_for_generation_idx.detach().clone()
             # print(f"time for normal_for_generation_emb:{time.time() - start_time}")
             # Noise
             noise = torch.randn(normal_for_generation_emb.size(), device=self.device) * args.var + args.mean
@@ -318,6 +327,9 @@ class VecGAD(nn.Module):
 
             outlier_emb = normal_for_generation_emb + args.outlier_beta * reconstruction_error_proj
             outlier_emb = outlier_emb.squeeze(0)
+            self.last_reconstruction_displacement = (
+                outlier_emb - normal_for_generation_emb.squeeze(0)
+            ).detach()
 
             # 中心点对齐损失，鼓励离群点距离全局中心的距离保持在一个 ring 内
             # 计算离群点嵌入与全局中心的距离
@@ -361,6 +373,10 @@ class VecGAD(nn.Module):
         # 计算距离
         emb_rec_loss = torch.mean(torch.norm(normal_for_generation_emb.squeeze(0) - reencoded_emb, dim=-1))  # [N]
         loss_rec = self.args.lambda_rec_tok * token_rec_loss + self.args.lambda_rec_emb * emb_rec_loss
+        self.last_rec_components = {
+            'token_rec_loss': token_rec_loss,
+            'emb_rec_loss': emb_rec_loss,
+        }
         return loss_rec
 
 
