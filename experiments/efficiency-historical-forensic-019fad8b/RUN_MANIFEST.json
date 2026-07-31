@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "state": "prepared",
+  "investigation_id": "2026-07-31-vecgad-historical-efficiency-forensic",
+  "thread_id": "019fad8b-cbf2-7481-a0b7-077753148fd1",
+  "prepared_at": "2026-07-31T08:00:00Z",
+  "execution_host": "HCCS-90",
+  "hostname": "gpufree-container",
+  "gpu_indices": [0, 1, 2, 3, 4, 5, 6, 7],
+  "gpu_model": "NVIDIA GeForce RTX 4090",
+  "parallel_gpu_cap": 8,
+  "authorization": {
+    "status": "granted_by_current_user_instruction",
+    "destination": "HCCS/VecGAD",
+    "allowed_upload_classes": [
+      "experiment_config",
+      "trial_identity",
+      "run_status",
+      "timing_metrics",
+      "resource_metadata",
+      "runtime_metadata"
+    ],
+    "excluded_upload_classes": [
+      "raw_data",
+      "source_code",
+      "credentials",
+      "raw_result_files"
+    ]
+  },
+  "scope": {
+    "evidence_class": "internal_diagnostic",
+    "expected_trials": 24,
+    "fresh_process_repeats": 3,
+    "warmup_epochs": 10,
+    "measured_epochs": 30,
+    "source_commits": [
+      "e071ae6646451d94fc8e8c9e88305eb76c393089",
+      "5bf8205b0d4c54d583b13c547ae62122ffdf2f6a"
+    ],
+    "batch_modes": ["native", "fullbatch"],
+    "datasets": ["Amazon", "t_finance"]
+  },
+  "source": {
+    "branch": "codex/vecgad-efficiency-historical-forensic-019fad8b",
+    "parent_commit": "7a346d439ebef11a0b43b32348e05aac3f829895",
+    "prepared_protocol_commit": null,
+    "launch_manifest_commit": null,
+    "remote_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-historical-forensic-019fad8b",
+    "harness_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-historical-forensic-019fad8b/harness-worktree",
+    "historical_e071_worktree": "/root/gpufree-data/linziyao/VecGAD-tfinance-rmin03-iqxjqsdl-019fabbd/worktree-e071ae66",
+    "historical_5bf_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-historical-forensic-019fad8b/worktree-5bf8205b"
+  },
+  "datasets": {
+    "Amazon.mat": {
+      "sha256": "749110e891df8bcb0015c51fb18193821f3f0e379d547c9180b2f8fa309d0fe8"
+    },
+    "t_finance.mat": {
+      "sha256": "ee66d63073743edaef3de46de96a517f9c3394d7ce4659f5afae8be8380bf6b9"
+    }
+  },
+  "runtime": {
+    "python": "3.8.20",
+    "torch": "2.0.0+cu118",
+    "cuda_runtime": "11.8",
+    "dgl": "1.1.3",
+    "wandb": "0.21.1",
+    "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8"
+  },
+  "wandb": {
+    "entity": "HCCS",
+    "project": "VecGAD",
+    "sweep_id": null,
+    "status": "not_created"
+  },
+  "tmux": {
+    "session": "vecgad-efficiency-historical-forensic-019fad8b",
+    "panes": {},
+    "first_agent_started_at": null
+  }
+}

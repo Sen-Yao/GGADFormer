@@ -1,0 +1,36 @@
+name: vecgad-historical-efficiency-forensic-019fad8b
+description: VecGAD-only 2x2 historical source and batch-mode timing forensic on HCCS-90
+method: grid
+run_cap: 24
+program: experiments/efficiency-historical-forensic-019fad8b/run_wandb_trial.py
+command:
+  - ${env}
+  - ${interpreter}
+  - ${program}
+parameters:
+  trial_id:
+    values:
+      - e071ae66-native-amazon-r0
+      - e071ae66-native-amazon-r1
+      - e071ae66-native-amazon-r2
+      - e071ae66-native-t_finance-r0
+      - e071ae66-native-t_finance-r1
+      - e071ae66-native-t_finance-r2
+      - e071ae66-fullbatch-amazon-r0
+      - e071ae66-fullbatch-amazon-r1
+      - e071ae66-fullbatch-amazon-r2
+      - e071ae66-fullbatch-t_finance-r0
+      - e071ae66-fullbatch-t_finance-r1
+      - e071ae66-fullbatch-t_finance-r2
+      - 5bf8205b-native-amazon-r0
+      - 5bf8205b-native-amazon-r1
+      - 5bf8205b-native-amazon-r2
+      - 5bf8205b-native-t_finance-r0
+      - 5bf8205b-native-t_finance-r1
+      - 5bf8205b-native-t_finance-r2
+      - 5bf8205b-fullbatch-amazon-r0
+      - 5bf8205b-fullbatch-amazon-r1
+      - 5bf8205b-fullbatch-amazon-r2
+      - 5bf8205b-fullbatch-t_finance-r0
+      - 5bf8205b-fullbatch-t_finance-r1
+      - 5bf8205b-fullbatch-t_finance-r2
