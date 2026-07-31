@@ -119,7 +119,7 @@ def assert_equal(actual, expected, label):
 
 def summary_last(summary, name):
     value = summary.get(name)
-    if isinstance(value, dict):
+    if hasattr(value, "get"):
         value = value.get("last")
     if value is None:
         raise AssertionError(f"missing summary value {name}")
