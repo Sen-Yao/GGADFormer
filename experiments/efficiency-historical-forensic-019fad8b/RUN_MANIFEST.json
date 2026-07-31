@@ -113,8 +113,9 @@
   "wandb": {
     "entity": "HCCS",
     "project": "VecGAD",
-    "sweep_id": null,
-    "status": "not_created"
+    "sweep_id": "y7tn68lj",
+    "created_at": "2026-07-31T08:15:04Z",
+    "status": "created_once"
   },
   "tmux": {
     "session": "vecgad-efficiency-historical-forensic-019fad8b",
