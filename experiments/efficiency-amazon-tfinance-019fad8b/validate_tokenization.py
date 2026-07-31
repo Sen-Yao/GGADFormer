@@ -41,7 +41,7 @@ def main():
     args = parser.parse_args()
 
     config = CONFIG[args.dataset]
-    load_args = SimpleNamespace(data_split_seed=42)
+    load_args = SimpleNamespace(data_split_seed=42, sample_rate=0.15)
     adj, features, *_ = load_mat(args.dataset, 0.05, 0.1, args=load_args)
     if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
         features, _ = preprocess_features(features)
