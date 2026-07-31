@@ -43,7 +43,7 @@
     "branch": "codex/vecgad-efficiency-fullbatch-sweep-019fad8b",
     "parent_evidence_commit": "560b5f22803e0be283e18da954357988a4126e33",
     "vecgad_scientific_code_commit": "4483749e118769bf094436ab5ba8bb24bcdf2c9b",
-    "prepared_protocol_commit": null,
+    "prepared_protocol_commit": "9c851dfd07ab5b1275253a55ef56dd42cbc370f9",
     "launch_manifest_commit": null,
     "rho_repository": "https://github.com/mala-lab/RHO.git",
     "rho_commit": "a394d5575dea6745215b15e0453e1f925ffcc1f2",
