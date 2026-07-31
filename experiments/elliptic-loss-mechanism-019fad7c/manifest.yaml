@@ -1,0 +1,178 @@
+schema_version: 1
+state: prepared
+formal_launch_allowed: false
+investigation_mode: lightweight
+investigation_id: elliptic-loss-mechanism-019fad7c
+owner_thread_id: 019fb720-b85a-7ae3-8390-a0ab2b2345ad
+source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
+prepared_at_utc: 2026-07-31T08:27:44Z
+last_material_transition_at_utc: 2026-07-31T08:27:44Z
+
+status_axes:
+  lifecycle: active
+  coverage: partial
+  scientific_verdict: unresolved
+
+objective:
+  dataset: elliptic
+  design: fixed_four_cell_single_seed_mechanism_probe
+  expected_trials: 4
+  trial_axis:
+    mechanism_cell: [control_2_20, emb_only_0p1_20, ring_only_2_1, unified_0p1_1]
+    seed: [0]
+  metrics: [AUC.last, AP.last]
+  metric_policy: fixed_final_epoch_only
+  final_history_step_required: 150
+  optimizer_updates_required: 302
+  gradient_epochs: [0, 1, 2, 5, 10, 20, 50, 100, 150]
+  numeric_or_performance_gates: []
+  result_driven_expansion_allowed: false
+
+authorization:
+  execution: HCCS
+  wandb_destination: HCCS/GGADFormer
+  granted_by: explicit_user_confirmation_in_grill_and_execution_request
+  allowed_data_classes:
+    - experiment_config
+    - seed
+    - run_status
+    - metadata
+    - AUROC
+    - AUPRC
+    - scalar_diagnostics
+    - trace_hashes
+  forbidden_data_classes:
+    - raw_data
+    - source_code
+    - credentials
+    - checkpoints
+    - custom_artifacts
+
+git:
+  code_sha: 65014dd11bed01b761aa7c3889c7718b7950884d
+  code_tree: 1bcefe3e514ce59cab49d2a5c6eac012c5e9feec
+  code_remote: https://github.com/Sen-Yao/GGADFormer.git
+  protocol_branch: codex/elliptic-loss-mechanism-019fad7c
+  protocol_source_commit: PENDING_PROTOCOL_COMMIT
+  code_remote_publication: pushed
+
+config:
+  wrapper_path: experiments/elliptic-loss-mechanism-019fad7c/run-sweep-trial.py
+  wrapper_sha256: b3ccecd4d61c2a8144a68baa1ce37bd79698e58c1f9bf143a314b34a7cc6f97a
+  sweep_path: experiments/elliptic-loss-mechanism-019fad7c/sweep.yaml
+  sweep_sha256: 81dda3c26fd7d1d2e4dfbb66261256201313270777d982dc63c4167bf287dc5f
+  launcher_path: experiments/elliptic-loss-mechanism-019fad7c/launch-agent.sh
+  launcher_sha256: 8d6af96dff16f9fd1948c27d7082e6dcf65636fe70d9fc0ff7c26f683ea27001
+  collector_path: experiments/elliptic-loss-mechanism-019fad7c/collect-evidence.py
+  collector_sha256: a89b72e81bb4c107aa0b666ec788c73efb18e9b33a72403a0a21bd7b54cb3d35
+  replay_path: experiments/elliptic-loss-mechanism-019fad7c/replay-results.py
+  replay_sha256: d79c03ce7e187a421c5c1dd04c624059c20a7f8a7436f79f7db946efea9adeb5
+  protocol_readme_sha256: f129cf3268b671fa1137e61436477da02341780e1745de0c53468ab410ea2688
+  phase1_audit_sha256: b4a365571e9af2e6eb8b7aa2deec8e595bb4622096852cfacc71d0b435ec2b55
+
+execution:
+  execution_host: HCCS-85
+  observed_hostname: gpufree-container
+  selection_probe_at_utc: 2026-07-31T08:23:01Z
+  selection_reason: only candidate with free cooperative occupancy and eight GPUs without compute PID
+  intended_gpu_indices: [0, 1, 2, 3]
+  parallel_gpu_cap: 4
+  eligible_gpu_indices_at_selection_probe: [0, 1, 2, 3, 4, 5, 6, 7]
+  compute_pids_at_selection_probe: []
+  task_root: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-mechanism-019fad7c
+  detached_worktree: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-mechanism-019fad7c/worktree
+  protocol_root: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-mechanism-019fad7c/protocol
+  tmux_session: vecgad_elliptic_mechanism_019fad7c
+  tmux_remain_on_exit_requested: true
+  pane_records: []
+  first_agent_start_utc: null
+
+candidate_selection:
+  HCCS-25:
+    occupancy: running
+    foreign_compute_present: true
+    eligible: false
+  HCCS-85:
+    occupancy: free
+    free_gpu_count: 8
+    gpu_model: NVIDIA GeForce RTX 4090
+    eligible: true
+  HCCS-90:
+    occupancy: running
+    free_gpu_count_observed: 8
+    eligible: false
+    note: cooperative running state fails closed despite empty live GPU process list
+
+runtime:
+  environment: /root/gpufree-data/linziyao/.conda/envs/DualRefGAD
+  environment_reused_read_only: true
+  python: "3.8"
+  torch: 2.0.0+cu118
+  dgl: 1.1.3
+  wandb: 0.21.1
+  scipy: 1.10.1
+  sklearn: 1.1.3
+  runtime_difference_from_historical_hccs90:
+    scipy: "1.10.1 vs 1.7.3"
+    sklearn: "1.1.3 vs 1.0.2"
+  cpu_unit_tests:
+    code_sha: 65014dd11bed01b761aa7c3889c7718b7950884d
+    result: passed
+    tests_run: 5
+  run_import_help_check: passed
+
+data:
+  logical_path: dataset/elliptic.mat
+  readonly_source: /root/gpufree-data/linziyao/DualRefGAD/dataset/elliptic.mat
+  access_mode: symlink_read_only_reuse
+  size_bytes: 36906872
+  sha256: 2f502df4b87be8f8b5ed5ef8378876125c92b06afbc5b38ee58fe4b56b1b2023
+  node_count: 46564
+  split:
+    data_split_seed: 42
+    train_rate: 0.05
+    val_rate: 0.1
+    train_count: 2328
+    validation_count: 4656
+    test_count: 39580
+    known_normal_train_count: 2096
+    unknown_pool_count: 44468
+  batch_size: 32768
+  optimizer_updates_per_epoch: 2
+  pseudo_outlier_source: known_normal_nodes_in_sampled_batch
+
+wandb:
+  destination: HCCS/GGADFormer
+  sweep_id: PENDING_SWEEP_ID
+  sweep_creation_count: 0
+  create_exactly_once: true
+  expected_trials: 4
+  current_state: not_created
+  code_upload_disabled: true
+  console_upload_disabled: true
+  custom_artifacts_uploaded: 0
+
+trials:
+  expected:
+    - {mechanism_cell: control_2_20, lambda_rec_emb: 2.0, ring_loss_weight: 20.0, seed: 0}
+    - {mechanism_cell: emb_only_0p1_20, lambda_rec_emb: 0.1, ring_loss_weight: 20.0, seed: 0}
+    - {mechanism_cell: ring_only_2_1, lambda_rec_emb: 2.0, ring_loss_weight: 1.0, seed: 0}
+    - {mechanism_cell: unified_0p1_1, lambda_rec_emb: 0.1, ring_loss_weight: 1.0, seed: 0}
+  observed: []
+
+evidence:
+  directory: experiments/elliptic-loss-mechanism-019fad7c
+  diagnostics_directory: experiments/elliptic-loss-mechanism-019fad7c/diagnostics
+  authoritative_sweep: experiments/elliptic-loss-mechanism-019fad7c/authoritative-sweep.json
+  results: experiments/elliptic-loss-mechanism-019fad7c/results.json
+  replay: experiments/elliptic-loss-mechanism-019fad7c/replay.json
+  final_report: experiments/elliptic-loss-mechanism-019fad7c/DIAGNOSTIC_REPORT.md
+
+occupancy:
+  document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
+  selected_host_state: free
+  claim_state: not_claimed
+
+protocol_deviations: []
+blockers:
+  - host_approval_and_final_prelaunch_claim_pending

@@ -1,0 +1,7 @@
+program: /root/gpufree-data/linziyao/VecGAD-elliptic-loss-mechanism-019fad7c/protocol/run-sweep-trial.py
+method: grid
+parameters:
+  mechanism_cell:
+    values: [control_2_20, emb_only_0p1_20, ring_only_2_1, unified_0p1_1]
+  seed:
+    values: [0]
