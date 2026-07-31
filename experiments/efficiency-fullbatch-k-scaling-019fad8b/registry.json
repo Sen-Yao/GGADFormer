@@ -1,0 +1,122 @@
+{
+  "schema_version": 2,
+  "protocol_id": "vecgad-efficiency-fullbatch-019fad8b-v1",
+  "full_batch_required": true,
+  "train_ratio": 0.05,
+  "data_split_seed": 42,
+  "methods": {
+    "VecGAD": {
+      "Amazon": {
+        "num_nodes": 11944,
+        "args": [
+          "--batch_size=11944",
+          "--dataset=Amazon",
+          "--data_split_seed=42",
+          "--end_lr=0.0001",
+          "--lambda_rec_emb=0.1",
+          "--num_epoch=100",
+          "--peak_lr=0.0003",
+          "--pp_k=5",
+          "--progregate_alpha=0.4",
+          "--rec_loss_weight=1",
+          "--ring_R_max=1",
+          "--ring_R_min=0.3",
+          "--ring_loss_weight=1",
+          "--seed=0",
+          "--train_rate=0.05",
+          "--warmup_updates=50"
+        ]
+      },
+      "t_finance": {
+        "num_nodes": 39357,
+        "args": [
+          "--batch_size=39357",
+          "--dataset=t_finance",
+          "--data_split_seed=42",
+          "--end_lr=0.0001",
+          "--lambda_rec_emb=0.1",
+          "--num_epoch=40",
+          "--outlier_beta=0.3",
+          "--peak_lr=0.0005",
+          "--pp_k=7",
+          "--progregate_alpha=0.3",
+          "--rec_loss_weight=1",
+          "--ring_R_max=1",
+          "--ring_R_min=0.3",
+          "--ring_loss_weight=1",
+          "--seed=0",
+          "--train_rate=0.05",
+          "--warmup_updates=50"
+        ]
+      }
+    },
+    "GGAD": {
+      "Amazon": {
+        "num_nodes": 11944,
+        "args": [
+          "--dataset=Amazon",
+          "--data_split_seed=42",
+          "--embedding_dim=300",
+          "--model_type=GGAD",
+          "--margin_loss_weight=1",
+          "--warmup_updates=0",
+          "--num_epoch=200",
+          "--peak_lr=0.001",
+          "--end_lr=0.001",
+          "--train_rate=0.05",
+          "--seed=0"
+        ]
+      },
+      "t_finance": {
+        "num_nodes": 39357,
+        "args": [
+          "--dataset=t_finance",
+          "--data_split_seed=42",
+          "--embedding_dim=300",
+          "--model_type=GGAD",
+          "--margin_loss_weight=1",
+          "--warmup_updates=0",
+          "--num_epoch=70",
+          "--peak_lr=0.001",
+          "--end_lr=0.001",
+          "--train_rate=0.05",
+          "--confidence_margin=0.7",
+          "--seed=0"
+        ]
+      }
+    },
+    "RHO": {
+      "amazon": {
+        "num_nodes": 11944,
+        "args": [
+          "--dataset=amazon",
+          "--lr=0.005",
+          "--hidden1=1024",
+          "--hidden2=64",
+          "--alpha=1.0",
+          "--batch-size=0",
+          "--train-ratio=0.05",
+          "--data-split-seed=42",
+          "--seed=0"
+        ]
+      },
+      "tfinance": {
+        "num_nodes": 39357,
+        "args": [
+          "--dataset=tfinance",
+          "--lr=0.005",
+          "--hidden1=1024",
+          "--hidden2=64",
+          "--alpha=1.0",
+          "--batch-size=0",
+          "--train-ratio=0.05",
+          "--data-split-seed=42",
+          "--seed=0"
+        ]
+      }
+    }
+  },
+  "repeats": [0, 1, 2],
+  "warmup_epochs": 10,
+  "measured_epochs": 30
+}

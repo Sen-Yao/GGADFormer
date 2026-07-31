@@ -1,0 +1,30 @@
+name: vecgad-efficiency-fullbatch-019fad8b
+description: Full-batch cold-start efficiency audit on HCCS-90 RTX 4090 GPUs
+method: grid
+run_cap: 18
+program: experiments/efficiency-fullbatch-k-scaling-019fad8b/run_wandb_trial.py
+command:
+  - ${env}
+  - ${interpreter}
+  - ${program}
+parameters:
+  trial_id:
+    values:
+      - vecgad-amazon-r0
+      - vecgad-amazon-r1
+      - vecgad-amazon-r2
+      - vecgad-t_finance-r0
+      - vecgad-t_finance-r1
+      - vecgad-t_finance-r2
+      - ggad-amazon-r0
+      - ggad-amazon-r1
+      - ggad-amazon-r2
+      - ggad-t_finance-r0
+      - ggad-t_finance-r1
+      - ggad-t_finance-r2
+      - rho-amazon-r0
+      - rho-amazon-r1
+      - rho-amazon-r2
+      - rho-tfinance-r0
+      - rho-tfinance-r1
+      - rho-tfinance-r2

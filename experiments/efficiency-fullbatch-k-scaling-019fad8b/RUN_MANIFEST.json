@@ -1,0 +1,135 @@
+{
+  "schema_version": 2,
+  "state": "prepared",
+  "investigation_id": "2026-07-31-vecgad-efficiency-fullbatch-k-scaling",
+  "thread_id": "019fad8b-cbf2-7481-a0b7-077753148fd1",
+  "prepared_at": "2026-07-31T03:50:49Z",
+  "execution_host": "HCCS-90",
+  "hostname": "gpufree-container",
+  "gpu_indices": [0, 1, 2, 3, 4, 5, 6, 7],
+  "gpu_model": "NVIDIA GeForce RTX 4090",
+  "gpu_total_memory_mib": 24564,
+  "gpu_uuids": {
+    "0": "GPU-ef3ccc4b-3d93-2e67-ff68-fb64baf630d8",
+    "1": "GPU-0b5b9af4-5282-116d-c041-d3a2cbc3beef",
+    "2": "GPU-5e6b7ec1-1f23-2afb-46e4-4fba322130f3",
+    "3": "GPU-52a38d4a-f8b1-8e11-4bde-dd6ab542fb8c",
+    "4": "GPU-17ef53a7-69aa-7d47-5276-60fce74cca10",
+    "5": "GPU-6211f92a-bb8d-6d3f-4ecf-bf210e677e2f",
+    "6": "GPU-90b5f174-7bb6-91be-d0ae-71ac33fb8b7b",
+    "7": "GPU-829887b7-4c7d-f6a3-6f4a-f19f989c70cd"
+  },
+  "parallel_gpu_cap": 8,
+  "same_model_gpu_policy": "Treat physical RTX 4090 index as recorded execution metadata, not an experimental factor.",
+  "authorization": {
+    "status": "granted_by_current_user_instruction",
+    "destination": "HCCS/VecGAD",
+    "allowed_upload_classes": [
+      "experiment_config",
+      "trial_identity",
+      "run_status",
+      "timing_metrics",
+      "resource_metadata",
+      "runtime_metadata"
+    ],
+    "excluded_upload_classes": [
+      "raw_data",
+      "source_code",
+      "credentials",
+      "raw_result_files"
+    ]
+  },
+  "source": {
+    "branch": "codex/vecgad-efficiency-fullbatch-sweep-019fad8b",
+    "parent_evidence_commit": "560b5f22803e0be283e18da954357988a4126e33",
+    "vecgad_scientific_code_commit": "4483749e118769bf094436ab5ba8bb24bcdf2c9b",
+    "prepared_protocol_commit": null,
+    "launch_manifest_commit": null,
+    "rho_repository": "https://github.com/mala-lab/RHO.git",
+    "rho_commit": "a394d5575dea6745215b15e0453e1f925ffcc1f2",
+    "remote_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-fullbatch-k-scaling-019fad8b",
+    "vecgad_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-fullbatch-k-scaling-019fad8b/vec-worktree",
+    "rho_worktree": "/root/gpufree-data/linziyao/VecGAD-efficiency-fullbatch-k-scaling-019fad8b/rho-worktree",
+    "rho_data_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-fullbatch-k-scaling-019fad8b/rho-runtime"
+  },
+  "digests": {
+    "registry_sha256": "93d5636036b24c981fe0ca8ee3a2ee331ddb5799026fd394a5219f13f3247b55",
+    "fullbatch_sweep_sha256": "40dd5ed28c4166e4b4a713d017c6fd959f9a73012830193c1c1465069c3fdd5f",
+    "wandb_trial_wrapper_sha256": "0c54e6a8db3ad6e3dc87c00bbdc97a9441aa289dd049c16f898dc6c8f386aac1",
+    "run_shard_sha256": "4f5e7e24683a97dab575474bfcd7fe9c543fe0f734a76e65f91d5399dc865609",
+    "rho_harness_sha256": "b0808244019418f64e1095781bb4b7c704e3787e4406cff19ee9f5b6ffdddff4",
+    "aggregate_sha256": "2c421a316b3de36ce8f76eebde346a4784805a7fa4b1668d11ef6408daeecf40",
+    "run_py_sha256": "cb9fbbdee884cba8ac97bb7cf3f930588d620d31d8a4700272a0d4d476930069",
+    "utils_py_sha256": "5c26377373ef63cc482d874e9708ea9df7fc8ee179ab565bdd4286043754f602"
+  },
+  "datasets": {
+    "Amazon.mat": {
+      "sha256": "749110e891df8bcb0015c51fb18193821f3f0e379d547c9180b2f8fa309d0fe8"
+    },
+    "t_finance.mat": {
+      "sha256": "ee66d63073743edaef3de46de96a517f9c3394d7ce4659f5afae8be8380bf6b9"
+    },
+    "dgl_fraud_amazon_archive": {
+      "sha256": "c1b7a1f8cd8621467d5121b690fef61a7d398e4f582232bb3e8a154424f7a5b9"
+    },
+    "rho_tfinance_graph": {
+      "sha256": "51739edc7af215aad05ebda3a6a613063c9279c54268439983f9970818cda530"
+    },
+    "rho_amazon_laplacian": {
+      "sha256": "efb171fa31a5198ae1c55ac963c30174523974d2586929597d6b21bb1fc31271"
+    },
+    "rho_tfinance_laplacian": {
+      "sha256": "69eb72ba3f1588a5fd6b8cb85ae197eca5feba91f884cee3b2d8c0248a309e3e"
+    }
+  },
+  "runtime": {
+    "python": "3.8.20",
+    "torch": "2.0.0+cu118",
+    "cuda_runtime": "11.8",
+    "dgl": "1.1.3",
+    "wandb": "0.21.1",
+    "environment": "/root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8"
+  },
+  "selection_snapshot": {
+    "observed_at": "2026-07-31T11:42:41+08:00",
+    "hccs_90_free_gpu_indices": [0, 1, 2, 3, 4, 5, 6, 7],
+    "hccs_90_compute_pids": 0,
+    "hccs_90_disk_free_tib": 5.0,
+    "hccs_85_excluded_reasons": [
+      "missing frozen VecGAD runtime",
+      "data volume at 100 percent usage"
+    ],
+    "hccs_25_excluded_reason": "foreign compute PIDs and cooperative reservation"
+  },
+  "fullbatch_sweep": {
+    "status": "prepared",
+    "sweep_id": null,
+    "expected_trials": 18,
+    "warmup_epochs": 10,
+    "measured_epochs": 30,
+    "fresh_process_repeats": 3,
+    "agent_counts": {
+      "0": 3,
+      "1": 3,
+      "2": 2,
+      "3": 2,
+      "4": 2,
+      "5": 2,
+      "6": 2,
+      "7": 2
+    },
+    "tmux_session": "vecgad-efficiency-fullbatch-019fad8b",
+    "panes": {},
+    "first_agent_started_at": null,
+    "output_root": "/root/gpufree-data/linziyao/VecGAD-efficiency-fullbatch-k-scaling-019fad8b/fullbatch-results"
+  },
+  "k_scaling_successor": {
+    "status": "designed_not_created",
+    "depends_on": "terminal fullbatch sweep handoff",
+    "dataset": "t_finance",
+    "alpha": 0.3,
+    "k_values": [1, 5, 7, 10, 20],
+    "repeats": 3,
+    "reason_for_separate_sweep": "Concurrent CPU SpMM trials would confound tokenization timing."
+  }
+}
