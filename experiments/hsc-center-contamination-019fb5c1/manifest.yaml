@@ -4,7 +4,7 @@ formal_launch_allowed: false
 investigation_id: 2026-07-31-vecgad-hsc-center-contamination
 owner_thread_id: 019fb5c1-2c04-7f40-ac8a-121ee993cbd4
 protocol_id: hsc-center-contamination-019fb5c1-v1
-prepared_at_utc: pending
+prepared_at_utc: 2026-07-31T03:05:53Z
 
 objective:
   design: paired_batch_center_contamination_stress_test
@@ -24,8 +24,8 @@ objective:
   decision_threshold: null
 
 git:
-  code_sha: pending_after_code_commit
-  code_tree: pending_after_code_commit
+  code_sha: 89e96d5ac8b088c9e4bcc85c32ff3e568f735438
+  code_tree: d625bad37bf1acb25c7a0e78483498e305163b24
   protocol_branch: codex/hsc-center-contamination-019fb5c1
   prepared_manifest_commit: pending_after_protocol_commit
   remote_publication: pending
@@ -93,17 +93,82 @@ authorization:
 
 config_files:
   sweep_path: experiments/hsc-center-contamination-019fb5c1/sweep.yaml
+  sweep_sha256: 866ac3180a44fc47de356461be0591442803b78a781727dace97710831562dfd
   wrapper_path: experiments/hsc-center-contamination-019fb5c1/run-sweep-trial.py
+  wrapper_sha256: 0145de1734ae04492b5ba8d463d376bf2881a8c2cefdf59dd69f97018c57ecde
   launcher_path: experiments/hsc-center-contamination-019fb5c1/launch-agent.sh
+  launcher_sha256: 3968c4c11b3e4d9f49f345d1bd87baa7218992881d690cd96a5d169c8aa639b0
   collector_path: experiments/hsc-center-contamination-019fb5c1/collect-evidence.py
+  collector_sha256: 596ffad9968b17ca99132ac695fd1acd069017c439468d11a4cd86f03a991fd0
   replay_path: experiments/hsc-center-contamination-019fb5c1/replay-results.py
-  sha256: pending_after_code_commit
+  replay_sha256: e50d07e5db91ac9d8efb3785d065fe6018e05eb0896f3d39662a33b8ffa88d7b
 
 trials:
   expected_axis_product:
     dataset: [Amazon, tolokers]
     hsc_center_condition: [default, q0, q10, q20, q30, q40]
     seed: [0, 1, 2, 3, 4]
+  expected:
+    - {dataset: Amazon, hsc_center_condition: default, seed: 0}
+    - {dataset: Amazon, hsc_center_condition: default, seed: 1}
+    - {dataset: Amazon, hsc_center_condition: default, seed: 2}
+    - {dataset: Amazon, hsc_center_condition: default, seed: 3}
+    - {dataset: Amazon, hsc_center_condition: default, seed: 4}
+    - {dataset: Amazon, hsc_center_condition: q0, seed: 0}
+    - {dataset: Amazon, hsc_center_condition: q0, seed: 1}
+    - {dataset: Amazon, hsc_center_condition: q0, seed: 2}
+    - {dataset: Amazon, hsc_center_condition: q0, seed: 3}
+    - {dataset: Amazon, hsc_center_condition: q0, seed: 4}
+    - {dataset: Amazon, hsc_center_condition: q10, seed: 0}
+    - {dataset: Amazon, hsc_center_condition: q10, seed: 1}
+    - {dataset: Amazon, hsc_center_condition: q10, seed: 2}
+    - {dataset: Amazon, hsc_center_condition: q10, seed: 3}
+    - {dataset: Amazon, hsc_center_condition: q10, seed: 4}
+    - {dataset: Amazon, hsc_center_condition: q20, seed: 0}
+    - {dataset: Amazon, hsc_center_condition: q20, seed: 1}
+    - {dataset: Amazon, hsc_center_condition: q20, seed: 2}
+    - {dataset: Amazon, hsc_center_condition: q20, seed: 3}
+    - {dataset: Amazon, hsc_center_condition: q20, seed: 4}
+    - {dataset: Amazon, hsc_center_condition: q30, seed: 0}
+    - {dataset: Amazon, hsc_center_condition: q30, seed: 1}
+    - {dataset: Amazon, hsc_center_condition: q30, seed: 2}
+    - {dataset: Amazon, hsc_center_condition: q30, seed: 3}
+    - {dataset: Amazon, hsc_center_condition: q30, seed: 4}
+    - {dataset: Amazon, hsc_center_condition: q40, seed: 0}
+    - {dataset: Amazon, hsc_center_condition: q40, seed: 1}
+    - {dataset: Amazon, hsc_center_condition: q40, seed: 2}
+    - {dataset: Amazon, hsc_center_condition: q40, seed: 3}
+    - {dataset: Amazon, hsc_center_condition: q40, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: default, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: default, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: default, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: default, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: default, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: q0, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: q0, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: q0, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: q0, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: q0, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: q10, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: q10, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: q10, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: q10, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: q10, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: q20, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: q20, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: q20, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: q20, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: q20, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: q30, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: q30, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: q30, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: q30, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: q30, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: q40, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: q40, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: q40, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: q40, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: q40, seed: 4}
   observed: []
 
 result_validation:
