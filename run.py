@@ -54,7 +54,7 @@ def build_wandb_audit_config(args):
     code_sha = os.environ.get("CODE_SHA") or get_git_head_sha()
     gpu_index = os.environ.get("GPU_INDEX") or os.environ.get("CUDA_VISIBLE_DEVICES") or str(args.device)
 
-    return {
+    config = {
         "variant": infer_run_variant(args),
         "protocol_identity": os.environ.get("PROTOCOL_ID", "unrecorded"),
         "split_protocol_identity": (
@@ -82,6 +82,16 @@ def build_wandb_audit_config(args):
             else "disabled"
         ),
     }
+    for config_key, env_key in (
+        ("optimization_bundle", "OPTIMIZATION_BUNDLE"),
+        ("propagation_bundle", "PROPAGATION_BUNDLE"),
+        ("factorial_cell", "FACTORIAL_CELL"),
+        ("parent_sweep_id", "PARENT_SWEEP_ID"),
+    ):
+        value = os.environ.get(env_key)
+        if value:
+            config[config_key] = value
+    return config
 
 
 def train(args):

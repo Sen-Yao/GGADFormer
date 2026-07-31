@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "investigation_id": "elliptic-bundle-factorial-019fb305",
+  "parent_sweep_id": "k5lbpsg9",
+  "dataset": "elliptic",
+  "variant": "unified_0p1_1",
+  "seeds": [0, 1, 2, 3, 4],
+  "factors": {
+    "optimization_bundle": {
+      "current": {"batch_size": 32768, "end_lr": 0.0003, "num_epoch": 150},
+      "mixed": {"batch_size": 8192, "end_lr": 0.0001, "num_epoch": 200}
+    },
+    "propagation_bundle": {
+      "current": {"pp_k": 7, "progregate_alpha": 0.6},
+      "mixed": {"pp_k": 8, "progregate_alpha": 0.8}
+    }
+  },
+  "fixed": {
+    "lambda_rec_emb": 0.1,
+    "ring_loss_weight": 1.0,
+    "peak_lr": 0.0005,
+    "warmup_updates": 50,
+    "outlier_beta": 0.3,
+    "rec_loss_weight": 1.0,
+    "ring_R_min": 0.3,
+    "ring_R_max": 1.0,
+    "train_rate": 0.05,
+    "data_split_seed": 42
+  },
+  "expected_trials": 20,
+  "endpoint_policy": {
+    "current_optimization_final_step": 150,
+    "mixed_optimization_final_step": 200,
+    "selection": "fixed cell-specific final step only",
+    "forbidden": ["AUC.max", "AP.max", "best epoch", "early stopping", "manual checkpoint selection"]
+  },
+  "estimands": [
+    "cell mean and sample std",
+    "same-seed optimization main effect",
+    "same-seed propagation main effect",
+    "same-seed simple effects",
+    "same-seed difference-in-differences interaction"
+  ],
+  "post_result_search_allowed": false
+}
+

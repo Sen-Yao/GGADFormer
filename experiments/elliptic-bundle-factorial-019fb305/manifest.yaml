@@ -1,0 +1,156 @@
+schema_version: 1
+state: protocol_draft
+formal_launch_allowed: false
+investigation_id: elliptic-bundle-factorial-019fb305
+parent_investigation_id: elliptic-mixed-replication-019fb305
+owner_thread_id: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
+source_thread_id: 019fad7c-281f-7463-b248-dde17f1677ab
+prepared_at_utc: null
+last_material_transition_at_utc: 2026-07-31T14:32:33Z
+
+parent_gate:
+  sweep_id: k5lbpsg9
+  sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/k5lbpsg9
+  evidence_commit: d4d2e3460d7a86da3aee562baf10fbe1e8148f65
+  authoritative_sweep_sha256: 194fa89326f876a35c5abd78e404929c8297cd4dc2e71a9e5186a44f014cca4a
+  results_sha256: c3d0d4cc33ce116b55fc4e99c5abfa939c33c3296116fc1f001208946b99a19d
+  AUROC_paired_mean_difference: -0.00725113759117244
+  AUPRC_paired_mean_difference: -0.0038430914946813222
+  joint_practical_equivalence_pass: true
+  followup_allowed: true
+
+objective:
+  dataset: elliptic
+  variant: unified_0p1_1
+  design: optimization_bundle_x_propagation_bundle_factorial
+  expected_trials: 20
+  factors:
+    optimization_bundle: [current, mixed]
+    propagation_bundle: [current, mixed]
+    seed: [0, 1, 2, 3, 4]
+  metric_policy: fixed_cell_specific_final_epoch_only
+  final_history_step:
+    current_optimization: 150
+    mixed_optimization: 200
+  forbidden_selection: [AUC.max, AP.max, best_epoch, early_stopping, manual_checkpoint_selection]
+  post_result_search_allowed: false
+
+git:
+  scientific_base_sha: 655d6293bb76633bc6aa6fd21166a49c3b91d504
+  parent_observation_sha: 40986c9f8b460f8fd9baaefb985573209f96e572
+  execution_code_sha: PENDING_EXECUTION_SHA
+  prepared_protocol_commit: PENDING_PREPARED_COMMIT
+  sweep_bind_commit: PENDING_SWEEP_BIND_COMMIT
+  launch_checkpoint_commit: PENDING_LAUNCH_COMMIT
+  code_remote: https://github.com/Sen-Yao/GGADFormer.git
+  protocol_branch: codex/elliptic-mixed-replication-hccs90-019fb305
+  remote_publication: pending
+
+observation_layer:
+  source_files: [run.py, hsc_diagnostics.py]
+  added_factorial_metadata: [optimization_bundle, propagation_bundle, factorial_cell, parent_sweep_id]
+  training_semantics_changed: false
+  changes_loss_or_gradient: false
+  changes_optimizer_or_scheduler: false
+  changes_rng: false
+
+config:
+  analysis_plan_path: experiments/elliptic-bundle-factorial-019fb305/analysis-plan.json
+  analysis_plan_sha256: PENDING
+  resolved_configs_path: experiments/elliptic-bundle-factorial-019fb305/resolved-configs.json
+  resolved_configs_sha256: PENDING
+  sweep_path: experiments/elliptic-bundle-factorial-019fb305/sweep.yaml
+  sweep_sha256: PENDING
+  wrapper_path: experiments/elliptic-bundle-factorial-019fb305/run-sweep-trial.py
+  wrapper_sha256: PENDING
+  launcher_path: experiments/elliptic-bundle-factorial-019fb305/launch-agent.sh
+  launcher_sha256: PENDING
+  collector_path: experiments/elliptic-bundle-factorial-019fb305/collect-evidence.py
+  collector_sha256: PENDING
+  replay_path: experiments/elliptic-bundle-factorial-019fb305/replay-results.py
+  replay_sha256: PENDING
+
+execution:
+  execution_host: HCCS-90
+  observed_hostname: gpufree-container
+  selection_probe_at_utc: 2026-07-31T14:30:46Z
+  selected_gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+  eligible_gpu_indices_at_selection_probe: [0, 1, 2, 3, 4, 5, 6, 7]
+  compute_pids_at_selection_probe: []
+  task_root: /root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305
+  detached_worktree: /root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/worktree
+  protocol_root: /root/gpufree-data/linziyao/VecGAD-elliptic-bundle-factorial-019fb305/protocol
+  tmux_session: vecgad_elliptic_factorial_019fb305
+  tmux_remain_on_exit_requested: true
+  agent_trial_count_plan:
+    - {gpu: 0, count: 3}
+    - {gpu: 1, count: 3}
+    - {gpu: 2, count: 3}
+    - {gpu: 3, count: 3}
+    - {gpu: 4, count: 2}
+    - {gpu: 5, count: 2}
+    - {gpu: 6, count: 2}
+    - {gpu: 7, count: 2}
+  pane_records: []
+  first_agent_start_utc: null
+
+runtime:
+  environment: /root/gpufree-data/linziyao/.conda/envs/VecGAD-28bce1a8
+  expected:
+    python: 3.8.20
+    torch: 2.0.0+cu118
+    dgl: 1.1.3
+    wandb: 0.21.1
+    numpy: 1.21.6
+    scipy: 1.7.3
+    sklearn: 1.0.2
+  preflight: pending
+
+data:
+  logical_path: dataset/elliptic.mat
+  readonly_source: /root/gpufree-data/linziyao/DualRefGAD/dataset/elliptic.mat
+  access_mode: symlink_read_only_reuse
+  size_bytes: 36906872
+  sha256: 2f502df4b87be8f8b5ed5ef8378876125c92b06afbc5b38ee58fe4b56b1b2023
+  node_count: 46564
+
+wandb:
+  destination: HCCS/GGADFormer
+  sweep_id: PENDING_SWEEP_ID
+  sweep_url: PENDING_SWEEP_URL
+  sweep_creation_count: 0
+  create_exactly_once: true
+  expected_trials: 20
+  current_state: pending
+  code_upload_disabled: true
+  console_upload_disabled: true
+  custom_artifacts_uploaded: 0
+
+diagnostics:
+  expected_batches_per_epoch:
+    current_optimization: 2
+    mixed_optimization: 6
+  expected_epoch_steps:
+    current_optimization: 151
+    mixed_optimization: 201
+  required_terminal_fields:
+    - hsc/shell_hit_rate
+    - hsc/inner_violation_rate
+    - hsc/outer_violation_rate
+    - hsc/distance_mean
+    - loss/bce_raw
+    - loss/rec_combined_raw
+    - loss/hsc_raw
+    - loss/true_weighted_total
+
+occupancy:
+  document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
+  claim_state: reserved
+  owner: 019fb305-c6f4-77e0-ac85-5dcaa2053a47
+  selected_gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+
+result_validation:
+  status: pending
+
+protocol_deviations: []
+blockers: []

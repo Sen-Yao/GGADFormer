@@ -1,0 +1,13 @@
+program: experiments/elliptic-bundle-factorial-019fb305/run-sweep-trial.py
+method: grid
+metric:
+  name: AUC.last
+  goal: maximize
+parameters:
+  optimization_bundle:
+    values: [current, mixed]
+  propagation_bundle:
+    values: [current, mixed]
+  seed:
+    values: [0, 1, 2, 3, 4]
+

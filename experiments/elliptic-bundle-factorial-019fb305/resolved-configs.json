@@ -1,0 +1,25 @@
+{
+  "common": {
+    "dataset": "elliptic",
+    "lambda_rec_emb": 0.1,
+    "ring_loss_weight": 1.0,
+    "peak_lr": 0.0005,
+    "warmup_updates": 50,
+    "outlier_beta": 0.3,
+    "rec_loss_weight": 1.0,
+    "ring_R_min": 0.3,
+    "ring_R_max": 1.0,
+    "train_rate": 0.05,
+    "data_split_seed": 42,
+    "hsc_diagnostics": true
+  },
+  "optimization": {
+    "current": {"batch_size": 32768, "end_lr": 0.0003, "num_epoch": 150, "final_step": 150, "batches_per_epoch": 2},
+    "mixed": {"batch_size": 8192, "end_lr": 0.0001, "num_epoch": 200, "final_step": 200, "batches_per_epoch": 6}
+  },
+  "propagation": {
+    "current": {"pp_k": 7, "progregate_alpha": 0.6},
+    "mixed": {"pp_k": 8, "progregate_alpha": 0.8}
+  }
+}
+
