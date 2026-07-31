@@ -1,0 +1,19 @@
+# VecGAD efficiency benchmark protocol
+
+- Execution host: HCCS-90, GPU 0 (RTX 4090, 24 GB), with a declared parallel-GPU cap of one. Trials run sequentially to avoid CPU, RAM, and I/O contention in timing samples.
+- Datasets: Amazon and T-Finance.
+- Methods: VecGAD, GGAD, and the official RHO implementation at its separately recorded SHA. RHO uses the upstream parser's `alpha=1.0`; the upstream `run.sh` spelling `--beta` is not a valid parser option.
+- W&B: disabled. Raw JSON, logs, manifests, and environment snapshots are authoritative.
+- Dataset file I/O is outside the offline timer. The timer starts after `load_mat` returns and ends when the first training epoch can start.
+- RHO data assets are prepared before timing with the committed preparation script. T-Finance feature/label/topology comes from the same hashed `.mat` used by VecGAD/GGAD; Amazon uses DGL `FraudAmazonDataset`. The normalized Laplacian is the sparse algebraic equivalent of upstream `get_Lap.py`, and all generated files are hashed.
+- Each method/dataset has three fresh-process repeats. Each process warms up for 10 complete epochs and records the next 30 complete epochs.
+- Epoch time includes data-loader iteration, CPU-to-GPU batch transfer, forward, backward, optimizer step, and scheduler step. Evaluation, checkpoints, terminal rendering, and logging are outside the timer.
+- RHO's method-native center recomputation and full-graph forward are inside its measured epoch; evaluation is omitted from all methods.
+- The RHO harness imports the upstream `Dataset` and `RHO` classes at the recorded SHA. It mirrors upstream `init_params` and `get_split` locally because upstream `utils.py` hard-imports unused OGB functionality unavailable in the frozen runtime; the mirrored functions are covered by the harness digest.
+- CUDA timing is synchronized. CPU memory is sampled from process RSS. CUDA allocated and reserved peaks are reset and recorded separately for offline and training phases.
+- A CUDA OOM is accepted only after two fresh-process failures under the identical configuration. Other failure classes remain distinct.
+- VecGAD uses the paper operator `D^-1/2 A D^-1/2 + I`, a sparse COO representation, and sequential hop reuse. Formal timing is gated on token equivalence.
+- The gate first checks tokens with `rtol=1e-5`, `atol=1e-6`, then compares final seed-0 AUC/AP after the same 40-epoch trajectory. Amazon uses the former dense recomputation as reference; T-Finance uses sparse recomputation from the origin. Either metric delta above `0.005` requires the predeclared five-seed escalation before timing.
+- No DGraph or K-scaling experiment is part of this protocol.
+- Each raw result records hostname, Python/Torch/CUDA identity, GPU name/capacity, phase RSS baseline/absolute peak/delta, and GPU allocated/reserved baseline/peak/delta. The validator rejects unexpected host/GPU identity, missing repeats, invalid epoch vectors, and non-repeated OOMs.
+- Break-even analysis, table selection, and manuscript wording are deferred until all raw evidence is collected.

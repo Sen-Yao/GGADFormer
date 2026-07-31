@@ -62,6 +62,14 @@ def normalize_adj(adj):
     return adj.dot(d_mat_inv_sqrt).transpose().dot(d_mat_inv_sqrt).tocoo()
 
 
+def scipy_sparse_to_torch_sparse(matrix):
+    """Convert a SciPy sparse matrix to a coalesced float32 Torch COO tensor."""
+    matrix = matrix.tocoo().astype(np.float32)
+    indices = torch.from_numpy(np.vstack((matrix.row, matrix.col)).astype(np.int64))
+    values = torch.from_numpy(matrix.data)
+    return torch.sparse_coo_tensor(indices, values, matrix.shape).coalesce()
+
+
 def dense_to_one_hot(labels_dense, num_classes):
     """Convert class labels from scalars to one-hot vectors."""
     num_labels = labels_dense.shape[0]
@@ -286,12 +294,10 @@ def node_neighborhood_feature(adj, features, k, alpha=0.1):
 
     x_0 = features
     for i in range(k):
-        # print(f"features.shape: {features.shape}, adj.shape: {adj.shape}")
-        if isinstance(adj, torch.Tensor):
-            features = (1-alpha) * torch.mm(adj, features) + alpha * x_0
-        else:
-            # sparse adj, maybe DGraph
-            features = (1 - alpha) * torch.spmm(adj, features) + alpha * x_0
+        if not isinstance(adj, torch.Tensor):
+            raise TypeError(f"adj must be a torch.Tensor, got {type(adj)!r}")
+        propagated = torch.sparse.mm(adj, features) if adj.is_sparse else torch.mm(adj, features)
+        features = (1 - alpha) * propagated + alpha * x_0
 
     return features
 
@@ -564,16 +570,21 @@ def nagphormer_tokenization(features, adj, args):
     print("Tokenizating")
     start_time = time.time()
 
-    nodes_features = features.unsqueeze(1)
-    for hop in range(args.pp_k):
+    token_features = [features]
+    current_features = features
+    for _ in range(args.pp_k):
+        propagated = torch.sparse.mm(adj, current_features) if adj.is_sparse else torch.mm(adj, current_features)
+        current_features = (
+            (1 - args.progregate_alpha) * propagated
+            + args.progregate_alpha * features
+        )
+        token_features.append(current_features)
 
-        steped_nodes_features = node_neighborhood_feature(adj, features, hop+1, args.progregate_alpha)
-        nodes_features = torch.concat((nodes_features, steped_nodes_features.unsqueeze(1)), dim=1)
+    nodes_features = torch.stack(token_features, dim=1)
     print(f"Tokenization time: {time.time() - start_time:.4f}s")
     
     # 计算并输出 nodes_features 空间开销
-    num_elements = nodes_features.shape[0] * nodes_features.shape[1] * nodes_features.shape[2]
-    memory_bytes = num_elements * 4  # float32 = 4 bytes
+    memory_bytes = nodes_features.untyped_storage().nbytes()
     if memory_bytes >= 1024**3:
         memory_str = f"{memory_bytes / 1024**3:.2f} GB"
     elif memory_bytes >= 1024**2:
@@ -583,6 +594,18 @@ def nagphormer_tokenization(features, adj, args):
     print(f"nodes_features shape: {nodes_features.shape}, memory usage: {memory_str}")
     
     return nodes_features
+
+
+def legacy_nagphormer_tokenization(features, adj, args):
+    """Reference implementation that recomputes every hop from the origin."""
+    token_features = [features]
+    for hop in range(args.pp_k):
+        token_features.append(
+            node_neighborhood_feature(
+                adj, features, hop + 1, args.progregate_alpha
+            )
+        )
+    return torch.stack(token_features, dim=1)
 
 class PolynomialDecayLR(_LRScheduler):
 

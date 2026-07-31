@@ -10,6 +10,11 @@ import random
 import dgl
 from sklearn.metrics import average_precision_score
 import argparse
+import json
+import os
+import platform
+import socket
+import threading
 from tqdm import tqdm
 import time
 import torch.utils.data as Data
@@ -19,12 +24,132 @@ from visualization import create_tsne_visualization, visualize_attention_weights
 from utils import send_notification, calculate_graph_statistics
 from ablation_rec_error import evaluate_with_rec_error_filter
 
+
+def _rss_bytes():
+    try:
+        with open('/proc/self/status', 'r', encoding='utf-8') as stream:
+            for line in stream:
+                if line.startswith('VmRSS:'):
+                    return int(line.split()[1]) * 1024
+    except (FileNotFoundError, OSError):
+        return 0
+    return 0
+
+
+class _PeakRSSSampler:
+    def __init__(self, interval=0.01):
+        self.interval = interval
+        self.baseline = _rss_bytes()
+        self.peak = self.baseline
+        self._stop = threading.Event()
+        self._thread = None
+
+    def start(self):
+        def sample():
+            while not self._stop.is_set():
+                self.peak = max(self.peak, _rss_bytes())
+                self._stop.wait(self.interval)
+
+        self._thread = threading.Thread(target=sample, daemon=True)
+        self._thread.start()
+
+    def stop(self):
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join()
+        self.peak = max(self.peak, _rss_bytes())
+        return {
+            'baseline_bytes': self.baseline,
+            'peak_bytes': self.peak,
+            'delta_bytes': max(0, self.peak - self.baseline),
+        }
+
+
+def _cuda_sync(device):
+    if torch.cuda.is_available() and device.type == 'cuda':
+        torch.cuda.synchronize(device)
+
+
+def _cuda_current(device):
+    if not (torch.cuda.is_available() and device.type == 'cuda'):
+        return {'allocated_bytes': 0, 'reserved_bytes': 0}
+    return {
+        'allocated_bytes': torch.cuda.memory_allocated(device),
+        'reserved_bytes': torch.cuda.memory_reserved(device),
+    }
+
+
+def _cuda_peak(device, baseline=None):
+    if not (torch.cuda.is_available() and device.type == 'cuda'):
+        baseline = baseline or {'allocated_bytes': 0, 'reserved_bytes': 0}
+        return {
+            'baseline': baseline,
+            'peak': {'allocated_bytes': 0, 'reserved_bytes': 0},
+            'delta': {'allocated_bytes': 0, 'reserved_bytes': 0},
+        }
+    baseline = baseline or {'allocated_bytes': 0, 'reserved_bytes': 0}
+    peak = {
+        'allocated_bytes': torch.cuda.max_memory_allocated(device),
+        'reserved_bytes': torch.cuda.max_memory_reserved(device),
+    }
+    return {
+        'baseline': baseline,
+        'peak': peak,
+        'delta': {
+            key: max(0, peak[key] - baseline[key])
+            for key in ('allocated_bytes', 'reserved_bytes')
+        },
+    }
+
+
+def _runtime_identity(device):
+    gpu = None
+    if torch.cuda.is_available() and device.type == 'cuda':
+        properties = torch.cuda.get_device_properties(device)
+        gpu = {
+            'index': device.index,
+            'name': properties.name,
+            'total_memory_bytes': properties.total_memory,
+        }
+    return {
+        'hostname': socket.gethostname(),
+        'platform': platform.platform(),
+        'python': platform.python_version(),
+        'torch': torch.__version__,
+        'cuda_runtime': torch.version.cuda,
+        'cudnn': torch.backends.cudnn.version(),
+        'gpu': gpu,
+    }
+
+
+def _write_efficiency_failure(args, status, error):
+    output = {
+        'schema_version': 1,
+        'status': status,
+        'dataset': args.dataset,
+        'method': args.model_type,
+        'seed': args.seed,
+        'repeat': args.efficiency_repeat,
+        'error_type': type(error).__name__,
+        'error': str(error),
+    }
+    output_dir = os.path.dirname(os.path.abspath(args.efficiency_output))
+    os.makedirs(output_dir, exist_ok=True)
+    temporary_output = args.efficiency_output + '.tmp'
+    with open(temporary_output, 'w', encoding='utf-8') as stream:
+        json.dump(output, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+    os.replace(temporary_output, args.efficiency_output)
+
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
 # os.environ["KMP_DUPLICATE_LnIB_OK"] = "TRUE"
 # Set argument
 
 def train(args):
+    efficiency_mode = getattr(args, 'efficiency_mode', False)
+    efficiency_metrics = None
+    tokenization_seconds = 0.0
     # Set random seed
     dgl.random.seed(args.seed)
     np.random.seed(args.seed)
@@ -49,7 +174,17 @@ def train(args):
     # Load and preprocess data
     if args.dataset == 'dgraph':
         adj, features, labels, all_idx, idx_train, idx_val, idx_test, ano_label, _, _, normal_for_train_idx, normal_for_generation_idx = load_dgraph(train_rate=args.train_rate, val_rate=0.1, args=args)
+        if efficiency_mode:
+            offline_rss = _PeakRSSSampler()
+            offline_rss.start()
+            _cuda_sync(device)
+            offline_gpu_baseline = _cuda_current(device)
+            if device.type == 'cuda':
+                torch.cuda.reset_peak_memory_stats(device)
+            offline_start = time.perf_counter()
+        tokenization_start = time.perf_counter()
         concated_input_features = nagphormer_tokenization(features, adj, args)
+        tokenization_seconds = time.perf_counter() - tokenization_start
         model = VecGAD(features.shape[1], args.embedding_dim, 'prelu', args)
         features = features.to(device)
         adj = adj.to(device)
@@ -60,6 +195,15 @@ def train(args):
     else:
         adj, features, labels, all_idx, idx_train, idx_val, \
         idx_test, ano_label, str_ano_label, attr_ano_label, normal_for_train_idx, normal_for_generation_idx = load_mat(args.dataset, args.train_rate, 0.1, args=args)
+
+        if efficiency_mode:
+            offline_rss = _PeakRSSSampler()
+            offline_rss.start()
+            _cuda_sync(device)
+            offline_gpu_baseline = _cuda_current(device)
+            if device.type == 'cuda':
+                torch.cuda.reset_peak_memory_stats(device)
+            offline_start = time.perf_counter()
 
         if args.dataset in ['Amazon', 'tf_finace', 'reddit', 'elliptic']:
             features, _ = preprocess_features(features)
@@ -77,13 +221,16 @@ def train(args):
             raw_adj = raw_adj.to(device)
 
         adj = normalize_adj(adj)
-        adj = (adj + sp.eye(adj.shape[0])).todense()
+        adj = adj + sp.eye(adj.shape[0], format='coo')
         features = torch.FloatTensor(features[np.newaxis])
-        # adj = torch.FloatTensor(adj[np.newaxis])
         features = torch.FloatTensor(features)
-        adj = torch.FloatTensor(adj)
-        # adj = adj.to_sparse_csr()
-        adj = torch.FloatTensor(adj[np.newaxis])
+        if args.model_type == 'VecGAD':
+            if args.tokenization_reference == 'dense_recomputation':
+                adj = torch.FloatTensor(adj.todense())
+            else:
+                adj = scipy_sparse_to_torch_sparse(adj)
+        else:
+            adj = torch.FloatTensor(adj.todense()[np.newaxis])
         labels = torch.FloatTensor(labels[np.newaxis])
 
         # 将数据移动到指定设备
@@ -101,7 +248,14 @@ def train(args):
         # Initialize model and optimiser
 
         if args.model_type == 'VecGAD':
-            concated_input_features = nagphormer_tokenization(features.squeeze(0), adj.squeeze(0), args)
+            tokenization_start = time.perf_counter()
+            if args.tokenization_reference == 'sequential_sparse':
+                concated_input_features = nagphormer_tokenization(features.squeeze(0), adj, args)
+            else:
+                concated_input_features = legacy_nagphormer_tokenization(
+                    features.squeeze(0), adj, args
+                )
+            tokenization_seconds = time.perf_counter() - tokenization_start
             model = VecGAD(ft_size, args.embedding_dim, 'prelu', args)
         elif args.model_type == 'SGT':
             concated_input_features = preprocess_sample_features(args, features.squeeze(0), adj.squeeze(0)).to(device)
@@ -177,12 +331,54 @@ def train(args):
 
         normal_for_train_idx = torch.tensor(normal_for_train_idx, dtype=torch.long, device=device)
 
+    if efficiency_mode:
+        _cuda_sync(device)
+        offline_seconds = time.perf_counter() - offline_start
+        offline_memory = offline_rss.stop()
+        offline_gpu = _cuda_peak(device, offline_gpu_baseline)
+        token_payload_bytes = 0
+        if args.model_type == 'VecGAD':
+            token_payload_bytes = concated_input_features.untyped_storage().nbytes()
+        efficiency_metrics = {
+            'schema_version': 1,
+            'status': 'completed',
+            'dataset': args.dataset,
+            'method': args.model_type,
+            'seed': args.seed,
+            'repeat': args.efficiency_repeat,
+            'config': vars(args),
+            'runtime': _runtime_identity(device),
+            'offline': {
+                'seconds': offline_seconds,
+                'tokenization_seconds': tokenization_seconds,
+                'rss': offline_memory,
+                'gpu_peak': offline_gpu,
+                'token_payload_bytes': token_payload_bytes,
+            },
+            'training': {},
+        }
+
 
     # Train model
-    print(f"Start training! Total epochs: {args.num_epoch}")
-    pbar = tqdm(total=args.num_epoch, desc='Training')
+    if efficiency_mode:
+        total_epochs = args.efficiency_warmup_epochs + args.efficiency_measure_epochs
+        measured_epoch_seconds = []
+        training_rss = _PeakRSSSampler()
+        training_rss.start()
+        _cuda_sync(device)
+        training_gpu_baseline = _cuda_current(device)
+        if device.type == 'cuda':
+            torch.cuda.reset_peak_memory_stats(device)
+    else:
+        total_epochs = args.num_epoch + 1
+
+    print(f"Start training! Total epochs: {total_epochs}")
+    pbar = tqdm(total=total_epochs, desc='Training', disable=efficiency_mode)
     total_time = 0
-    for epoch in range(args.num_epoch + 1):
+    for epoch in range(total_epochs):
+        if efficiency_mode:
+            _cuda_sync(device)
+            measured_epoch_start = time.perf_counter()
         dynamic_weights = get_dynamic_loss_weights(epoch, args)
         start_time = time.time()
         train_flag = True
@@ -231,14 +427,15 @@ def train(args):
             current_lr = optimizer.param_groups[0]['lr']
             
             # 更新进度条信息
-            pbar.set_postfix({
-                'Time': f'{total_time:.1f}s',
-                'Epoch': f'{epoch+1}/{args.num_epoch}',
-                'AUC': f'{auc:.4f}',
-                'AP': f'{ap:.4f}'
-            })
-            pbar.update(1)
-            if epoch % 2 == 0:
+            if not efficiency_mode:
+                pbar.set_postfix({
+                    'Time': f'{total_time:.1f}s',
+                    'Epoch': f'{epoch+1}/{args.num_epoch}',
+                    'AUC': f'{auc:.4f}',
+                    'AP': f'{ap:.4f}'
+                })
+                pbar.update(1)
+            if epoch % 2 == 0 and not efficiency_mode:
                 wandb.log({ "batched_total_loss": batched_total_loss.item(),
                             "bce_loss": batched_bce_loss.item(),
                             "rec_loss": batched_rec_loss.item(),
@@ -298,14 +495,15 @@ def train(args):
             current_lr = optimizer.param_groups[0]['lr']
             
             # 更新进度条信息
-            pbar.set_postfix({
-                'Time': f'{total_time:.1f}s',
-                'Epoch': f'{epoch+1}/{args.num_epoch}',
-                'AUC': f'{auc:.4f}',
-                'AP': f'{ap:.4f}'
-            })
-            pbar.update(1)
-            if epoch % 2 == 0:
+            if not efficiency_mode:
+                pbar.set_postfix({
+                    'Time': f'{total_time:.1f}s',
+                    'Epoch': f'{epoch+1}/{args.num_epoch}',
+                    'AUC': f'{auc:.4f}',
+                    'AP': f'{ap:.4f}'
+                })
+                pbar.update(1)
+            if epoch % 2 == 0 and not efficiency_mode:
                 wandb.log({ "margin_loss": loss_margin.item(),
                             "bce_loss": loss_bce.item(),
                             "rec_loss": loss_rec.item(),
@@ -315,7 +513,13 @@ def train(args):
                             "reconstruction_loss": reconstruction_loss.item(),
                             "learning_rate": current_lr}, step=epoch)
         lr_scheduler.step()
-        if epoch % 10 == 0:
+        if efficiency_mode:
+            _cuda_sync(device)
+            measured_epoch_end = time.perf_counter()
+            if epoch >= args.efficiency_warmup_epochs:
+                measured_epoch_seconds.append(measured_epoch_end - measured_epoch_start)
+
+        if epoch % 10 == 0 and not efficiency_mode:
             model.eval()
             train_flag = False
 
@@ -360,6 +564,51 @@ def train(args):
 
     pbar.close()  # 关闭进度条
     print(f"Training done! Total time: {total_time:.2f} seconds")
+
+    if efficiency_mode:
+        _cuda_sync(device)
+        training_memory = training_rss.stop()
+        efficiency_metrics['training'] = {
+            'warmup_epochs': args.efficiency_warmup_epochs,
+            'measured_epochs': args.efficiency_measure_epochs,
+            'epoch_seconds': measured_epoch_seconds,
+            'rss': training_memory,
+            'gpu_peak': _cuda_peak(device, training_gpu_baseline),
+            'optimizer_steps_per_epoch': len(train_data_loader) if args.model_type == 'VecGAD' else 1,
+            'batch_size': args.batch_size if args.model_type == 'VecGAD' else num_nodes,
+        }
+        efficiency_metrics['model'] = {
+            'parameter_count': sum(parameter.numel() for parameter in model.parameters()),
+            'trainable_parameter_count': sum(
+                parameter.numel() for parameter in model.parameters() if parameter.requires_grad
+            ),
+        }
+        if args.efficiency_evaluate:
+            model.eval()
+            all_batched_logits = []
+            with torch.no_grad():
+                for item in test_data_loader:
+                    input_tokens = item[0].to(device)
+                    _, _, logits, _, _, _, _ = model(
+                        input_tokens, None, None, None, False, args
+                    )
+                    all_batched_logits.append(logits.squeeze(0))
+            logits = torch.cat(all_batched_logits, dim=0).cpu().numpy().squeeze()
+            efficiency_metrics['validation'] = {
+                'auc': roc_auc_score(ano_label[idx_test], logits),
+                'ap': average_precision_score(
+                    ano_label[idx_test], logits, average='macro', pos_label=1
+                ),
+                'evaluation_in_timing': False,
+            }
+        output_dir = os.path.dirname(os.path.abspath(args.efficiency_output))
+        os.makedirs(output_dir, exist_ok=True)
+        temporary_output = args.efficiency_output + '.tmp'
+        with open(temporary_output, 'w', encoding='utf-8') as stream:
+            json.dump(efficiency_metrics, stream, indent=2, sort_keys=True)
+            stream.write('\n')
+        os.replace(temporary_output, args.efficiency_output)
+        return efficiency_metrics
     
     # 在最后一次eval时进行重构误差分析可视化
     if args.visualize and args.model_type == "VecGAD":
@@ -485,6 +734,17 @@ if __name__ == "__main__":
     parser.add_argument('--end_lr', type=float, default=1e-4)
 
     parser.add_argument('--warmup_epoch', type=int, default=20)
+    parser.add_argument('--efficiency_mode', action='store_true')
+    parser.add_argument('--efficiency_warmup_epochs', type=int, default=10)
+    parser.add_argument('--efficiency_measure_epochs', type=int, default=30)
+    parser.add_argument('--efficiency_repeat', type=int, default=0)
+    parser.add_argument('--efficiency_output', type=str)
+    parser.add_argument('--efficiency_evaluate', action='store_true')
+    parser.add_argument(
+        '--tokenization_reference',
+        choices=['sequential_sparse', 'dense_recomputation', 'sparse_recomputation'],
+        default='sequential_sparse',
+    )
 
     # Ablation Study (perturbation + h_mean center computation + token fusion)
     parser.add_argument('--ablation_mode', type=str, default='none',
@@ -516,39 +776,55 @@ if __name__ == "__main__":
         args.var = 0.0
 
 
-    run = wandb.init(
-        entity="HCCS",
-        # Set the wandb project where this run will be logged.
-        project="VecGAD",
-        # Track hyperparameters and run metadata.
-        config=args,
-    )
+    if args.efficiency_mode and not args.efficiency_output:
+        parser.error('--efficiency_output is required with --efficiency_mode')
+    if args.model_type != 'VecGAD' and args.tokenization_reference != 'sequential_sparse':
+        parser.error('--tokenization_reference applies only to VecGAD')
 
-    wandb.define_metric("AUC", summary="max")
-    wandb.define_metric("AP", summary="max")
-    wandb.define_metric("AUC", summary="last")
-    wandb.define_metric("AP", summary="last")
+    run = None
+    if not args.efficiency_mode:
+        run = wandb.init(
+            entity="HCCS",
+            project="VecGAD",
+            config=args,
+        )
+
+        wandb.define_metric("AUC", summary="max")
+        wandb.define_metric("AP", summary="max")
+        wandb.define_metric("AUC", summary="last")
+        wandb.define_metric("AP", summary="last")
     print('Dataset: ', args.dataset)
         
     try:
         train(args)
         start_time = time.time()
-        wandb.finish()
+        if run is not None:
+            wandb.finish()
         
         
     except torch.cuda.OutOfMemoryError as e:
         print(f"显存不足!：{e}")
+        if args.efficiency_mode:
+            _write_efficiency_failure(args, 'gpu_oom', e)
+            raise
         send_notification(f"【VecFormer】出现显存不足!：{e}")
-        wandb.log({"AUC.max": 0})
-        wandb.log({"AP.max": 0})
+        if run is not None:
+            wandb.log({"AUC.max": 0})
+            wandb.log({"AP.max": 0})
         start_time = time.time()
-        wandb.finish()
+        if run is not None:
+            wandb.finish()
     
     except Exception as e:
         import traceback
         print(f"其他错误：{e}")
         traceback.print_exc()  # 打印详细的错误堆栈，包括出错的代码行
-        wandb.log({"AUC.max": 0})
+        if args.efficiency_mode:
+            _write_efficiency_failure(args, 'error', e)
+            raise
+        if run is not None:
+            wandb.log({"AUC.max": 0})
         start_time = time.time()
-        wandb.finish()
+        if run is not None:
+            wandb.finish()
     print(f"WandB finish took {time.time() - start_time:.2f} seconds")
