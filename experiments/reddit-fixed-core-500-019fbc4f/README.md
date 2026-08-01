@@ -25,10 +25,10 @@ validation 标签用于超参数选择是本协议的明确科研假设；其目
 |---|---|---|---|---|---|
 | S1 | validation-only screening | required | screening | 192 configs × 2 seeds = 384 | complete |
 | P1 | fresh-seed promotion | required | canonical-coverage | top 12 × 5 seeds = 60 | complete |
-| C1 | frozen test confirmation | required | promotion | top 6 × 5 seeds = 30 | pending |
+| C1 | frozen test confirmation | required | promotion | top 6 × 5 seeds = 30 | complete |
 | R1 | technical retries | adaptive | implementation validity | crashed/identity-invalid only; at most 25 | not-triggered |
 
-初始三轴状态为 `Lifecycle: active`、`Coverage: none`、`Scientific verdict: unresolved`。
+最终三轴状态为 `Lifecycle: complete`、`Coverage: required-complete`、`Scientific verdict: mixed`。固定核心扫描已完整覆盖预声明范围；AUROC 与 PDF 17 接近，但 AUPRC 仍有差距，因此不作全面复现成功的表述。
 
 ## Promotion 冻结结果
 
@@ -44,6 +44,23 @@ Promotion sweep `55chbpyh` 的 60 条 validation-only 记录全部有效。按�
 | 6 | `cfg-016` | 0.528330 ± 0.038136 | 0.036518 ± 0.004086 |
 
 完整 validation 证据位于 `promotion-results.json`。该冻结过程未读取 test；六个配置固定后，confirmation 才能用 seeds 0--4 在固定最终 epoch 各读取一次 test。
+
+## Confirmation 固定最终结果
+
+Confirmation sweep `219k2jj2` 的 30 条记录全部有效。下表严格保留 promotion validation 冻结顺序；Test 指标没有用于重排、挑选配置或选择 epoch。标准差为五个预声明 seeds 0--4 的样本标准差。
+
+| Validation freeze rank | Config | Test AUROC mean ± sample std | Test AP mean ± sample std |
+|---:|---|---:|---:|
+| 1 | `cfg-117` | 0.579653 ± 0.017170 | 0.041303 ± 0.003952 |
+| 2 | `cfg-058` | 0.521017 ± 0.048216 | 0.037056 ± 0.004736 |
+| 3 | `cfg-183` | 0.546887 ± 0.027083 | 0.036153 ± 0.003326 |
+| 4 | `cfg-177` | 0.544546 ± 0.038492 | 0.037006 ± 0.005304 |
+| 5 | `cfg-018` | 0.497024 ± 0.021790 | 0.034359 ± 0.002773 |
+| 6 | `cfg-016` | 0.559765 ± 0.029880 | 0.038347 ± 0.004380 |
+
+预冻结第一名 `cfg-117` 相对 PDF 17 的 AUROC 0.5782 高 0.001453，AUPRC 0.0441 低 0.002797。它相对严格固定核心历史控制 `ry7lvaiy` 的 AUROC 0.551455 / AUPRC 0.040330 分别高 0.028198 和 0.000973，但 AUROC 的 seed 间离散程度也更大。因此证据支持“在不可变固定核心下找到 AUROC 接近 PDF 的配置”，不支持“完整复现 PDF 两项指标”或跨数据集泛化结论。
+
+完整逐 run 证据、固定最终 step、聚合值和摘要 SHA 位于 `confirmation-results.json`。审计前所有 run 的 application artifact 清单为 0。一次 `scan_history` 审计调用使 W&B 服务端为 `3kstc07c` 物化了内部 `wandb-history` 对象；它不是训练或客户端上传，也没有引入授权范围外的数据类别。此后终态审计不再使用该 API，并在 manifest 中单列该副作用。
 
 ## 搜索空间
 
@@ -74,6 +91,8 @@ Transformer 宽度、深度和方法结构保持不变。每个 resolved config 
 | hard total | 500 |
 
 任何 smoke、失败或重试都会消耗一个 ordinal。低分、离群值或科学上不理想的有效 run 不得重跑。manifest 中 `next_record_ordinal` 在任何会创建或分配新 run 的操作前检查；ordinal 501 永远拒绝。
+
+最终科学消耗为 475/500：smoke 1、screening 384、promotion 60、confirmation 30，未发生失败或重试；25 条技术重试预留保持未使用，并在 investigation 完成后不再分配。
 
 ## 外部数据授权
 

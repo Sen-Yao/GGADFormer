@@ -31,3 +31,19 @@
 - HCCS-90 direct Git fetch reached GitHub but could not lock the stale task remote-tracking ref. A complete bundle from the verified pushed branch was transferred and verified (bundle SHA `30d6ed03614074a986e658251f1e5e9ce8abed5580d393ef5513ff4ac95e24d8`). The clean detached confirmation worktree is at gate SHA `73ae066e79ab20d09c69e3fc73b3ffb5e870fb8f`; data/runtime/YAML/parser and four negative fixed-core guards passed. Native confirmation sweep `219k2jj2` was created exactly once at 2026-08-01T11:54:50Z and remained `PENDING` with 0 runs at the prelaunch audit.
 - Confirmation launched on HCCS-90 at 2026-08-01T11:57:00Z with tmux session `reddit_fixed_core_500_019fbc4f_confirmation`, panes `%107`--`%114`, GPU mapping 0--7, and assignment counts 4/4/4/4/4/4/3/3 = 30. The initial audit at 11:58:14Z found eight unique running W&B identities and no fixed-core, phase, seed, frozen-test, code, host, duplicate, failure, or cap violation. Record consumption is 453/500 with 47 remaining; 22 confirmation assignments and all 25 retry records remain. A subsequent detail-only API query saw a transient connection reset, while tmux agents and all eight compute processes remained healthy.
 - One-shot confirmation heartbeat generation 1 (`check-reddit-fixed-core-confirmation`) is scheduled for 2026-08-01T12:06:00Z. It is bound to sweep `219k2jj2`, HCCS-90 panes `%107`--`%114`, fixed-final `frozen_test`, the immutable four-item core, and the 500-record guard. The obsolete promotion heartbeat was deleted.
+
+## 2026-08-01 Confirmation 收口
+
+- Confirmation 在 2026-08-01T12:07:21Z 前完成全部 30 个预声明身份。Native sweep `219k2jj2` 已显式停止并为 `FINISHED`；30/30 run 均为 `finished`，固定核心、phase、seed、`frozen_test`、execution SHA、host/GPU 和固定最终 summary step 全部一致。没有失败、重复、缺失指标、身份漂移或 application artifact。
+- `confirmation-results.json` 在 promotion 冻结顺序上导出并独立重放全部 fixed-final Val/Test 指标。文件 SHA 为 `8bf5dee3fbab2684ddd8b3f418cb6b35dadb93525a0dc7186bb91ba8d936b544`，payload SHA 为 `3f0259ff2ac5c5a2716cf9581f4fbb6f9f4abb1122b280d88f39af48b26b8059`，rows SHA 为 `dad2bc2bc247fa17364865c005a3368e5a1d060221311954a59001fa8f295118`。
+- 预冻结第一名 `cfg-117` 的 Test AUROC 为 0.579653 ± 0.017170，Test AP 为 0.041303 ± 0.003952。相对 PDF 17 的 0.5782 / 0.0441，AUROC 差值为 +0.001453，AP 差值为 -0.002797。六配置均按 validation 冻结顺序报告，没有 Test 重排或 per-seed best epoch。
+- 审计前全量 `logged_artifacts()` 检查为 0。随后一次只读 `scan_history` 调用使 W&B 服务端为 run `3kstc07c` 物化 `run-3kstc07c-history:v0`（type `wandb-history`，2,237 bytes）；创建时间与审计调用一致，训练代码没有上传 artifact，且没有新增授权外数据类别。审计已停止使用该 API，该内部对象在 manifest 中单列，不作为训练 artifact 或科学证据。
+- Heartbeat `check-reddit-fixed-core-confirmation` 已删除。最终 scientific consumption 为 475/500，25 条 technical retry records 未触发且不再分配；ordinal 501 从未创建或分配。
+
+Closure Audit：
+
+- Lifecycle: `complete`；Coverage: `required-complete`；Scientific verdict: `mixed`。
+- Required scope: S1、P1、C1 共 3/3 完成，无 waiver；adaptive R1 未触发；没有 optional item。
+- job 层：smoke、screening、promotion、confirmation 全部有效终止。phase 层：validation-only 选择与 frozen-test 确认均完成。配置层：`cfg-117` 在 AUROC 上接近 PDF，但 AP 仍低。investigation 层：固定核心 Reddit 搜索范围完成。
+- 证据支持范围仅限 Reddit、split seed 42、当前 VecGAD 实现、预声明搜索空间和 seeds；不外推到其他数据集、方法改造、不同核心参数或普遍复现结论。
+- 剩余资源为未使用的 25 条技术重试记录；因没有技术失败且 required scope 已完成，不再使用。没有 successor investigation 被本结果自动授权或启动。

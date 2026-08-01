@@ -1,7 +1,7 @@
 schema_version: 1
-state: launched
-formal_launch_allowed: true
-confirmation_launch_allowed: true
+state: completed
+formal_launch_allowed: false
+confirmation_launch_allowed: false
 protocol:
   id: reddit-fixed-core-500-019fbc4f
   governance: governed
@@ -24,6 +24,8 @@ protocol:
   confirmation_config_ids_sha256: adfb7edae5c7e46f0363ccf7e2e7db6332da5ada79620ddea4241ce1ea9f1a7c
   confirmation_trials_sha256: 95fbdac5ad1df47a47adf91a16df12f4618662f3fc5ebcce544d360e692872d0
   confirmation_sweep_config_sha256: 866b6e15a3a85c87ac541b448ec75609847dc5179d7e7814452a4220babe810f
+  confirmation_results_file_sha256: 8bf5dee3fbab2684ddd8b3f418cb6b35dadb93525a0dc7186bb91ba8d936b544
+  confirmation_results_payload_sha256: 3f0259ff2ac5c5a2716cf9581f4fbb6f9f4abb1122b280d88f39af48b26b8059
   config_parser: run.py argparse with FIXED_CORE_GUARD=1
   label_boundary: validation labels may select configs; test labels are inaccessible in validation_only and read once at the frozen final epoch in confirmation
   selection_policy:
@@ -52,14 +54,14 @@ budget:
   allocated_records: 475
   future_scientific_records_reserved: 0
   technical_retry_records_reserved: 25
-  created_records: 453
-  consumed_records: 453
-  valid_records: 445
+  created_records: 475
+  consumed_records: 475
+  valid_records: 475
   failed_records: 0
   retry_records: 0
-  remaining_records: 47
-  next_record_ordinal: 454
-  observed_at_utc: 2026-08-01T11:58:14Z
+  remaining_records: 25
+  next_record_ordinal: 476
+  observed_at_utc: 2026-08-01T12:26:58Z
   allocation_guard: reject before any operation that would create or assign ordinal 501
 
 authorization:
@@ -171,17 +173,20 @@ wandb:
   confirmation_sweep_id: 219k2jj2
   confirmation_sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/219k2jj2
   confirmation_sweep_created_at_utc: 2026-08-01T11:54:50Z
-  confirmation_sweep_state: RUNNING
-  confirmation_sweep_observed_at_utc: 2026-08-01T11:58:14Z
-  confirmation_runs_observed: 8
-  confirmation_state_counts_observed: {running: 8}
-  confirmation_identity_audit: {unique_identities: 8, identity_violations: 0, duplicates: 0}
+  confirmation_sweep_state: FINISHED
+  confirmation_sweep_observed_at_utc: 2026-08-01T12:26:58Z
+  confirmation_runs_observed: 30
+  confirmation_state_counts_observed: {finished: 30}
+  confirmation_run_ids_final: {count: 30, sha256: a497af44bdf54d99b0f2ae5e5c884c409f1931bf26b3041e5c40c6b9435d0e7f, path: experiments/reddit-fixed-core-500-019fbc4f/confirmation-results.json}
+  confirmation_identity_audit: {unique_identities: 30, identity_violations: 0, duplicates: 0, finished_metric_violations: 0, application_logged_artifacts: 0}
+  confirmation_results: {path: experiments/reddit-fixed-core-500-019fbc4f/confirmation-results.json, file_sha256: 8bf5dee3fbab2684ddd8b3f418cb6b35dadb93525a0dc7186bb91ba8d936b544, payload_sha256: 3f0259ff2ac5c5a2716cf9581f4fbb6f9f4abb1122b280d88f39af48b26b8059, rows_sha256: dad2bc2bc247fa17364865c005a3368e5a1d060221311954a59001fa8f295118}
+  wandb_internal_history_materialization: {count: 1, run_id: 3kstc07c, artifact: "run-3kstc07c-history:v0", type: wandb-history, created_at_utc: 2026-08-01T12:22:30Z, cause: audit_scan_history_api, training_or_client_upload: false, new_data_class: false}
   confirmation_create_exactly_once: true
   promotion_create_exactly_once: true
   expected_promotion_trials: 60
   create_exactly_once: true
   expected_screening_trials: 384
-  current_state: CONFIRMATION_RUNNING
+  current_state: COMPLETED
   preassignment_invalid_launches:
     - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
@@ -200,6 +205,10 @@ execution:
     - {pane_id: "%113", pane_pid: 461905, gpu_index: 6, agent_count: 3}
     - {pane_id: "%114", pane_pid: 461917, gpu_index: 7, agent_count: 3}
   confirmation_first_agent_start_utc: 2026-08-01T11:57:00Z
+  confirmation_last_run_heartbeat_utc: 2026-08-01T12:07:21Z
+  confirmation_terminal_observed_at_utc: 2026-08-01T12:26:58Z
+  confirmation_agents_terminal: true
+  confirmation_compute_pids_terminal: true
   git_transport: verified_bundle_after_origin_https_tls_failure
   git_transport_ref: bead6c63120708bf3e62b58aeb6a2bd3140fa12e
   git_bundle_sha256: a7502419bc237cbb25f21608561730da2305fb858fa82c529447e6ffc22bff1c
@@ -239,13 +248,15 @@ execution:
 
 heartbeat:
   type: one_shot
-  status: active
+  status: completed
   automation_id: check-reddit-fixed-core-confirmation
   phase: confirmation
   generation: 1
   created_at_utc: 2026-08-01T12:00:37Z
   scheduled_for: 2026-08-01T12:06:00Z
   scheduling_rule: "FREQ=DAILY;BYHOUR=20;BYMINUTE=6;COUNT=1"
+  completed_at_utc: 2026-08-01T12:26:58Z
+  automation_deleted: true
   previous_promotion_heartbeat:
     automation_id: check-reddit-fixed-core-screening
     generation: 3
@@ -253,7 +264,7 @@ heartbeat:
     automation_deleted: true
 
 result_validation:
-  all_expected_trials_terminal: false
+  all_expected_trials_terminal: true
   screening_expected_trials_terminal: true
   screening_config_identity_valid: true
   screening_code_identity_valid: true
@@ -268,15 +279,23 @@ result_validation:
   promotion_test_metrics_absent: true
   promotion_logged_artifacts_absent: true
   confirmation_selection_frozen: true
-  confirmation_expected_trials_terminal: false
+  confirmation_expected_trials_terminal: true
+  confirmation_config_identity_valid: true
+  confirmation_code_identity_valid: true
+  confirmation_data_identity_valid: true
+  confirmation_fixed_final_epoch_policy_valid: true
+  confirmation_application_logged_artifacts_absent: true
+  confirmation_test_selected_reranking_absent: true
+  confirmation_results_independent_replay_valid: true
+  wandb_internal_history_materialization_classified: true
   config_identity_valid: true
   code_identity_valid: true
   data_identity_valid: true
   fixed_final_epoch_policy_valid: true
 
 scope_status:
-  lifecycle: active
-  coverage: partial
-  scientific_verdict: unresolved
+  lifecycle: complete
+  coverage: required-complete
+  scientific_verdict: mixed
 
 blockers: []

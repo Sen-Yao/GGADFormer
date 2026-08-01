@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import math
 from pathlib import Path
 import statistics
 
@@ -155,6 +156,59 @@ def test_confirmation_sweep_matches_frozen_promotion_ranking():
     assert sweep["parameters"]["config_id"]["values"] == confirmed
     assert sweep["parameters"]["seed"]["values"] == [0, 1, 2, 3, 4]
     assert len(protocol.confirmation_trial_identities()) == 30
+
+
+def test_confirmation_results_replay_fixed_final_without_test_reranking():
+    protocol = load_protocol()
+    results = json.loads((TASK_ROOT / "confirmation-results.json").read_text())
+    payload = dict(results)
+    claimed_payload_sha256 = payload.pop("payload_sha256")
+    assert protocol.canonical_sha256(payload) == claimed_payload_sha256
+    assert results["sweep_state_at_collection"] == "FINISHED"
+    assert results["run_count"] == 30
+    assert results["valid_run_count"] == 30
+    assert results["unique_identity_count"] == 30
+    assert results["failed_run_count"] == 0
+    assert results["application_logged_artifact_count"] == 0
+    assert [item["config_id"] for item in results["aggregates"]] == list(
+        protocol.CONFIRMATION_CONFIG_IDS
+    )
+
+    expected_identities = protocol.confirmation_trial_identities()
+    observed_identities = []
+    by_config = {}
+    for row in results["runs"]:
+        observed_identities.append({
+            "phase": "confirmation",
+            "config_id": row["config_id"],
+            "seed": row["seed"],
+        })
+        resolved = protocol.resolve_config(
+            "confirmation", row["config_id"], row["seed"]
+        )
+        assert row["summary_step"] == resolved["num_epoch"]
+        assert row["state"] == "finished"
+        by_config.setdefault(row["config_id"], []).append(row)
+    assert observed_identities == expected_identities
+
+    for selection_rank, aggregate in enumerate(results["aggregates"], start=1):
+        rows = sorted(by_config[aggregate["config_id"]], key=lambda row: row["seed"])
+        assert [row["seed"] for row in rows] == [0, 1, 2, 3, 4]
+        assert aggregate["selection_rank"] == selection_rank
+        for metric in ("val_auc", "val_ap", "test_auc", "test_ap"):
+            values = [row["{}_last".format(metric)] for row in rows]
+            assert math.isclose(
+                aggregate["mean_{}_last".format(metric)],
+                statistics.mean(values),
+                rel_tol=0.0,
+                abs_tol=1e-15,
+            )
+            assert math.isclose(
+                aggregate["std_{}_last".format(metric)],
+                statistics.stdev(values),
+                rel_tol=0.0,
+                abs_tol=1e-15,
+            )
 
 
 def test_validation_path_does_not_index_test_labels_or_carry_training_labels():

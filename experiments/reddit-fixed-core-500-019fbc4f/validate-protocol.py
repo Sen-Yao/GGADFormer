@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import json
+import math
 from pathlib import Path
+import statistics
 
 import yaml
 
@@ -30,6 +32,9 @@ def main():
     )
     screening_results = json.loads((task_root / "screening-results.json").read_text())
     promotion_results = json.loads((task_root / "promotion-results.json").read_text())
+    confirmation_results = json.loads(
+        (task_root / "confirmation-results.json").read_text()
+    )
 
     protocol = validate_protocol()
     if manifest["protocol"]["id"] != PROTOCOL_ID:
@@ -145,6 +150,82 @@ def main():
             if resolved["evaluation_protocol"] != "frozen_test":
                 raise AssertionError("confirmation must use frozen test evaluation")
 
+    claimed_confirmation_payload_sha256 = confirmation_results["payload_sha256"]
+    confirmation_payload = dict(confirmation_results)
+    confirmation_payload.pop("payload_sha256")
+    if canonical_sha256(confirmation_payload) != claimed_confirmation_payload_sha256:
+        raise AssertionError("confirmation results payload digest mismatch")
+    if confirmation_results["sweep_state_at_collection"] != "FINISHED":
+        raise AssertionError("confirmation result was collected before sweep terminal")
+    for count_key in ("run_count", "unique_identity_count", "valid_run_count"):
+        if confirmation_results[count_key] != PHASE_BUDGET["confirmation"]:
+            raise AssertionError("confirmation {} mismatch".format(count_key))
+    if confirmation_results["failed_run_count"] != 0:
+        raise AssertionError("confirmation contains a failed run")
+    if confirmation_results["application_logged_artifact_count"] != 0:
+        raise AssertionError("confirmation contains an application artifact")
+
+    expected_identities = confirmation_trial_identities()
+    observed_identities = []
+    confirmation_by_config = {}
+    for row in confirmation_results["runs"]:
+        config_id = row["config_id"]
+        seed = row["seed"]
+        observed_identities.append({
+            "phase": "confirmation",
+            "config_id": config_id,
+            "seed": seed,
+        })
+        resolved = resolve_config("confirmation", config_id, seed)
+        if row["state"] != "finished":
+            raise AssertionError("confirmation row is not finished")
+        if row["summary_step"] != resolved["num_epoch"]:
+            raise AssertionError("confirmation row is not fixed-final")
+        for metric_key in (
+            "val_auc_last",
+            "val_ap_last",
+            "test_auc_last",
+            "test_ap_last",
+        ):
+            if not math.isfinite(row[metric_key]):
+                raise AssertionError("confirmation row has non-finite metric")
+        expected_config_sha256 = canonical_sha256(screening_registry()[config_id])
+        if row["config_sha256"] != expected_config_sha256:
+            raise AssertionError("confirmation row config digest mismatch")
+        confirmation_by_config.setdefault(config_id, []).append(row)
+    if observed_identities != expected_identities:
+        raise AssertionError("confirmation result identities mismatch")
+
+    if [item["config_id"] for item in confirmation_results["aggregates"]] != list(
+        CONFIRMATION_CONFIG_IDS
+    ):
+        raise AssertionError("confirmation aggregate order changed after Test read")
+    for selection_rank, aggregate in enumerate(
+        confirmation_results["aggregates"], start=1
+    ):
+        config_id = aggregate["config_id"]
+        rows = sorted(confirmation_by_config[config_id], key=lambda row: row["seed"])
+        if [row["seed"] for row in rows] != [0, 1, 2, 3, 4]:
+            raise AssertionError("confirmation aggregate seed mismatch")
+        if aggregate["selection_rank"] != selection_rank:
+            raise AssertionError("confirmation validation rank changed")
+        for prefix in ("val_auc", "val_ap", "test_auc", "test_ap"):
+            values = [row["{}_last".format(prefix)] for row in rows]
+            if not math.isclose(
+                aggregate["mean_{}_last".format(prefix)],
+                statistics.mean(values),
+                rel_tol=0.0,
+                abs_tol=1e-15,
+            ):
+                raise AssertionError("confirmation mean replay mismatch")
+            if not math.isclose(
+                aggregate["std_{}_last".format(prefix)],
+                statistics.stdev(values),
+                rel_tol=0.0,
+                abs_tol=1e-15,
+            ):
+                raise AssertionError("confirmation sample std replay mismatch")
+
     print(json.dumps({
         "manifest_state": manifest["state"],
         "protocol": protocol,
@@ -153,6 +234,9 @@ def main():
         "promotion_config_ids": list(PROMOTION_CONFIG_IDS),
         "confirmation_trials": len(confirmation_trial_identities()),
         "confirmation_config_ids": list(CONFIRMATION_CONFIG_IDS),
+        "confirmation_results_payload_sha256": (
+            claimed_confirmation_payload_sha256
+        ),
     }, indent=2, sort_keys=True))
 
 
