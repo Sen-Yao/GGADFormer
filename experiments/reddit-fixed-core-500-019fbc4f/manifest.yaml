@@ -37,13 +37,13 @@ budget:
     technical_retry_reserve: 25
   scientific_records_planned: 475
   allocated_plus_reserved: 500
-  created_records: 0
-  consumed_records: 0
-  valid_records: 0
+  created_records: 1
+  consumed_records: 1
+  valid_records: 1
   failed_records: 0
   retry_records: 0
-  remaining_records: 500
-  next_record_ordinal: 1
+  remaining_records: 499
+  next_record_ordinal: 2
   allocation_guard: reject before any operation that would create or assign ordinal 501
 
 authorization:
@@ -82,8 +82,8 @@ selection:
     clean_gpu_count: 8
     aggregate_fp32_tflops: 660.64
     speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
-  occupancy_state: reserved
-  selected_at_utc: 2026-08-01T08:00:11Z
+  occupancy_state: running
+  selected_at_utc: 2026-08-01T08:34:19Z
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/DualRefGAD
@@ -105,17 +105,23 @@ wandb:
   project: GGADFormer
   smoke_run_id: fcfqzf5w
   smoke_run_url: https://wandb.ai/HCCS/GGADFormer/runs/fcfqzf5w
+  smoke_state: finished
+  smoke_metrics: {Val/AUC.last: 0.5257899142079934, Val/AP.last: 0.04450442254016716}
+  smoke_valid: true
   screening_sweep_id: null
   screening_sweep_url: null
   create_exactly_once: true
   expected_screening_trials: 384
   current_state: NOT_CREATED
+  preassignment_invalid_launches:
+    - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
 execution:
-  detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-c20a37f327921f40c833be5e535bfc9a3f7cafc8
-  tmux_session: null
-  pane_records: []
-  first_agent_start_utc: null
+  detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-045915c633e3b6e24ebb35c2a233c35751bad7b6
+  tmux_session: reddit_fixed_core_500_019fbc4f_smoke
+  pane_records:
+    - {pane_id: "%90", pane_pid: 159968, gpu_index: 0, phase: smoke, run_id: fcfqzf5w}
+  first_agent_start_utc: 2026-08-01T08:35:46Z
   remain_on_exit: true
 
 heartbeat:

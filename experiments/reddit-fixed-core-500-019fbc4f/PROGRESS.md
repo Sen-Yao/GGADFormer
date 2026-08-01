@@ -15,3 +15,5 @@
 - prepared commit `081c246b1da213d093174375991b3582f4429b6e` was superseded before launch by `c20a37f327921f40c833be5e535bfc9a3f7cafc8`, which withholds test labels during validation-only selection; manifest binding commit pending before HCCS detached launch.
 - HCCS-85 launch preflight revalidated at 2026-08-01T08:29:05Z: all eight GPUs clean, detached SHA/data/runtime/W&B identities exact. Smoke run identity reserved as `fcfqzf5w`.
 - HCCS-85 was claimed by another owner before occupancy start; it was not launched or modified. Full rerank at 2026-08-01T08:30:47Z excluded it and selected HCCS-90, which passed the same 8-GPU/data/runtime/W&B preflight. Launcher host identity was made manifest-bound before relaunch.
+- Smoke `fcfqzf5w` finished valid on HCCS-90 GPU 0 at 2026-08-01T08:35:46Z: fixed-core config exact, validation-only metrics `Val/AUC.last=0.5257899142079934`, `Val/AP.last=0.04450442254016716`, no test metrics, no uploaded artifacts. Budget consumed is 1/500; remaining 499.
+- The first tmux shell expansion error was pre-assignment and consumed no W&B record; it is fenced in `manifest.yaml`.
