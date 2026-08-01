@@ -21,3 +21,19 @@ sample standard deviation（`ddof=1`），不允许 best-seed 或 best-epoch 选
 W&B 目的地为 `HCCS/GGADFormer`。仅发送 config、seed、运行状态、metadata、
 AUROC 和 AP；不上传源码、原始数据、checkpoint、控制台输出或未声明 artifact。
 
+## 最终状态
+
+HCCS-85 上的原生 W&B sweep `inqdttil` 已完成。25/25 trial 全部为
+`finished`，无缺失、重复或意外 trial；固定终点、配置、代码提交和消融 RNG
+seed 均通过校验。远程聚合和独立本地 replay 一致。
+
+| Variant | AUC.last mean | AUC.last std | AP.last mean | AP.last std |
+|---|---:|---:|---:|---:|
+| `none` | 0.6640 | 0.0062 | 0.3148 | 0.0073 |
+| `random_dir` | 0.5410 | 0.0762 | 0.2391 | 0.0429 |
+| `random_mag` | 0.3472 | 0.0114 | 0.1592 | 0.0045 |
+| `random_both` | 0.5355 | 0.0783 | 0.2381 | 0.0440 |
+| `constant_mag` | 0.3525 | 0.0171 | 0.1619 | 0.0077 |
+
+完整逐 run 记录、URL、最终指标和配置子集位于 `results.json`；远程 agent
+日志内容哈希位于 `remote-log-sha256.txt`。
