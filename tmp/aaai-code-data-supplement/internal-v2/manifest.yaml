@@ -3,7 +3,7 @@ artifact: package-v2
 artifact_path: /Users/oliver/Developer/VecGAD/tmp/aaai-code-data-supplement/package-v2
 submission_includes_this_manifest: false
 artifact_execution_sha: ab082e85fcbddc96e51144e375ef69c1a3ef12b5
-protocol_content_commit: ab082e85fcbddc96e51144e375ef69c1a3ef12b5
+protocol_content_commit: 06d3d0085082723f1c8bc33f666e9349706ae0c8
 
 source_authorities:
   strict_execution_sha: fdb150b7927f26f2e8b5270365a324d844dc8b98
@@ -83,6 +83,19 @@ formal_revalidation:
   metric_policy: fixed_final_epoch
   metrics: [AUROC, AUPRC]
   retry_policy: objective_technical_invalidity_only
+  selection_snapshot:
+    observed_at: 2026-08-01T18:27:59+08:00
+    HCCS-85:
+      occupancy: reserved_for_this_protocol
+      eligible_gpus: [0, 1, 2, 3, 4, 5, 6, 7]
+      aggregate_fp32_tflops_estimate: 660.64
+    HCCS-90:
+      occupancy: excluded_running_other_sweep
+      sweep_id: 2cibydx2
+    HCCS-25:
+      occupancy: free
+      eligible_gpus: [2, 3, 4, 5, 6]
+      aggregate_fp32_tflops_estimate: 67.25
   runtime_contract:
     python: 3.8.19
     pytorch: 2.0.0
@@ -106,11 +119,15 @@ formal_revalidation:
   phases:
     - id: six-dataset-hccs85
       execution_host: HCCS-85
+      gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
       datasets: [Amazon, reddit, photo, elliptic, t_finance, tolokers]
       expected_trials: 30
+      remote_worktree: /root/gpufree-data/linziyao/worktrees/GGADFormer-package-v2-019fbc58
+      results_dir: /root/gpufree-data/linziyao/vecgad-package-v2-results-019fbc58/hccs85
       state: prepared
     - id: dgraph-hccs90
       execution_host: HCCS-90
+      gpu_indices: pending_release_and_live_selection
       datasets: [dgraph]
       expected_trials: 5
       state: waiting_for_existing_owner_release
