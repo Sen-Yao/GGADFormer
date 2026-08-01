@@ -44,8 +44,8 @@ git:
   code_sha: fdb150b7927f26f2e8b5270365a324d844dc8b98
   code_tree: e631e5f3370e991f441ccc95cbae28315f7a82af
   code_remote: https://github.com/Sen-Yao/GGADFormer.git
-  prepared_protocol_commit: pending_first_commit
-  launch_manifest_commit: pending_second_commit
+  prepared_protocol_commit: 3dd8283f48aef1ab9db60279c46ac7f8eb8917ec
+  launch_manifest_commit: pending_sweep_creation
 
 config_artifacts:
   sweep: experiments/tolokers-direction-mag-lrec01-019fbba0/sweep.yaml
