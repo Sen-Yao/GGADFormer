@@ -29,5 +29,10 @@ Mean paired differences versus Default are `-0.2066816590/-0.1131445041` for `q=
 - Authoritative evidence: `evidence-final/authoritative-sweep.json` (`b939db30d26a7a1468d82e48f672764d86ab063e73519030bef4d5ec549f536d`)
 - Aggregated results: `evidence-final/results.json` (`5ac960ea8203c51cbee3877ad95ef08592854472006e31ca31ba96a6b024ad57`)
 - Independent replay: `evidence-final/replay-results.json` (`3d46dec31d16d709221f0667b84336d4c0358d8fc5d372998f738f701d554a53`)
+- Remote agent log hashes: `remote-log-sha256.txt` (`09d3452284843c5e2b67b7ea1d6fc4f835d4ce8ec77cbce8815957e072de665b`)
 
 W&B asynchronously materialized one provider-generated `wandb-history` artifact per run after the first collector query. The final validators require its exact provider history structure and independently confirm there are no user-uploaded or used artifacts. No source, raw data, credentials, checkpoints, embeddings, or node-level results were uploaded.
+
+## Closure
+
+Evidence checkpoint `f1dc0b69e642f26bffa25de7cb963cc79557084c` is pushed on the task branch. The shared supplement was updated without rendering or compiling a PDF. The task-specific tmux session, detached worktrees, processes, and symlinks were removed; a live release audit found no task process or GPU compute PID. HCCS-85 occupancy was released to `free` at `2026-08-01T09:52:57Z`.

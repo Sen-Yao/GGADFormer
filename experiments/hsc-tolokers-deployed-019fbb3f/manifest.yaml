@@ -1,23 +1,23 @@
 schema_version: 1
-state: validated_pending_release
+state: completed
 formal_launch_allowed: false
 investigation_id: 2026-08-01-vecgad-tolokers-hsc-deployed
 owner_thread_id: 019fbc4f-1fe7-7860-aee9-130f66dc70cd
 source_thread_id: 019fbb3f-2b0c-7d53-b852-457514993d8c
 protocol_id: hsc-tolokers-deployed-019fbb3f-v1
 prepared_at_utc: 2026-08-01T08:20:49Z
-last_material_transition_at_utc: 2026-08-01T09:45:03Z
+last_material_transition_at_utc: 2026-08-01T09:52:57Z
 
 governance:
   mode: governed
-  lifecycle: active
+  lifecycle: closed
   coverage: canonical
   scientific_verdict: resolved_protocol_specific_asymmetric_sensitivity
   scope_v1:
     - {id: M1, class: required, evidence: canonical-coverage, state: completed, object: 30/30 condition-seed trials}
     - {id: M2, class: required, evidence: canonical-coverage, state: completed, object: fixed-endpoint aggregation and independent replay}
     - {id: M3, class: required, evidence: canonical-coverage, state: completed, object: paired initialization/batch/source diagnostics}
-    - {id: M4, class: required, evidence: canonical-coverage, state: pending, object: evidence archive, supplement update, HCCS-85 release}
+    - {id: M4, class: required, evidence: canonical-coverage, state: completed, object: evidence archive, supplement update, HCCS-85 release}
 
 objective:
   design: paired_batch_center_contamination_stress_test
@@ -68,8 +68,8 @@ git:
   code_tree: 400e545e35300f5d21cf394d3827ed32d6d015d8
   prepared_protocol_commit: 7201c466b7ce9f4cc3d4c8e69a90567880a55afb
   evidence_validator_commit: 244617470ce17b7d8d96cf27df23a7558fcd4447
-  final_evidence_commit: null
-  remote_publication: branch_pushed_pending_final_evidence
+  final_evidence_commit: f1dc0b69e642f26bffa25de7cb963cc79557084c
+  remote_publication: pushed
 
 protocol_files:
   sweep: {path: experiments/hsc-tolokers-deployed-019fbb3f/sweep.yaml, sha256: 59191fe39194892a2056f9d5dc6ad25ef171e9d336bab33940cf6932b4ad214e}
@@ -119,6 +119,12 @@ execution:
   validation_worktree_head: 244617470ce17b7d8d96cf27df23a7558fcd4447
   validation_worktree_clean: true
   validation_bundle_sha256: c571676237570352aff0f78867fb128962dce1b2559b1fb282a1a698366684cb
+  terminal_release_probe_at_utc: 2026-08-01T09:52:57Z
+  terminal_task_owned_processes: []
+  terminal_gpu_compute_pids: []
+  task_tmux_session_removed: true
+  detached_worktrees_removed: true
+  task_symlinks_removed: true
 
 data:
   access_mode: symlink_read_only_reuse
@@ -188,6 +194,9 @@ evidence:
     remote_path: /root/gpufree-data/linziyao/VecGAD-hsc-tolokers-deployed-019fbb3f/evidence-final/replay-results.json
     sha256: 3d46dec31d16d709221f0667b84336d4c0358d8fc5d372998f738f701d554a53
   remote_agent_log_hashes: embedded_in_authoritative_agent_evidence
+  remote_log_checksums_path: experiments/hsc-tolokers-deployed-019fbb3f/remote-log-sha256.txt
+  remote_log_checksums_sha256: 09d3452284843c5e2b67b7ea1d6fc4f835d4ce8ec77cbce8815957e072de665b
+  release_audit: experiments/hsc-tolokers-deployed-019fbb3f/release-evidence.json
   run_ids: [ngapjyfh, i9h0918h, 61qvloh8, th79tgqa, x9f67fs2, pu1ql60l, nlc9lpu5, 3icuof05, cqm0i3rk, 5pcqaerc, 2cncehna, uwy4a4iv, whio1cwz, 8ko4myr0, zdt9eg92, z6uu7ywi, iavc2ire, ngdsiyte, gz7wdto2, 5tvkxql2, n6hjtv9h, bqsqovwy, wvtkpojj, gslnea5q, todrx90t, l2grfa9z, oitolyi9, j8i7fw8p, u7a1yn1k, baenpywb]
 
 results:
@@ -210,9 +219,9 @@ results:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  state: running
-  released_at_utc: null
-  release_evidence: null
+  state: free
+  released_at_utc: 2026-08-01T09:52:57Z
+  release_evidence: "W&B txc1ymqu FINISHED 30/30; collector/replay/pairing passed; 8/8 agent exits 0; no task process, tmux session, detached worktree, symlink, or GPU compute PID; evidence commit f1dc0b6 pushed"
 
 preflight:
   snapshot_path: experiments/hsc-tolokers-deployed-019fbb3f/preflight-snapshot.json

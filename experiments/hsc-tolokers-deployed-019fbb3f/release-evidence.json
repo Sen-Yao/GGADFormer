@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-08-01T09:52:57Z",
+  "host": "HCCS-85",
+  "observed_hostname": "gpufree-container",
+  "sweep": {
+    "id": "txc1ymqu",
+    "state": "FINISHED",
+    "run_count": 30,
+    "run_states": {
+      "finished": 30
+    }
+  },
+  "task_processes": [],
+  "gpu_compute_processes": [],
+  "task_tmux_session_present": false,
+  "execution_worktree_present": false,
+  "validation_worktree_present": false,
+  "task_symlinks": [],
+  "preserved_remote_archive": "/root/gpufree-data/linziyao/VecGAD-hsc-tolokers-deployed-019fbb3f",
+  "final_evidence_sha256": {
+    "authoritative-sweep.json": "b939db30d26a7a1468d82e48f672764d86ab063e73519030bef4d5ec549f536d",
+    "results.json": "5ac960ea8203c51cbee3877ad95ef08592854472006e31ca31ba96a6b024ad57",
+    "replay-results.json": "3d46dec31d16d709221f0667b84336d4c0358d8fc5d372998f738f701d554a53"
+  },
+  "evidence_checkpoint_commit": "f1dc0b69e642f26bffa25de7cb963cc79557084c",
+  "occupancy_state_after_audit": "free"
+}

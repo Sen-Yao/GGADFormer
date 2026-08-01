@@ -48,3 +48,10 @@
 - `q=0.4` 的平均 center shift from Default 为 `0.1062307525`；旧文中的 Tolokers `0.254` 已更正。
 - Supplement 只更新 Tolokers AUROC/AUPRC 列、paired-seed 叙述、Tolokers center-shift 与不可见 provenance 注释；未渲染或编译 PDF。
 - HCCS-85 释放与 final closure commit 尚待完成。
+
+## 2026-08-01 - evidence checkpoint and HCCS-85 release
+
+- 高精度 authoritative/results/replay 证据、REPORT、insights 与 validated manifest 已提交并推送为 `f1dc0b69e642f26bffa25de7cb963cc79557084c`。
+- 精确 tmux session、execution/validation detached worktrees、dataset/cache symlinks 与 artifact-audit scratch 已清理；没有终止或修改其他 tmux sessions。
+- `2026-08-01T09:52:57Z` live release audit 确认 sweep 仍为 `FINISHED` 30/30、GPU 无 compute PID、无本任务 process/session/worktree/symlink，远端 final evidence hashes 未变化。
+- HCCS-85 occupancy 已更新为 `free`；investigation Scope v1 的 M1--M4 全部完成并关闭。

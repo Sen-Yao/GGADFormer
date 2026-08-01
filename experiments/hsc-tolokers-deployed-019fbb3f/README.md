@@ -5,9 +5,9 @@
 ## 治理状态
 
 - Governance: `governed`
-- Lifecycle: `active`
-- Coverage: `none`
-- Scientific verdict: `unresolved`
+- Lifecycle: `closed`
+- Coverage: `canonical`
+- Scientific verdict: `resolved_protocol_specific_asymmetric_sensitivity`
 - 当前 task: `019fbc4f-1fe7-7860-aee9-130f66dc70cd`
 - 父 task: `019fbb3f-2b0c-7d53-b852-457514993d8c`
 
@@ -15,10 +15,10 @@ Scope v1 在正式运行前冻结：
 
 | ID | 范围项 | 类别 | 完成证据 | 状态 |
 |---|---|---|---|---|
-| `M1` | 六个 center condition 与五个训练 seed 的完整笛卡尔积 | `required` | `canonical-coverage`：30/30 unique valid | `pending` |
-| `M2` | 固定终点 AUROC/AUPRC、mean、sample std (`ddof=1`) 与 paired-seed difference | `required` | collector 与独立 W&B replay 一致 | `pending` |
-| `M3` | 初始化、训练 batch、伪异常 source、诊断 batch/source 的 pairing audit | `required` | 同 seed 六条件哈希全部一致 | `pending` |
-| `M4` | 证据归档、Supplement 更新与 HCCS-85 释放 | `required` | manifest completed、证据 commit、无本任务 PID | `pending` |
+| `M1` | 六个 center condition 与五个训练 seed 的完整笛卡尔积 | `required` | `canonical-coverage`：30/30 unique valid | `completed` |
+| `M2` | 固定终点 AUROC/AUPRC、mean、sample std (`ddof=1`) 与 paired-seed difference | `required` | collector 与独立 W&B replay 一致 | `completed` |
+| `M3` | 初始化、训练 batch、伪异常 source、诊断 batch/source 的 pairing audit | `required` | 同 seed 六条件哈希全部一致 | `completed` |
+| `M4` | 证据归档、Supplement 更新与 HCCS-85 释放 | `required` | manifest completed、证据 commit、无本任务 PID | `completed` |
 
 ## 数据流授权
 
