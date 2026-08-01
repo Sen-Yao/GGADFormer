@@ -1,12 +1,12 @@
 schema_version: 1
-state: prepared
+state: launched
 formal_launch_allowed: true
 investigation_id: 2026-08-01-vecgad-tolokers-hsc-deployed
 owner_thread_id: 019fbc4f-1fe7-7860-aee9-130f66dc70cd
 source_thread_id: 019fbb3f-2b0c-7d53-b852-457514993d8c
 protocol_id: hsc-tolokers-deployed-019fbb3f-v1
 prepared_at_utc: 2026-08-01T08:20:49Z
-last_material_transition_at_utc: 2026-08-01T08:43:00Z
+last_material_transition_at_utc: 2026-08-01T08:48:05Z
 
 governance:
   mode: governed
@@ -88,7 +88,16 @@ execution:
   tmux_session: vecgad_hsc_tolokers_019fbb3f
   tmux_remain_on_exit: true
   per_agent_counts: {gpu0: 4, gpu1: 4, gpu2: 4, gpu3: 4, gpu4: 4, gpu5: 4, gpu6: 3, gpu7: 3}
-  pane_records: []
+  first_agent_start_utc: 2026-08-01T08:48:05Z
+  pane_records:
+    - {pane: "%271", pane_index: 0, gpu: 0, agent_count: 4}
+    - {pane: "%278", pane_index: 1, gpu: 1, agent_count: 4}
+    - {pane: "%277", pane_index: 2, gpu: 2, agent_count: 4}
+    - {pane: "%276", pane_index: 3, gpu: 3, agent_count: 4}
+    - {pane: "%275", pane_index: 4, gpu: 4, agent_count: 4}
+    - {pane: "%274", pane_index: 5, gpu: 5, agent_count: 4}
+    - {pane: "%273", pane_index: 6, gpu: 6, agent_count: 3}
+    - {pane: "%272", pane_index: 7, gpu: 7, agent_count: 3}
   bundle_sha256: 7131f28481a08ce692454cf6a9f9c813ce6715a49ee363628f83b1384d82747c
   detached_worktree_head: d8fdc7a2e0f6c7cfceedbc163f03b0d3a2a287bd
   detached_worktree_tree: 400e545e35300f5d21cf394d3827ed32d6d015d8
@@ -108,6 +117,8 @@ wandb:
   sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/txc1ymqu
   sweep_creation_recorded_at_utc: 2026-08-01T08:40:25Z
   sweep_creation_count: 1
+  current_state: RUNNING
+  initial_run_ids: [ngapjyfh, 61qvloh8, i9h0918h, th79tgqa, x9f67fs2, pu1ql60l, 3icuof05, nlc9lpu5]
   create_exactly_once: true
   expected_trials: 30
   code_upload_disabled: true
@@ -139,7 +150,7 @@ validation:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  state: reserved
+  state: running
   released_at_utc: null
   release_evidence: null
 

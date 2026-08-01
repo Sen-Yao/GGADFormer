@@ -26,3 +26,10 @@
 - selected-host targeted re-probe 通过：HCCS-85 `gpufree-container`，8 个目标 GPU 无 compute PID，tmux 3.2a；证据为 `launch-preflight.json`。
 - occupancy 保持当前 investigation 的 `reserved`，HCCS-90 的并行 task 保持不触碰。
 - manifest `formal_launch_allowed=true`；下一步只允许把 occupancy 转为 `running`，创建 task-specific tmux panes 并记录 pane/GPU identity。
+
+## 2026-08-01 - formal sweep launched
+
+- occupancy 已转为 `running`，native sweep `txc1ymqu` 于 `2026-08-01T08:48:05Z` 启动。
+- tmux session `vecgad_hsc_tolokers_019fbb3f` 有 8 个 panes，分别绑定 GPU `0..7`；agent count 总和为 30。
+- 首批 8 个 W&B runs 均为 `running`，config 轴从 `default/seed 0..4` 与 `q0/seed 0..2` 开始；8 张 GPU 均出现对应 task-owned compute PID。
+- 当前只记录运行身份，不解释中间指标。最终结论仍要求 30/30 terminal valid、agent exit 0、collector 与独立 replay 全部通过。
