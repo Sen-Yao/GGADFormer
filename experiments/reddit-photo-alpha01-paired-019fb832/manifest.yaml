@@ -81,8 +81,8 @@ selection:
     aggregate_fp32_tflops: 660.64
     speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
   selected_at_utc: 2026-07-31T14:17:52Z
-  occupancy_state: reserved
-  occupancy_recorded_at_utc: 2026-08-01T01:44:40Z
+  occupancy_state: running
+  occupancy_recorded_at_utc: 2026-08-01T01:51:32Z
   excluded_hosts:
     HCCS-25: cooperative occupancy owned by another formal sweep; live compute PIDs present
     HCCS-90: cooperative occupancy owned by another formal sweep
@@ -106,20 +106,37 @@ runtime:
 wandb:
   entity: HCCS
   project: GGADFormer
-  sweep_id: 11zvd8hg
-  sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/11zvd8hg
-  sweep_created_at_utc: 2026-08-01T01:51:33Z
+  sweep_id: null
+  sweep_url: null
+  sweep_created_at_utc: null
   create_exactly_once: true
   code_upload_disabled: true
   console_upload_disabled: true
   expected_trials: 20
-  current_state: CREATED
+  current_state: RETRY_PENDING_AFTER_INVALID_LAUNCH
+  invalid_sweeps:
+    - sweep_id: 11zvd8hg
+      sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/11zvd8hg
+      created_at_utc: 2026-08-01T01:51:33Z
+      canceled_at_utc: 2026-08-01T01:58:36Z
+      terminal_state: CANCELED
+      terminal_counts: {finished: 5, failed: 5}
+      invalidity: CUDA_VISIBLE_DEVICES was scoped to cd instead of the W&B agent; every run recorded an empty gpu_index
+      evidence_policy: excluded from formal results
+      run_ids: [8n2ahitp, byp8gpoq, f0v9zsft, veqks4oq, 7eiu629l, zubxkx83, saw4hmff, i4jq65s9, hqbb3y37, ylsy46s3]
 
 execution:
   tmux_session: null
   pane_records: []
   first_agent_start_utc: null
   last_agent_finish_utc: null
+  invalid_launch_attempts:
+    - tmux_session: reddit_photo_alpha01_019fb832
+      started_at_utc: 2026-08-01T01:51:32Z
+      stopped_at_utc: 2026-08-01T01:58:36Z
+      observed_pane_count: 5
+      observed_gpu_indices: [0]
+      disposition: all task-owned panes and orphaned child processes stopped; GPU 0-7 revalidated empty
 
 result_validation:
   all_expected_trials_terminal: false
@@ -129,5 +146,9 @@ result_validation:
   fixed_final_epoch_policy_valid: false
   independent_local_replay_valid: false
 
-protocol_deviations: []
+protocol_deviations:
+  - id: invalid_launch_1
+    scientific_protocol_changed: false
+    reason: tmux pane sizing stopped the launch at five panes and the shell command did not propagate CUDA_VISIBLE_DEVICES
+    action: canceled sweep 11zvd8hg, excluded all ten assigned runs, and permitted one objective technical retry under the frozen retry policy
 blockers: []
