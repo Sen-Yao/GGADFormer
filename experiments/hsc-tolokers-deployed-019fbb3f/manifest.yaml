@@ -5,8 +5,8 @@ investigation_id: 2026-08-01-vecgad-tolokers-hsc-deployed
 owner_thread_id: 019fbc4f-1fe7-7860-aee9-130f66dc70cd
 source_thread_id: 019fbb3f-2b0c-7d53-b852-457514993d8c
 protocol_id: hsc-tolokers-deployed-019fbb3f-v1
-prepared_at_utc: null
-last_material_transition_at_utc: null
+prepared_at_utc: 2026-08-01T08:20:49Z
+last_material_transition_at_utc: 2026-08-01T08:20:49Z
 
 governance:
   mode: governed
@@ -64,11 +64,18 @@ scientific_protocol:
 
 git:
   branch: codex/hsc-tolokers-deployed-4193
-  code_sha: null
-  code_tree: null
+  code_sha: d8fdc7a2e0f6c7cfceedbc163f03b0d3a2a287bd
+  code_tree: 400e545e35300f5d21cf394d3827ed32d6d015d8
   prepared_protocol_commit: null
   final_evidence_commit: null
   remote_publication: pending
+
+protocol_files:
+  sweep: {path: experiments/hsc-tolokers-deployed-019fbb3f/sweep.yaml, sha256: 59191fe39194892a2056f9d5dc6ad25ef171e9d336bab33940cf6932b4ad214e}
+  wrapper: {path: experiments/hsc-tolokers-deployed-019fbb3f/run-sweep-trial.py, sha256: b0be43ceca978b1295b55626c2dd9086b74f0a8204053fc45830717481d68e49}
+  launcher: {path: experiments/hsc-tolokers-deployed-019fbb3f/launch-agent.sh, sha256: 08dc5fc06006fb5cfc5c6938c8a1edf304d92c17d4236f6400f62b8ca35e0594}
+  collector: {path: experiments/hsc-tolokers-deployed-019fbb3f/collect-evidence.py, sha256: c39eed8323d30252d02087fda42743e258f5b8f59b96395c6e62336f52165a69}
+  replay: {path: experiments/hsc-tolokers-deployed-019fbb3f/replay-results.py, sha256: 55236f3759f57ee4b4bdaad4782af439b99b4cfceefd0519ecb5017eb28cb0fe}
 
 execution:
   execution_host: HCCS-85
@@ -110,7 +117,7 @@ authorization:
   excluded_data: [raw_data, source_code, credentials, checkpoints, node_level_results, embeddings, undeclared_artifacts]
 
 validation:
-  wrapper_tests: pending
+  wrapper_tests: passed_12_mac_without_torch
   hsc_unit_tests: pending
   expected_trials: 30
   finished_trials: 0
