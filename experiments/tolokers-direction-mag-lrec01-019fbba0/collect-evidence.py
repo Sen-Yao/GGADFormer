@@ -60,6 +60,7 @@ def get_summary_value(summary, key):
 
 def collect_run(run, sweep_id):
     config = dict(run.config)
+    metadata = run.metadata or {}
     errors = []
     variant = config.get("ablation_mode")
     seed = config.get("seed")
@@ -113,7 +114,7 @@ def collect_run(run, sweep_id):
         "url": run.url,
         "sweep_id": sweep_id,
         "state": run.state,
-        "program": run.program,
+        "program": metadata.get("program"),
         "commit": getattr(run, "commit", None),
         "created_at": run.created_at,
         "runtime_seconds": summary.get("_runtime"),
