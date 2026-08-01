@@ -1,0 +1,12 @@
+name: vecgad-review
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pytorch=2.0.0
+  - pytorch-cuda=11.8
+  - numpy=1.21.6
+  - scipy=1.7.3
+  - scikit-learn=1.0.2

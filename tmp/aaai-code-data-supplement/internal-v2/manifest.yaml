@@ -1,0 +1,94 @@
+schema_version: 1
+artifact: package-v2
+artifact_path: /Users/oliver/Developer/VecGAD/tmp/aaai-code-data-supplement/package-v2
+submission_includes_this_manifest: false
+
+source_authorities:
+  strict_execution_sha: fdb150b7927f26f2e8b5270365a324d844dc8b98
+  strict_evidence_commit: b02bcc151bed529623ac2ad99aae49a4bad86bf9
+  strict_source_worktree: /Users/oliver/Developer/VecGAD/.worktrees/tolokers-lrec01
+  supplement: /Users/oliver/Developer/VecGAD/tmp/aaai-migration/overleaf-project/supplement.tex
+  old_package_comparison_only: /Users/oliver/Developer/VecGAD/tmp/aaai-code-data-supplement/package
+
+file_mapping:
+  run.py:
+    sources:
+      - fdb150b7927f26f2e8b5270365a324d844dc8b98:run.py
+      - fdb150b7927f26f2e8b5270365a324d844dc8b98:utils.py
+    retained_protocol:
+      - fixed split seed isolated from global RNG
+      - equal sampler mass for labeled normals and all other nodes
+      - num_epoch plus one optimization iterations
+      - fixed-endpoint AUROC and AUPRC
+  vecgad.py:
+    sources:
+      - fdb150b7927f26f2e8b5270365a324d844dc8b98:VecGAD.py
+    retained_protocol:
+      - final-layer attention averaged over heads
+      - zero-hop attention query readout
+      - scale factor one
+      - unused pseudo-source noise RNG draw
+      - default sampled-batch HSC center
+  controls.py:
+    sources:
+      - fdb150b7927f26f2e8b5270365a324d844dc8b98:ablation.py
+    scope: strict direction--magnitude controls only
+  data.py:
+    sources:
+      - fdb150b7927f26f2e8b5270365a324d844dc8b98:utils.py
+    retained_protocol:
+      - standard operator D^-1/2 A D^-1/2 plus I
+      - DGraph self-loop-inclusive symmetric normalization
+      - row normalization only for Amazon, Reddit, and Elliptic
+  tokenization.py:
+    sources:
+      - fdb150b7927f26f2e8b5270365a324d844dc8b98:utils.py
+      - supplement.tex recursive tokenization and complexity claim
+    deliberate_change: incremental sparse implementation with exactly K propagations
+  reproduction.sh:
+    command_authorities:
+      Amazon: strict sweep at execution SHA fdb150b7927f26f2e8b5270365a324d844dc8b98
+      Reddit: strict alpha=0.1 paired result commit 7a0540ec0ca80c079020da282a3ff5b629174ae7
+      Photo: strict alpha=0.1 paired result commit 7a0540ec0ca80c079020da282a3ff5b629174ae7
+      Elliptic: strict sweep at execution SHA fdb150b7927f26f2e8b5270365a324d844dc8b98
+      T-Finance: reproduction authority in main repository
+      Tolokers: deployed/default strict evidence commit b02bcc151bed529623ac2ad99aae49a4bad86bf9
+      DGraph: current reproduction command; formal five-seed revalidation pending
+
+excluded_from_anonymous_artifact:
+  - datasets
+  - download scripts
+  - historical ablation code
+  - HSC center-contamination diagnostic
+  - propagation sensitivity and hop-summation ablations
+  - experiment tracking integrations
+  - per-run logs
+  - checkpoints
+  - result aggregation
+  - public tests and smoke tests
+  - internal provenance and evidence
+
+validation_state:
+  local_internal_checks: passed_15_tests
+  formal_seven_dataset_five_seed_rerun: user_approved
+  material_result_difference_policy: stop_and_request_user_decision
+
+formal_revalidation:
+  protocol_id: vecgad-package-v2-full-revalidation-019fbc58
+  approved_at_local_date: 2026-08-01
+  expected_trials: 35
+  seeds: [0, 1, 2, 3, 4]
+  metric_policy: fixed_final_epoch
+  metrics: [AUROC, AUPRC]
+  retry_policy: objective_technical_invalidity_only
+  phases:
+    - id: six-dataset-hccs85
+      execution_host: HCCS-85
+      datasets: [Amazon, reddit, photo, elliptic, t_finance, tolokers]
+      expected_trials: 30
+      state: prepared
+    - id: dgraph-hccs90
+      execution_host: HCCS-90
+      datasets: [dgraph]
+      expected_trials: 5
+      state: waiting_for_existing_owner_release
