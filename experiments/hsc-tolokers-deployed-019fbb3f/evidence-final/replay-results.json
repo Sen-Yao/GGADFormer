@@ -1,0 +1,3342 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "source": "direct independent wandb.Api().sweep(\"HCCS/GGADFormer/txc1ymqu\") replay plus local diagnostics",
+  "sweep_id": "txc1ymqu",
+  "code_sha": "d8fdc7a2e0f6c7cfceedbc163f03b0d3a2a287bd",
+  "run_count": 30,
+  "coverage": {
+    "missing": [],
+    "duplicate": [],
+    "unexpected": [],
+    "all_finished": true,
+    "all_runs_valid": true,
+    "only_provider_generated_history_artifacts": true,
+    "no_user_uploaded_or_used_wandb_artifacts": true,
+    "pairing_hashes_match_within_seed": true
+  },
+  "source_hashes": {
+    "authoritative": "b939db30d26a7a1468d82e48f672764d86ab063e73519030bef4d5ec549f536d",
+    "results": "5ac960ea8203c51cbee3877ad95ef08592854472006e31ca31ba96a6b024ad57"
+  },
+  "aggregate": {
+    "default": {
+      "AUC.last": {
+        "mean": 0.6640012396971138,
+        "sample_std_ddof1": 0.006178631314516395,
+        "values_by_seed": {
+          "0": 0.6672217375705911,
+          "1": 0.6597943430200404,
+          "2": 0.6673263062332128,
+          "3": 0.6553873909834316,
+          "4": 0.6702764206782933
+        }
+      },
+      "AP.last": {
+        "mean": 0.3147889298719929,
+        "sample_std_ddof1": 0.007272270024818868,
+        "values_by_seed": {
+          "0": 0.320515779268124,
+          "1": 0.31647412177284184,
+          "2": 0.32121669026189126,
+          "3": 0.31227475317509623,
+          "4": 0.30346330488201123
+        }
+      }
+    },
+    "q0": {
+      "AUC.last": {
+        "mean": 0.45731958065357203,
+        "sample_std_ddof1": 0.09233936466582954,
+        "values_by_seed": {
+          "0": 0.5709842394182054,
+          "1": 0.37612532971962176,
+          "2": 0.541323882069532,
+          "3": 0.41850090810862406,
+          "4": 0.37966354395187696
+        }
+      },
+      "AP.last": {
+        "mean": 0.20164442575343325,
+        "sample_std_ddof1": 0.036672343014960994,
+        "values_by_seed": {
+          "0": 0.2571008878982646,
+          "1": 0.1682429560899426,
+          "2": 0.22019895796818145,
+          "3": 0.17821490855129354,
+          "4": 0.1844644182594841
+        }
+      }
+    },
+    "q10": {
+      "AUC.last": {
+        "mean": 0.6584054530725334,
+        "sample_std_ddof1": 0.008821763515800022,
+        "values_by_seed": {
+          "0": 0.662899712760115,
+          "1": 0.6544349865227499,
+          "2": 0.6642467635163425,
+          "3": 0.6447121236737413,
+          "4": 0.6657336788897182
+        }
+      },
+      "AP.last": {
+        "mean": 0.3099454772263507,
+        "sample_std_ddof1": 0.009296562752762999,
+        "values_by_seed": {
+          "0": 0.31628309354039175,
+          "1": 0.31368240311506157,
+          "2": 0.3194722204038788,
+          "3": 0.3022317330210867,
+          "4": 0.2980579360513346
+        }
+      }
+    },
+    "q20": {
+      "AUC.last": {
+        "mean": 0.6811287013041152,
+        "sample_std_ddof1": 0.004022859865467377,
+        "values_by_seed": {
+          "0": 0.6784057474009249,
+          "1": 0.6773884675686757,
+          "2": 0.6795561492676471,
+          "3": 0.6872166319697272,
+          "4": 0.6830765103136012
+        }
+      },
+      "AP.last": {
+        "mean": 0.3279394029863168,
+        "sample_std_ddof1": 0.0019236628870737483,
+        "values_by_seed": {
+          "0": 0.3269942584857498,
+          "1": 0.3259822501769217,
+          "2": 0.3285962755988994,
+          "3": 0.33094966966550704,
+          "4": 0.32717456100450604
+        }
+      }
+    },
+    "q30": {
+      "AUC.last": {
+        "mean": 0.688892884927742,
+        "sample_std_ddof1": 0.004433767976315741,
+        "values_by_seed": {
+          "0": 0.6847798625908557,
+          "1": 0.6857184300992643,
+          "2": 0.6888516789529224,
+          "3": 0.6960773530191732,
+          "4": 0.6890370999764948
+        }
+      },
+      "AP.last": {
+        "mean": 0.33383848038603536,
+        "sample_std_ddof1": 0.0025702251989877987,
+        "values_by_seed": {
+          "0": 0.33159401766738095,
+          "1": 0.3312649436095275,
+          "2": 0.33552136333079174,
+          "3": 0.33727913141928756,
+          "4": 0.333532945903189
+        }
+      }
+    },
+    "q40": {
+      "AUC.last": {
+        "mean": 0.6930377674335485,
+        "sample_std_ddof1": 0.0044580697096602735,
+        "values_by_seed": {
+          "0": 0.690799874928023,
+          "1": 0.6887642012716042,
+          "2": 0.6921978761568146,
+          "3": 0.7004883212898103,
+          "4": 0.6929385635214902
+        }
+      },
+      "AP.last": {
+        "mean": 0.3372791181762665,
+        "sample_std_ddof1": 0.002403894428747022,
+        "values_by_seed": {
+          "0": 0.3359759163367889,
+          "1": 0.3341826056186868,
+          "2": 0.33846142917442257,
+          "3": 0.34050868492756226,
+          "4": 0.337266954823872
+        }
+      }
+    }
+  },
+  "paired_deltas_vs_default": {
+    "q0": {
+      "AUC.last": {
+        "by_seed": {
+          "0": -0.09623749815238569,
+          "1": -0.2836690133004186,
+          "2": -0.1260024241636808,
+          "3": -0.2368864828748075,
+          "4": -0.29061287672641634
+        },
+        "all_positive": false,
+        "all_negative": true,
+        "mean": -0.2066816590435418,
+        "sample_std_ddof1": 0.09026472873669021
+      },
+      "AP.last": {
+        "by_seed": {
+          "0": -0.06341489136985945,
+          "1": -0.14823116568289924,
+          "2": -0.1010177322937098,
+          "3": -0.1340598446238027,
+          "4": -0.11899888662252714
+        },
+        "all_positive": false,
+        "all_negative": true,
+        "mean": -0.11314450411855967,
+        "sample_std_ddof1": 0.03287435193928233
+      }
+    },
+    "q10": {
+      "AUC.last": {
+        "by_seed": {
+          "0": -0.004322024810476166,
+          "1": -0.005359356497290468,
+          "2": -0.003079542716870276,
+          "3": -0.010675267309690262,
+          "4": -0.004542741788575055
+        },
+        "all_positive": false,
+        "all_negative": true,
+        "mean": -0.005595786624580446,
+        "sample_std_ddof1": 0.0029546522309863484
+      },
+      "AP.last": {
+        "by_seed": {
+          "0": -0.004232685727732277,
+          "1": -0.0027917186577802733,
+          "2": -0.0017444698580124651,
+          "3": -0.010043020154009541,
+          "4": -0.0054053688306766046
+        },
+        "all_positive": false,
+        "all_negative": true,
+        "mean": -0.004843452645642232,
+        "sample_std_ddof1": 0.003222483319431589
+      }
+    },
+    "q20": {
+      "AUC.last": {
+        "by_seed": {
+          "0": 0.011184009830333741,
+          "1": 0.017594124548635293,
+          "2": 0.012229843034434307,
+          "3": 0.03182924098629558,
+          "4": 0.012800089635307876
+        },
+        "all_positive": true,
+        "all_negative": false,
+        "mean": 0.01712746160700136,
+        "sample_std_ddof1": 0.00857900819010946
+      },
+      "AP.last": {
+        "by_seed": {
+          "0": 0.006478479217625788,
+          "1": 0.00950812840407983,
+          "2": 0.0073795853370081654,
+          "3": 0.01867491649041081,
+          "4": 0.023711256122494806
+        },
+        "all_positive": true,
+        "all_negative": false,
+        "mean": 0.01315047311432388,
+        "sample_std_ddof1": 0.007634378423379565
+      }
+    },
+    "q30": {
+      "AUC.last": {
+        "by_seed": {
+          "0": 0.017558125020264548,
+          "1": 0.02592408707922389,
+          "2": 0.021525372719709668,
+          "3": 0.0406899620357416,
+          "4": 0.018760679298201466
+        },
+        "all_positive": true,
+        "all_negative": false,
+        "mean": 0.024891645230628236,
+        "sample_std_ddof1": 0.009398853688131538
+      },
+      "AP.last": {
+        "by_seed": {
+          "0": 0.011078238399256923,
+          "1": 0.014790821836685675,
+          "2": 0.014304673068900486,
+          "3": 0.025004378244191328,
+          "4": 0.030069641021177762
+        },
+        "all_positive": true,
+        "all_negative": false,
+        "mean": 0.019049550514042436,
+        "sample_std_ddof1": 0.008079214331067229
+      }
+    },
+    "q40": {
+      "AUC.last": {
+        "by_seed": {
+          "0": 0.02357813735743186,
+          "1": 0.02896985825156384,
+          "2": 0.024871569923601844,
+          "3": 0.04510093030637874,
+          "4": 0.022662142843196897
+        },
+        "all_positive": true,
+        "all_negative": false,
+        "mean": 0.029036527736434635,
+        "sample_std_ddof1": 0.009298429391957064
+      },
+      "AP.last": {
+        "by_seed": {
+          "0": 0.015460137068664892,
+          "1": 0.017708483845844947,
+          "2": 0.01724473891253131,
+          "3": 0.028233931752466024,
+          "4": 0.03380364994186075
+        },
+        "all_positive": true,
+        "all_negative": false,
+        "mean": 0.022490188304273583,
+        "sample_std_ddof1": 0.008074435897450964
+      }
+    }
+  },
+  "runs": [
+    {
+      "run_id": "ngapjyfh",
+      "hsc_center_condition": "default",
+      "seed": 0,
+      "AUC.last": 0.6672217375705911,
+      "AP.last": 0.320515779268124,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.639081099725788,
+          "AP": 0.3027493203716729
+        },
+        {
+          "step": 10,
+          "AUC": 0.5419641342679218,
+          "AP": 0.24970786837652054
+        },
+        {
+          "step": 20,
+          "AUC": 0.5953607865111291,
+          "AP": 0.2755537261248045
+        },
+        {
+          "step": 30,
+          "AUC": 0.6161408693205981,
+          "AP": 0.28789381724551094
+        },
+        {
+          "step": 40,
+          "AUC": 0.6302144569298183,
+          "AP": 0.29716092362667534
+        },
+        {
+          "step": 50,
+          "AUC": 0.638313060927912,
+          "AP": 0.3036956473851724
+        },
+        {
+          "step": 60,
+          "AUC": 0.6440956757237533,
+          "AP": 0.30769863708475687
+        },
+        {
+          "step": 70,
+          "AUC": 0.64743140726671,
+          "AP": 0.3100075471414505
+        },
+        {
+          "step": 80,
+          "AUC": 0.6553496032048727,
+          "AP": 0.31417152884232263
+        },
+        {
+          "step": 90,
+          "AUC": 0.6644152401364957,
+          "AP": 0.3182565615045545
+        },
+        {
+          "step": 100,
+          "AUC": 0.6672217375705911,
+          "AP": 0.320515779268124
+        }
+      ],
+      "diagnostic_sha256": "431dbd7b346882dd36c50a6d0ffd54e44aaa132a5da8add4aef0c1b9b4d53974",
+      "initial_model_sha256": "35dba6e191c3c5a587326ead59a417ee820b97522e843a08142626dc5694c3d2",
+      "training_batch_trace_sha256": "36b2eb0a4e64881aa80be8db32a2c8756b93dc2fe0d9e88aa44f720f6918fecc",
+      "pseudo_source_trace_sha256": "ab473d112d772d3efcb20658bc129cd96fc5492c65868f4b5fc46678f7680725",
+      "diagnostic_batch_trace_sha256": "d00fa0809081fa62ef3360e44e7a3f8a85dbf2f19ba5842acf83865fcf365f8e",
+      "diagnostic_source_trace_sha256": "e07d456a7ae8dfe8a07e01726801e90f5a419c3534c8abdc541797871e719756",
+      "hsc": {
+        "ShellHit": 0.12939841089670828,
+        "inner_violation": 0.8683314415437003,
+        "outer_violation": 0.0022701475595913734,
+        "mean_hsc_loss": 0.0789186091211949,
+        "center_shift_from_default": 0.0,
+        "center_shift_from_normal": 0.041714081851144634,
+        "sampled_anomaly_fraction": 0.11353971763905427
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-ngapjyfh-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for ngapjyfh",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4750,
+          "digest": "3d8a54064cf835a0e52a9a478b7fbc6c",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4750,
+            "digest": "ztRXMEkJteFsH/BJHh5v1w=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "i9h0918h",
+      "hsc_center_condition": "default",
+      "seed": 1,
+      "AUC.last": 0.6597943430200404,
+      "AP.last": 0.31647412177284184,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.417988178669529,
+          "AP": 0.17521241011496227
+        },
+        {
+          "step": 10,
+          "AUC": 0.6175617366993322,
+          "AP": 0.2799182349459726
+        },
+        {
+          "step": 20,
+          "AUC": 0.6132577995997721,
+          "AP": 0.2773328236929654
+        },
+        {
+          "step": 30,
+          "AUC": 0.618631256889527,
+          "AP": 0.28329691573225535
+        },
+        {
+          "step": 40,
+          "AUC": 0.6252306622875448,
+          "AP": 0.28891212430924623
+        },
+        {
+          "step": 50,
+          "AUC": 0.6440684415528601,
+          "AP": 0.301358095816077
+        },
+        {
+          "step": 60,
+          "AUC": 0.6500291191624845,
+          "AP": 0.306642613325687
+        },
+        {
+          "step": 70,
+          "AUC": 0.6535594181889903,
+          "AP": 0.31051877336444544
+        },
+        {
+          "step": 80,
+          "AUC": 0.6553227208209018,
+          "AP": 0.3129925584432418
+        },
+        {
+          "step": 90,
+          "AUC": 0.6588857653467484,
+          "AP": 0.31575068233221903
+        },
+        {
+          "step": 100,
+          "AUC": 0.6597943430200404,
+          "AP": 0.31647412177284184
+        }
+      ],
+      "diagnostic_sha256": "f925a567581cd4741033fe6de156885001189a1e480f8551af2f45de41b6d6f4",
+      "initial_model_sha256": "dc0069953a4cbc547c4512ab360e874af65b6c831f5e8ceb8fbeb0fcda0f4f25",
+      "training_batch_trace_sha256": "4c3c86aacbf49a86632e746d76c8a51adc4150c50e63ea6a3eae7a8a73d19dec",
+      "pseudo_source_trace_sha256": "965d02b5548335e85c95b3dcbae85c88591e762a7a1544af930c7a2b878c88cc",
+      "diagnostic_batch_trace_sha256": "0469e745d2781c0a6d6c4985ee7f932cc15b98817306c2395e3a9ed2f40976c3",
+      "diagnostic_source_trace_sha256": "b7ff81890faa4e9e6f528a10fbcfea8dbe3380d0ac894194e41617100e9bea34",
+      "hsc": {
+        "ShellHit": 0.09709821428571429,
+        "inner_violation": 0.8973214285714286,
+        "outer_violation": 0.005580357142857143,
+        "mean_hsc_loss": 0.10156678674476487,
+        "center_shift_from_default": 0.0,
+        "center_shift_from_normal": 0.03660991803432504,
+        "sampled_anomaly_fraction": 0.10979758462323524
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-i9h0918h-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for i9h0918h",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4748,
+          "digest": "79ba22662ca999520f3bf1ea401fb414",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4748,
+            "digest": "y1uvlPCLFZPXnBxm3TspOg=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "61qvloh8",
+      "hsc_center_condition": "default",
+      "seed": 2,
+      "AUC.last": 0.6673263062332128,
+      "AP.last": 0.32121669026189126,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4325135779491514,
+          "AP": 0.19683649921136112
+        },
+        {
+          "step": 10,
+          "AUC": 0.5537138467847174,
+          "AP": 0.248158653145683
+        },
+        {
+          "step": 20,
+          "AUC": 0.6363051491227695,
+          "AP": 0.298999809793308
+        },
+        {
+          "step": 30,
+          "AUC": 0.6506823288458415,
+          "AP": 0.309752012120707
+        },
+        {
+          "step": 40,
+          "AUC": 0.6590080406177872,
+          "AP": 0.3154719975884086
+        },
+        {
+          "step": 50,
+          "AUC": 0.6638505341796467,
+          "AP": 0.31765269403601726
+        },
+        {
+          "step": 60,
+          "AUC": 0.6675249192663671,
+          "AP": 0.31938717869712496
+        },
+        {
+          "step": 70,
+          "AUC": 0.6696345561231768,
+          "AP": 0.32051189650508516
+        },
+        {
+          "step": 80,
+          "AUC": 0.6687736748934189,
+          "AP": 0.3209160088582942
+        },
+        {
+          "step": 90,
+          "AUC": 0.6672155226682992,
+          "AP": 0.32097087214284337
+        },
+        {
+          "step": 100,
+          "AUC": 0.6673263062332128,
+          "AP": 0.32121669026189126
+        }
+      ],
+      "diagnostic_sha256": "9c3addab1069e1a7a3bbe20348b19a062ef5f6e4847e510c5021548c3be8d7ba",
+      "initial_model_sha256": "09da8c2ce7141fc2171b99c0800f65c527c9847b31bd3e303af8bcd00f89ca8a",
+      "training_batch_trace_sha256": "54cd89758811d3a70d12c6b9fef3723442838b6dd1726a6d6ad3093ebcc30630",
+      "pseudo_source_trace_sha256": "e8723dbb27de8076a17043407e1db45a61925d69ac01800a555183b1822b3ab9",
+      "diagnostic_batch_trace_sha256": "127c7d92f0b185f436489bafa4ef5207ea752d9f1182d43634e7df15b6bde63d",
+      "diagnostic_source_trace_sha256": "e217120a8fd7b71575d002e2e5caf9ab05e34bfa09136b77d6adfd217076759f",
+      "hsc": {
+        "ShellHit": 0.08371559633027523,
+        "inner_violation": 0.9139908256880734,
+        "outer_violation": 0.0022935779816513763,
+        "mean_hsc_loss": 0.12851157975853036,
+        "center_shift_from_default": 0.0,
+        "center_shift_from_normal": 0.037923280304918684,
+        "sampled_anomaly_fraction": 0.11387991154958327
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-61qvloh8-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for 61qvloh8",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4742,
+          "digest": "553acce991ef58927a344b045fca55cf",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4742,
+            "digest": "yFijhsJZDL0rOBWt8Ys6dw=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "th79tgqa",
+      "hsc_center_condition": "default",
+      "seed": 3,
+      "AUC.last": 0.6553873909834316,
+      "AP.last": 0.31227475317509623,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.502152965279393,
+          "AP": 0.2079875963073949
+        },
+        {
+          "step": 10,
+          "AUC": 0.42041248892823946,
+          "AP": 0.18811191287694878
+        },
+        {
+          "step": 20,
+          "AUC": 0.4477112420370832,
+          "AP": 0.20001986608634933
+        },
+        {
+          "step": 30,
+          "AUC": 0.5106810424783295,
+          "AP": 0.2260236185878303
+        },
+        {
+          "step": 40,
+          "AUC": 0.5771916662381706,
+          "AP": 0.2640559722955982
+        },
+        {
+          "step": 50,
+          "AUC": 0.6155702416172254,
+          "AP": 0.2895940692717132
+        },
+        {
+          "step": 60,
+          "AUC": 0.6303241265028118,
+          "AP": 0.2983858918294756
+        },
+        {
+          "step": 70,
+          "AUC": 0.643748374084819,
+          "AP": 0.30787474683746757
+        },
+        {
+          "step": 80,
+          "AUC": 0.6362057986328271,
+          "AP": 0.30549826981643985
+        },
+        {
+          "step": 90,
+          "AUC": 0.6545513107316879,
+          "AP": 0.3122743807616839
+        },
+        {
+          "step": 100,
+          "AUC": 0.6553873909834316,
+          "AP": 0.31227475317509623
+        }
+      ],
+      "diagnostic_sha256": "a57d6f760a07b6545f0863505eeeebda277e57ca23c7fd648e7c9351bfa0a316",
+      "initial_model_sha256": "57c29fb262656484fa91158e74918c45457aefb1de1e8ac702cd164b7ef12287",
+      "training_batch_trace_sha256": "75721593edb3d4cb707b91cc8f8d8a67c14a517b14df86a54e0ec93688d6e964",
+      "pseudo_source_trace_sha256": "0e45b758de62acb57a363e78185b33dca2d1e28dd88842e234f371e288910fde",
+      "diagnostic_batch_trace_sha256": "64469ceef6ac95ee9834b99d4f915ba398aa4163baaeb4631cd69afe774ded75",
+      "diagnostic_source_trace_sha256": "ced1139123d2bbcab9796ee59eb475b15b59c8e8adb49b8233137adc69231d4a",
+      "hsc": {
+        "ShellHit": 0.12873563218390804,
+        "inner_violation": 0.871264367816092,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.06175362871981215,
+        "center_shift_from_default": 0.0,
+        "center_shift_from_normal": 0.04087071120738983,
+        "sampled_anomaly_fraction": 0.11030787548902875
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-th79tgqa-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for th79tgqa",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4740,
+          "digest": "433ea8ab4f913ccb3f39621a5f360bf8",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4740,
+            "digest": "sC+m2TUzJd2wAT0Sa+U9EQ=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "x9f67fs2",
+      "hsc_center_condition": "default",
+      "seed": 4,
+      "AUC.last": 0.6702764206782933,
+      "AP.last": 0.30346330488201123,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4010888332922231,
+          "AP": 0.18356339374489247
+        },
+        {
+          "step": 10,
+          "AUC": 0.46936328736435895,
+          "AP": 0.21263005677747635
+        },
+        {
+          "step": 20,
+          "AUC": 0.5218515671433126,
+          "AP": 0.23501091910392513
+        },
+        {
+          "step": 30,
+          "AUC": 0.5889541603464726,
+          "AP": 0.2684505713423959
+        },
+        {
+          "step": 40,
+          "AUC": 0.617097671117807,
+          "AP": 0.28430040575296084
+        },
+        {
+          "step": 50,
+          "AUC": 0.6492720443903501,
+          "AP": 0.3032503045600329
+        },
+        {
+          "step": 60,
+          "AUC": 0.6630911727925181,
+          "AP": 0.31040896705784415
+        },
+        {
+          "step": 70,
+          "AUC": 0.6688999663984858,
+          "AP": 0.31300170833764174
+        },
+        {
+          "step": 80,
+          "AUC": 0.6717521961324664,
+          "AP": 0.30742648484921564
+        },
+        {
+          "step": 90,
+          "AUC": 0.6717339325280891,
+          "AP": 0.30474394717942627
+        },
+        {
+          "step": 100,
+          "AUC": 0.6702764206782933,
+          "AP": 0.30346330488201123
+        }
+      ],
+      "diagnostic_sha256": "4bb3c484031c3a93137983528d8341e2c9138a604858bd1fa0e5d7473224f417",
+      "initial_model_sha256": "bf686a2c178ff8d7c749e1d100dc82ada4a7deb43bec3bc0e2fd685bd7b58d99",
+      "training_batch_trace_sha256": "90c51a2154671098196dad69a67967e55ed90275753f7d8919d8f3f2e4dd9fd3",
+      "pseudo_source_trace_sha256": "cd395ff0b05f935afb62f9f2149379d7717de0cb101a05b2b7d91986f5cb3d85",
+      "diagnostic_batch_trace_sha256": "4c1fe3184415948e62c6cdf3b3a62b78916603e1f69b0d74011c475b04473850",
+      "diagnostic_source_trace_sha256": "02355d9fab89ca0634fa0a6d40b3addb158bcdedbc753e37a7237fb8590992a4",
+      "hsc": {
+        "ShellHit": 0.0851305334846765,
+        "inner_violation": 0.9148694665153235,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.11965467440013042,
+        "center_shift_from_default": 0.0,
+        "center_shift_from_normal": 0.039889988489449024,
+        "sampled_anomaly_fraction": 0.112434087429835
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-x9f67fs2-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for x9f67fs2",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4747,
+          "digest": "257f57fc7bbdc45dc36601e5c4ebca29",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4747,
+            "digest": "O5IVQy7cMxUV111Bu89BeA=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "pu1ql60l",
+      "hsc_center_condition": "q0",
+      "seed": 0,
+      "AUC.last": 0.5709842394182054,
+      "AP.last": 0.2571008878982646,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.6384827981178696,
+          "AP": 0.3023717542619641
+        },
+        {
+          "step": 10,
+          "AUC": 0.5323517325124816,
+          "AP": 0.24432114238182273
+        },
+        {
+          "step": 20,
+          "AUC": 0.5565955386734315,
+          "AP": 0.25614561920229356
+        },
+        {
+          "step": 30,
+          "AUC": 0.572547668447158,
+          "AP": 0.26287468295414557
+        },
+        {
+          "step": 40,
+          "AUC": 0.5778028960154795,
+          "AP": 0.2638094999412829
+        },
+        {
+          "step": 50,
+          "AUC": 0.5731811194317187,
+          "AP": 0.26095837879089856
+        },
+        {
+          "step": 60,
+          "AUC": 0.5641344203627404,
+          "AP": 0.2555019850768916
+        },
+        {
+          "step": 70,
+          "AUC": 0.5577785980927638,
+          "AP": 0.25214777003413497
+        },
+        {
+          "step": 80,
+          "AUC": 0.5570254222923503,
+          "AP": 0.250522436479166
+        },
+        {
+          "step": 90,
+          "AUC": 0.5704071036567723,
+          "AP": 0.2563959460667106
+        },
+        {
+          "step": 100,
+          "AUC": 0.5709842394182054,
+          "AP": 0.2571008878982646
+        }
+      ],
+      "diagnostic_sha256": "4fa5915ed1bf3a0265b2ce418b9f2151d05e98f4b23b1caf11093b8ce15f12f6",
+      "initial_model_sha256": "35dba6e191c3c5a587326ead59a417ee820b97522e843a08142626dc5694c3d2",
+      "training_batch_trace_sha256": "36b2eb0a4e64881aa80be8db32a2c8756b93dc2fe0d9e88aa44f720f6918fecc",
+      "pseudo_source_trace_sha256": "ab473d112d772d3efcb20658bc129cd96fc5492c65868f4b5fc46678f7680725",
+      "diagnostic_batch_trace_sha256": "d00fa0809081fa62ef3360e44e7a3f8a85dbf2f19ba5842acf83865fcf365f8e",
+      "diagnostic_source_trace_sha256": "e07d456a7ae8dfe8a07e01726801e90f5a419c3534c8abdc541797871e719756",
+      "hsc": {
+        "ShellHit": 0.094211123723042,
+        "inner_violation": 0.9035187287173666,
+        "outer_violation": 0.0022701475595913734,
+        "mean_hsc_loss": 0.09477367114263008,
+        "center_shift_from_default": 0.041301045256356396,
+        "center_shift_from_normal": 0.0,
+        "sampled_anomaly_fraction": 0.11353971763905427
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-pu1ql60l-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for pu1ql60l",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4752,
+          "digest": "23ab660031f100f3c274b4df7c9f1d7a",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4752,
+            "digest": "T3ztmO5YfiFROlVBo87bWA=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "nlc9lpu5",
+      "hsc_center_condition": "q0",
+      "seed": 1,
+      "AUC.last": 0.37612532971962176,
+      "AP.last": 0.1682429560899426,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4176197991308401,
+          "AP": 0.175115142778822
+        },
+        {
+          "step": 10,
+          "AUC": 0.6074863247231335,
+          "AP": 0.2740972518305756
+        },
+        {
+          "step": 20,
+          "AUC": 0.5761560934859674,
+          "AP": 0.2579388966774809
+        },
+        {
+          "step": 30,
+          "AUC": 0.5506604828779735,
+          "AP": 0.24888250949613755
+        },
+        {
+          "step": 40,
+          "AUC": 0.4957534627999108,
+          "AP": 0.22665278813185608
+        },
+        {
+          "step": 50,
+          "AUC": 0.45773315308553186,
+          "AP": 0.21106765347392617
+        },
+        {
+          "step": 60,
+          "AUC": 0.4082509805034411,
+          "AP": 0.18976698430703373
+        },
+        {
+          "step": 70,
+          "AUC": 0.3816191567679202,
+          "AP": 0.1770109303998746
+        },
+        {
+          "step": 80,
+          "AUC": 0.37159586788735943,
+          "AP": 0.1703439261403116
+        },
+        {
+          "step": 90,
+          "AUC": 0.3790821281162239,
+          "AP": 0.17015422192547738
+        },
+        {
+          "step": 100,
+          "AUC": 0.37612532971962176,
+          "AP": 0.1682429560899426
+        }
+      ],
+      "diagnostic_sha256": "48a60fda3a689df5d56c9d75c8922c389b587f684b18ad2c2392280f33eb24a0",
+      "initial_model_sha256": "dc0069953a4cbc547c4512ab360e874af65b6c831f5e8ceb8fbeb0fcda0f4f25",
+      "training_batch_trace_sha256": "4c3c86aacbf49a86632e746d76c8a51adc4150c50e63ea6a3eae7a8a73d19dec",
+      "pseudo_source_trace_sha256": "965d02b5548335e85c95b3dcbae85c88591e762a7a1544af930c7a2b878c88cc",
+      "diagnostic_batch_trace_sha256": "0469e745d2781c0a6d6c4985ee7f932cc15b98817306c2395e3a9ed2f40976c3",
+      "diagnostic_source_trace_sha256": "b7ff81890faa4e9e6f528a10fbcfea8dbe3380d0ac894194e41617100e9bea34",
+      "hsc": {
+        "ShellHit": 0.08816964285714286,
+        "inner_violation": 0.90625,
+        "outer_violation": 0.005580357142857143,
+        "mean_hsc_loss": 0.10737233129995209,
+        "center_shift_from_default": 0.03645199739063779,
+        "center_shift_from_normal": 0.0,
+        "sampled_anomaly_fraction": 0.10979758462323524
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-nlc9lpu5-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for nlc9lpu5",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4739,
+          "digest": "e58b42945471fa5ae42d4bea8b51dd8e",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4739,
+            "digest": "epqsep+AxNtOzyTT58bZ3Q=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "3icuof05",
+      "hsc_center_condition": "q0",
+      "seed": 2,
+      "AUC.last": 0.541323882069532,
+      "AP.last": 0.22019895796818145,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4323685537904777,
+          "AP": 0.19682419883516714
+        },
+        {
+          "step": 10,
+          "AUC": 0.5006721475460019,
+          "AP": 0.21876078404523291
+        },
+        {
+          "step": 20,
+          "AUC": 0.5606776448029727,
+          "AP": 0.2526758827439507
+        },
+        {
+          "step": 30,
+          "AUC": 0.5522384231174665,
+          "AP": 0.24531250287597967
+        },
+        {
+          "step": 40,
+          "AUC": 0.5572797642370952,
+          "AP": 0.2498120438404189
+        },
+        {
+          "step": 50,
+          "AUC": 0.575985506144281,
+          "AP": 0.24814349765928373
+        },
+        {
+          "step": 60,
+          "AUC": 0.5733995204792464,
+          "AP": 0.24111703382166555
+        },
+        {
+          "step": 70,
+          "AUC": 0.5534920158146983,
+          "AP": 0.2281657697123632
+        },
+        {
+          "step": 80,
+          "AUC": 0.5441632129496987,
+          "AP": 0.2218799782514942
+        },
+        {
+          "step": 90,
+          "AUC": 0.5453147288083411,
+          "AP": 0.22218715090447633
+        },
+        {
+          "step": 100,
+          "AUC": 0.541323882069532,
+          "AP": 0.22019895796818145
+        }
+      ],
+      "diagnostic_sha256": "ffc6b657e9b937637d41b49cc25d9915c27b887611665696936ac14b226df877",
+      "initial_model_sha256": "09da8c2ce7141fc2171b99c0800f65c527c9847b31bd3e303af8bcd00f89ca8a",
+      "training_batch_trace_sha256": "54cd89758811d3a70d12c6b9fef3723442838b6dd1726a6d6ad3093ebcc30630",
+      "pseudo_source_trace_sha256": "e8723dbb27de8076a17043407e1db45a61925d69ac01800a555183b1822b3ab9",
+      "diagnostic_batch_trace_sha256": "127c7d92f0b185f436489bafa4ef5207ea752d9f1182d43634e7df15b6bde63d",
+      "diagnostic_source_trace_sha256": "e217120a8fd7b71575d002e2e5caf9ab05e34bfa09136b77d6adfd217076759f",
+      "hsc": {
+        "ShellHit": 0.08256880733944955,
+        "inner_violation": 0.9151376146788991,
+        "outer_violation": 0.0022935779816513763,
+        "mean_hsc_loss": 0.1329626599583057,
+        "center_shift_from_default": 0.037859655916690826,
+        "center_shift_from_normal": 0.0,
+        "sampled_anomaly_fraction": 0.11387991154958327
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-3icuof05-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for 3icuof05",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4752,
+          "digest": "097b544ce8c664b9080404427c323af5",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4752,
+            "digest": "NJV63+mELg5b3tZRupFrLA=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "cqm0i3rk",
+      "hsc_center_condition": "q0",
+      "seed": 3,
+      "AUC.last": 0.41850090810862406,
+      "AP.last": 0.17821490855129354,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.5023418455410333,
+          "AP": 0.2081076013390583
+        },
+        {
+          "step": 10,
+          "AUC": 0.39628465518930567,
+          "AP": 0.18059574361345665
+        },
+        {
+          "step": 20,
+          "AUC": 0.4179057725830055,
+          "AP": 0.1862999708059357
+        },
+        {
+          "step": 30,
+          "AUC": 0.4140381098981173,
+          "AP": 0.18490457611751487
+        },
+        {
+          "step": 40,
+          "AUC": 0.4232516439149452,
+          "AP": 0.18698143297344474
+        },
+        {
+          "step": 50,
+          "AUC": 0.4310489130986043,
+          "AP": 0.1897103806326715
+        },
+        {
+          "step": 60,
+          "AUC": 0.4051831640173105,
+          "AP": 0.17747797001470986
+        },
+        {
+          "step": 70,
+          "AUC": 0.40327172977557935,
+          "AP": 0.17531466471532667
+        },
+        {
+          "step": 80,
+          "AUC": 0.4023859889366531,
+          "AP": 0.17229790248036148
+        },
+        {
+          "step": 90,
+          "AUC": 0.4163815971114541,
+          "AP": 0.17793093696343526
+        },
+        {
+          "step": 100,
+          "AUC": 0.41850090810862406,
+          "AP": 0.17821490855129354
+        }
+      ],
+      "diagnostic_sha256": "43e5cc2607cffa84849f85a69aa67f8cc268ecb132ead972d6bb2deb66d371da",
+      "initial_model_sha256": "57c29fb262656484fa91158e74918c45457aefb1de1e8ac702cd164b7ef12287",
+      "training_batch_trace_sha256": "75721593edb3d4cb707b91cc8f8d8a67c14a517b14df86a54e0ec93688d6e964",
+      "pseudo_source_trace_sha256": "0e45b758de62acb57a363e78185b33dca2d1e28dd88842e234f371e288910fde",
+      "diagnostic_batch_trace_sha256": "64469ceef6ac95ee9834b99d4f915ba398aa4163baaeb4631cd69afe774ded75",
+      "diagnostic_source_trace_sha256": "ced1139123d2bbcab9796ee59eb475b15b59c8e8adb49b8233137adc69231d4a",
+      "hsc": {
+        "ShellHit": 0.12298850574712644,
+        "inner_violation": 0.8770114942528736,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.06235236299449,
+        "center_shift_from_default": 0.04090697846064965,
+        "center_shift_from_normal": 0.0,
+        "sampled_anomaly_fraction": 0.11030787548902875
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-cqm0i3rk-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for cqm0i3rk",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4751,
+          "digest": "758919de4cb2c3c74bd5dd07b12cf2c9",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4751,
+            "digest": "mf27Bw5lJuEimF9s3Oy1lA=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "5pcqaerc",
+      "hsc_center_condition": "q0",
+      "seed": 4,
+      "AUC.last": 0.37966354395187696,
+      "AP.last": 0.1844644182594841,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.40137767967091975,
+          "AP": 0.1836723232359364
+        },
+        {
+          "step": 10,
+          "AUC": 0.44335535773534585,
+          "AP": 0.20116389218623018
+        },
+        {
+          "step": 20,
+          "AUC": 0.43158362922033633,
+          "AP": 0.19778565195655856
+        },
+        {
+          "step": 30,
+          "AUC": 0.46010498846168213,
+          "AP": 0.21013922449411113
+        },
+        {
+          "step": 40,
+          "AUC": 0.4116618771854396,
+          "AP": 0.18929539082740665
+        },
+        {
+          "step": 50,
+          "AUC": 0.4133809426118854,
+          "AP": 0.18676750868054423
+        },
+        {
+          "step": 60,
+          "AUC": 0.3736719677242535,
+          "AP": 0.17112142804349154
+        },
+        {
+          "step": 70,
+          "AUC": 0.3461919270881735,
+          "AP": 0.16292433380040852
+        },
+        {
+          "step": 80,
+          "AUC": 0.35838427549981744,
+          "AP": 0.1683741789792515
+        },
+        {
+          "step": 90,
+          "AUC": 0.37021214334449337,
+          "AP": 0.17993907215336663
+        },
+        {
+          "step": 100,
+          "AUC": 0.37966354395187696,
+          "AP": 0.1844644182594841
+        }
+      ],
+      "diagnostic_sha256": "2554cf80acd2916616db552b6209300814cd104f09f7256156909499bc61a19d",
+      "initial_model_sha256": "bf686a2c178ff8d7c749e1d100dc82ada4a7deb43bec3bc0e2fd685bd7b58d99",
+      "training_batch_trace_sha256": "90c51a2154671098196dad69a67967e55ed90275753f7d8919d8f3f2e4dd9fd3",
+      "pseudo_source_trace_sha256": "cd395ff0b05f935afb62f9f2149379d7717de0cb101a05b2b7d91986f5cb3d85",
+      "diagnostic_batch_trace_sha256": "4c1fe3184415948e62c6cdf3b3a62b78916603e1f69b0d74011c475b04473850",
+      "diagnostic_source_trace_sha256": "02355d9fab89ca0634fa0a6d40b3addb158bcdedbc753e37a7237fb8590992a4",
+      "hsc": {
+        "ShellHit": 0.08059023836549375,
+        "inner_violation": 0.9194097616345063,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.12455192245500718,
+        "center_shift_from_default": 0.03959295619279146,
+        "center_shift_from_normal": 0.0,
+        "sampled_anomaly_fraction": 0.112434087429835
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-5pcqaerc-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for 5pcqaerc",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4738,
+          "digest": "98b7deccadcf050e4046a4039d6e12bb",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4738,
+            "digest": "99Eyzi0ZYtPw6SOrQkzBew=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "2cncehna",
+      "hsc_center_condition": "q10",
+      "seed": 0,
+      "AUC.last": 0.662899712760115,
+      "AP.last": 0.31628309354039175,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.6389856775231433,
+          "AP": 0.3026955191282284
+        },
+        {
+          "step": 10,
+          "AUC": 0.5408803667073782,
+          "AP": 0.2490859741933956
+        },
+        {
+          "step": 20,
+          "AUC": 0.5926099300418937,
+          "AP": 0.27414611641597275
+        },
+        {
+          "step": 30,
+          "AUC": 0.609534310921829,
+          "AP": 0.2842977962005317
+        },
+        {
+          "step": 40,
+          "AUC": 0.6212661409367464,
+          "AP": 0.2917082094219505
+        },
+        {
+          "step": 50,
+          "AUC": 0.6314467665182576,
+          "AP": 0.29935390502358106
+        },
+        {
+          "step": 60,
+          "AUC": 0.6379743487529944,
+          "AP": 0.30317135746620394
+        },
+        {
+          "step": 70,
+          "AUC": 0.6405878617446907,
+          "AP": 0.30446604114986686
+        },
+        {
+          "step": 80,
+          "AUC": 0.648858167076391,
+          "AP": 0.3088083114045958
+        },
+        {
+          "step": 90,
+          "AUC": 0.6593364043940767,
+          "AP": 0.3135765482768167
+        },
+        {
+          "step": 100,
+          "AUC": 0.662899712760115,
+          "AP": 0.31628309354039175
+        }
+      ],
+      "diagnostic_sha256": "7f100d2712447049d71135a154b0de45edcccf229ffe20b1f68d454eaadf6bf0",
+      "initial_model_sha256": "35dba6e191c3c5a587326ead59a417ee820b97522e843a08142626dc5694c3d2",
+      "training_batch_trace_sha256": "36b2eb0a4e64881aa80be8db32a2c8756b93dc2fe0d9e88aa44f720f6918fecc",
+      "pseudo_source_trace_sha256": "ab473d112d772d3efcb20658bc129cd96fc5492c65868f4b5fc46678f7680725",
+      "diagnostic_batch_trace_sha256": "d00fa0809081fa62ef3360e44e7a3f8a85dbf2f19ba5842acf83865fcf365f8e",
+      "diagnostic_source_trace_sha256": "e07d456a7ae8dfe8a07e01726801e90f5a419c3534c8abdc541797871e719756",
+      "hsc": {
+        "ShellHit": 0.11237230419977298,
+        "inner_violation": 0.8853575482406356,
+        "outer_violation": 0.0022701475595913734,
+        "mean_hsc_loss": 0.08987882757024517,
+        "center_shift_from_default": 0.005075678908421348,
+        "center_shift_from_normal": 0.03657073713839054,
+        "sampled_anomaly_fraction": 0.11353971763905427
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-2cncehna-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for 2cncehna",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4740,
+          "digest": "e6c693b81a0851537cf29afc8b1c67f8",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4740,
+            "digest": "Izp2U375kwa7TB3n2JrAKA=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "uwy4a4iv",
+      "hsc_center_condition": "q10",
+      "seed": 1,
+      "AUC.last": 0.6544349865227499,
+      "AP.last": 0.31368240311506157,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.41793784382407867,
+          "AP": 0.17519720285744506
+        },
+        {
+          "step": 10,
+          "AUC": 0.6164345820850516,
+          "AP": 0.27925162037134893
+        },
+        {
+          "step": 20,
+          "AUC": 0.6086006097991771,
+          "AP": 0.27486328342952326
+        },
+        {
+          "step": 30,
+          "AUC": 0.6129102927517999,
+          "AP": 0.2798076857845294
+        },
+        {
+          "step": 40,
+          "AUC": 0.6168596286337903,
+          "AP": 0.28421110591587434
+        },
+        {
+          "step": 50,
+          "AUC": 0.6356082885454836,
+          "AP": 0.2965197993749512
+        },
+        {
+          "step": 60,
+          "AUC": 0.6416989807384348,
+          "AP": 0.3020837538767963
+        },
+        {
+          "step": 70,
+          "AUC": 0.6465373408039585,
+          "AP": 0.30694337785136294
+        },
+        {
+          "step": 80,
+          "AUC": 0.648194022682869,
+          "AP": 0.3093511641723367
+        },
+        {
+          "step": 90,
+          "AUC": 0.6528405416134908,
+          "AP": 0.3127824363179353
+        },
+        {
+          "step": 100,
+          "AUC": 0.6544349865227499,
+          "AP": 0.31368240311506157
+        }
+      ],
+      "diagnostic_sha256": "b632d36ba927860804286c01a4a3c2b3a0fe6b706624853408d8451aeaa11470",
+      "initial_model_sha256": "dc0069953a4cbc547c4512ab360e874af65b6c831f5e8ceb8fbeb0fcda0f4f25",
+      "training_batch_trace_sha256": "4c3c86aacbf49a86632e746d76c8a51adc4150c50e63ea6a3eae7a8a73d19dec",
+      "pseudo_source_trace_sha256": "965d02b5548335e85c95b3dcbae85c88591e762a7a1544af930c7a2b878c88cc",
+      "diagnostic_batch_trace_sha256": "0469e745d2781c0a6d6c4985ee7f932cc15b98817306c2395e3a9ed2f40976c3",
+      "diagnostic_source_trace_sha256": "b7ff81890faa4e9e6f528a10fbcfea8dbe3380d0ac894194e41617100e9bea34",
+      "hsc": {
+        "ShellHit": 0.09263392857142858,
+        "inner_violation": 0.9017857142857143,
+        "outer_violation": 0.005580357142857143,
+        "mean_hsc_loss": 0.10331991980118412,
+        "center_shift_from_default": 0.004127726759179495,
+        "center_shift_from_normal": 0.033102942941089473,
+        "sampled_anomaly_fraction": 0.10979758462323524
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-uwy4a4iv-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for uwy4a4iv",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4746,
+          "digest": "a85d96bef92a5ae0f6b6eb7467a9e2ee",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4746,
+            "digest": "dh+AQGkSfyILr2c/kifRTw=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "whio1cwz",
+      "hsc_center_condition": "q10",
+      "seed": 2,
+      "AUC.last": 0.6642467635163425,
+      "AP.last": 0.3194722204038788,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4324929397830495,
+          "AP": 0.1968317466055865
+        },
+        {
+          "step": 10,
+          "AUC": 0.5559431205106492,
+          "AP": 0.2504684673886635
+        },
+        {
+          "step": 20,
+          "AUC": 0.6282099750471674,
+          "AP": 0.2966686773274691
+        },
+        {
+          "step": 30,
+          "AUC": 0.6442682272090885,
+          "AP": 0.3071778331330297
+        },
+        {
+          "step": 40,
+          "AUC": 0.6552088591204189,
+          "AP": 0.3135883440833114
+        },
+        {
+          "step": 50,
+          "AUC": 0.6595809842517307,
+          "AP": 0.31535546998693353
+        },
+        {
+          "step": 60,
+          "AUC": 0.6641861095878412,
+          "AP": 0.3174802203780701
+        },
+        {
+          "step": 70,
+          "AUC": 0.6663732861454174,
+          "AP": 0.3186511758400383
+        },
+        {
+          "step": 80,
+          "AUC": 0.665431904341631,
+          "AP": 0.3194505959493888
+        },
+        {
+          "step": 90,
+          "AUC": 0.6640750035515821,
+          "AP": 0.31924162545500817
+        },
+        {
+          "step": 100,
+          "AUC": 0.6642467635163425,
+          "AP": 0.3194722204038788
+        }
+      ],
+      "diagnostic_sha256": "f98aa49596daa3618180c7263f39ba15860eb7f6267991835eb8939291b6a3dd",
+      "initial_model_sha256": "09da8c2ce7141fc2171b99c0800f65c527c9847b31bd3e303af8bcd00f89ca8a",
+      "training_batch_trace_sha256": "54cd89758811d3a70d12c6b9fef3723442838b6dd1726a6d6ad3093ebcc30630",
+      "pseudo_source_trace_sha256": "e8723dbb27de8076a17043407e1db45a61925d69ac01800a555183b1822b3ab9",
+      "diagnostic_batch_trace_sha256": "127c7d92f0b185f436489bafa4ef5207ea752d9f1182d43634e7df15b6bde63d",
+      "diagnostic_source_trace_sha256": "e217120a8fd7b71575d002e2e5caf9ab05e34bfa09136b77d6adfd217076759f",
+      "hsc": {
+        "ShellHit": 0.08371559633027523,
+        "inner_violation": 0.9139908256880734,
+        "outer_violation": 0.0022935779816513763,
+        "mean_hsc_loss": 0.12916168761909555,
+        "center_shift_from_default": 0.004724759740687053,
+        "center_shift_from_normal": 0.03328844609980782,
+        "sampled_anomaly_fraction": 0.11387991154958327
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-whio1cwz-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for whio1cwz",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4757,
+          "digest": "ca7445fb6111abe48fb1ce79f65802ab",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4757,
+            "digest": "WjJ8kV4+lT/wXE0LVAQHoQ=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "8ko4myr0",
+      "hsc_center_condition": "q10",
+      "seed": 3,
+      "AUC.last": 0.6447121236737413,
+      "AP.last": 0.3022317330210867,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.5021833655325857,
+          "AP": 0.20800442619787352
+        },
+        {
+          "step": 10,
+          "AUC": 0.41915616988236076,
+          "AP": 0.18764104840843415
+        },
+        {
+          "step": 20,
+          "AUC": 0.4480929894788154,
+          "AP": 0.19954991764959096
+        },
+        {
+          "step": 30,
+          "AUC": 0.5027826638701169,
+          "AP": 0.22113081142238503
+        },
+        {
+          "step": 40,
+          "AUC": 0.5667254189914164,
+          "AP": 0.25669728739169606
+        },
+        {
+          "step": 50,
+          "AUC": 0.6107623990672019,
+          "AP": 0.2865394474965008
+        },
+        {
+          "step": 60,
+          "AUC": 0.6230892766610073,
+          "AP": 0.2940526104595427
+        },
+        {
+          "step": 70,
+          "AUC": 0.632531325599376,
+          "AP": 0.29915591708170297
+        },
+        {
+          "step": 80,
+          "AUC": 0.6268159607368271,
+          "AP": 0.295548835779177
+        },
+        {
+          "step": 90,
+          "AUC": 0.6446303038987548,
+          "AP": 0.3027083486246457
+        },
+        {
+          "step": 100,
+          "AUC": 0.6447121236737413,
+          "AP": 0.3022317330210867
+        }
+      ],
+      "diagnostic_sha256": "73c7d720ebcb77d18aac98de20513a27482d5a05597d88a971124cb29bedc41d",
+      "initial_model_sha256": "57c29fb262656484fa91158e74918c45457aefb1de1e8ac702cd164b7ef12287",
+      "training_batch_trace_sha256": "75721593edb3d4cb707b91cc8f8d8a67c14a517b14df86a54e0ec93688d6e964",
+      "pseudo_source_trace_sha256": "0e45b758de62acb57a363e78185b33dca2d1e28dd88842e234f371e288910fde",
+      "diagnostic_batch_trace_sha256": "64469ceef6ac95ee9834b99d4f915ba398aa4163baaeb4631cd69afe774ded75",
+      "diagnostic_source_trace_sha256": "ced1139123d2bbcab9796ee59eb475b15b59c8e8adb49b8233137adc69231d4a",
+      "hsc": {
+        "ShellHit": 0.13218390804597702,
+        "inner_violation": 0.867816091954023,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.0575633002423692,
+        "center_shift_from_default": 0.0038536620850209147,
+        "center_shift_from_normal": 0.03735789408286413,
+        "sampled_anomaly_fraction": 0.11030787548902875
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-8ko4myr0-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for 8ko4myr0",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4761,
+          "digest": "cbf82554a864d79981b0ad6e8560ea65",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4761,
+            "digest": "GBK5+tWrcmWzghIyhHrdLA=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "zdt9eg92",
+      "hsc_center_condition": "q10",
+      "seed": 4,
+      "AUC.last": 0.6657336788897182,
+      "AP.last": 0.2980579360513346,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4011163899344615,
+          "AP": 0.18356580211514034
+        },
+        {
+          "step": 10,
+          "AUC": 0.46336042463964855,
+          "AP": 0.20991192732448052
+        },
+        {
+          "step": 20,
+          "AUC": 0.4836897218239049,
+          "AP": 0.2191243374565794
+        },
+        {
+          "step": 30,
+          "AUC": 0.5826354222812103,
+          "AP": 0.26567689483621665
+        },
+        {
+          "step": 40,
+          "AUC": 0.5991446066462283,
+          "AP": 0.2746596836789686
+        },
+        {
+          "step": 50,
+          "AUC": 0.6411463234836708,
+          "AP": 0.298317451742082
+        },
+        {
+          "step": 60,
+          "AUC": 0.6570247538971983,
+          "AP": 0.30644935348555385
+        },
+        {
+          "step": 70,
+          "AUC": 0.664479763721141,
+          "AP": 0.30871685755809014
+        },
+        {
+          "step": 80,
+          "AUC": 0.6644513569271739,
+          "AP": 0.29935349086517393
+        },
+        {
+          "step": 90,
+          "AUC": 0.66570667924344,
+          "AP": 0.2990010200949262
+        },
+        {
+          "step": 100,
+          "AUC": 0.6657336788897182,
+          "AP": 0.2980579360513346
+        }
+      ],
+      "diagnostic_sha256": "7997897c00ed0631049d3e0d402574479b5d0ec0368bdef284f52b0861922d39",
+      "initial_model_sha256": "bf686a2c178ff8d7c749e1d100dc82ada4a7deb43bec3bc0e2fd685bd7b58d99",
+      "training_batch_trace_sha256": "90c51a2154671098196dad69a67967e55ed90275753f7d8919d8f3f2e4dd9fd3",
+      "pseudo_source_trace_sha256": "cd395ff0b05f935afb62f9f2149379d7717de0cb101a05b2b7d91986f5cb3d85",
+      "diagnostic_batch_trace_sha256": "4c1fe3184415948e62c6cdf3b3a62b78916603e1f69b0d74011c475b04473850",
+      "diagnostic_source_trace_sha256": "02355d9fab89ca0634fa0a6d40b3addb158bcdedbc753e37a7237fb8590992a4",
+      "hsc": {
+        "ShellHit": 0.08286038592508513,
+        "inner_violation": 0.9171396140749148,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.12039328054456246,
+        "center_shift_from_default": 0.004346438062687715,
+        "center_shift_from_normal": 0.035455407264331974,
+        "sampled_anomaly_fraction": 0.112434087429835
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-zdt9eg92-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for zdt9eg92",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4742,
+          "digest": "922870a1ba781d7dc8f84410868f40bb",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4742,
+            "digest": "Ursdyhhe2zY6GCng45OZNg=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "z6uu7ywi",
+      "hsc_center_condition": "q20",
+      "seed": 0,
+      "AUC.last": 0.6784057474009249,
+      "AP.last": 0.3269942584857498,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.639465602831744,
+          "AP": 0.3030260192734052
+        },
+        {
+          "step": 10,
+          "AUC": 0.5497721622682845,
+          "AP": 0.2539733541667387
+        },
+        {
+          "step": 20,
+          "AUC": 0.6170182552201222,
+          "AP": 0.2879250361761678
+        },
+        {
+          "step": 30,
+          "AUC": 0.6364713098123516,
+          "AP": 0.30081931701852593
+        },
+        {
+          "step": 40,
+          "AUC": 0.6475806821840269,
+          "AP": 0.3089949925013583
+        },
+        {
+          "step": 50,
+          "AUC": 0.6579790931859518,
+          "AP": 0.31486656723508816
+        },
+        {
+          "step": 60,
+          "AUC": 0.6685159323417593,
+          "AP": 0.3197189695246637
+        },
+        {
+          "step": 70,
+          "AUC": 0.6722984039603234,
+          "AP": 0.3215369525311781
+        },
+        {
+          "step": 80,
+          "AUC": 0.6762076947643376,
+          "AP": 0.3239560027452053
+        },
+        {
+          "step": 90,
+          "AUC": 0.6767746287050272,
+          "AP": 0.3251893083379871
+        },
+        {
+          "step": 100,
+          "AUC": 0.6784057474009249,
+          "AP": 0.3269942584857498
+        }
+      ],
+      "diagnostic_sha256": "33b1c1d4f91b37bf1c469f311f79f68316999b5d74d32e4197fef9740a65d288",
+      "initial_model_sha256": "35dba6e191c3c5a587326ead59a417ee820b97522e843a08142626dc5694c3d2",
+      "training_batch_trace_sha256": "36b2eb0a4e64881aa80be8db32a2c8756b93dc2fe0d9e88aa44f720f6918fecc",
+      "pseudo_source_trace_sha256": "ab473d112d772d3efcb20658bc129cd96fc5492c65868f4b5fc46678f7680725",
+      "diagnostic_batch_trace_sha256": "d00fa0809081fa62ef3360e44e7a3f8a85dbf2f19ba5842acf83865fcf365f8e",
+      "diagnostic_source_trace_sha256": "e07d456a7ae8dfe8a07e01726801e90f5a419c3534c8abdc541797871e719756",
+      "hsc": {
+        "ShellHit": 0.13847900113507378,
+        "inner_violation": 0.8592508513053349,
+        "outer_violation": 0.0022701475595913734,
+        "mean_hsc_loss": 0.07689000718574654,
+        "center_shift_from_default": 0.03182584047317505,
+        "center_shift_from_normal": 0.07390978249410789,
+        "sampled_anomaly_fraction": 0.11353971763905427
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-z6uu7ywi-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for z6uu7ywi",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4744,
+          "digest": "ecd4278a473bd169ab9c6cbacb072566",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4744,
+            "digest": "JLx4KQIpR5Th2w2toD5OwQ=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "iavc2ire",
+      "hsc_center_condition": "q20",
+      "seed": 1,
+      "AUC.last": 0.6773884675686757,
+      "AP.last": 0.3259822501769217,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4183187411140822,
+          "AP": 0.17530465691835706
+        },
+        {
+          "step": 10,
+          "AUC": 0.6240974100332796,
+          "AP": 0.2837820204533806
+        },
+        {
+          "step": 20,
+          "AUC": 0.6339933813635835,
+          "AP": 0.2893700683127332
+        },
+        {
+          "step": 30,
+          "AUC": 0.6475855485697839,
+          "AP": 0.2998984360875815
+        },
+        {
+          "step": 40,
+          "AUC": 0.6595863196867174,
+          "AP": 0.30878026021001304
+        },
+        {
+          "step": 50,
+          "AUC": 0.6711740050102666,
+          "AP": 0.31769038185700293
+        },
+        {
+          "step": 60,
+          "AUC": 0.6725727684440564,
+          "AP": 0.3199991703084209
+        },
+        {
+          "step": 70,
+          "AUC": 0.6745340684820084,
+          "AP": 0.3227145604469029
+        },
+        {
+          "step": 80,
+          "AUC": 0.6763937020994467,
+          "AP": 0.32476763272514575
+        },
+        {
+          "step": 90,
+          "AUC": 0.677714544729971,
+          "AP": 0.3258932849035143
+        },
+        {
+          "step": 100,
+          "AUC": 0.6773884675686757,
+          "AP": 0.3259822501769217
+        }
+      ],
+      "diagnostic_sha256": "2c54af4472f25fad4ab4fe72cd683b7655efb26682a0cca06014d4dff4217fe8",
+      "initial_model_sha256": "dc0069953a4cbc547c4512ab360e874af65b6c831f5e8ceb8fbeb0fcda0f4f25",
+      "training_batch_trace_sha256": "4c3c86aacbf49a86632e746d76c8a51adc4150c50e63ea6a3eae7a8a73d19dec",
+      "pseudo_source_trace_sha256": "965d02b5548335e85c95b3dcbae85c88591e762a7a1544af930c7a2b878c88cc",
+      "diagnostic_batch_trace_sha256": "0469e745d2781c0a6d6c4985ee7f932cc15b98817306c2395e3a9ed2f40976c3",
+      "diagnostic_source_trace_sha256": "b7ff81890faa4e9e6f528a10fbcfea8dbe3380d0ac894194e41617100e9bea34",
+      "hsc": {
+        "ShellHit": 0.1015625,
+        "inner_violation": 0.8928571428571429,
+        "outer_violation": 0.005580357142857143,
+        "mean_hsc_loss": 0.09498086997440883,
+        "center_shift_from_default": 0.029820209369063377,
+        "center_shift_from_normal": 0.06658930766085784,
+        "sampled_anomaly_fraction": 0.10979758462323524
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-iavc2ire-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for iavc2ire",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4736,
+          "digest": "6c4e9322f2a93d6dc89d702d3b980b7d",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4736,
+            "digest": "yysu6tEo9XQ3ssmDrDXVqA=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "ngdsiyte",
+      "hsc_center_condition": "q20",
+      "seed": 2,
+      "AUC.last": 0.6795561492676471,
+      "AP.last": 0.3285962755988994,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.43255922230230587,
+          "AP": 0.19682354093459944
+        },
+        {
+          "step": 10,
+          "AUC": 0.5834541770270358,
+          "AP": 0.26334346998081887
+        },
+        {
+          "step": 20,
+          "AUC": 0.655375225019039,
+          "AP": 0.3095136373492105
+        },
+        {
+          "step": 30,
+          "AUC": 0.6681713277358952,
+          "AP": 0.32026503496392617
+        },
+        {
+          "step": 40,
+          "AUC": 0.6757774886740735,
+          "AP": 0.3240973984587251
+        },
+        {
+          "step": 50,
+          "AUC": 0.6775438694415541,
+          "AP": 0.3252806045344585
+        },
+        {
+          "step": 60,
+          "AUC": 0.6792586841093569,
+          "AP": 0.32673285293102367
+        },
+        {
+          "step": 70,
+          "AUC": 0.680664366019283,
+          "AP": 0.3280411907497923
+        },
+        {
+          "step": 80,
+          "AUC": 0.6813611972809919,
+          "AP": 0.32910943279111876
+        },
+        {
+          "step": 90,
+          "AUC": 0.6800012769865276,
+          "AP": 0.32871216732623454
+        },
+        {
+          "step": 100,
+          "AUC": 0.6795561492676471,
+          "AP": 0.3285962755988994
+        }
+      ],
+      "diagnostic_sha256": "7360cf55f846ac31ddd947c4eeb59380d48a21c5ebec2fd588fbcfe5ca91bea7",
+      "initial_model_sha256": "09da8c2ce7141fc2171b99c0800f65c527c9847b31bd3e303af8bcd00f89ca8a",
+      "training_batch_trace_sha256": "54cd89758811d3a70d12c6b9fef3723442838b6dd1726a6d6ad3093ebcc30630",
+      "pseudo_source_trace_sha256": "e8723dbb27de8076a17043407e1db45a61925d69ac01800a555183b1822b3ab9",
+      "diagnostic_batch_trace_sha256": "127c7d92f0b185f436489bafa4ef5207ea752d9f1182d43634e7df15b6bde63d",
+      "diagnostic_source_trace_sha256": "e217120a8fd7b71575d002e2e5caf9ab05e34bfa09136b77d6adfd217076759f",
+      "hsc": {
+        "ShellHit": 0.09059633027522936,
+        "inner_violation": 0.9071100917431193,
+        "outer_violation": 0.0022935779816513763,
+        "mean_hsc_loss": 0.1234519238318872,
+        "center_shift_from_default": 0.028934240030745666,
+        "center_shift_from_normal": 0.06727203819900751,
+        "sampled_anomaly_fraction": 0.11387991154958327
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-ngdsiyte-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for ngdsiyte",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4755,
+          "digest": "7e56e14fa3f0e3960fded5893608c8ef",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4755,
+            "digest": "Qu/JAO56DjlJKcOT6UCkVw=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "gz7wdto2",
+      "hsc_center_condition": "q20",
+      "seed": 3,
+      "AUC.last": 0.6872166319697272,
+      "AP.last": 0.33094966966550704,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.5020372273819917,
+          "AP": 0.20791889249596654
+        },
+        {
+          "step": 10,
+          "AUC": 0.4291875498621318,
+          "AP": 0.19194272829133446
+        },
+        {
+          "step": 20,
+          "AUC": 0.49223116692588476,
+          "AP": 0.21765790659804032
+        },
+        {
+          "step": 30,
+          "AUC": 0.5951825184883083,
+          "AP": 0.2729206441393263
+        },
+        {
+          "step": 40,
+          "AUC": 0.6521058346264923,
+          "AP": 0.30544640164872583
+        },
+        {
+          "step": 50,
+          "AUC": 0.6716063218220639,
+          "AP": 0.3202158493219281
+        },
+        {
+          "step": 60,
+          "AUC": 0.6814450398307812,
+          "AP": 0.32739896358845155
+        },
+        {
+          "step": 70,
+          "AUC": 0.6889250265261997,
+          "AP": 0.3307538348537252
+        },
+        {
+          "step": 80,
+          "AUC": 0.6859785765282255,
+          "AP": 0.3297057682796493
+        },
+        {
+          "step": 90,
+          "AUC": 0.6874679250944796,
+          "AP": 0.33094298826552965
+        },
+        {
+          "step": 100,
+          "AUC": 0.6872166319697272,
+          "AP": 0.33094966966550704
+        }
+      ],
+      "diagnostic_sha256": "94962c95443bd78d9189feb87a03e24ee73bd05107153e96a5ce87095acd7123",
+      "initial_model_sha256": "57c29fb262656484fa91158e74918c45457aefb1de1e8ac702cd164b7ef12287",
+      "training_batch_trace_sha256": "75721593edb3d4cb707b91cc8f8d8a67c14a517b14df86a54e0ec93688d6e964",
+      "pseudo_source_trace_sha256": "0e45b758de62acb57a363e78185b33dca2d1e28dd88842e234f371e288910fde",
+      "diagnostic_batch_trace_sha256": "64469ceef6ac95ee9834b99d4f915ba398aa4163baaeb4631cd69afe774ded75",
+      "diagnostic_source_trace_sha256": "ced1139123d2bbcab9796ee59eb475b15b59c8e8adb49b8233137adc69231d4a",
+      "hsc": {
+        "ShellHit": 0.19540229885057472,
+        "inner_violation": 0.8045977011494253,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.0474593806540829,
+        "center_shift_from_default": 0.03408076443398992,
+        "center_shift_from_normal": 0.07581762845317523,
+        "sampled_anomaly_fraction": 0.11030787548902875
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-gz7wdto2-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for gz7wdto2",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4757,
+          "digest": "e1257c00745728e0f2189480ca3d7ffb",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4757,
+            "digest": "rybGDIhuLHcOxDue5943UA=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "5tvkxql2",
+      "hsc_center_condition": "q20",
+      "seed": 4,
+      "AUC.last": 0.6830765103136012,
+      "AP.last": 0.32717456100450604,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.40081344276330033,
+          "AP": 0.18347483476642396
+        },
+        {
+          "step": 10,
+          "AUC": 0.48776309191154504,
+          "AP": 0.21989939064547112
+        },
+        {
+          "step": 20,
+          "AUC": 0.5863290970174977,
+          "AP": 0.2650264919609365
+        },
+        {
+          "step": 30,
+          "AUC": 0.642322405795713,
+          "AP": 0.2975834539204404
+        },
+        {
+          "step": 40,
+          "AUC": 0.6605843098693996,
+          "AP": 0.3101231439736578
+        },
+        {
+          "step": 50,
+          "AUC": 0.6720980613081349,
+          "AP": 0.31849955516026196
+        },
+        {
+          "step": 60,
+          "AUC": 0.678614327730208,
+          "AP": 0.324182678083377
+        },
+        {
+          "step": 70,
+          "AUC": 0.6813613438588763,
+          "AP": 0.3256824331635083
+        },
+        {
+          "step": 80,
+          "AUC": 0.6835638817787215,
+          "AP": 0.32700500803284516
+        },
+        {
+          "step": 90,
+          "AUC": 0.684445665014773,
+          "AP": 0.3279723368446471
+        },
+        {
+          "step": 100,
+          "AUC": 0.6830765103136012,
+          "AP": 0.32717456100450604
+        }
+      ],
+      "diagnostic_sha256": "f14d81dfb6e2f4e1668f542e0c8428e1da87cb62ef8285ebfdfda52e62c40773",
+      "initial_model_sha256": "bf686a2c178ff8d7c749e1d100dc82ada4a7deb43bec3bc0e2fd685bd7b58d99",
+      "training_batch_trace_sha256": "90c51a2154671098196dad69a67967e55ed90275753f7d8919d8f3f2e4dd9fd3",
+      "pseudo_source_trace_sha256": "cd395ff0b05f935afb62f9f2149379d7717de0cb101a05b2b7d91986f5cb3d85",
+      "diagnostic_batch_trace_sha256": "4c1fe3184415948e62c6cdf3b3a62b78916603e1f69b0d74011c475b04473850",
+      "diagnostic_source_trace_sha256": "02355d9fab89ca0634fa0a6d40b3addb158bcdedbc753e37a7237fb8590992a4",
+      "hsc": {
+        "ShellHit": 0.09534619750283768,
+        "inner_violation": 0.9046538024971623,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.11302821563131828,
+        "center_shift_from_default": 0.03142223538209995,
+        "center_shift_from_normal": 0.07162990979850292,
+        "sampled_anomaly_fraction": 0.112434087429835
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-5tvkxql2-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for 5tvkxql2",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4749,
+          "digest": "e18ac703e69e801395f339d1b82da3ba",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4749,
+            "digest": "E3guHyzIL/T00oyJ/h2KUA=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "n6hjtv9h",
+      "hsc_center_condition": "q30",
+      "seed": 0,
+      "AUC.last": 0.6847798625908557,
+      "AP.last": 0.33159401766738095,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.6398701871078418,
+          "AP": 0.3032511187125331
+        },
+        {
+          "step": 10,
+          "AUC": 0.5590024941106472,
+          "AP": 0.258891228648175
+        },
+        {
+          "step": 20,
+          "AUC": 0.6317445834634701,
+          "AP": 0.2966803321108671
+        },
+        {
+          "step": 30,
+          "AUC": 0.6504554555966046,
+          "AP": 0.3092813092487969
+        },
+        {
+          "step": 40,
+          "AUC": 0.6650943354742108,
+          "AP": 0.3184232158546096
+        },
+        {
+          "step": 50,
+          "AUC": 0.6737278314874976,
+          "AP": 0.32267525405041825
+        },
+        {
+          "step": 60,
+          "AUC": 0.6793286897068729,
+          "AP": 0.3258014596361094
+        },
+        {
+          "step": 70,
+          "AUC": 0.6805459604043884,
+          "AP": 0.3266972146529037
+        },
+        {
+          "step": 80,
+          "AUC": 0.6830121333068399,
+          "AP": 0.3287027611498524
+        },
+        {
+          "step": 90,
+          "AUC": 0.683244078150872,
+          "AP": 0.3298254494508028
+        },
+        {
+          "step": 100,
+          "AUC": 0.6847798625908557,
+          "AP": 0.33159401766738095
+        }
+      ],
+      "diagnostic_sha256": "e74ef95927baa7706a03f9913899fc529254a78052d31ed0789adb626311e968",
+      "initial_model_sha256": "35dba6e191c3c5a587326ead59a417ee820b97522e843a08142626dc5694c3d2",
+      "training_batch_trace_sha256": "36b2eb0a4e64881aa80be8db32a2c8756b93dc2fe0d9e88aa44f720f6918fecc",
+      "pseudo_source_trace_sha256": "ab473d112d772d3efcb20658bc129cd96fc5492c65868f4b5fc46678f7680725",
+      "diagnostic_batch_trace_sha256": "d00fa0809081fa62ef3360e44e7a3f8a85dbf2f19ba5842acf83865fcf365f8e",
+      "diagnostic_source_trace_sha256": "e07d456a7ae8dfe8a07e01726801e90f5a419c3534c8abdc541797871e719756",
+      "hsc": {
+        "ShellHit": 0.18388195232690124,
+        "inner_violation": 0.8138479001135074,
+        "outer_violation": 0.0022701475595913734,
+        "mean_hsc_loss": 0.06148090995805894,
+        "center_shift_from_default": 0.0698718757679065,
+        "center_shift_from_normal": 0.11262357545395692,
+        "sampled_anomaly_fraction": 0.11353971763905427
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-n6hjtv9h-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for n6hjtv9h",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4746,
+          "digest": "317c6e70e38fcb15e945de0f82b4c5e4",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4746,
+            "digest": "Hu9vdSdb1mt8NOMuLf7FFw=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "bqsqovwy",
+      "hsc_center_condition": "q30",
+      "seed": 1,
+      "AUC.last": 0.6857184300992643,
+      "AP.last": 0.3312649436095275,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4186867981814258,
+          "AP": 0.17539855626896372
+        },
+        {
+          "step": 10,
+          "AUC": 0.6311628158408947,
+          "AP": 0.2880838962541149
+        },
+        {
+          "step": 20,
+          "AUC": 0.651012686081357,
+          "AP": 0.2998517198819772
+        },
+        {
+          "step": 30,
+          "AUC": 0.6727703847475979,
+          "AP": 0.3149005560762869
+        },
+        {
+          "step": 40,
+          "AUC": 0.6808788387795128,
+          "AP": 0.32173384120045867
+        },
+        {
+          "step": 50,
+          "AUC": 0.6828321942961386,
+          "AP": 0.32548039445465105
+        },
+        {
+          "step": 60,
+          "AUC": 0.6843450832706028,
+          "AP": 0.32863612239610984
+        },
+        {
+          "step": 70,
+          "AUC": 0.6864618731281638,
+          "AP": 0.33070974994568825
+        },
+        {
+          "step": 80,
+          "AUC": 0.6876291314515742,
+          "AP": 0.3322048289384537
+        },
+        {
+          "step": 90,
+          "AUC": 0.6875494223981209,
+          "AP": 0.3326819893183298
+        },
+        {
+          "step": 100,
+          "AUC": 0.6857184300992643,
+          "AP": 0.3312649436095275
+        }
+      ],
+      "diagnostic_sha256": "b8a236a375f9c5cbb8db0a30cac92e890cd40fb8101a04b21481a09be9ec00a8",
+      "initial_model_sha256": "dc0069953a4cbc547c4512ab360e874af65b6c831f5e8ceb8fbeb0fcda0f4f25",
+      "training_batch_trace_sha256": "4c3c86aacbf49a86632e746d76c8a51adc4150c50e63ea6a3eae7a8a73d19dec",
+      "pseudo_source_trace_sha256": "965d02b5548335e85c95b3dcbae85c88591e762a7a1544af930c7a2b878c88cc",
+      "diagnostic_batch_trace_sha256": "0469e745d2781c0a6d6c4985ee7f932cc15b98817306c2395e3a9ed2f40976c3",
+      "diagnostic_source_trace_sha256": "b7ff81890faa4e9e6f528a10fbcfea8dbe3380d0ac894194e41617100e9bea34",
+      "hsc": {
+        "ShellHit": 0.10491071428571429,
+        "inner_violation": 0.8895089285714286,
+        "outer_violation": 0.005580357142857143,
+        "mean_hsc_loss": 0.08627156806843621,
+        "center_shift_from_default": 0.06392052800705035,
+        "center_shift_from_normal": 0.10116106582184632,
+        "sampled_anomaly_fraction": 0.10979758462323524
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-bqsqovwy-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for bqsqovwy",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4747,
+          "digest": "f7a5e2ba202fc8fb095f45ed6a1c0487",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4747,
+            "digest": "CQT2IBCNpv/1Kw49QSxhLA=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "wvtkpojj",
+      "hsc_center_condition": "q30",
+      "seed": 2,
+      "AUC.last": 0.6888516789529224,
+      "AP.last": 0.33552136333079174,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4326110815577524,
+          "AP": 0.19681397428881237
+        },
+        {
+          "step": 10,
+          "AUC": 0.6282585216424298,
+          "AP": 0.2858585170239943
+        },
+        {
+          "step": 20,
+          "AUC": 0.6650784464315584,
+          "AP": 0.31553481351974355
+        },
+        {
+          "step": 30,
+          "AUC": 0.680841813205952,
+          "AP": 0.32645598217434224
+        },
+        {
+          "step": 40,
+          "AUC": 0.6840779011031979,
+          "AP": 0.3286234290400284
+        },
+        {
+          "step": 50,
+          "AUC": 0.684912105158023,
+          "AP": 0.33020195332815205
+        },
+        {
+          "step": 60,
+          "AUC": 0.6872284461471974,
+          "AP": 0.3323202446926221
+        },
+        {
+          "step": 70,
+          "AUC": 0.6888717894386412,
+          "AP": 0.33391017574045834
+        },
+        {
+          "step": 80,
+          "AUC": 0.6896915702296564,
+          "AP": 0.33509170436315877
+        },
+        {
+          "step": 90,
+          "AUC": 0.6893707405566173,
+          "AP": 0.3357276486025837
+        },
+        {
+          "step": 100,
+          "AUC": 0.6888516789529224,
+          "AP": 0.33552136333079174
+        }
+      ],
+      "diagnostic_sha256": "06d714c03826b1fdbd0f95cebe857aca9e0c97da09f8c89140feebe302d1d943",
+      "initial_model_sha256": "09da8c2ce7141fc2171b99c0800f65c527c9847b31bd3e303af8bcd00f89ca8a",
+      "training_batch_trace_sha256": "54cd89758811d3a70d12c6b9fef3723442838b6dd1726a6d6ad3093ebcc30630",
+      "pseudo_source_trace_sha256": "e8723dbb27de8076a17043407e1db45a61925d69ac01800a555183b1822b3ab9",
+      "diagnostic_batch_trace_sha256": "127c7d92f0b185f436489bafa4ef5207ea752d9f1182d43634e7df15b6bde63d",
+      "diagnostic_source_trace_sha256": "e217120a8fd7b71575d002e2e5caf9ab05e34bfa09136b77d6adfd217076759f",
+      "hsc": {
+        "ShellHit": 0.09862385321100918,
+        "inner_violation": 0.8990825688073395,
+        "outer_violation": 0.0022935779816513763,
+        "mean_hsc_loss": 0.11538642672223783,
+        "center_shift_from_default": 0.06375845801085234,
+        "center_shift_from_normal": 0.10281867844363053,
+        "sampled_anomaly_fraction": 0.11387991154958327
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-wvtkpojj-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for wvtkpojj",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4758,
+          "digest": "07f975e7696724ba8303086dd1fa534f",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4758,
+            "digest": "3ExIhGv96J5FqNXG7/NS4Q=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "gslnea5q",
+      "hsc_center_condition": "q30",
+      "seed": 3,
+      "AUC.last": 0.6960773530191732,
+      "AP.last": 0.33727913141928756,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.5019050434459782,
+          "AP": 0.20782989885037728
+        },
+        {
+          "step": 10,
+          "AUC": 0.43466155958048003,
+          "AP": 0.19461039928400742
+        },
+        {
+          "step": 20,
+          "AUC": 0.5395948200313806,
+          "AP": 0.24061657306163034
+        },
+        {
+          "step": 30,
+          "AUC": 0.6400046869744267,
+          "AP": 0.29930329823289936
+        },
+        {
+          "step": 40,
+          "AUC": 0.6777338343795379,
+          "AP": 0.322296092807648
+        },
+        {
+          "step": 50,
+          "AUC": 0.6845884025584524,
+          "AP": 0.32895281992281966
+        },
+        {
+          "step": 60,
+          "AUC": 0.6934788496028238,
+          "AP": 0.3353935470213335
+        },
+        {
+          "step": 70,
+          "AUC": 0.697177595933906,
+          "AP": 0.3373638242630901
+        },
+        {
+          "step": 80,
+          "AUC": 0.6962396147370342,
+          "AP": 0.33728874066424447
+        },
+        {
+          "step": 90,
+          "AUC": 0.6963156593433815,
+          "AP": 0.33732998483759746
+        },
+        {
+          "step": 100,
+          "AUC": 0.6960773530191732,
+          "AP": 0.33727913141928756
+        }
+      ],
+      "diagnostic_sha256": "0a3501f4fd9d05b0657ba1412c63b284f2e087e80fe42eb90b39af10702ca634",
+      "initial_model_sha256": "57c29fb262656484fa91158e74918c45457aefb1de1e8ac702cd164b7ef12287",
+      "training_batch_trace_sha256": "75721593edb3d4cb707b91cc8f8d8a67c14a517b14df86a54e0ec93688d6e964",
+      "pseudo_source_trace_sha256": "0e45b758de62acb57a363e78185b33dca2d1e28dd88842e234f371e288910fde",
+      "diagnostic_batch_trace_sha256": "64469ceef6ac95ee9834b99d4f915ba398aa4163baaeb4631cd69afe774ded75",
+      "diagnostic_source_trace_sha256": "ced1139123d2bbcab9796ee59eb475b15b59c8e8adb49b8233137adc69231d4a",
+      "hsc": {
+        "ShellHit": 0.31494252873563217,
+        "inner_violation": 0.6850574712643678,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.029796370555614602,
+        "center_shift_from_default": 0.07337969572593768,
+        "center_shift_from_normal": 0.11592514750858147,
+        "sampled_anomaly_fraction": 0.11030787548902875
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-gslnea5q-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for gslnea5q",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4749,
+          "digest": "4ebad003f59875ca0860e136089bacee",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4749,
+            "digest": "JW2H/IJjH+sfY79+BbfxlQ=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "todrx90t",
+      "hsc_center_condition": "q30",
+      "seed": 4,
+      "AUC.last": 0.6890370999764948,
+      "AP.last": 0.333532945903189,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4005394886976432,
+          "AP": 0.1833867705865753
+        },
+        {
+          "step": 10,
+          "AUC": 0.5152429273385871,
+          "AP": 0.23096442349871227
+        },
+        {
+          "step": 20,
+          "AUC": 0.6329846030486206,
+          "AP": 0.2913435102047647
+        },
+        {
+          "step": 30,
+          "AUC": 0.6667645611496257,
+          "AP": 0.3133813870538331
+        },
+        {
+          "step": 40,
+          "AUC": 0.6772607102847662,
+          "AP": 0.32140848732972294
+        },
+        {
+          "step": 50,
+          "AUC": 0.6818648682068407,
+          "AP": 0.32696468619008523
+        },
+        {
+          "step": 60,
+          "AUC": 0.6857457815324648,
+          "AP": 0.3311045953722367
+        },
+        {
+          "step": 70,
+          "AUC": 0.6869310982512145,
+          "AP": 0.33127327156640385
+        },
+        {
+          "step": 80,
+          "AUC": 0.6900823761846351,
+          "AP": 0.3340450887219877
+        },
+        {
+          "step": 90,
+          "AUC": 0.6905135790045123,
+          "AP": 0.33495266329946405
+        },
+        {
+          "step": 100,
+          "AUC": 0.6890370999764948,
+          "AP": 0.333532945903189
+        }
+      ],
+      "diagnostic_sha256": "f4426a0f16c89a63df155f05cbe0296723fc21e03fd24dcd23570460cf79dfa3",
+      "initial_model_sha256": "bf686a2c178ff8d7c749e1d100dc82ada4a7deb43bec3bc0e2fd685bd7b58d99",
+      "training_batch_trace_sha256": "90c51a2154671098196dad69a67967e55ed90275753f7d8919d8f3f2e4dd9fd3",
+      "pseudo_source_trace_sha256": "cd395ff0b05f935afb62f9f2149379d7717de0cb101a05b2b7d91986f5cb3d85",
+      "diagnostic_batch_trace_sha256": "4c1fe3184415948e62c6cdf3b3a62b78916603e1f69b0d74011c475b04473850",
+      "diagnostic_source_trace_sha256": "02355d9fab89ca0634fa0a6d40b3addb158bcdedbc753e37a7237fb8590992a4",
+      "hsc": {
+        "ShellHit": 0.09875141884222474,
+        "inner_violation": 0.9012485811577753,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.10155225476666557,
+        "center_shift_from_default": 0.0682842309276263,
+        "center_shift_from_normal": 0.10912086007495721,
+        "sampled_anomaly_fraction": 0.112434087429835
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-todrx90t-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for todrx90t",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4758,
+          "digest": "eec2e49d08f3bcd8ff49965f1178fe63",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4758,
+            "digest": "QbvvAjqSNuL4n9Cj8ByE5g=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "l2grfa9z",
+      "hsc_center_condition": "q40",
+      "seed": 0,
+      "AUC.last": 0.690799874928023,
+      "AP.last": 0.3359759163367889,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.6402520224963046,
+          "AP": 0.30346997336500536
+        },
+        {
+          "step": 10,
+          "AUC": 0.5694623505616483,
+          "AP": 0.26406855225668224
+        },
+        {
+          "step": 20,
+          "AUC": 0.6428928282900476,
+          "AP": 0.3032812887374099
+        },
+        {
+          "step": 30,
+          "AUC": 0.6605067115374794,
+          "AP": 0.3147686232682918
+        },
+        {
+          "step": 40,
+          "AUC": 0.6736248165504489,
+          "AP": 0.32270455519544483
+        },
+        {
+          "step": 50,
+          "AUC": 0.6828585196841492,
+          "AP": 0.3283554358502765
+        },
+        {
+          "step": 60,
+          "AUC": 0.686975159563219,
+          "AP": 0.33185460419090124
+        },
+        {
+          "step": 70,
+          "AUC": 0.6884320851014778,
+          "AP": 0.33255828889609595
+        },
+        {
+          "step": 80,
+          "AUC": 0.6899024958050876,
+          "AP": 0.3339964697783708
+        },
+        {
+          "step": 90,
+          "AUC": 0.6897223809009252,
+          "AP": 0.3346003352656971
+        },
+        {
+          "step": 100,
+          "AUC": 0.690799874928023,
+          "AP": 0.3359759163367889
+        }
+      ],
+      "diagnostic_sha256": "1d916e5a0d3c35e12fd3c02aa362ca4aedaeb2a0a2a5b3076599013977f3b247",
+      "initial_model_sha256": "35dba6e191c3c5a587326ead59a417ee820b97522e843a08142626dc5694c3d2",
+      "training_batch_trace_sha256": "36b2eb0a4e64881aa80be8db32a2c8756b93dc2fe0d9e88aa44f720f6918fecc",
+      "pseudo_source_trace_sha256": "ab473d112d772d3efcb20658bc129cd96fc5492c65868f4b5fc46678f7680725",
+      "diagnostic_batch_trace_sha256": "d00fa0809081fa62ef3360e44e7a3f8a85dbf2f19ba5842acf83865fcf365f8e",
+      "diagnostic_source_trace_sha256": "e07d456a7ae8dfe8a07e01726801e90f5a419c3534c8abdc541797871e719756",
+      "hsc": {
+        "ShellHit": 0.3496027241770715,
+        "inner_violation": 0.6481271282633371,
+        "outer_violation": 0.0022701475595913734,
+        "mean_hsc_loss": 0.040372141238373876,
+        "center_shift_from_default": 0.10884927337368329,
+        "center_shift_from_normal": 0.15217204143603644,
+        "sampled_anomaly_fraction": 0.11353971763905427
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-l2grfa9z-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for l2grfa9z",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4761,
+          "digest": "27fdb0e34b4bab95604d6393ef816f26",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4761,
+            "digest": "psrPaw7RCUYeuGvq9LaJyg=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "oitolyi9",
+      "hsc_center_condition": "q40",
+      "seed": 1,
+      "AUC.last": 0.6887642012716042,
+      "AP.last": 0.3341826056186868,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4191116395211266,
+          "AP": 0.17553023562716782
+        },
+        {
+          "step": 10,
+          "AUC": 0.6374683618965746,
+          "AP": 0.2920102024374636
+        },
+        {
+          "step": 20,
+          "AUC": 0.6624722623340746,
+          "AP": 0.30731876516021445
+        },
+        {
+          "step": 30,
+          "AUC": 0.6823048070686188,
+          "AP": 0.3214488588042741
+        },
+        {
+          "step": 40,
+          "AUC": 0.6849528831254205,
+          "AP": 0.32532002334585186
+        },
+        {
+          "step": 50,
+          "AUC": 0.6851010440508171,
+          "AP": 0.3289211024588949
+        },
+        {
+          "step": 60,
+          "AUC": 0.6878728611574998,
+          "AP": 0.33184797706593117
+        },
+        {
+          "step": 70,
+          "AUC": 0.6899192056838916,
+          "AP": 0.33439799511638685
+        },
+        {
+          "step": 80,
+          "AUC": 0.6903128845654014,
+          "AP": 0.334929018876411
+        },
+        {
+          "step": 90,
+          "AUC": 0.6896417630645894,
+          "AP": 0.33480935737530687
+        },
+        {
+          "step": 100,
+          "AUC": 0.6887642012716042,
+          "AP": 0.3341826056186868
+        }
+      ],
+      "diagnostic_sha256": "9b2523242d58f16de0a227c2bcf4956257d939841ba12083504c152571faba1e",
+      "initial_model_sha256": "dc0069953a4cbc547c4512ab360e874af65b6c831f5e8ceb8fbeb0fcda0f4f25",
+      "training_batch_trace_sha256": "4c3c86aacbf49a86632e746d76c8a51adc4150c50e63ea6a3eae7a8a73d19dec",
+      "pseudo_source_trace_sha256": "965d02b5548335e85c95b3dcbae85c88591e762a7a1544af930c7a2b878c88cc",
+      "diagnostic_batch_trace_sha256": "0469e745d2781c0a6d6c4985ee7f932cc15b98817306c2395e3a9ed2f40976c3",
+      "diagnostic_source_trace_sha256": "b7ff81890faa4e9e6f528a10fbcfea8dbe3380d0ac894194e41617100e9bea34",
+      "hsc": {
+        "ShellHit": 0.13169642857142858,
+        "inner_violation": 0.8627232142857143,
+        "outer_violation": 0.005580357142857143,
+        "mean_hsc_loss": 0.0641544336186988,
+        "center_shift_from_default": 0.09970391417543094,
+        "center_shift_from_normal": 0.13773390650749207,
+        "sampled_anomaly_fraction": 0.10979758462323524
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-oitolyi9-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for oitolyi9",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4758,
+          "digest": "682269cca24763de1df7d0a63ff9583e",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4758,
+            "digest": "T+gLA+OXX7WtqwAIbs/J9A=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "j8i7fw8p",
+      "hsc_center_condition": "q40",
+      "seed": 2,
+      "AUC.last": 0.6921978761568146,
+      "AP.last": 0.33846142917442257,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4326779503885457,
+          "AP": 0.19680304561471507
+        },
+        {
+          "step": 10,
+          "AUC": 0.6383450149066777,
+          "AP": 0.2912235193163048
+        },
+        {
+          "step": 20,
+          "AUC": 0.6742699351345958,
+          "AP": 0.3224746527447375
+        },
+        {
+          "step": 30,
+          "AUC": 0.6847952532687015,
+          "AP": 0.3288562584164999
+        },
+        {
+          "step": 40,
+          "AUC": 0.6869288702673739,
+          "AP": 0.33102005737500095
+        },
+        {
+          "step": 50,
+          "AUC": 0.6893208454448196,
+          "AP": 0.33365694288182124
+        },
+        {
+          "step": 60,
+          "AUC": 0.6908515876055852,
+          "AP": 0.3357812680561342
+        },
+        {
+          "step": 70,
+          "AUC": 0.6920077939565235,
+          "AP": 0.33771635828951546
+        },
+        {
+          "step": 80,
+          "AUC": 0.6928334085473316,
+          "AP": 0.3388825721164708
+        },
+        {
+          "step": 90,
+          "AUC": 0.6923191546982405,
+          "AP": 0.3389327499556543
+        },
+        {
+          "step": 100,
+          "AUC": 0.6921978761568146,
+          "AP": 0.33846142917442257
+        }
+      ],
+      "diagnostic_sha256": "7583f62a8449c1fdc4349e8776e3e6d8699c766c8220c62db770f46301f3cad7",
+      "initial_model_sha256": "09da8c2ce7141fc2171b99c0800f65c527c9847b31bd3e303af8bcd00f89ca8a",
+      "training_batch_trace_sha256": "54cd89758811d3a70d12c6b9fef3723442838b6dd1726a6d6ad3093ebcc30630",
+      "pseudo_source_trace_sha256": "e8723dbb27de8076a17043407e1db45a61925d69ac01800a555183b1822b3ab9",
+      "diagnostic_batch_trace_sha256": "127c7d92f0b185f436489bafa4ef5207ea752d9f1182d43634e7df15b6bde63d",
+      "diagnostic_source_trace_sha256": "e217120a8fd7b71575d002e2e5caf9ab05e34bfa09136b77d6adfd217076759f",
+      "hsc": {
+        "ShellHit": 0.10779816513761468,
+        "inner_violation": 0.8899082568807339,
+        "outer_violation": 0.0022935779816513763,
+        "mean_hsc_loss": 0.10302665446876386,
+        "center_shift_from_default": 0.10116221631566684,
+        "center_shift_from_normal": 0.14146393227080503,
+        "sampled_anomaly_fraction": 0.11387991154958327
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-j8i7fw8p-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for j8i7fw8p",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4753,
+          "digest": "20939de71340133b64bd298a13dd0d40",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4753,
+            "digest": "1wsabxvKAnH0I5gSoI9HPg=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "u7a1yn1k",
+      "hsc_center_condition": "q40",
+      "seed": 3,
+      "AUC.last": 0.7004883212898103,
+      "AP.last": 0.34050868492756226,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.5017797193549471,
+          "AP": 0.20776157995784234
+        },
+        {
+          "step": 10,
+          "AUC": 0.4367417635981329,
+          "AP": 0.19572923234605824
+        },
+        {
+          "step": 20,
+          "AUC": 0.587988329351594,
+          "AP": 0.2667724483785023
+        },
+        {
+          "step": 30,
+          "AUC": 0.6688795041258451,
+          "AP": 0.31440502020218053
+        },
+        {
+          "step": 40,
+          "AUC": 0.6861140438088462,
+          "AP": 0.3289455734602794
+        },
+        {
+          "step": 50,
+          "AUC": 0.6895166148670195,
+          "AP": 0.33323977139403255
+        },
+        {
+          "step": 60,
+          "AUC": 0.694997601692658,
+          "AP": 0.3379105347042622
+        },
+        {
+          "step": 70,
+          "AUC": 0.699363629183985,
+          "AP": 0.34040359148082344
+        },
+        {
+          "step": 80,
+          "AUC": 0.6997121034459933,
+          "AP": 0.3402251864479102
+        },
+        {
+          "step": 90,
+          "AUC": 0.6999740381251423,
+          "AP": 0.34029098504423305
+        },
+        {
+          "step": 100,
+          "AUC": 0.7004883212898103,
+          "AP": 0.34050868492756226
+        }
+      ],
+      "diagnostic_sha256": "98b8378582184f44b42a1ff8d89117dcd5efb23100cde311e8ff1a4065b8fb7c",
+      "initial_model_sha256": "57c29fb262656484fa91158e74918c45457aefb1de1e8ac702cd164b7ef12287",
+      "training_batch_trace_sha256": "75721593edb3d4cb707b91cc8f8d8a67c14a517b14df86a54e0ec93688d6e964",
+      "pseudo_source_trace_sha256": "0e45b758de62acb57a363e78185b33dca2d1e28dd88842e234f371e288910fde",
+      "diagnostic_batch_trace_sha256": "64469ceef6ac95ee9834b99d4f915ba398aa4163baaeb4631cd69afe774ded75",
+      "diagnostic_source_trace_sha256": "ced1139123d2bbcab9796ee59eb475b15b59c8e8adb49b8233137adc69231d4a",
+      "hsc": {
+        "ShellHit": 0.6103448275862069,
+        "inner_violation": 0.3896551724137931,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.011840275889155509,
+        "center_shift_from_default": 0.11438527517020702,
+        "center_shift_from_normal": 0.1578284353017807,
+        "sampled_anomaly_fraction": 0.11030787548902875
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-u7a1yn1k-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for u7a1yn1k",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4758,
+          "digest": "59284474bb74e31533f739eef85ef8a5",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4758,
+            "digest": "YHv2A9+c1HH9bG3sC1hgmg=="
+          }
+        }
+      }
+    },
+    {
+      "run_id": "baenpywb",
+      "hsc_center_condition": "q40",
+      "seed": 4,
+      "AUC.last": 0.6929385635214902,
+      "AP.last": 0.337266954823872,
+      "history": [
+        {
+          "step": 0,
+          "AUC": 0.4001787898400888,
+          "AP": 0.18328936477828167
+        },
+        {
+          "step": 10,
+          "AUC": 0.5389237278461453,
+          "AP": 0.24079755852078608
+        },
+        {
+          "step": 20,
+          "AUC": 0.6545995055400284,
+          "AP": 0.3045527066243195
+        },
+        {
+          "step": 30,
+          "AUC": 0.6817465505386767,
+          "AP": 0.3242870755008296
+        },
+        {
+          "step": 40,
+          "AUC": 0.6851057345431129,
+          "AP": 0.32814315686750767
+        },
+        {
+          "step": 50,
+          "AUC": 0.6878231126235863,
+          "AP": 0.3323183229274196
+        },
+        {
+          "step": 60,
+          "AUC": 0.6895426764148387,
+          "AP": 0.33388561735523387
+        },
+        {
+          "step": 70,
+          "AUC": 0.69143968739276,
+          "AP": 0.33594896712405076
+        },
+        {
+          "step": 80,
+          "AUC": 0.6933713493825172,
+          "AP": 0.33768653888176414
+        },
+        {
+          "step": 90,
+          "AUC": 0.6940414155225627,
+          "AP": 0.3385380696960525
+        },
+        {
+          "step": 100,
+          "AUC": 0.6929385635214902,
+          "AP": 0.337266954823872
+        }
+      ],
+      "diagnostic_sha256": "622fde975e6272b9a654b88d54c70840cb4e4d9bd171c82d9e047ed0708113f4",
+      "initial_model_sha256": "bf686a2c178ff8d7c749e1d100dc82ada4a7deb43bec3bc0e2fd685bd7b58d99",
+      "training_batch_trace_sha256": "90c51a2154671098196dad69a67967e55ed90275753f7d8919d8f3f2e4dd9fd3",
+      "pseudo_source_trace_sha256": "cd395ff0b05f935afb62f9f2149379d7717de0cb101a05b2b7d91986f5cb3d85",
+      "diagnostic_batch_trace_sha256": "4c1fe3184415948e62c6cdf3b3a62b78916603e1f69b0d74011c475b04473850",
+      "diagnostic_source_trace_sha256": "02355d9fab89ca0634fa0a6d40b3addb158bcdedbc753e37a7237fb8590992a4",
+      "hsc": {
+        "ShellHit": 0.10556186152099886,
+        "inner_violation": 0.8944381384790011,
+        "outer_violation": 0.0,
+        "mean_hsc_loss": 0.08893652860747564,
+        "center_shift_from_default": 0.1070530836780866,
+        "center_shift_from_normal": 0.14882744352022806,
+        "sampled_anomaly_fraction": 0.112434087429835
+      },
+      "wandb_artifact_audit": {
+        "only_provider_generated_history_artifact": true,
+        "used_artifacts": [],
+        "logged_artifact": {
+          "name": "run-baenpywb-history:v0",
+          "type": "wandb-history",
+          "state": "COMMITTED",
+          "entity": "HCCS",
+          "project": "GGADFormer",
+          "description": "Weights & Biases Run History Data for baenpywb",
+          "aliases": [
+            "latest"
+          ],
+          "size": 4752,
+          "digest": "31c27d84f28cb40b35ba57b7fc5a712c",
+          "file": {
+            "name": "0000.parquet",
+            "size": 4752,
+            "digest": "EkRwS4hb6fjNC5nlt8pRJA=="
+          }
+        }
+      }
+    }
+  ]
+}

@@ -33,3 +33,18 @@
 - tmux session `vecgad_hsc_tolokers_019fbb3f` 有 8 个 panes，分别绑定 GPU `0..7`；agent count 总和为 30。
 - 首批 8 个 W&B runs 均为 `running`，config 轴从 `default/seed 0..4` 与 `q0/seed 0..2` 开始；8 张 GPU 均出现对应 task-owned compute PID。
 - 当前只记录运行身份，不解释中间指标。最终结论仍要求 30/30 terminal valid、agent exit 0、collector 与独立 replay 全部通过。
+
+## 2026-08-01 - 30/30 terminal validation
+
+- 30 个 condition-seed runs 全部 `finished`，missing/duplicate/unexpected 均为 0；native sweep 已 graceful stop 并转为 `FINISHED`。
+- 8 个 agents 全部写出 terminal record 且 exit code 均为 0，正式训练于 `2026-08-01T08:52:51Z` 前结束。
+- 首次 collector 通过后，W&B 延迟物化了每 run 一个 provider-generated `wandb-history` artifact；初次 replay 因原 validator 的 artifact-empty 假设而 fail closed。
+- validator commit `244617470ce17b7d8d96cf27df23a7558fcd4447` 将边界收紧为只接受 `run-<id>-history:v0`、`type=wandb-history`、单文件 `0000.parquet`、无 metadata/used artifacts 的后端 history manifest；任何其他 artifact 仍失败。训练 execution SHA 未改变。
+- HCCS-85 clean detached validation worktree 上的 9 个 tests 通过。最终 collector 与独立 replay 均通过，证据位于 `evidence-final/`。
+
+## 2026-08-01 - scientific interpretation and supplement update
+
+- Default 为 AUROC `0.6640 +/- 0.0062`、AUPRC `0.3148 +/- 0.0073`；`q=0` 显著退化，`q=0.1` 两指标在五个 paired seeds 中均小幅下降，`q=0.2--0.4` 两指标均在五个 seeds 中改善。
+- `q=0.4` 的平均 center shift from Default 为 `0.1062307525`；旧文中的 Tolokers `0.254` 已更正。
+- Supplement 只更新 Tolokers AUROC/AUPRC 列、paired-seed 叙述、Tolokers center-shift 与不可见 provenance 注释；未渲染或编译 PDF。
+- HCCS-85 释放与 final closure commit 尚待完成。

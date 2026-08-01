@@ -1,22 +1,22 @@
 schema_version: 1
-state: launched
-formal_launch_allowed: true
+state: validated_pending_release
+formal_launch_allowed: false
 investigation_id: 2026-08-01-vecgad-tolokers-hsc-deployed
 owner_thread_id: 019fbc4f-1fe7-7860-aee9-130f66dc70cd
 source_thread_id: 019fbb3f-2b0c-7d53-b852-457514993d8c
 protocol_id: hsc-tolokers-deployed-019fbb3f-v1
 prepared_at_utc: 2026-08-01T08:20:49Z
-last_material_transition_at_utc: 2026-08-01T08:48:05Z
+last_material_transition_at_utc: 2026-08-01T09:45:03Z
 
 governance:
   mode: governed
   lifecycle: active
-  coverage: none
-  scientific_verdict: unresolved
+  coverage: canonical
+  scientific_verdict: resolved_protocol_specific_asymmetric_sensitivity
   scope_v1:
-    - {id: M1, class: required, evidence: canonical-coverage, state: pending, object: 30/30 condition-seed trials}
-    - {id: M2, class: required, evidence: canonical-coverage, state: pending, object: fixed-endpoint aggregation and independent replay}
-    - {id: M3, class: required, evidence: canonical-coverage, state: pending, object: paired initialization/batch/source diagnostics}
+    - {id: M1, class: required, evidence: canonical-coverage, state: completed, object: 30/30 condition-seed trials}
+    - {id: M2, class: required, evidence: canonical-coverage, state: completed, object: fixed-endpoint aggregation and independent replay}
+    - {id: M3, class: required, evidence: canonical-coverage, state: completed, object: paired initialization/batch/source diagnostics}
     - {id: M4, class: required, evidence: canonical-coverage, state: pending, object: evidence archive, supplement update, HCCS-85 release}
 
 objective:
@@ -67,15 +67,24 @@ git:
   code_sha: d8fdc7a2e0f6c7cfceedbc163f03b0d3a2a287bd
   code_tree: 400e545e35300f5d21cf394d3827ed32d6d015d8
   prepared_protocol_commit: 7201c466b7ce9f4cc3d4c8e69a90567880a55afb
+  evidence_validator_commit: 244617470ce17b7d8d96cf27df23a7558fcd4447
   final_evidence_commit: null
-  remote_publication: pending
+  remote_publication: branch_pushed_pending_final_evidence
 
 protocol_files:
   sweep: {path: experiments/hsc-tolokers-deployed-019fbb3f/sweep.yaml, sha256: 59191fe39194892a2056f9d5dc6ad25ef171e9d336bab33940cf6932b4ad214e}
   wrapper: {path: experiments/hsc-tolokers-deployed-019fbb3f/run-sweep-trial.py, sha256: b0be43ceca978b1295b55626c2dd9086b74f0a8204053fc45830717481d68e49}
   launcher: {path: experiments/hsc-tolokers-deployed-019fbb3f/launch-agent.sh, sha256: 08dc5fc06006fb5cfc5c6938c8a1edf304d92c17d4236f6400f62b8ca35e0594}
-  collector: {path: experiments/hsc-tolokers-deployed-019fbb3f/collect-evidence.py, sha256: c39eed8323d30252d02087fda42743e258f5b8f59b96395c6e62336f52165a69}
-  replay: {path: experiments/hsc-tolokers-deployed-019fbb3f/replay-results.py, sha256: 55236f3759f57ee4b4bdaad4782af439b99b4cfceefd0519ecb5017eb28cb0fe}
+  collector:
+    path: experiments/hsc-tolokers-deployed-019fbb3f/collect-evidence.py
+    execution_sha256: c39eed8323d30252d02087fda42743e258f5b8f59b96395c6e62336f52165a69
+    validation_sha256: fd415646485426d3a0d4586262f0baa6ac49e0e53a76e5f5efc456ab6cd6f198
+    validation_commit: 244617470ce17b7d8d96cf27df23a7558fcd4447
+  replay:
+    path: experiments/hsc-tolokers-deployed-019fbb3f/replay-results.py
+    execution_sha256: 55236f3759f57ee4b4bdaad4782af439b99b4cfceefd0519ecb5017eb28cb0fe
+    validation_sha256: 99e06227e217062e67e1039b311ebf758396a97eaed32b32d94107fe14deba79
+    validation_commit: 244617470ce17b7d8d96cf27df23a7558fcd4447
 
 execution:
   execution_host: HCCS-85
@@ -89,6 +98,8 @@ execution:
   tmux_remain_on_exit: true
   per_agent_counts: {gpu0: 4, gpu1: 4, gpu2: 4, gpu3: 4, gpu4: 4, gpu5: 4, gpu6: 3, gpu7: 3}
   first_agent_start_utc: 2026-08-01T08:48:05Z
+  last_agent_finish_utc: 2026-08-01T08:52:51Z
+  all_agent_exit_codes_zero: true
   pane_records:
     - {pane: "%271", pane_index: 0, gpu: 0, agent_count: 4}
     - {pane: "%278", pane_index: 1, gpu: 1, agent_count: 4}
@@ -104,6 +115,10 @@ execution:
   detached_worktree_clean: true
   tmux_version: 3.2a
   disk_available_at_preflight: 49G
+  validation_worktree: /root/gpufree-data/linziyao/VecGAD-hsc-tolokers-deployed-019fbb3f/validation-worktree
+  validation_worktree_head: 244617470ce17b7d8d96cf27df23a7558fcd4447
+  validation_worktree_clean: true
+  validation_bundle_sha256: c571676237570352aff0f78867fb128962dce1b2559b1fb282a1a698366684cb
 
 data:
   access_mode: symlink_read_only_reuse
@@ -117,16 +132,21 @@ wandb:
   sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/txc1ymqu
   sweep_creation_recorded_at_utc: 2026-08-01T08:40:25Z
   sweep_creation_count: 1
-  current_state: RUNNING
+  current_state: FINISHED
   initial_run_ids: [ngapjyfh, 61qvloh8, i9h0918h, th79tgqa, x9f67fs2, pu1ql60l, 3icuof05, nlc9lpu5]
   create_exactly_once: true
   expected_trials: 30
+  final_run_count: 30
+  final_finished_run_count: 30
+  stopped_after_expected_trials: true
   code_upload_disabled: true
   console_upload_disabled: true
   raw_data_uploaded: false
   source_code_uploaded: false
   checkpoint_uploaded: false
-  undeclared_artifacts_uploaded: false
+  provider_generated_history_artifacts: 30
+  user_uploaded_or_used_artifacts: 0
+  undeclared_user_artifacts_uploaded: false
 
 authorization:
   state: explicitly_approved_by_user
@@ -136,17 +156,57 @@ authorization:
   excluded_data: [raw_data, source_code, credentials, checkpoints, node_level_results, embeddings, undeclared_artifacts]
 
 validation:
-  wrapper_tests: passed_12_mac_without_torch
-  hsc_unit_tests: pending
+  wrapper_and_evidence_tests: passed_9_mac_and_hccs_validator
+  hsc_and_wrapper_runtime_tests: passed_20_hccs_execution_sha
   expected_trials: 30
-  finished_trials: 0
-  valid_trials: 0
-  duplicate_trials: null
-  missing_trials: null
-  unexpected_trials: null
-  all_agent_exit_codes_zero: null
-  collector: pending
-  independent_wandb_replay: pending
+  finished_trials: 30
+  valid_trials: 30
+  duplicate_trials: 0
+  missing_trials: 0
+  unexpected_trials: 0
+  all_agent_exit_codes_zero: true
+  fixed_final_epoch_policy_valid: true
+  all_authority_config_valid: true
+  all_checkpoints_and_diagnostics_valid: true
+  pairing_hashes_valid: true
+  only_provider_generated_history_artifacts: true
+  no_user_uploaded_or_used_wandb_artifacts: true
+  collector: passed
+  independent_wandb_replay: passed
+
+evidence:
+  authoritative:
+    path: experiments/hsc-tolokers-deployed-019fbb3f/evidence-final/authoritative-sweep.json
+    remote_path: /root/gpufree-data/linziyao/VecGAD-hsc-tolokers-deployed-019fbb3f/evidence-final/authoritative-sweep.json
+    sha256: b939db30d26a7a1468d82e48f672764d86ab063e73519030bef4d5ec549f536d
+  results:
+    path: experiments/hsc-tolokers-deployed-019fbb3f/evidence-final/results.json
+    remote_path: /root/gpufree-data/linziyao/VecGAD-hsc-tolokers-deployed-019fbb3f/evidence-final/results.json
+    sha256: 5ac960ea8203c51cbee3877ad95ef08592854472006e31ca31ba96a6b024ad57
+  independent_replay:
+    path: experiments/hsc-tolokers-deployed-019fbb3f/evidence-final/replay-results.json
+    remote_path: /root/gpufree-data/linziyao/VecGAD-hsc-tolokers-deployed-019fbb3f/evidence-final/replay-results.json
+    sha256: 3d46dec31d16d709221f0667b84336d4c0358d8fc5d372998f738f701d554a53
+  remote_agent_log_hashes: embedded_in_authoritative_agent_evidence
+  run_ids: [ngapjyfh, i9h0918h, 61qvloh8, th79tgqa, x9f67fs2, pu1ql60l, nlc9lpu5, 3icuof05, cqm0i3rk, 5pcqaerc, 2cncehna, uwy4a4iv, whio1cwz, 8ko4myr0, zdt9eg92, z6uu7ywi, iavc2ire, ngdsiyte, gz7wdto2, 5tvkxql2, n6hjtv9h, bqsqovwy, wvtkpojj, gslnea5q, todrx90t, l2grfa9z, oitolyi9, j8i7fw8p, u7a1yn1k, baenpywb]
+
+results:
+  aggregate_mean_sample_std_ddof1:
+    default: {AUROC: [0.6640012396971138, 0.006178631314516395], AUPRC: [0.3147889298719929, 0.007272270024818868]}
+    q0: {AUROC: [0.45731958065357203, 0.09233936466582954], AUPRC: [0.20164442575343325, 0.036672343014960994]}
+    q10: {AUROC: [0.6584054530725334, 0.008821763515800022], AUPRC: [0.3099454772263507, 0.009296562752762999]}
+    q20: {AUROC: [0.6811287013041152, 0.004022859865467377], AUPRC: [0.3279394029863168, 0.0019236628870737483]}
+    q30: {AUROC: [0.688892884927742, 0.004433767976315741], AUPRC: [0.33383848038603536, 0.0025702251989877987]}
+    q40: {AUROC: [0.6930377674335485, 0.0044580697096602735], AUPRC: [0.3372791181762665, 0.002403894428747022]}
+  paired_mean_difference_vs_default:
+    q0: {AUROC: -0.2066816590435418, AUPRC: -0.11314450411855967, all_five_same_direction: true}
+    q10: {AUROC: -0.005595786624580446, AUPRC: -0.004843452645642232, all_five_same_direction: true}
+    q20: {AUROC: 0.01712746160700136, AUPRC: 0.01315047311432388, all_five_same_direction: true}
+    q30: {AUROC: 0.024891645230628236, AUPRC: 0.019049550514042436, all_five_same_direction: true}
+    q40: {AUROC: 0.029036527736434635, AUPRC: 0.022490188304273583, all_five_same_direction: true}
+  q40_center_shift_from_default: {mean: 0.10623075254261494, sample_std_ddof1: 0.005964872120973062}
+  supplement_updated: true
+  supplement_rendered_or_compiled: false
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
@@ -164,8 +224,6 @@ preflight:
   launch_reprobe_path: experiments/hsc-tolokers-deployed-019fbb3f/launch-preflight.json
   launch_reprobe_sha256: b66478ee24f25a2378d7ed70a5aec6dd9cb90e5cd1762ff598f1f841b8263cbf
   launch_reprobe_compute_pids: []
-
-blockers: []
 
 trials:
   expected:
@@ -199,4 +257,15 @@ trials:
     - {dataset: tolokers, hsc_center_condition: q40, seed: 2}
     - {dataset: tolokers, hsc_center_condition: q40, seed: 3}
     - {dataset: tolokers, hsc_center_condition: q40, seed: 4}
-  observed: []
+  observed:
+    count: 30
+    source_path: experiments/hsc-tolokers-deployed-019fbb3f/evidence-final/authoritative-sweep.json
+    source_sha256: b939db30d26a7a1468d82e48f672764d86ab063e73519030bef4d5ec549f536d
+
+protocol_deviations:
+  - state: excluded_nonformal_preflight
+    detail: initial smoke omitted CUBLAS_WORKSPACE_CONFIG and failed before formal launch; deterministic replacement smoke passed with the launcher environment
+  - state: evidence_validator_corrected_post_run
+    detail: W&B asynchronously materialized provider-generated wandb-history artifacts after the initial collector query; validator commit 2446174 audits their exact manifest and still rejects every user-uploaded or used artifact
+
+blockers: []
