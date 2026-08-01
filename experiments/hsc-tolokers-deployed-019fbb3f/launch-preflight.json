@@ -1,0 +1,102 @@
+{
+  "captured_at_utc": "2026-08-01T08:43:00Z",
+  "source": "targeted SSH/GPU re-probe immediately before formal launch",
+  "probe": {
+    "name": "HCCS-85",
+    "command_kind": "ssh",
+    "returncode": 0,
+    "elapsed_seconds": 0.37363290786743164,
+    "stdout": "__HCCS_HOSTNAME__\ngpufree-container\n__HCCS_META__\n2026-08-01T16:42:23+08:00\n 16:42:23 up 265 days, 16:19,  0 users,  load average: 1.30, 10.35, 12.00\n__HCCS_GPU__\n0, GPU-7f9e65b0-bb0d-f8e2-f9fd-da2fcec01810, NVIDIA GeForce RTX 4090, 0, 4, 24564\n1, GPU-e893ecd0-4654-154e-305c-700de7143320, NVIDIA GeForce RTX 4090, 0, 4, 24564\n2, GPU-87286e39-93b6-aac0-ddd7-4b6596a64fe1, NVIDIA GeForce RTX 4090, 0, 4, 24564\n3, GPU-233f638b-056b-cacd-4477-cb192de2b89b, NVIDIA GeForce RTX 4090, 0, 4, 24564\n4, GPU-b40e6598-a872-8353-2608-d71fde166ddb, NVIDIA GeForce RTX 4090, 0, 4, 24564\n5, GPU-ab5844b7-63d9-03b3-d855-675f6d285adb, NVIDIA GeForce RTX 4090, 0, 4, 24564\n6, GPU-85c42615-ae59-f3dc-13c3-836ba00d7a67, NVIDIA GeForce RTX 4090, 0, 4, 24564\n7, GPU-b59907df-ac21-14e1-8c90-4066f2cd8496, NVIDIA GeForce RTX 4090, 0, 4, 24564\n__HCCS_PROCS__",
+    "stderr": "",
+    "status": "ok",
+    "hostname": "gpufree-container",
+    "gpus": [
+      {
+        "index": 0,
+        "uuid": "GPU-7f9e65b0-bb0d-f8e2-f9fd-da2fcec01810",
+        "name": "NVIDIA GeForce RTX 4090",
+        "utilization_gpu": 0,
+        "memory_used_mb": 4,
+        "memory_total_mb": 24564,
+        "compute_pids": []
+      },
+      {
+        "index": 1,
+        "uuid": "GPU-e893ecd0-4654-154e-305c-700de7143320",
+        "name": "NVIDIA GeForce RTX 4090",
+        "utilization_gpu": 0,
+        "memory_used_mb": 4,
+        "memory_total_mb": 24564,
+        "compute_pids": []
+      },
+      {
+        "index": 2,
+        "uuid": "GPU-87286e39-93b6-aac0-ddd7-4b6596a64fe1",
+        "name": "NVIDIA GeForce RTX 4090",
+        "utilization_gpu": 0,
+        "memory_used_mb": 4,
+        "memory_total_mb": 24564,
+        "compute_pids": []
+      },
+      {
+        "index": 3,
+        "uuid": "GPU-233f638b-056b-cacd-4477-cb192de2b89b",
+        "name": "NVIDIA GeForce RTX 4090",
+        "utilization_gpu": 0,
+        "memory_used_mb": 4,
+        "memory_total_mb": 24564,
+        "compute_pids": []
+      },
+      {
+        "index": 4,
+        "uuid": "GPU-b40e6598-a872-8353-2608-d71fde166ddb",
+        "name": "NVIDIA GeForce RTX 4090",
+        "utilization_gpu": 0,
+        "memory_used_mb": 4,
+        "memory_total_mb": 24564,
+        "compute_pids": []
+      },
+      {
+        "index": 5,
+        "uuid": "GPU-ab5844b7-63d9-03b3-d855-675f6d285adb",
+        "name": "NVIDIA GeForce RTX 4090",
+        "utilization_gpu": 0,
+        "memory_used_mb": 4,
+        "memory_total_mb": 24564,
+        "compute_pids": []
+      },
+      {
+        "index": 6,
+        "uuid": "GPU-85c42615-ae59-f3dc-13c3-836ba00d7a67",
+        "name": "NVIDIA GeForce RTX 4090",
+        "utilization_gpu": 0,
+        "memory_used_mb": 4,
+        "memory_total_mb": 24564,
+        "compute_pids": []
+      },
+      {
+        "index": 7,
+        "uuid": "GPU-b59907df-ac21-14e1-8c90-4066f2cd8496",
+        "name": "NVIDIA GeForce RTX 4090",
+        "utilization_gpu": 0,
+        "memory_used_mb": 4,
+        "memory_total_mb": 24564,
+        "compute_pids": []
+      }
+    ],
+    "compute_processes": []
+  },
+  "raw_query": "gpufree-container\n2026-08-01T08:42:24Z\ntmux 3.2a\n0, NVIDIA GeForce RTX 4090, 24077, 0\n1, NVIDIA GeForce RTX 4090, 24077, 0\n2, NVIDIA GeForce RTX 4090, 24077, 0\n3, NVIDIA GeForce RTX 4090, 24077, 0\n4, NVIDIA GeForce RTX 4090, 24077, 0\n5, NVIDIA GeForce RTX 4090, 24077, 0\n6, NVIDIA GeForce RTX 4090, 24077, 0\n7, NVIDIA GeForce RTX 4090, 24077, 0\n",
+  "expected_host": "HCCS-85",
+  "expected_gpus": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "compute_pids": []
+}

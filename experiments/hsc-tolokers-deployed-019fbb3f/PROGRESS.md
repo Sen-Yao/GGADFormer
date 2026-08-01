@@ -20,3 +20,9 @@
 - 远端 clean detached worktree 为 execution SHA `d8fdc7a...a287bd`，source bundle SHA 为 `7131f284...4d82747c`。
 - HSC unit/evidence tests 共 20 个在 HCCS runtime 通过；dataset `loadmat` inventory 通过；deterministic q10 非正式 smoke 通过。
 - native W&B sweep 已创建且仅创建一次：`HCCS/GGADFormer/txc1ymqu`。此时 manifest 仍保持 `formal_launch_allowed=false`，等待 selected-host 最终 re-probe 与 launch checkpoint。
+
+## 2026-08-01 - formal launch gate opened
+
+- selected-host targeted re-probe 通过：HCCS-85 `gpufree-container`，8 个目标 GPU 无 compute PID，tmux 3.2a；证据为 `launch-preflight.json`。
+- occupancy 保持当前 investigation 的 `reserved`，HCCS-90 的并行 task 保持不触碰。
+- manifest `formal_launch_allowed=true`；下一步只允许把 occupancy 转为 `running`，创建 task-specific tmux panes 并记录 pane/GPU identity。
