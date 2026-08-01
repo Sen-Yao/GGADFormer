@@ -9,8 +9,15 @@ from pathlib import Path
 import wandb
 
 
-PACKAGE = Path(__file__).resolve().parents[0] / ".." / "package-v2"
-RESULTS = Path(__file__).resolve().parent / "results-85"
+INTERNAL_DIR = Path(__file__).resolve().parent
+PACKAGE = Path(
+    os.environ.get("VECGAD_PACKAGE_DIR", INTERNAL_DIR.parent / "package-v2")
+).resolve()
+DATA_DIR = Path(os.environ["VECGAD_DATA_DIR"]).resolve()
+RESULTS = Path(os.environ["VECGAD_RESULTS_DIR"]).resolve()
+EXECUTION_SHA = os.environ["VECGAD_EXECUTION_SHA"]
+EXECUTION_HOST = os.environ["VECGAD_EXECUTION_HOST"]
+PROTOCOL_ID = "vecgad-package-v2-full-revalidation-019fbc58"
 COMMON = {
     "data_split_seed": 42,
     "train_rate": 0.05,
@@ -55,6 +62,10 @@ DATASET_CONFIGS = {
                      end_lr=0.00001, warmup_updates=5, pp_k=10,
                      progregate_alpha=0.9, lambda_rec_emb=0.1,
                      ring_loss_weight=1.0),
+    "dgraph": dict(batch_size=65536, num_epoch=200, peak_lr=0.00005,
+                   end_lr=0.00001, warmup_updates=5, pp_k=10,
+                   progregate_alpha=0.9, lambda_rec_emb=0.1,
+                   ring_loss_weight=1.0),
 }
 
 
@@ -69,16 +80,16 @@ def main():
     audit_config = dict(config)
     audit_config.update(
         {
-            "execution_sha": os.environ["VECGAD_EXECUTION_SHA"],
-            "protocol_id": "vecgad-package-v2-full-revalidation-019fbc58",
-            "execution_host": "HCCS-85",
+            "execution_sha": EXECUTION_SHA,
+            "protocol_id": PROTOCOL_ID,
+            "execution_host": EXECUTION_HOST,
         }
     )
     run.config.update(audit_config, allow_val_change=True)
     command = [sys.executable, str(PACKAGE / "run.py")]
     for key, value in config.items():
         command.extend(["--{}".format(key), str(value)])
-    command.extend(["--data_dir", "/root/gpufree-data/linziyao/DualRefGAD/dataset"])
+    command.extend(["--data_dir", str(DATA_DIR)])
     environment = os.environ.copy()
     environment.setdefault("WANDB_SILENT", "true")
     environment["PYTHONHASHSEED"] = str(seed)
@@ -106,6 +117,10 @@ def main():
         "AUROC": float(fields["AUROC"]),
         "AUPRC": float(fields["AUPRC"]),
         "runtime_seconds": float(fields["runtime_seconds"]),
+        "wandb_run_id": run.id,
+        "execution_sha": EXECUTION_SHA,
+        "protocol_id": PROTOCOL_ID,
+        "execution_host": EXECUTION_HOST,
     }
     RESULTS.mkdir(exist_ok=True)
     result_path = RESULTS / "{}-seed{}.json".format(dataset, seed)

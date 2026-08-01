@@ -2,6 +2,8 @@ schema_version: 1
 artifact: package-v2
 artifact_path: /Users/oliver/Developer/VecGAD/tmp/aaai-code-data-supplement/package-v2
 submission_includes_this_manifest: false
+artifact_execution_sha: ab082e85fcbddc96e51144e375ef69c1a3ef12b5
+protocol_content_commit: ab082e85fcbddc96e51144e375ef69c1a3ef12b5
 
 source_authorities:
   strict_execution_sha: fdb150b7927f26f2e8b5270365a324d844dc8b98
@@ -81,6 +83,26 @@ formal_revalidation:
   metric_policy: fixed_final_epoch
   metrics: [AUROC, AUPRC]
   retry_policy: objective_technical_invalidity_only
+  runtime_contract:
+    python: 3.8.19
+    pytorch: 2.0.0
+    cuda: 11.8
+    gpu_class: RTX 4090
+  data_inventory:
+    note: Raw datasets remain outside Git and outside the anonymous artifact.
+    hccs85_dataset_dir: /root/gpufree-data/linziyao/DualRefGAD/dataset
+    tolokers_observed_shape: [11758, 8]
+    tolokers_manuscript_consistency_note: >-
+      The formal dataset file has 8 feature columns, while the current
+      supplement table reports 10. Preserve the formal file for reruns and
+      resolve the manuscript discrepancy after result validation.
+    sha256:
+      Amazon.mat: 749110e891df8bcb0015c51fb18193821f3f0e379d547c9180b2f8fa309d0fe8
+      reddit.mat: 533a739caa38939dff51f1902e6705fbb4e727badf1d408fc0d1b45467cf4fd3
+      photo.mat: 3c940fc79515c85ecef24ed4a90e4ee982fbe8629a134bd51c70f99718ba276b
+      elliptic.mat: 2f502df4b87be8f8b5ed5ef8378876125c92b06afbc5b38ee58fe4b56b1b2023
+      t_finance.mat: ee66d63073743edaef3de46de96a517f9c3394d7ce4659f5afae8be8380bf6b9
+      tolokers.mat: d6ec34984d4db3f52b53606a447f6101a74d8e9aad2ae8644dfe2ff33227a1d0
   phases:
     - id: six-dataset-hccs85
       execution_host: HCCS-85

@@ -1,0 +1,10 @@
+program: run_trial.py
+method: grid
+metric:
+  name: AUROC
+  goal: maximize
+parameters:
+  dataset:
+    values: [dgraph]
+  seed:
+    values: [0, 1, 2, 3, 4]
