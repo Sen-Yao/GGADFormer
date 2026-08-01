@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+from collections.abc import Mapping
 import datetime
 import json
 import math
@@ -48,7 +49,10 @@ def equal_value(actual, expected):
 def get_summary_value(summary, key):
     value = summary.get(key)
     if value is None:
-        value = summary.get(key.replace(".last", ""))
+        root, leaf = key.split(".", 1)
+        value = summary.get(root)
+        if isinstance(value, Mapping):
+            value = value.get(leaf)
     if value is None or not math.isfinite(float(value)):
         raise ValueError("missing/non-finite summary value {}".format(key))
     return float(value)
@@ -89,7 +93,7 @@ def collect_run(run, sweep_id):
     final_rows = [row for row in history if row["step"] == 100]
     if len(final_rows) != 1:
         errors.append("expected one final history row at step 100, got {}".format(len(final_rows)))
-    summary = dict(run.summary)
+    summary = dict(run.summary._json_dict)
     try:
         auc_last = get_summary_value(summary, "AUC.last")
         ap_last = get_summary_value(summary, "AP.last")
@@ -192,4 +196,3 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-
