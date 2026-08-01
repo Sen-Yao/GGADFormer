@@ -141,6 +141,10 @@ formal_revalidation:
         - {gpu: 6, pane_id: "%285", max_assignments: 3}
         - {gpu: 7, pane_id: "%286", max_assignments: 3}
       first_formal_agent_started_at: 2026-08-01T18:47:30+08:00
+      heartbeat:
+        automation_id: check-vecgad-package-v2-reruns
+        generation: 1
+        next_check_local: 2026-08-01T18:56:00+08:00
       state: launched
     - id: dgraph-hccs90
       execution_host: HCCS-90
