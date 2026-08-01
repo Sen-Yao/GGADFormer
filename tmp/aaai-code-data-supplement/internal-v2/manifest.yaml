@@ -4,6 +4,7 @@ artifact_path: /Users/oliver/Developer/VecGAD/tmp/aaai-code-data-supplement/pack
 submission_includes_this_manifest: false
 artifact_execution_sha: ab082e85fcbddc96e51144e375ef69c1a3ef12b5
 protocol_content_commit: 06d3d0085082723f1c8bc33f666e9349706ae0c8
+protocol_binding_commit: 2642ac6123260f9d948f0ce8ec9a7b3e85097293
 
 source_authorities:
   strict_execution_sha: fdb150b7927f26f2e8b5270365a324d844dc8b98
@@ -122,6 +123,10 @@ formal_revalidation:
       gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
       datasets: [Amazon, reddit, photo, elliptic, t_finance, tolokers]
       expected_trials: 30
+      sweep_id: 2uzmgq9u
+      sweep_url: https://wandb.ai/HCCS/DualRefGAD/sweeps/2uzmgq9u
+      sweep_config_sha256: 67ed67f25d79043f13ed04b76c1a4153592475ac18abeadf33d7a6043e07d337
+      wrapper_sha256: 2355605d3a532762144832762dbbd236ad5952ac8eeec2ec381f25767de642b7
       remote_worktree: /root/gpufree-data/linziyao/worktrees/GGADFormer-package-v2-019fbc58
       results_dir: /root/gpufree-data/linziyao/vecgad-package-v2-results-019fbc58/hccs85
       state: prepared
