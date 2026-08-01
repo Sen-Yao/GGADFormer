@@ -106,13 +106,14 @@ runtime:
 wandb:
   entity: HCCS
   project: GGADFormer
-  sweep_id: null
-  sweep_url: null
+  sweep_id: 11zvd8hg
+  sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/11zvd8hg
+  sweep_created_at_utc: 2026-08-01T01:51:33Z
   create_exactly_once: true
   code_upload_disabled: true
   console_upload_disabled: true
   expected_trials: 20
-  current_state: NOT_CREATED
+  current_state: CREATED
 
 execution:
   tmux_session: null
