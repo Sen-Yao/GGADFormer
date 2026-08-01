@@ -137,18 +137,25 @@ wandb:
   screening_identity_audit: {observed_at_utc: 2026-08-01T10:41:59Z, unique_identities: 384, identity_violations: 0, duplicates: 0, finished_metric_violations: 0, forbidden_test_metrics: 0}
   screening_results: {path: experiments/reddit-fixed-core-500-019fbc4f/screening-results.json, file_sha256: b72084ed57b10eb4bc47568516c3665b809481216a40ec5ff666a09d33fce83d, payload_sha256: 2bf64d8b55c661463af61a402b794a535bbc84925be087b3dac1420df729c6aa, rows_sha256: 1271573311b1e6e922ce5b0fdffe641495c81fefd8765a8a78c4344b92b84a3d}
   promotion_parent_sweep_id: 2cibydx2
-  promotion_sweep_id: null
-  promotion_sweep_state: NOT_CREATED
+  promotion_sweep_id: 55chbpyh
+  promotion_sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/55chbpyh
+  promotion_sweep_state: PENDING
+  promotion_sweep_observed_at_utc: 2026-08-01T11:02:17Z
+  promotion_runs_observed: 0
+  promotion_create_exactly_once: true
   expected_promotion_trials: 60
   create_exactly_once: true
   expected_screening_trials: 384
-  current_state: SCREENING_FINISHED_PROMOTION_PREPARED
+  current_state: PROMOTION_SWEEP_CREATED
   preassignment_invalid_launches:
     - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
 execution:
   screening_detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-045915c633e3b6e24ebb35c2a233c35751bad7b6
   detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-promotion-b9a8c23af0160fb650e7bd3882543d985b6cfb1d
+  git_transport: verified_bundle_after_origin_https_tls_failure
+  git_transport_ref: bead6c63120708bf3e62b58aeb6a2bd3140fa12e
+  git_bundle_sha256: a7502419bc237cbb25f21608561730da2305fb858fa82c529447e6ffc22bff1c
   tmux_session: reddit_fixed_core_500_019fbc4f_screening
   pane_records:
     - {pane_id: "%91", pane_pid: 165995, gpu_index: 0, agent_count: 48}
