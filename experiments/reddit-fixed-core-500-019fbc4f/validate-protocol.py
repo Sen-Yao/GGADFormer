@@ -42,10 +42,13 @@ def main():
         raise AssertionError("manifest fixed core mismatch")
     if manifest["budget"]["allocated_plus_reserved"] > HARD_RUN_LIMIT:
         raise AssertionError("manifest allocates more than 500 records")
-    if manifest["budget"]["created_records"] != 445:
-        raise AssertionError("promotion handoff must account for 445 records")
-    if manifest["budget"]["remaining_records"] != 55:
-        raise AssertionError("promotion handoff must preserve 55 records")
+    created_records = manifest["budget"]["created_records"]
+    if not 445 <= created_records <= 475:
+        raise AssertionError("confirmation accounting is outside ordinals 446-475")
+    if manifest["budget"]["remaining_records"] != HARD_RUN_LIMIT - created_records:
+        raise AssertionError("remaining record accounting mismatch")
+    if created_records + manifest["budget"]["technical_retry_records_reserved"] > HARD_RUN_LIMIT:
+        raise AssertionError("confirmation accounting consumes retry reserve")
 
     params = screening_sweep["parameters"]
     config_ids = params["config_id"]["values"]

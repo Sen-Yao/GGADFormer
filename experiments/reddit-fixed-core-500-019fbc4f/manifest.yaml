@@ -1,5 +1,5 @@
 schema_version: 1
-state: prepared
+state: launched
 formal_launch_allowed: true
 confirmation_launch_allowed: true
 protocol:
@@ -49,17 +49,17 @@ budget:
     technical_retry_reserve: 25
   scientific_records_planned: 475
   allocated_plus_reserved: 500
-  allocated_records: 445
-  future_scientific_records_reserved: 30
+  allocated_records: 475
+  future_scientific_records_reserved: 0
   technical_retry_records_reserved: 25
-  created_records: 445
-  consumed_records: 445
+  created_records: 453
+  consumed_records: 453
   valid_records: 445
   failed_records: 0
   retry_records: 0
-  remaining_records: 55
-  next_record_ordinal: 446
-  observed_at_utc: 2026-08-01T11:36:06Z
+  remaining_records: 47
+  next_record_ordinal: 454
+  observed_at_utc: 2026-08-01T11:58:14Z
   allocation_guard: reject before any operation that would create or assign ordinal 501
 
 authorization:
@@ -101,7 +101,7 @@ selection:
     clean_gpu_count: 8
     aggregate_fp32_tflops: 660.64
     speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
-  occupancy_state: reserved
+  occupancy_state: running
   selected_at_utc: 2026-08-01T08:34:19Z
   promotion_selected_at_utc: 2026-08-01T10:51:08Z
   confirmation_selected_at_utc: 2026-08-01T11:51:16Z
@@ -171,14 +171,17 @@ wandb:
   confirmation_sweep_id: 219k2jj2
   confirmation_sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/219k2jj2
   confirmation_sweep_created_at_utc: 2026-08-01T11:54:50Z
-  confirmation_sweep_state: PENDING
-  confirmation_runs_observed: 0
+  confirmation_sweep_state: RUNNING
+  confirmation_sweep_observed_at_utc: 2026-08-01T11:58:14Z
+  confirmation_runs_observed: 8
+  confirmation_state_counts_observed: {running: 8}
+  confirmation_identity_audit: {unique_identities: 8, identity_violations: 0, duplicates: 0}
   confirmation_create_exactly_once: true
   promotion_create_exactly_once: true
   expected_promotion_trials: 60
   create_exactly_once: true
   expected_screening_trials: 384
-  current_state: CONFIRMATION_SWEEP_CREATED
+  current_state: CONFIRMATION_RUNNING
   preassignment_invalid_launches:
     - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
@@ -186,6 +189,17 @@ execution:
   screening_detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-045915c633e3b6e24ebb35c2a233c35751bad7b6
   detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-promotion-b9a8c23af0160fb650e7bd3882543d985b6cfb1d
   confirmation_detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-confirmation-73ae066e79ab20d09c69e3fc73b3ffb5e870fb8f
+  confirmation_tmux_session: reddit_fixed_core_500_019fbc4f_confirmation
+  confirmation_pane_records:
+    - {pane_id: "%107", pane_pid: 461843, gpu_index: 0, agent_count: 4}
+    - {pane_id: "%108", pane_pid: 461855, gpu_index: 1, agent_count: 4}
+    - {pane_id: "%109", pane_pid: 461861, gpu_index: 2, agent_count: 4}
+    - {pane_id: "%110", pane_pid: 461872, gpu_index: 3, agent_count: 4}
+    - {pane_id: "%111", pane_pid: 461883, gpu_index: 4, agent_count: 4}
+    - {pane_id: "%112", pane_pid: 461894, gpu_index: 5, agent_count: 4}
+    - {pane_id: "%113", pane_pid: 461905, gpu_index: 6, agent_count: 3}
+    - {pane_id: "%114", pane_pid: 461917, gpu_index: 7, agent_count: 3}
+  confirmation_first_agent_start_utc: 2026-08-01T11:57:00Z
   git_transport: verified_bundle_after_origin_https_tls_failure
   git_transport_ref: bead6c63120708bf3e62b58aeb6a2bd3140fa12e
   git_bundle_sha256: a7502419bc237cbb25f21608561730da2305fb858fa82c529447e6ffc22bff1c
