@@ -103,7 +103,9 @@ selection:
     clean_gpu_count: 8
     aggregate_fp32_tflops: 660.64
     speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
-  occupancy_state: running
+  occupancy_state: free
+  occupancy_released_at_utc: 2026-08-01T12:33:26Z
+  occupancy_release_evidence: W&B 219k2jj2 FINISHED 30/30; fixed-final aggregate/replay passed; application artifacts 0; task tmux/process/GPU absent; completed results commit 6528c3a pushed
   selected_at_utc: 2026-08-01T08:34:19Z
   promotion_selected_at_utc: 2026-08-01T10:51:08Z
   confirmation_selected_at_utc: 2026-08-01T11:51:16Z
@@ -209,6 +211,7 @@ execution:
   confirmation_terminal_observed_at_utc: 2026-08-01T12:26:58Z
   confirmation_agents_terminal: true
   confirmation_compute_pids_terminal: true
+  confirmation_tmux_session_terminal: true
   git_transport: verified_bundle_after_origin_https_tls_failure
   git_transport_ref: bead6c63120708bf3e62b58aeb6a2bd3140fa12e
   git_bundle_sha256: a7502419bc237cbb25f21608561730da2305fb858fa82c529447e6ffc22bff1c

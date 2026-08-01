@@ -47,3 +47,4 @@ Closure Audit：
 - job 层：smoke、screening、promotion、confirmation 全部有效终止。phase 层：validation-only 选择与 frozen-test 确认均完成。配置层：`cfg-117` 在 AUROC 上接近 PDF，但 AP 仍低。investigation 层：固定核心 Reddit 搜索范围完成。
 - 证据支持范围仅限 Reddit、split seed 42、当前 VecGAD 实现、预声明搜索空间和 seeds；不外推到其他数据集、方法改造、不同核心参数或普遍复现结论。
 - 剩余资源为未使用的 25 条技术重试记录；因没有技术失败且 required scope 已完成，不再使用。没有 successor investigation 被本结果自动授权或启动。
+- 科学终态提交 `6528c3a` 推送成功后，精确终态 pane `%107` 已清理，confirmation tmux session、task agent、task compute PID 均不存在。HCCS-90 occupancy 于 2026-08-01T12:33:26Z 按 `running -> free` 释放。
