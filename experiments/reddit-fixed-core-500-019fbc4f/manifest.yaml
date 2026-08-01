@@ -167,11 +167,18 @@ wandb:
   confirmation_config_ids_sha256: adfb7edae5c7e46f0363ccf7e2e7db6332da5ada79620ddea4241ce1ea9f1a7c
   confirmation_trials_sha256: 95fbdac5ad1df47a47adf91a16df12f4618662f3fc5ebcce544d360e692872d0
   expected_confirmation_trials: 30
+  confirmation_parent_sweep_id: 55chbpyh
+  confirmation_sweep_id: 219k2jj2
+  confirmation_sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/219k2jj2
+  confirmation_sweep_created_at_utc: 2026-08-01T11:54:50Z
+  confirmation_sweep_state: PENDING
+  confirmation_runs_observed: 0
+  confirmation_create_exactly_once: true
   promotion_create_exactly_once: true
   expected_promotion_trials: 60
   create_exactly_once: true
   expected_screening_trials: 384
-  current_state: CONFIRMATION_PREPARED
+  current_state: CONFIRMATION_SWEEP_CREATED
   preassignment_invalid_launches:
     - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
@@ -182,6 +189,9 @@ execution:
   git_transport: verified_bundle_after_origin_https_tls_failure
   git_transport_ref: bead6c63120708bf3e62b58aeb6a2bd3140fa12e
   git_bundle_sha256: a7502419bc237cbb25f21608561730da2305fb858fa82c529447e6ffc22bff1c
+  confirmation_git_transport: verified_bundle_after_origin_ref_lock_failure
+  confirmation_git_transport_ref: f18430bc43e8c15b142af78740ed8ecb47228ec0
+  confirmation_git_bundle_sha256: 30d6ed03614074a986e658251f1e5e9ce8abed5580d393ef5513ff4ac95e24d8
   tmux_session: reddit_fixed_core_500_019fbc4f_screening
   pane_records:
     - {pane_id: "%91", pane_pid: 165995, gpu_index: 0, agent_count: 48}
