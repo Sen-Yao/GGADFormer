@@ -10,6 +10,7 @@ import random
 import dgl
 from sklearn.metrics import average_precision_score
 import argparse
+import json
 import os
 from tqdm import tqdm
 import time
@@ -19,6 +20,25 @@ import wandb
 from visualization import create_tsne_visualization, visualize_attention_weights, visualize_reconstruction_analysis
 from utils import send_notification, calculate_graph_statistics
 from ablation_rec_error import evaluate_with_rec_error_filter
+
+
+FIXED_CORE_CONFIG = {
+    "dataset": "reddit",
+    "progregate_alpha": 0.0,
+    "lambda_rec_emb": 0.1,
+    "ring_R_max": 1.0,
+}
+
+
+def assert_fixed_core_config(args):
+    observed = {key: getattr(args, key) for key in FIXED_CORE_CONFIG}
+    if observed != FIXED_CORE_CONFIG:
+        raise AssertionError(
+            "fixed-core config mismatch: expected {}, observed {}".format(
+                json.dumps(FIXED_CORE_CONFIG, sort_keys=True),
+                json.dumps(observed, sort_keys=True),
+            )
+        )
 
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(map(str, [3]))
@@ -155,7 +175,9 @@ def train(args):
         # 其中 all_node_indices 是用于计算 batch 内部的 normal_for_train_idx 的
         batch_data_train = Data.TensorDataset(concated_input_features, labels, all_node_indices)
         batch_data_val = Data.TensorDataset(concated_input_features[idx_val], labels[idx_val])
-        batch_data_test = Data.TensorDataset(concated_input_features[idx_test], labels[idx_test])
+        batch_data_test = None
+        if args.evaluation_protocol != 'validation_only':
+            batch_data_test = Data.TensorDataset(concated_input_features[idx_test], labels[idx_test])
 
         # 对于训练集需要分层采样
 
@@ -174,7 +196,9 @@ def train(args):
 
         train_data_loader = Data.DataLoader(batch_data_train, batch_size=args.batch_size, sampler=sampler, num_workers=0, pin_memory=False)
         val_data_loader = Data.DataLoader(batch_data_val, batch_size=args.batch_size, shuffle = False)
-        test_data_loader = Data.DataLoader(batch_data_test, batch_size=args.batch_size, shuffle = False)
+        test_data_loader = None
+        if batch_data_test is not None:
+            test_data_loader = Data.DataLoader(batch_data_test, batch_size=args.batch_size, shuffle = False)
 
         normal_for_train_idx = torch.tensor(normal_for_train_idx, dtype=torch.long, device=device)
 
@@ -239,7 +263,7 @@ def train(args):
                 'AP': f'{ap:.4f}'
             })
             pbar.update(1)
-            if epoch % 2 == 0:
+            if epoch % 2 == 0 and args.wandb_log_training_metrics:
                 wandb.log({ "batched_total_loss": batched_total_loss.item(),
                             "bce_loss": batched_bce_loss.item(),
                             "rec_loss": batched_rec_loss.item(),
@@ -306,7 +330,7 @@ def train(args):
                 'AP': f'{ap:.4f}'
             })
             pbar.update(1)
-            if epoch % 2 == 0:
+            if epoch % 2 == 0 and args.wandb_log_training_metrics:
                 wandb.log({ "margin_loss": loss_margin.item(),
                             "bce_loss": loss_bce.item(),
                             "rec_loss": loss_rec.item(),
@@ -321,36 +345,70 @@ def train(args):
             train_flag = False
 
             if args.model_type == "VecGAD":
-                all_batched_logits = []
-                with torch.no_grad():
-                    for _, item in enumerate(test_data_loader):
-                        concated_input_features = item[0].to(device)
-                        labels = item[1].to(device)
-                        emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, loss_rec, loss_ring = model(concated_input_features, None, None, None,
-                                                                                train_flag, args)
-                        all_batched_logits.append(logits.squeeze(0))
-                    # Concatenate all batched logits
+                def infer_batched(data_loader):
+                    all_batched_logits = []
+                    with torch.no_grad():
+                        for _, item in enumerate(data_loader):
+                            input_tokens = item[0].to(device)
+                            emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, loss_rec, loss_ring = model(input_tokens, None, None, None,
+                                                                                    train_flag, args)
+                            all_batched_logits.append(logits.squeeze(0))
                     concatenated_logits = torch.cat(all_batched_logits, dim=0)
-                    logits = np.squeeze(concatenated_logits.cpu().detach().numpy())
-            else: 
+                    return np.squeeze(concatenated_logits.cpu().detach().numpy())
+
+                val_logits = infer_batched(val_data_loader)
+            else:
                 emb, emb_combine, logits, outlier_emb, noised_normal_for_generation_emb, _, con_loss, proj_loss, reconstruction_loss = model(concated_input_features, adj, normal_for_generation_idx, normal_for_train_idx,
                                                                         train_flag, args)
-                logits = np.squeeze(logits[:, idx_test, :].cpu().detach().numpy())
-            
-            # ===== 重构误差过滤消融实验 =====
-            # 当 rec_error_filter_ratio != 1.0 时，使用过滤后的节点计算AUROC/AUPRC
-            if getattr(args, 'rec_error_filter_ratio', 1.0) != 1.0 and args.model_type == "VecGAD":
-                filtered_results = evaluate_with_rec_error_filter(
-                    model, test_data_loader, ano_label, idx_test,
-                    args, device, args.rec_error_filter_ratio
+                all_logits = np.squeeze(logits.cpu().detach().numpy())
+                val_logits = all_logits[idx_val]
+
+            val_auc = roc_auc_score(ano_label[idx_val], val_logits)
+            val_ap = average_precision_score(
+                ano_label[idx_val], val_logits, average='macro', pos_label=1,
+                sample_weight=None
+            )
+            metric_payload = {"Val/AUC": val_auc, "Val/AP": val_ap}
+            auc = val_auc
+            ap = val_ap
+
+            evaluate_test = (
+                args.evaluation_protocol == 'legacy_test'
+                or (
+                    args.evaluation_protocol == 'frozen_test'
+                    and epoch == args.num_epoch
                 )
-                auc = filtered_results['auroc']
-                ap = filtered_results['auprc']
-            else:
-                auc = roc_auc_score(ano_label[idx_test], logits)
-                ap = average_precision_score(ano_label[idx_test], logits, average='macro', pos_label=1, sample_weight=None)
-            
-            wandb.log({"AUC": auc, "AP": ap}, step=epoch)
+            )
+            if evaluate_test:
+                if args.model_type == "VecGAD":
+                    test_logits = infer_batched(test_data_loader)
+                else:
+                    test_logits = all_logits[idx_test]
+
+                # ===== 重构误差过滤消融实验 =====
+                # 当 rec_error_filter_ratio != 1.0 时，使用过滤后的节点计算AUROC/AUPRC
+                if getattr(args, 'rec_error_filter_ratio', 1.0) != 1.0 and args.model_type == "VecGAD":
+                    filtered_results = evaluate_with_rec_error_filter(
+                        model, test_data_loader, ano_label, idx_test,
+                        args, device, args.rec_error_filter_ratio
+                    )
+                    test_auc = filtered_results['auroc']
+                    test_ap = filtered_results['auprc']
+                else:
+                    test_auc = roc_auc_score(ano_label[idx_test], test_logits)
+                    test_ap = average_precision_score(
+                        ano_label[idx_test], test_logits, average='macro',
+                        pos_label=1, sample_weight=None
+                    )
+
+                if args.evaluation_protocol == 'legacy_test':
+                    auc = test_auc
+                    ap = test_ap
+                    metric_payload = {"AUC": auc, "AP": ap}
+                else:
+                    metric_payload.update({"Test/AUC": test_auc, "Test/AP": test_ap})
+
+            wandb.log(metric_payload, step=epoch)
             
             # 检查是否为最佳模型
             if auc > best_AUC and ap > best_AP:
@@ -363,7 +421,7 @@ def train(args):
     print(f"Training done! Total time: {total_time:.2f} seconds")
     
     # 在最后一次eval时进行重构误差分析可视化
-    if args.visualize and args.model_type == "VecGAD":
+    if args.visualize and args.model_type == "VecGAD" and test_data_loader is not None:
         print("\n=== Starting Final Evaluation Reconstruction Analysis ===")
         model.eval()
         train_flag = False
@@ -446,6 +504,11 @@ if __name__ == "__main__":
     
     parser.add_argument('--model_type', type=str, default='VecGAD')
     parser.add_argument('--visualize', type=str2bool, default=False)
+    parser.add_argument('--evaluation_protocol', type=str,
+                        choices=['legacy_test', 'validation_only', 'frozen_test'],
+                        default='legacy_test')
+    parser.add_argument('--wandb_log_training_metrics', type=str2bool, default=True)
+    parser.add_argument('--validate_config_only', type=str2bool, default=False)
     parser.add_argument('--device', type=int, default=0)
 
     parser.add_argument('--pp_k', type=int, default=6)
@@ -516,6 +579,14 @@ if __name__ == "__main__":
         args.mean = 0.0
         args.var = 0.0
 
+    fixed_core_guard = os.environ.get("FIXED_CORE_GUARD", "") == "1"
+    if fixed_core_guard:
+        assert_fixed_core_config(args)
+
+    if args.validate_config_only:
+        print(json.dumps(vars(args), sort_keys=True))
+        raise SystemExit(0)
+
 
     run_config = vars(args).copy()
     run_config.update({
@@ -524,6 +595,9 @@ if __name__ == "__main__":
         "code_sha": os.environ.get("EXPECTED_CODE_SHA", ""),
         "execution_host": os.environ.get("EXECUTION_HOST", ""),
         "gpu_index": os.environ.get("CUDA_VISIBLE_DEVICES", ""),
+        "phase": os.environ.get("EXPERIMENT_PHASE", ""),
+        "config_id": os.environ.get("EXPERIMENT_CONFIG_ID", ""),
+        "fixed_core_guard": fixed_core_guard,
     })
     run = wandb.init(
         entity=os.environ.get("WANDB_ENTITY", "HCCS"),
@@ -533,10 +607,17 @@ if __name__ == "__main__":
         config=run_config,
     )
 
-    wandb.define_metric("AUC", summary="max")
-    wandb.define_metric("AP", summary="max")
-    wandb.define_metric("AUC", summary="last")
-    wandb.define_metric("AP", summary="last")
+    if args.evaluation_protocol == 'legacy_test':
+        wandb.define_metric("AUC", summary="max")
+        wandb.define_metric("AP", summary="max")
+        wandb.define_metric("AUC", summary="last")
+        wandb.define_metric("AP", summary="last")
+    else:
+        wandb.define_metric("Val/AUC", summary="last")
+        wandb.define_metric("Val/AP", summary="last")
+        if args.evaluation_protocol == 'frozen_test':
+            wandb.define_metric("Test/AUC", summary="last")
+            wandb.define_metric("Test/AP", summary="last")
     print('Dataset: ', args.dataset)
         
     try:

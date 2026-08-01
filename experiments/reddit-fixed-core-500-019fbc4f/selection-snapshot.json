@@ -1,0 +1,99 @@
+{
+  "collected_at_utc": "2026-08-01T07:59:05Z",
+  "occupancy_document_valid": true,
+  "hosts": [
+    {
+      "host": "HCCS-25",
+      "hostname": "VM-2-25-ubuntu",
+      "status": "ok",
+      "occupancy_state": "free",
+      "preflight": {
+        "git_clean": true,
+        "runtime_ok": true,
+        "cache_ok": true,
+        "wandb_ok": true
+      },
+      "preflight_evidence": {
+        "git": "clean main checkout; intended task branch will be fetched after push",
+        "runtime": "Python 3.8.19; torch 2.0.0+cu117; DGL 1.1.3+cu117; W&B 0.21.1",
+        "cache": "reddit.mat readable; SHA-256 533a739caa38939dff51f1902e6705fbb4e727badf1d408fc0d1b45467cf4fd3",
+        "wandb": "authenticated viewer and HCCS/GGADFormer project access passed over direct HTTPS"
+      },
+      "gpus": [
+        {"index": 0, "model": "RTX 2080 Ti", "memory_used_mb": 10287, "compute_pids": [3166897, 1174504, 849348]},
+        {"index": 1, "model": "RTX 2080 Ti", "memory_used_mb": 1067, "compute_pids": [1174504]},
+        {"index": 2, "model": "RTX 2080 Ti", "memory_used_mb": 3, "compute_pids": []},
+        {"index": 3, "model": "RTX 2080 Ti", "memory_used_mb": 3, "compute_pids": []},
+        {"index": 4, "model": "RTX 2080 Ti", "memory_used_mb": 3, "compute_pids": []},
+        {"index": 5, "model": "RTX 2080 Ti", "memory_used_mb": 3, "compute_pids": []},
+        {"index": 6, "model": "RTX 2080 Ti", "memory_used_mb": 3, "compute_pids": []},
+        {"index": 7, "model": "RTX 2080 Ti", "memory_used_mb": 1067, "compute_pids": [3166897]}
+      ]
+    },
+    {
+      "host": "HCCS-85",
+      "hostname": "gpufree-container",
+      "status": "ok",
+      "occupancy_state": "free",
+      "preflight": {
+        "git_clean": true,
+        "runtime_ok": true,
+        "cache_ok": true,
+        "wandb_ok": true
+      },
+      "preflight_evidence": {
+        "git": "clean main checkout; intended task branch will be fetched after push",
+        "runtime": "Python 3.8.19; torch 2.0.0 cu118; DGL 1.1.3; W&B 0.21.1",
+        "cache": "reddit.mat readable; SHA-256 533a739caa38939dff51f1902e6705fbb4e727badf1d408fc0d1b45467cf4fd3",
+        "wandb": "authenticated viewer and HCCS/GGADFormer project access passed over direct HTTPS"
+      },
+      "gpus": [
+        {"index": 0, "model": "RTX 4090", "memory_used_mb": 4, "compute_pids": []},
+        {"index": 1, "model": "RTX 4090", "memory_used_mb": 4, "compute_pids": []},
+        {"index": 2, "model": "RTX 4090", "memory_used_mb": 4, "compute_pids": []},
+        {"index": 3, "model": "RTX 4090", "memory_used_mb": 4, "compute_pids": []},
+        {"index": 4, "model": "RTX 4090", "memory_used_mb": 4, "compute_pids": []},
+        {"index": 5, "model": "RTX 4090", "memory_used_mb": 4, "compute_pids": []},
+        {"index": 6, "model": "RTX 4090", "memory_used_mb": 4, "compute_pids": []},
+        {"index": 7, "model": "RTX 4090", "memory_used_mb": 4, "compute_pids": []}
+      ]
+    },
+    {
+      "host": "HCCS-90",
+      "hostname": "gpufree-container",
+      "status": "ok",
+      "occupancy_state": "free",
+      "preflight": {
+        "git_clean": true,
+        "runtime_ok": true,
+        "cache_ok": true,
+        "wandb_ok": true
+      },
+      "preflight_evidence": {
+        "git": "clean main checkout behind origin/main and eligible for ff-only; intended task branch will be fetched after push",
+        "runtime": "Python 3.8.19; torch 2.0.0+cu118; DGL 1.1.3; W&B 0.21.1",
+        "cache": "reddit.mat readable; SHA-256 533a739caa38939dff51f1902e6705fbb4e727badf1d408fc0d1b45467cf4fd3",
+        "wandb": "authenticated viewer and HCCS/GGADFormer project access passed over direct HTTPS"
+      },
+      "gpus": [
+        {"index": 0, "model": "RTX 4090", "memory_used_mb": 5, "compute_pids": []},
+        {"index": 1, "model": "RTX 4090", "memory_used_mb": 23, "compute_pids": []},
+        {"index": 2, "model": "RTX 4090", "memory_used_mb": 5, "compute_pids": []},
+        {"index": 3, "model": "RTX 4090", "memory_used_mb": 5, "compute_pids": []},
+        {"index": 4, "model": "RTX 4090", "memory_used_mb": 5, "compute_pids": []},
+        {"index": 5, "model": "RTX 4090", "memory_used_mb": 5, "compute_pids": []},
+        {"index": 6, "model": "RTX 4090", "memory_used_mb": 4, "compute_pids": []},
+        {"index": 7, "model": "RTX 4090", "memory_used_mb": 4, "compute_pids": []}
+      ]
+    }
+  ],
+  "scorer_result": {
+    "selected": "HCCS-85",
+    "ranked": [
+      {"host": "HCCS-85", "clean_gpu_count": 8, "aggregate_fp32_tflops": 660.64},
+      {"host": "HCCS-90", "clean_gpu_count": 8, "aggregate_fp32_tflops": 660.64},
+      {"host": "HCCS-25", "clean_gpu_count": 5, "aggregate_fp32_tflops": 67.25}
+    ],
+    "tie_break_order": ["HCCS-85", "HCCS-90", "HCCS-25"]
+  }
+}

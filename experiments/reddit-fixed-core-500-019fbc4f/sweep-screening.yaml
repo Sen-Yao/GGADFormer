@@ -1,0 +1,13 @@
+name: reddit-fixed-core-screening-019fbc4f
+program: experiments/reddit-fixed-core-500-019fbc4f/run-trial.py
+method: grid
+metric:
+  name: Val/AUC.last
+  goal: maximize
+parameters:
+  phase:
+    value: screening
+  config_id:
+    values: [cfg-000, cfg-001, cfg-002, cfg-003, cfg-004, cfg-005, cfg-006, cfg-007, cfg-008, cfg-009, cfg-010, cfg-011, cfg-012, cfg-013, cfg-014, cfg-015, cfg-016, cfg-017, cfg-018, cfg-019, cfg-020, cfg-021, cfg-022, cfg-023, cfg-024, cfg-025, cfg-026, cfg-027, cfg-028, cfg-029, cfg-030, cfg-031, cfg-032, cfg-033, cfg-034, cfg-035, cfg-036, cfg-037, cfg-038, cfg-039, cfg-040, cfg-041, cfg-042, cfg-043, cfg-044, cfg-045, cfg-046, cfg-047, cfg-048, cfg-049, cfg-050, cfg-051, cfg-052, cfg-053, cfg-054, cfg-055, cfg-056, cfg-057, cfg-058, cfg-059, cfg-060, cfg-061, cfg-062, cfg-063, cfg-064, cfg-065, cfg-066, cfg-067, cfg-068, cfg-069, cfg-070, cfg-071, cfg-072, cfg-073, cfg-074, cfg-075, cfg-076, cfg-077, cfg-078, cfg-079, cfg-080, cfg-081, cfg-082, cfg-083, cfg-084, cfg-085, cfg-086, cfg-087, cfg-088, cfg-089, cfg-090, cfg-091, cfg-092, cfg-093, cfg-094, cfg-095, cfg-096, cfg-097, cfg-098, cfg-099, cfg-100, cfg-101, cfg-102, cfg-103, cfg-104, cfg-105, cfg-106, cfg-107, cfg-108, cfg-109, cfg-110, cfg-111, cfg-112, cfg-113, cfg-114, cfg-115, cfg-116, cfg-117, cfg-118, cfg-119, cfg-120, cfg-121, cfg-122, cfg-123, cfg-124, cfg-125, cfg-126, cfg-127, cfg-128, cfg-129, cfg-130, cfg-131, cfg-132, cfg-133, cfg-134, cfg-135, cfg-136, cfg-137, cfg-138, cfg-139, cfg-140, cfg-141, cfg-142, cfg-143, cfg-144, cfg-145, cfg-146, cfg-147, cfg-148, cfg-149, cfg-150, cfg-151, cfg-152, cfg-153, cfg-154, cfg-155, cfg-156, cfg-157, cfg-158, cfg-159, cfg-160, cfg-161, cfg-162, cfg-163, cfg-164, cfg-165, cfg-166, cfg-167, cfg-168, cfg-169, cfg-170, cfg-171, cfg-172, cfg-173, cfg-174, cfg-175, cfg-176, cfg-177, cfg-178, cfg-179, cfg-180, cfg-181, cfg-182, cfg-183, cfg-184, cfg-185, cfg-186, cfg-187, cfg-188, cfg-189, cfg-190, cfg-191]
+  seed:
+    values: [0, 1]

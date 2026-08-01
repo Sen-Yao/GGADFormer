@@ -1,0 +1,139 @@
+schema_version: 1
+state: prepared
+formal_launch_allowed: false
+protocol:
+  id: reddit-fixed-core-500-019fbc4f
+  governance: governed
+  objective: reliable Reddit fixed-core validation-selected hyperparameter scan
+  owner_thread_id: 019fbc4f-3c4e-7701-a1de-37f373693859
+  source_thread_id: 019fbb9e-1afe-7192-a88a-f81e7e145055
+  scientific_base_sha: 7a0540ec0ca80c079020da282a3ff5b629174ae7
+  execution_code_sha: TO_BE_BOUND_AFTER_PREPARED_COMMIT
+  prepared_protocol_commit: TO_BE_BOUND_AFTER_PREPARED_COMMIT
+  screening_registry_sha256: 4c1895d6c27189774fee3b1b8a4f26b10375ceccc2dcb810cd6b23a76e3c80ce
+  screening_trials_sha256: 6c5b6ea56660443f623a95bbda4494ecf9e3ebf899072f4640f80929037cd273
+  config_parser: run.py argparse with FIXED_CORE_GUARD=1
+  label_boundary: validation labels may select configs; test labels are inaccessible in validation_only and read once at the frozen final epoch in confirmation
+  selection_policy:
+    screening: mean Val/AUC.last over seeds 0-1; Val/AP.last is the frozen tie-break
+    promotion: top 12 configs, fresh validation seeds 2-6, ranked by mean Val/AUC.last then mean Val/AP.last
+    confirmation: freeze top 6 configs before five-seed test reads
+  metric_policy: fixed final epoch for each resolved trial; no per-seed best epoch, cross-seed epoch stitching, or test-selected config
+  retry_policy: technical invalidity only; every retry consumes one reserved W&B record
+
+fixed_core:
+  dataset: reddit
+  progregate_alpha: 0.0
+  lambda_rec_emb: 0.1
+  ring_R_max: 1.0
+
+budget:
+  hard_limit: 500
+  phase_allocation:
+    smoke: 1
+    screening: 384
+    promotion: 60
+    confirmation: 30
+    technical_retry_reserve: 25
+  scientific_records_planned: 475
+  allocated_plus_reserved: 500
+  created_records: 0
+  consumed_records: 0
+  valid_records: 0
+  failed_records: 0
+  retry_records: 0
+  remaining_records: 500
+  next_record_ordinal: 1
+  allocation_guard: reject before any operation that would create or assign ordinal 501
+
+authorization:
+  status: granted_by_explicit_user_request
+  execution_location: HCCS
+  destination: HCCS/GGADFormer
+  allowed_data: [config, seed, run_status, necessary_metadata, AUROC, AP]
+  excluded_data: [raw_data, source_code, credentials, checkpoints, undeclared_artifacts]
+  code_upload_disabled: true
+  console_upload_disabled: true
+  artifact_uploads: []
+
+data:
+  split_seed: 42
+  train_rate: 0.05
+  validation_rate: 0.1
+  path: dataset/reddit.mat
+  sha256: 533a739caa38939dff51f1902e6705fbb4e727badf1d408fc0d1b45467cf4fd3
+  size_bytes: 10848176
+  inventory:
+    Attributes: {shape: [10984, 64], dtype: float64}
+    Class: {shape: [1, 10984], dtype: float64}
+    Label: {shape: [1, 10984], dtype: float64}
+    Network: {shape: [10984, 10984], dtype: float64}
+  hash_mismatch_action: stop
+  regeneration_allowed: false
+
+selection:
+  candidate_pool: [HCCS-25, HCCS-85, HCCS-90]
+  occupancy_document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
+  snapshot_path: experiments/reddit-fixed-core-500-019fbc4f/selection-snapshot.json
+  execution_host: HCCS-85
+  gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+  selected_host_score:
+    model: RTX 4090
+    clean_gpu_count: 8
+    aggregate_fp32_tflops: 660.64
+    speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
+  occupancy_state: reserved
+  selected_at_utc: 2026-08-01T08:00:11Z
+
+runtime:
+  environment: /root/gpufree-data/linziyao/.conda/envs/DualRefGAD
+  python: 3.8.19
+  torch: 2.0.0
+  torch_cuda: 11.8
+  cuda_available: true
+  cuda_device_count: 8
+  dgl: 1.1.3
+  wandb: 0.21.1
+  numpy: 1.24.4
+  scipy: 1.10.1
+  sklearn: 1.1.3
+  pyyaml: 6.0.3
+  network_path: direct_https
+
+wandb:
+  entity: HCCS
+  project: GGADFormer
+  smoke_run_id: null
+  smoke_run_url: null
+  screening_sweep_id: null
+  screening_sweep_url: null
+  create_exactly_once: true
+  expected_screening_trials: 384
+  current_state: NOT_CREATED
+
+execution:
+  detached_worktree: null
+  tmux_session: null
+  pane_records: []
+  first_agent_start_utc: null
+  remain_on_exit: true
+
+heartbeat:
+  type: one_shot
+  status: not_scheduled
+  generation: 0
+  scheduled_for: null
+
+result_validation:
+  all_expected_trials_terminal: false
+  config_identity_valid: false
+  code_identity_valid: false
+  data_identity_valid: false
+  fixed_final_epoch_policy_valid: false
+
+scope_status:
+  lifecycle: active
+  coverage: none
+  scientific_verdict: unresolved
+
+blockers: []
