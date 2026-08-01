@@ -74,6 +74,7 @@ AUDIT_CONFIG = {
     "wandb_project": "GGADFormer",
 }
 T_CRITICAL_DF4_975 = 2.7764451051977987
+PROVIDER_HISTORY_ARTIFACT_TYPE = "wandb-history"
 
 
 def utc_now():
@@ -178,6 +179,69 @@ def direct_summary(summary, name):
     return value
 
 
+def audit_wandb_artifacts(run):
+    """Allow only W&B's provider-generated run-history artifact.
+
+    W&B materializes this artifact asynchronously after a run is queried. It
+    contains the metric history backing the API and is distinct from user
+    uploaded checkpoints, source, data, or declared artifacts.
+    """
+    logged = list(run.logged_artifacts())
+    used = list(run.used_artifacts())
+    if used:
+        raise AssertionError(f"run {run.id} has used W&B artifacts: {len(used)}")
+    if len(logged) != 1:
+        raise AssertionError(
+            f"run {run.id} expected one provider history artifact, found {len(logged)}"
+        )
+    artifact = logged[0]
+    expected_name = f"run-{run.id}-history:v0"
+    if getattr(artifact, "name", None) != expected_name:
+        raise AssertionError(f"run {run.id} has unexpected artifact name")
+    for attribute, expected in (
+        ("type", PROVIDER_HISTORY_ARTIFACT_TYPE),
+        ("state", "COMMITTED"),
+        ("entity", "HCCS"),
+        ("project", "GGADFormer"),
+        ("description", f"Weights & Biases Run History Data for {run.id}"),
+    ):
+        if getattr(artifact, attribute, None) != expected:
+            raise AssertionError(f"run {run.id} provider artifact {attribute} mismatch")
+    if dict(getattr(artifact, "metadata", {}) or {}):
+        raise AssertionError(f"run {run.id} provider artifact has metadata")
+    aliases = sorted(getattr(artifact, "aliases", []) or [])
+    if aliases != ["latest"]:
+        raise AssertionError(f"run {run.id} provider artifact aliases mismatch")
+    files = list(artifact.files())
+    if len(files) != 1 or getattr(files[0], "name", None) != "0000.parquet":
+        raise AssertionError(f"run {run.id} provider artifact file manifest mismatch")
+    file_entry = files[0]
+    return {
+        "only_provider_generated_history_artifact": True,
+        "used_artifacts": [],
+        "logged_artifacts": [
+            {
+                "name": artifact.name,
+                "type": artifact.type,
+                "state": artifact.state,
+                "entity": artifact.entity,
+                "project": artifact.project,
+                "description": artifact.description,
+                "aliases": aliases,
+                "size": int(getattr(artifact, "size", 0)),
+                "digest": getattr(artifact, "digest", None),
+                "files": [
+                    {
+                        "name": file_entry.name,
+                        "size": int(getattr(file_entry, "size", 0)),
+                        "digest": getattr(file_entry, "digest", None),
+                    }
+                ],
+            }
+        ],
+    }
+
+
 def aggregate_records(records):
     cells = {dataset: {condition: {} for condition in CONDITIONS} for dataset in DATASETS}
     for record in records:
@@ -270,13 +334,7 @@ def main():
         observed.add(trial)
         if run.state != "finished":
             raise AssertionError(f"run {run.id} state is {run.state}")
-        logged_artifacts = list(run.logged_artifacts())
-        used_artifacts = list(run.used_artifacts())
-        if logged_artifacts or used_artifacts:
-            raise AssertionError(
-                f"run {run.id} has undeclared W&B artifacts: "
-                f"logged={len(logged_artifacts)} used={len(used_artifacts)}"
-            )
+        wandb_artifact_audit = audit_wandb_artifacts(run)
 
         expected_config = BASE_CONFIG[dataset]
         for key, expected in expected_config.items():
@@ -408,6 +466,7 @@ def main():
                 "config_sha256": sha256_bytes(canonical_bytes(config)),
                 "history": history,
                 "history_sha256": sha256_bytes(canonical_bytes(history)),
+                "wandb_artifact_audit": wandb_artifact_audit,
                 **metric_values,
                 **pairing,
             }
@@ -454,7 +513,8 @@ def main():
             "pairing_hashes_match_within_dataset_seed": True,
             "repeated_diagnostic_replay_verified": True,
             "audit_config_valid": True,
-            "no_wandb_artifacts_declared_or_uploaded": True,
+            "only_provider_generated_history_artifacts": True,
+            "no_user_uploaded_or_used_wandb_artifacts": True,
         },
         "pairing_audit": pairing_audit,
         "agent_evidence": agent_evidence,

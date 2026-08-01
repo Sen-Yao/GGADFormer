@@ -44,6 +44,7 @@ EXPECTED_AUDIT = {
     "wandb_project": "GGADFormer",
 }
 PROTOCOL_ID = "hsc-tolokers-deployed-019fbb3f-v1"
+PROVIDER_HISTORY_ARTIFACT_TYPE = "wandb-history"
 
 
 def sha256_file(path):
@@ -74,6 +75,57 @@ def summary_value(summary, key):
     if value is None:
         raise AssertionError(f"missing summary value {key}")
     return value
+
+
+def audit_wandb_artifacts(run):
+    """Independently validate W&B's provider-generated history artifact only."""
+    logged = list(run.logged_artifacts())
+    used = list(run.used_artifacts())
+    if used:
+        raise AssertionError(f"run {run.id} has used W&B artifacts: {len(used)}")
+    if len(logged) != 1:
+        raise AssertionError(
+            f"run {run.id} expected one provider history artifact, found {len(logged)}"
+        )
+    artifact = logged[0]
+    if getattr(artifact, "name", None) != f"run-{run.id}-history:v0":
+        raise AssertionError(f"run {run.id} has unexpected artifact name")
+    for attribute, expected in (
+        ("type", PROVIDER_HISTORY_ARTIFACT_TYPE),
+        ("state", "COMMITTED"),
+        ("entity", "HCCS"),
+        ("project", "GGADFormer"),
+        ("description", f"Weights & Biases Run History Data for {run.id}"),
+    ):
+        if getattr(artifact, attribute, None) != expected:
+            raise AssertionError(f"run {run.id} provider artifact {attribute} mismatch")
+    if dict(getattr(artifact, "metadata", {}) or {}):
+        raise AssertionError(f"run {run.id} provider artifact has metadata")
+    if sorted(getattr(artifact, "aliases", []) or []) != ["latest"]:
+        raise AssertionError(f"run {run.id} provider artifact aliases mismatch")
+    files = list(artifact.files())
+    if len(files) != 1 or getattr(files[0], "name", None) != "0000.parquet":
+        raise AssertionError(f"run {run.id} provider artifact file manifest mismatch")
+    return {
+        "only_provider_generated_history_artifact": True,
+        "used_artifacts": [],
+        "logged_artifact": {
+            "name": artifact.name,
+            "type": artifact.type,
+            "state": artifact.state,
+            "entity": artifact.entity,
+            "project": artifact.project,
+            "description": artifact.description,
+            "aliases": sorted(artifact.aliases),
+            "size": int(getattr(artifact, "size", 0)),
+            "digest": getattr(artifact, "digest", None),
+            "file": {
+                "name": files[0].name,
+                "size": int(getattr(files[0], "size", 0)),
+                "digest": getattr(files[0], "digest", None),
+            },
+        },
+    }
 
 
 def close(actual, expected, label):
@@ -188,8 +240,7 @@ def main():
             raise AssertionError(f"run {run.id} fixed endpoint mismatch")
         if summary_value(run.summary, "run_valid") is not True:
             raise AssertionError(f"run {run.id} is not valid")
-        if list(run.logged_artifacts()) or list(run.used_artifacts()):
-            raise AssertionError(f"run {run.id} has undeclared W&B artifacts")
+        wandb_artifact_audit = audit_wandb_artifacts(run)
 
         diagnostic_path = diagnostic_dir / f"{run.id}.json"
         diagnostic = json.loads(diagnostic_path.read_text(encoding="utf-8"))
@@ -259,6 +310,7 @@ def main():
                         "sampled_anomaly_fraction",
                     )
                 },
+                "wandb_artifact_audit": wandb_artifact_audit,
             }
         )
 
@@ -329,7 +381,8 @@ def main():
             "unexpected": [],
             "all_finished": True,
             "all_runs_valid": True,
-            "all_artifact_sets_empty": True,
+            "only_provider_generated_history_artifacts": True,
+            "no_user_uploaded_or_used_wandb_artifacts": True,
             "pairing_hashes_match_within_seed": True,
         },
         "source_hashes": {

@@ -70,6 +70,54 @@ class HscTolokersEvidenceTest(unittest.TestCase):
         self.assertAlmostEqual(paired["q40"]["AP.last"]["mean"], 5.0)
         self.assertTrue(paired["q40"]["AUC.last"]["all_positive"])
 
+    def test_provider_generated_history_artifact_is_the_only_allowed_artifact(self):
+        class File:
+            name = "0000.parquet"
+            size = 42
+            digest = "file-digest"
+
+        class Artifact:
+            name = "run-run123-history:v0"
+            type = "wandb-history"
+            state = "COMMITTED"
+            entity = "HCCS"
+            project = "GGADFormer"
+            description = "Weights & Biases Run History Data for run123"
+            aliases = ["latest"]
+            metadata = {}
+            size = 42
+            digest = "artifact-digest"
+
+            def files(self):
+                return [File()]
+
+        class Run:
+            id = "run123"
+
+            def logged_artifacts(self):
+                return [Artifact()]
+
+            def used_artifacts(self):
+                return []
+
+        audit = COLLECTOR.audit_wandb_artifacts(Run())
+        self.assertTrue(audit["only_provider_generated_history_artifact"])
+        self.assertEqual(audit["logged_artifacts"][0]["files"][0]["name"], "0000.parquet")
+        self.assertTrue(REPLAY.audit_wandb_artifacts(Run())["only_provider_generated_history_artifact"])
+
+    def test_user_artifact_is_rejected(self):
+        class Run:
+            id = "run123"
+
+            def logged_artifacts(self):
+                return []
+
+            def used_artifacts(self):
+                return []
+
+        with self.assertRaises(AssertionError):
+            COLLECTOR.audit_wandb_artifacts(Run())
+
 
 if __name__ == "__main__":
     unittest.main()
