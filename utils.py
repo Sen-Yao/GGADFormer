@@ -123,7 +123,10 @@ def load_mat(dataset, train_rate=0.3, val_rate=0.1, args=None):
     idx_test = all_idx[num_train + num_val:]
     # idx_test = all_idx[num_train:]
     print('Training', Counter(np.squeeze(ano_labels[idx_train])))
-    print('Test', Counter(np.squeeze(ano_labels[idx_test])))
+    if args is None or getattr(args, 'evaluation_protocol', 'legacy_test') != 'validation_only':
+        print('Test', Counter(np.squeeze(ano_labels[idx_test])))
+    else:
+        print('Test labels withheld by validation-only protocol')
     # Sample some labeled normal nodes
     all_normal_label_idx = [i for i in idx_train if ano_labels[i] == 0]
     rate = 1  #  change train_rate to 0.3 0.5 0.6  0.8

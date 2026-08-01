@@ -170,11 +170,10 @@ def train(args):
 
         all_node_indices = torch.arange(num_nodes)
 
-        # 在半监督场景中，模型训练时允许访问全图的 feature 和被 normal_for_train_idx 允许的那些 label
-        # 为了形式统一，这里将全图的 label 也提供给 Dataset，但是在实际训练中，只有 normal_for_train_idx 的那些 label 允许被使用！
-        # 其中 all_node_indices 是用于计算 batch 内部的 normal_for_train_idx 的
-        batch_data_train = Data.TensorDataset(concated_input_features, labels, all_node_indices)
-        batch_data_val = Data.TensorDataset(concated_input_features[idx_val], labels[idx_val])
+        # Training receives only tokens and node identities. Held-out labels are
+        # not carried through the training DataLoader.
+        batch_data_train = Data.TensorDataset(concated_input_features, all_node_indices)
+        batch_data_val = Data.TensorDataset(concated_input_features[idx_val])
         batch_data_test = None
         if args.evaluation_protocol != 'validation_only':
             batch_data_test = Data.TensorDataset(concated_input_features[idx_test], labels[idx_test])
@@ -220,8 +219,7 @@ def train(args):
             for batch_idx, item in enumerate(train_data_loader):
                 # print(f"time to start batch {time.time() - start_time}")
                 concated_input_features = item[0].to(device)
-                labels = item[1].to(device)
-                batch_global_indices = item[2].to(device)
+                batch_global_indices = item[1].to(device)
 
                 optimizer.zero_grad()
                 is_known_normal_mask = torch.isin(batch_global_indices, normal_for_train_idx)

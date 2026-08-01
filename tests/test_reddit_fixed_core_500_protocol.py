@@ -77,3 +77,10 @@ def test_protocol_digests_are_stable():
     assert summary["screening_trials_sha256"] == (
         "6c5b6ea56660443f623a95bbda4494ecf9e3ebf899072f4640f80929037cd273"
     )
+
+
+def test_validation_path_does_not_index_test_labels_or_carry_training_labels():
+    run_source = (ROOT / "run.py").read_text()
+    utils_source = (ROOT / "utils.py").read_text()
+    assert "Data.TensorDataset(concated_input_features, all_node_indices)" in run_source
+    assert "Test labels withheld by validation-only protocol" in utils_source
