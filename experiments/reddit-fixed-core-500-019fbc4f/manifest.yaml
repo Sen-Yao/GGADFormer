@@ -8,8 +8,8 @@ protocol:
   owner_thread_id: 019fbc4f-3c4e-7701-a1de-37f373693859
   source_thread_id: 019fbb9e-1afe-7192-a88a-f81e7e145055
   scientific_base_sha: 7a0540ec0ca80c079020da282a3ff5b629174ae7
-  execution_code_sha: 045915c633e3b6e24ebb35c2a233c35751bad7b6
-  prepared_protocol_commit: 045915c633e3b6e24ebb35c2a233c35751bad7b6
+  execution_code_sha: b9a8c23af0160fb650e7bd3882543d985b6cfb1d
+  prepared_protocol_commit: b9a8c23af0160fb650e7bd3882543d985b6cfb1d
   screening_registry_sha256: 4c1895d6c27189774fee3b1b8a4f26b10375ceccc2dcb810cd6b23a76e3c80ce
   screening_trials_sha256: 6c5b6ea56660443f623a95bbda4494ecf9e3ebf899072f4640f80929037cd273
   screening_results_file_sha256: b72084ed57b10eb4bc47568516c3665b809481216a40ec5ff666a09d33fce83d
@@ -42,8 +42,8 @@ budget:
     technical_retry_reserve: 25
   scientific_records_planned: 475
   allocated_plus_reserved: 500
-  allocated_records: 385
-  future_scientific_records_reserved: 90
+  allocated_records: 445
+  future_scientific_records_reserved: 30
   technical_retry_records_reserved: 25
   created_records: 385
   consumed_records: 385
@@ -84,6 +84,7 @@ selection:
   candidate_pool: [HCCS-25, HCCS-85, HCCS-90]
   occupancy_document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
   snapshot_path: experiments/reddit-fixed-core-500-019fbc4f/selection-snapshot.json
+  promotion_snapshot_path: experiments/reddit-fixed-core-500-019fbc4f/selection-promotion-snapshot.json
   execution_host: HCCS-90
   gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
   selected_host_score:
@@ -91,8 +92,15 @@ selection:
     clean_gpu_count: 8
     aggregate_fp32_tflops: 660.64
     speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
-  occupancy_state: running
+  occupancy_state: reserved
   selected_at_utc: 2026-08-01T08:34:19Z
+  promotion_selected_at_utc: 2026-08-01T10:51:08Z
+  promotion_parent_sweep_id: 2cibydx2
+  promotion_selected_host_score:
+    model: RTX 4090
+    clean_gpu_count: 8
+    aggregate_fp32_tflops: 660.64
+    speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
 
 runtime:
   environment: /root/gpufree-data/linziyao/.conda/envs/DualRefGAD
@@ -128,6 +136,10 @@ wandb:
   screening_run_ids_final: {count: 384, sha256: dd4b5f8369738ac44657cffa2fff5ee738186e462545fbc572d34f1f55449249, path: experiments/reddit-fixed-core-500-019fbc4f/screening-results.json}
   screening_identity_audit: {observed_at_utc: 2026-08-01T10:41:59Z, unique_identities: 384, identity_violations: 0, duplicates: 0, finished_metric_violations: 0, forbidden_test_metrics: 0}
   screening_results: {path: experiments/reddit-fixed-core-500-019fbc4f/screening-results.json, file_sha256: b72084ed57b10eb4bc47568516c3665b809481216a40ec5ff666a09d33fce83d, payload_sha256: 2bf64d8b55c661463af61a402b794a535bbc84925be087b3dac1420df729c6aa, rows_sha256: 1271573311b1e6e922ce5b0fdffe641495c81fefd8765a8a78c4344b92b84a3d}
+  promotion_parent_sweep_id: 2cibydx2
+  promotion_sweep_id: null
+  promotion_sweep_state: NOT_CREATED
+  expected_promotion_trials: 60
   create_exactly_once: true
   expected_screening_trials: 384
   current_state: SCREENING_FINISHED_PROMOTION_PREPARED
@@ -135,7 +147,8 @@ wandb:
     - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
 execution:
-  detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-045915c633e3b6e24ebb35c2a233c35751bad7b6
+  screening_detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-045915c633e3b6e24ebb35c2a233c35751bad7b6
+  detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-promotion-b9a8c23af0160fb650e7bd3882543d985b6cfb1d
   tmux_session: reddit_fixed_core_500_019fbc4f_screening
   pane_records:
     - {pane_id: "%91", pane_pid: 165995, gpu_index: 0, agent_count: 48}
@@ -151,6 +164,8 @@ execution:
   screening_terminal_at_utc: 2026-08-01T10:39:16Z
   screening_agents_terminal: true
   screening_compute_pids_terminal: true
+  promotion_tmux_session: reddit_fixed_core_500_019fbc4f_promotion
+  promotion_pane_records: []
   remain_on_exit: true
 
 heartbeat:
