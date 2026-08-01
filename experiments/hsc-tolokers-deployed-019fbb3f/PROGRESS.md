@@ -13,3 +13,10 @@
 - tree SHA: `400e545e35300f5d21cf394d3827ed32d6d015d8`。
 - Mac 上 12 个 wrapper/evidence tests 通过，Python compile 与 YAML 解析通过。
 - Mac runtime 没有 `torch`，因此 `tests/test_hsc_center.py` 留待 HCCS-85 的已审计 runtime 执行；正式 launch gate 在该测试和 live preflight 通过前保持关闭。
+
+## 2026-08-01 - HCCS-85 preflight 与 native sweep 创建
+
+- HCCS-85 live probe：`gpufree-container`、tmux 3.2a、8 张 RTX 4090、launch 前无 compute PID；数据 cache SHA 为 `d6ec349...27a1d0`。
+- 远端 clean detached worktree 为 execution SHA `d8fdc7a...a287bd`，source bundle SHA 为 `7131f284...4d82747c`。
+- HSC unit/evidence tests 共 20 个在 HCCS runtime 通过；dataset `loadmat` inventory 通过；deterministic q10 非正式 smoke 通过。
+- native W&B sweep 已创建且仅创建一次：`HCCS/GGADFormer/txc1ymqu`。此时 manifest 仍保持 `formal_launch_allowed=false`，等待 selected-host 最终 re-probe 与 launch checkpoint。

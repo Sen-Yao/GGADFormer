@@ -1,0 +1,336 @@
+{
+  "captured_at_utc": "2026-08-01T08:32:00Z",
+  "source": "hccs-cluster check_hccs_ssh.py plus selected-host preflight",
+  "hosts": [
+    {
+      "command_kind": "ssh",
+      "returncode": 0,
+      "elapsed_seconds": 0.25359106063842773,
+      "stdout": "__HCCS_HOSTNAME__\nVM-2-25-ubuntu\n__HCCS_META__\n2026-08-01T16:31:49+08:00\n 16:31:49 up 492 days, 22:27, 82 users,  load average: 12.70, 16.82, 16.41\n__HCCS_GPU__\n0, GPU-5a2935b4-02c4-02fb-59e5-5c9336cff906, NVIDIA GeForce RTX 2080 Ti, 32, 10287, 11264\n1, GPU-f87f01a0-bd56-703f-68b9-822a51c1939a, NVIDIA GeForce RTX 2080 Ti, 34, 1195, 11264\n2, GPU-f1948200-8242-64d8-272a-56d5100edcee, NVIDIA GeForce RTX 2080 Ti, 0, 3, 11264\n3, GPU-c29cb72a-3795-4837-daff-14731609db21, NVIDIA GeForce RTX 2080 Ti, 0, 3, 11264\n4, GPU-3236dc54-afbd-79b2-ffe8-7a81d3baaa8c, NVIDIA GeForce RTX 2080 Ti, 0, 3, 11264\n5, GPU-51213fd8-3dec-b359-38c0-c3e3e5a47d25, NVIDIA GeForce RTX 2080 Ti, 0, 3, 11264\n6, GPU-48582e99-6747-67fd-a860-99a2ef46956f, NVIDIA GeForce RTX 2080 Ti, 0, 3, 11264\n7, GPU-c80dc9f4-7a2c-ff22-12f5-bee7f376b773, NVIDIA GeForce RTX 2080 Ti, 24, 1075, 11264\n__HCCS_PROCS__\nGPU-5a2935b4-02c4-02fb-59e5-5c9336cff906, 3166897, python, 154\nGPU-5a2935b4-02c4-02fb-59e5-5c9336cff906, 1174504, python, 154\nGPU-5a2935b4-02c4-02fb-59e5-5c9336cff906, 849348, python, 9976\nGPU-f87f01a0-bd56-703f-68b9-822a51c1939a, 1174504, python, 1192\nGPU-c80dc9f4-7a2c-ff22-12f5-bee7f376b773, 3166897, python, 1072",
+      "stderr": "",
+      "status": "ok",
+      "hostname": "VM-2-25-ubuntu",
+      "gpus": [
+        {
+          "index": 0,
+          "uuid": "GPU-5a2935b4-02c4-02fb-59e5-5c9336cff906",
+          "name": "NVIDIA GeForce RTX 2080 Ti",
+          "utilization_gpu": 32,
+          "memory_used_mb": 10287,
+          "memory_total_mb": 11264,
+          "compute_pids": [
+            3166897,
+            1174504,
+            849348
+          ]
+        },
+        {
+          "index": 1,
+          "uuid": "GPU-f87f01a0-bd56-703f-68b9-822a51c1939a",
+          "name": "NVIDIA GeForce RTX 2080 Ti",
+          "utilization_gpu": 34,
+          "memory_used_mb": 1195,
+          "memory_total_mb": 11264,
+          "compute_pids": [
+            1174504
+          ]
+        },
+        {
+          "index": 2,
+          "uuid": "GPU-f1948200-8242-64d8-272a-56d5100edcee",
+          "name": "NVIDIA GeForce RTX 2080 Ti",
+          "utilization_gpu": 0,
+          "memory_used_mb": 3,
+          "memory_total_mb": 11264,
+          "compute_pids": []
+        },
+        {
+          "index": 3,
+          "uuid": "GPU-c29cb72a-3795-4837-daff-14731609db21",
+          "name": "NVIDIA GeForce RTX 2080 Ti",
+          "utilization_gpu": 0,
+          "memory_used_mb": 3,
+          "memory_total_mb": 11264,
+          "compute_pids": []
+        },
+        {
+          "index": 4,
+          "uuid": "GPU-3236dc54-afbd-79b2-ffe8-7a81d3baaa8c",
+          "name": "NVIDIA GeForce RTX 2080 Ti",
+          "utilization_gpu": 0,
+          "memory_used_mb": 3,
+          "memory_total_mb": 11264,
+          "compute_pids": []
+        },
+        {
+          "index": 5,
+          "uuid": "GPU-51213fd8-3dec-b359-38c0-c3e3e5a47d25",
+          "name": "NVIDIA GeForce RTX 2080 Ti",
+          "utilization_gpu": 0,
+          "memory_used_mb": 3,
+          "memory_total_mb": 11264,
+          "compute_pids": []
+        },
+        {
+          "index": 6,
+          "uuid": "GPU-48582e99-6747-67fd-a860-99a2ef46956f",
+          "name": "NVIDIA GeForce RTX 2080 Ti",
+          "utilization_gpu": 0,
+          "memory_used_mb": 3,
+          "memory_total_mb": 11264,
+          "compute_pids": []
+        },
+        {
+          "index": 7,
+          "uuid": "GPU-c80dc9f4-7a2c-ff22-12f5-bee7f376b773",
+          "name": "NVIDIA GeForce RTX 2080 Ti",
+          "utilization_gpu": 24,
+          "memory_used_mb": 1075,
+          "memory_total_mb": 11264,
+          "compute_pids": [
+            3166897
+          ]
+        }
+      ],
+      "compute_processes": [
+        {
+          "gpu_uuid": "GPU-5a2935b4-02c4-02fb-59e5-5c9336cff906",
+          "pid": 3166897,
+          "process_name": "python",
+          "used_memory_mb": 154
+        },
+        {
+          "gpu_uuid": "GPU-5a2935b4-02c4-02fb-59e5-5c9336cff906",
+          "pid": 1174504,
+          "process_name": "python",
+          "used_memory_mb": 154
+        },
+        {
+          "gpu_uuid": "GPU-5a2935b4-02c4-02fb-59e5-5c9336cff906",
+          "pid": 849348,
+          "process_name": "python",
+          "used_memory_mb": 9976
+        },
+        {
+          "gpu_uuid": "GPU-f87f01a0-bd56-703f-68b9-822a51c1939a",
+          "pid": 1174504,
+          "process_name": "python",
+          "used_memory_mb": 1192
+        },
+        {
+          "gpu_uuid": "GPU-c80dc9f4-7a2c-ff22-12f5-bee7f376b773",
+          "pid": 3166897,
+          "process_name": "python",
+          "used_memory_mb": 1072
+        }
+      ],
+      "preflight_ok": false,
+      "preflight": {
+        "git_clean": false,
+        "runtime_ok": false,
+        "cache_ok": false,
+        "wandb_ok": false
+      },
+      "preflight_notes": "not selected; no formal execution preflight performed",
+      "host": "HCCS-25"
+    },
+    {
+      "command_kind": "ssh",
+      "returncode": 0,
+      "elapsed_seconds": 0.3635578155517578,
+      "stdout": "__HCCS_HOSTNAME__\ngpufree-container\n__HCCS_META__\n2026-08-01T16:31:50+08:00\n 16:31:50 up 265 days, 16:08,  0 users,  load average: 7.13, 2.97, 7.71\n__HCCS_GPU__\n0, GPU-7f9e65b0-bb0d-f8e2-f9fd-da2fcec01810, NVIDIA GeForce RTX 4090, 0, 4, 24564\n1, GPU-e893ecd0-4654-154e-305c-700de7143320, NVIDIA GeForce RTX 4090, 0, 4, 24564\n2, GPU-87286e39-93b6-aac0-ddd7-4b6596a64fe1, NVIDIA GeForce RTX 4090, 0, 4, 24564\n3, GPU-233f638b-056b-cacd-4477-cb192de2b89b, NVIDIA GeForce RTX 4090, 0, 4, 24564\n4, GPU-b40e6598-a872-8353-2608-d71fde166ddb, NVIDIA GeForce RTX 4090, 0, 4, 24564\n5, GPU-ab5844b7-63d9-03b3-d855-675f6d285adb, NVIDIA GeForce RTX 4090, 0, 4, 24564\n6, GPU-85c42615-ae59-f3dc-13c3-836ba00d7a67, NVIDIA GeForce RTX 4090, 0, 4, 24564\n7, GPU-b59907df-ac21-14e1-8c90-4066f2cd8496, NVIDIA GeForce RTX 4090, 0, 4, 24564\n__HCCS_PROCS__",
+      "stderr": "",
+      "status": "ok",
+      "hostname": "gpufree-container",
+      "gpus": [
+        {
+          "index": 0,
+          "uuid": "GPU-7f9e65b0-bb0d-f8e2-f9fd-da2fcec01810",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 4,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 1,
+          "uuid": "GPU-e893ecd0-4654-154e-305c-700de7143320",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 4,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 2,
+          "uuid": "GPU-87286e39-93b6-aac0-ddd7-4b6596a64fe1",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 4,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 3,
+          "uuid": "GPU-233f638b-056b-cacd-4477-cb192de2b89b",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 4,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 4,
+          "uuid": "GPU-b40e6598-a872-8353-2608-d71fde166ddb",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 4,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 5,
+          "uuid": "GPU-ab5844b7-63d9-03b3-d855-675f6d285adb",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 4,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 6,
+          "uuid": "GPU-85c42615-ae59-f3dc-13c3-836ba00d7a67",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 4,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 7,
+          "uuid": "GPU-b59907df-ac21-14e1-8c90-4066f2cd8496",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 4,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        }
+      ],
+      "compute_processes": [],
+      "preflight_ok": true,
+      "preflight": {
+        "git_clean": true,
+        "runtime_ok": true,
+        "cache_ok": true,
+        "wandb_ok": true
+      },
+      "preflight_notes": "runtime DualRefGAD, tolokers cache hash, W&B project access and disk probe passed; Git execution will use committed local bundle.",
+      "host": "HCCS-85"
+    },
+    {
+      "command_kind": "ssh",
+      "returncode": 0,
+      "elapsed_seconds": 0.3613402843475342,
+      "stdout": "__HCCS_HOSTNAME__\ngpufree-container\n__HCCS_META__\n2026-08-01T16:31:50+08:00\n 16:31:50 up 103 days,  3:24,  0 users,  load average: 2.97, 1.36, 1.13\n__HCCS_GPU__\n0, GPU-ef3ccc4b-3d93-2e67-ff68-fb64baf630d8, NVIDIA GeForce RTX 4090, 0, 5, 24564\n1, GPU-0b5b9af4-5282-116d-c041-d3a2cbc3beef, NVIDIA GeForce RTX 4090, 0, 23, 24564\n2, GPU-5e6b7ec1-1f23-2afb-46e4-4fba322130f3, NVIDIA GeForce RTX 4090, 0, 5, 24564\n3, GPU-52a38d4a-f8b1-8e11-4bde-dd6ab542fb8c, NVIDIA GeForce RTX 4090, 0, 5, 24564\n4, GPU-17ef53a7-69aa-7d47-5276-60fce74cca10, NVIDIA GeForce RTX 4090, 0, 5, 24564\n5, GPU-6211f92a-bb8d-6d3f-4ecf-bf210e677e2f, NVIDIA GeForce RTX 4090, 0, 5, 24564\n6, GPU-90b5f174-7bb6-91be-d0ae-71ac33fb8b7b, NVIDIA GeForce RTX 4090, 0, 4, 24564\n7, GPU-829887b7-4c7d-f6a3-6f4a-f19f989c70cd, NVIDIA GeForce RTX 4090, 0, 4, 24564\n__HCCS_PROCS__",
+      "stderr": "",
+      "status": "ok",
+      "hostname": "gpufree-container",
+      "gpus": [
+        {
+          "index": 0,
+          "uuid": "GPU-ef3ccc4b-3d93-2e67-ff68-fb64baf630d8",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 5,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 1,
+          "uuid": "GPU-0b5b9af4-5282-116d-c041-d3a2cbc3beef",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 23,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 2,
+          "uuid": "GPU-5e6b7ec1-1f23-2afb-46e4-4fba322130f3",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 5,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 3,
+          "uuid": "GPU-52a38d4a-f8b1-8e11-4bde-dd6ab542fb8c",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 5,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 4,
+          "uuid": "GPU-17ef53a7-69aa-7d47-5276-60fce74cca10",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 5,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 5,
+          "uuid": "GPU-6211f92a-bb8d-6d3f-4ecf-bf210e677e2f",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 5,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 6,
+          "uuid": "GPU-90b5f174-7bb6-91be-d0ae-71ac33fb8b7b",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 4,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        },
+        {
+          "index": 7,
+          "uuid": "GPU-829887b7-4c7d-f6a3-6f4a-f19f989c70cd",
+          "name": "NVIDIA GeForce RTX 4090",
+          "utilization_gpu": 0,
+          "memory_used_mb": 4,
+          "memory_total_mb": 24564,
+          "compute_pids": []
+        }
+      ],
+      "compute_processes": [],
+      "preflight_ok": false,
+      "preflight": {
+        "git_clean": false,
+        "runtime_ok": false,
+        "cache_ok": false,
+        "wandb_ok": false
+      },
+      "preflight_notes": "not selected; no formal execution preflight performed",
+      "host": "HCCS-90"
+    }
+  ],
+  "selection_policy": "clean GPU count, aggregate RTX capability, fixed tie order HCCS-85 then HCCS-90 then HCCS-25",
+  "selected_host": "HCCS-85",
+  "selected_gpu_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ]
+}

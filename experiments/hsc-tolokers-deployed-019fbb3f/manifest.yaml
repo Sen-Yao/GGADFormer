@@ -66,7 +66,7 @@ git:
   branch: codex/hsc-tolokers-deployed-4193
   code_sha: d8fdc7a2e0f6c7cfceedbc163f03b0d3a2a287bd
   code_tree: 400e545e35300f5d21cf394d3827ed32d6d015d8
-  prepared_protocol_commit: null
+  prepared_protocol_commit: 7201c466b7ce9f4cc3d4c8e69a90567880a55afb
   final_evidence_commit: null
   remote_publication: pending
 
@@ -79,7 +79,7 @@ protocol_files:
 
 execution:
   execution_host: HCCS-85
-  observed_hostname: null
+  observed_hostname: gpufree-container
   gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
   parallel_gpu_cap: 8
   task_root: /root/gpufree-data/linziyao/VecGAD-hsc-tolokers-deployed-019fbb3f
@@ -89,6 +89,12 @@ execution:
   tmux_remain_on_exit: true
   per_agent_counts: {gpu0: 4, gpu1: 4, gpu2: 4, gpu3: 4, gpu4: 4, gpu5: 4, gpu6: 3, gpu7: 3}
   pane_records: []
+  bundle_sha256: 7131f28481a08ce692454cf6a9f9c813ce6715a49ee363628f83b1384d82747c
+  detached_worktree_head: d8fdc7a2e0f6c7cfceedbc163f03b0d3a2a287bd
+  detached_worktree_tree: 400e545e35300f5d21cf394d3827ed32d6d015d8
+  detached_worktree_clean: true
+  tmux_version: 3.2a
+  disk_available_at_preflight: 49G
 
 data:
   access_mode: symlink_read_only_reuse
@@ -98,8 +104,10 @@ data:
 
 wandb:
   destination: HCCS/GGADFormer
-  sweep_id: null
-  sweep_url: null
+  sweep_id: txc1ymqu
+  sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/txc1ymqu
+  sweep_creation_recorded_at_utc: 2026-08-01T08:40:25Z
+  sweep_creation_count: 1
   create_exactly_once: true
   expected_trials: 30
   code_upload_disabled: true
@@ -131,9 +139,17 @@ validation:
 
 occupancy:
   document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
-  state: free
+  state: reserved
   released_at_utc: null
   release_evidence: null
+
+preflight:
+  snapshot_path: experiments/hsc-tolokers-deployed-019fbb3f/preflight-snapshot.json
+  snapshot_sha256: 49bfda8f7fba5ec54fae9390b3b6ca739c0c3ee9b03737dfc1acb1290941e316
+  initial_smoke: {status: failed_nonformal, cause: missing_CUBLAS_WORKSPACE_CONFIG, excluded_from_evidence: true}
+  deterministic_smoke: {status: passed, condition: q10, seed: 0, num_epoch: 0, excluded_from_evidence: true}
+  dataset_cache_sha256: d6ec34984d4db3f52b53606a447f6101a74d8e9aad2ae8644dfe2ff33227a1d0
+  runtime: {python: 3.8.19, torch: 2.0.0, torch_cuda: 11.8, dgl: 1.1.3, wandb: 0.21.1, cuda_available: true, device_count: 8}
 
 blockers: []
 
