@@ -1,6 +1,9 @@
 import importlib.util
+import json
 from pathlib import Path
+import statistics
 
+import pytest
 import yaml
 
 
@@ -43,17 +46,17 @@ def test_every_resolved_screening_config_has_fixed_core():
             assert config["wandb_log_training_metrics"] is False
 
 
-def test_confirmation_is_the_only_test_reading_phase():
+def test_promotion_is_validation_only_and_confirmation_fails_until_frozen():
     protocol = load_protocol()
     assert protocol.resolve_config(
         "smoke", "smoke-control", 0
     )["evaluation_protocol"] == "validation_only"
-    assert protocol.resolve_config(
-        "promotion", "cfg-000", 2
-    )["evaluation_protocol"] == "validation_only"
-    assert protocol.resolve_config(
-        "confirmation", "cfg-000", 0
-    )["evaluation_protocol"] == "frozen_test"
+    for config_id in protocol.PROMOTION_CONFIG_IDS:
+        assert protocol.resolve_config(
+            "promotion", config_id, 2
+        )["evaluation_protocol"] == "validation_only"
+    with pytest.raises(ValueError, match="not frozen"):
+        protocol.resolve_config("confirmation", protocol.PROMOTION_CONFIG_IDS[0], 0)
 
 
 def test_screening_sweep_identity_and_trial_count():
@@ -77,6 +80,32 @@ def test_protocol_digests_are_stable():
     assert summary["screening_trials_sha256"] == (
         "6c5b6ea56660443f623a95bbda4494ecf9e3ebf899072f4640f80929037cd273"
     )
+    assert summary["promotion_config_ids_sha256"] == (
+        "647346bd43308362620f9e63af6dda07f3b6823b225bc68b6551a626c53442ec"
+    )
+
+
+def test_promotion_sweep_matches_frozen_screening_ranking():
+    protocol = load_protocol()
+    results = json.loads((TASK_ROOT / "screening-results.json").read_text())
+    sweep = yaml.safe_load((TASK_ROOT / "sweep-promotion.yaml").read_text())
+    by_config = {}
+    for row in results["runs"]:
+        by_config.setdefault(row["config_id"], []).append(row)
+    replay = []
+    for config_id, rows in by_config.items():
+        replay.append((
+            config_id,
+            statistics.mean(row["val_auc_last"] for row in rows),
+            statistics.mean(row["val_ap_last"] for row in rows),
+        ))
+    replay.sort(key=lambda item: (-item[1], -item[2], item[0]))
+    promoted = [item[0] for item in replay[:12]]
+    assert promoted == list(protocol.PROMOTION_CONFIG_IDS)
+    assert results["top12_config_ids"] == promoted
+    assert sweep["parameters"]["config_id"]["values"] == promoted
+    assert sweep["parameters"]["seed"]["values"] == [2, 3, 4, 5, 6]
+    assert len(protocol.promotion_trial_identities()) == 60
 
 
 def test_validation_path_does_not_index_test_labels_or_carry_training_labels():

@@ -1,0 +1,13 @@
+name: reddit-fixed-core-promotion-019fbc4f
+program: experiments/reddit-fixed-core-500-019fbc4f/run-trial.py
+method: grid
+metric:
+  name: Val/AUC.last
+  goal: maximize
+parameters:
+  phase:
+    value: promotion
+  config_id:
+    values: [cfg-177, cfg-016, cfg-183, cfg-096, cfg-117, cfg-049, cfg-018, cfg-058, cfg-147, cfg-126, cfg-009, cfg-111]
+  seed:
+    values: [2, 3, 4, 5, 6]

@@ -1,5 +1,5 @@
 schema_version: 1
-state: launched
+state: prepared
 formal_launch_allowed: true
 protocol:
   id: reddit-fixed-core-500-019fbc4f
@@ -12,6 +12,11 @@ protocol:
   prepared_protocol_commit: 045915c633e3b6e24ebb35c2a233c35751bad7b6
   screening_registry_sha256: 4c1895d6c27189774fee3b1b8a4f26b10375ceccc2dcb810cd6b23a76e3c80ce
   screening_trials_sha256: 6c5b6ea56660443f623a95bbda4494ecf9e3ebf899072f4640f80929037cd273
+  screening_results_file_sha256: b72084ed57b10eb4bc47568516c3665b809481216a40ec5ff666a09d33fce83d
+  screening_results_payload_sha256: 2bf64d8b55c661463af61a402b794a535bbc84925be087b3dac1420df729c6aa
+  promotion_config_ids: [cfg-177, cfg-016, cfg-183, cfg-096, cfg-117, cfg-049, cfg-018, cfg-058, cfg-147, cfg-126, cfg-009, cfg-111]
+  promotion_config_ids_sha256: 647346bd43308362620f9e63af6dda07f3b6823b225bc68b6551a626c53442ec
+  promotion_trials_sha256: 44b95b6ccba88930f73777108a25fa7cdbf9733a898814a21004289b2c575bcd
   config_parser: run.py argparse with FIXED_CORE_GUARD=1
   label_boundary: validation labels may select configs; test labels are inaccessible in validation_only and read once at the frozen final epoch in confirmation
   selection_policy:
@@ -40,14 +45,14 @@ budget:
   allocated_records: 385
   future_scientific_records_reserved: 90
   technical_retry_records_reserved: 25
-  created_records: 105
-  consumed_records: 105
-  valid_records: 97
+  created_records: 385
+  consumed_records: 385
+  valid_records: 385
   failed_records: 0
   retry_records: 0
-  remaining_records: 395
-  next_record_ordinal: 106
-  observed_at_utc: 2026-08-01T09:04:28Z
+  remaining_records: 115
+  next_record_ordinal: 386
+  observed_at_utc: 2026-08-01T10:41:59Z
   allocation_guard: reject before any operation that would create or assign ordinal 501
 
 authorization:
@@ -115,15 +120,17 @@ wandb:
   screening_sweep_id: 2cibydx2
   screening_sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/2cibydx2
   screening_sweep_created_at_utc: 2026-08-01T08:40:00Z
-  screening_sweep_state: RUNNING
-  screening_runs_observed: 104
-  screening_state_counts_observed: {finished: 96, running: 8}
-  screening_valid_finished_observed: 96
-  screening_run_ids_observed: [dbg08k3z, ppy7zubd, z28cbrlx, cefhhaju, zmasbe8z, zsu2vyl0, dl7tlmge, q5fjmmkt, 5arzorfq, 1h88sdp7, vesa22zb, qxev6rpy, r5xhka0e, q1cov2m2, ihkufjvs, tr8vcrkw, qwpfixb3, rd54660t, ml85kwks, higrcw7s, z8u0s2gj, aq930wxc, j7obfif9, 4h163ybt, ve87givk, eq047hv8, 0s5x3h6a, 8mrdh0o1, b5y2qapm, 7x8rsuow, en4k7ack, 7da5lsi1, apkdnwqp, rax0no0m, 7mk0dmup, q15693rz, ncavhvbj, 8pot1jhi, mpnqef3h, 1qk4qmff, at5cr1on, d9au2nrd, t8djnsbn, s3nma8a9, 701n2vew, phoi8f0a, xpkxgycp, rxj5ui76, gps9uy3y, da26c4rx, vtwx0tuc, fh82qag2, tqi2cdut, ol01keva, i2xhspbz, ttl3dybf, qbw02gzx, 4gbbysng, iwk13y9i, f4wqdtkb, bd35wny2, pgyz7070, f2544oes, 31dg1mgc, cfp42zk7, ushcgtj8, znam7r7g, 8b4asjgg, l3r1xw97, u23qsism, y8nv8mj6, 17cglozw, bleyr0vj, kyi9epei, cnn70ras, ybhjdhq3, zikp6th1, jsunlsj6, dwnblnpm, udit20j4, 1yys8ogr, a9rblp25, 4gp6gtqz, d2f1mnmj, 035q8zlp, ccoje8ox, 53v1itos, 852mk8rg, pf3ik55g, vivuavd2, zauwk55s, g3gbsyor, k90xkhnu, 7dzyo81p, lbppntsv, 65453y4c, 2ytl0lx3, gv3os4sw, fl24x5x7, wvrdcdjg, urt1up2x, ab3vkhn4, 56dxevgj, 32aaj6g0]
-  screening_identity_audit: {observed_at_utc: 2026-08-01T09:04:28Z, unique_identities: 104, identity_violations: 0, duplicates: 0, finished_metric_violations: 0, forbidden_test_metrics: 0}
+  screening_sweep_state: FINISHED
+  screening_runs_observed: 384
+  screening_state_counts_observed: {finished: 384}
+  screening_valid_finished_observed: 384
+  screening_run_ids_first_checkpoint: [dbg08k3z, ppy7zubd, z28cbrlx, cefhhaju, zmasbe8z, zsu2vyl0, dl7tlmge, q5fjmmkt, 5arzorfq, 1h88sdp7, vesa22zb, qxev6rpy, r5xhka0e, q1cov2m2, ihkufjvs, tr8vcrkw, qwpfixb3, rd54660t, ml85kwks, higrcw7s, z8u0s2gj, aq930wxc, j7obfif9, 4h163ybt, ve87givk, eq047hv8, 0s5x3h6a, 8mrdh0o1, b5y2qapm, 7x8rsuow, en4k7ack, 7da5lsi1, apkdnwqp, rax0no0m, 7mk0dmup, q15693rz, ncavhvbj, 8pot1jhi, mpnqef3h, 1qk4qmff, at5cr1on, d9au2nrd, t8djnsbn, s3nma8a9, 701n2vew, phoi8f0a, xpkxgycp, rxj5ui76, gps9uy3y, da26c4rx, vtwx0tuc, fh82qag2, tqi2cdut, ol01keva, i2xhspbz, ttl3dybf, qbw02gzx, 4gbbysng, iwk13y9i, f4wqdtkb, bd35wny2, pgyz7070, f2544oes, 31dg1mgc, cfp42zk7, ushcgtj8, znam7r7g, 8b4asjgg, l3r1xw97, u23qsism, y8nv8mj6, 17cglozw, bleyr0vj, kyi9epei, cnn70ras, ybhjdhq3, zikp6th1, jsunlsj6, dwnblnpm, udit20j4, 1yys8ogr, a9rblp25, 4gp6gtqz, d2f1mnmj, 035q8zlp, ccoje8ox, 53v1itos, 852mk8rg, pf3ik55g, vivuavd2, zauwk55s, g3gbsyor, k90xkhnu, 7dzyo81p, lbppntsv, 65453y4c, 2ytl0lx3, gv3os4sw, fl24x5x7, wvrdcdjg, urt1up2x, ab3vkhn4, 56dxevgj, 32aaj6g0]
+  screening_run_ids_final: {count: 384, sha256: dd4b5f8369738ac44657cffa2fff5ee738186e462545fbc572d34f1f55449249, path: experiments/reddit-fixed-core-500-019fbc4f/screening-results.json}
+  screening_identity_audit: {observed_at_utc: 2026-08-01T10:41:59Z, unique_identities: 384, identity_violations: 0, duplicates: 0, finished_metric_violations: 0, forbidden_test_metrics: 0}
+  screening_results: {path: experiments/reddit-fixed-core-500-019fbc4f/screening-results.json, file_sha256: b72084ed57b10eb4bc47568516c3665b809481216a40ec5ff666a09d33fce83d, payload_sha256: 2bf64d8b55c661463af61a402b794a535bbc84925be087b3dac1420df729c6aa, rows_sha256: 1271573311b1e6e922ce5b0fdffe641495c81fefd8765a8a78c4344b92b84a3d}
   create_exactly_once: true
   expected_screening_trials: 384
-  current_state: RUNNING
+  current_state: SCREENING_FINISHED_PROMOTION_PREPARED
   preassignment_invalid_launches:
     - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
@@ -141,19 +148,28 @@ execution:
     - {pane_id: "%98", pane_pid: 166067, gpu_index: 7, agent_count: 48}
   smoke_pane: {session: reddit_fixed_core_500_019fbc4f_smoke, pane_id: "%90", gpu_index: 0, run_id: fcfqzf5w}
   first_agent_start_utc: 2026-08-01T08:42:37Z
+  screening_terminal_at_utc: 2026-08-01T10:39:16Z
+  screening_agents_terminal: true
+  screening_compute_pids_terminal: true
   remain_on_exit: true
 
 heartbeat:
   type: one_shot
-  status: active
+  status: paused
   automation_id: check-reddit-fixed-core-screening
-  generation: 1
+  generation: 8
   created_at_utc: 2026-08-01T09:02:47Z
-  scheduled_for: 2026-08-01T09:17:00Z
-  scheduling_rule: "FREQ=DAILY;BYHOUR=17;BYMINUTE=17;COUNT=1"
+  scheduled_for: null
+  scheduling_rule: null
 
 result_validation:
   all_expected_trials_terminal: false
+  screening_expected_trials_terminal: true
+  screening_config_identity_valid: true
+  screening_code_identity_valid: true
+  screening_data_identity_valid: true
+  screening_fixed_final_epoch_policy_valid: true
+  screening_test_metrics_absent: true
   config_identity_valid: false
   code_identity_valid: false
   data_identity_valid: false

@@ -10,6 +10,25 @@ HARD_RUN_LIMIT = 500
 SEARCH_SEED = 20260801
 SCREENING_CONFIG_COUNT = 192
 
+PROMOTION_CONFIG_IDS = (
+    "cfg-177",
+    "cfg-016",
+    "cfg-183",
+    "cfg-096",
+    "cfg-117",
+    "cfg-049",
+    "cfg-018",
+    "cfg-058",
+    "cfg-147",
+    "cfg-126",
+    "cfg-009",
+    "cfg-111",
+)
+
+# Frozen only after promotion finishes. Keeping this empty makes every
+# confirmation invocation fail closed until the selected top six are committed.
+CONFIRMATION_CONFIG_IDS = ()
+
 PHASE_BUDGET = {
     "smoke": 1,
     "screening": 384,
@@ -176,6 +195,13 @@ def resolve_config(phase, config_id, seed):
         registry = screening_registry()
         if config_id not in registry:
             raise ValueError("unsupported config id: {}".format(config_id))
+        if phase == "promotion" and config_id not in PROMOTION_CONFIG_IDS:
+            raise ValueError("config was not promoted: {}".format(config_id))
+        if phase == "confirmation":
+            if len(CONFIRMATION_CONFIG_IDS) != 6:
+                raise ValueError("confirmation configs are not frozen")
+            if config_id not in CONFIRMATION_CONFIG_IDS:
+                raise ValueError("config was not confirmed: {}".format(config_id))
         config = dict(registry[config_id])
 
     if phase == "confirmation":
@@ -213,16 +239,35 @@ def screening_trial_identities():
     ]
 
 
+def promotion_trial_identities():
+    return [
+        {
+            "phase": "promotion",
+            "config_id": config_id,
+            "seed": seed,
+        }
+        for config_id, seed in itertools.product(
+            PROMOTION_CONFIG_IDS, PHASE_SEEDS["promotion"]
+        )
+    ]
+
+
 def validate_protocol():
     if sum(PHASE_BUDGET.values()) != HARD_RUN_LIMIT:
         raise AssertionError("phase allocation must equal hard budget")
     if len(screening_trial_identities()) != PHASE_BUDGET["screening"]:
         raise AssertionError("screening allocation mismatch")
-    if 12 * len(PHASE_SEEDS["promotion"]) != PHASE_BUDGET["promotion"]:
+    if len(PROMOTION_CONFIG_IDS) != 12 or len(set(PROMOTION_CONFIG_IDS)) != 12:
+        raise AssertionError("promotion config freeze mismatch")
+    if len(promotion_trial_identities()) != PHASE_BUDGET["promotion"]:
         raise AssertionError("promotion allocation mismatch")
     if 6 * len(PHASE_SEEDS["confirmation"]) != PHASE_BUDGET["confirmation"]:
         raise AssertionError("confirmation allocation mismatch")
     registry = screening_registry()
+    if not set(PROMOTION_CONFIG_IDS).issubset(registry):
+        raise AssertionError("promotion config is outside screening registry")
+    if len(CONFIRMATION_CONFIG_IDS) not in (0, 6):
+        raise AssertionError("confirmation must be unfrozen or contain six configs")
     for config in registry.values():
         validate_resolved_config(config)
     for key, values in SEARCH_SPACE.items():
@@ -235,6 +280,8 @@ def validate_protocol():
         "phase_budget": PHASE_BUDGET,
         "screening_registry_sha256": canonical_sha256(registry),
         "screening_trials_sha256": canonical_sha256(screening_trial_identities()),
+        "promotion_config_ids_sha256": canonical_sha256(PROMOTION_CONFIG_IDS),
+        "promotion_trials_sha256": canonical_sha256(promotion_trial_identities()),
     }
 
 
