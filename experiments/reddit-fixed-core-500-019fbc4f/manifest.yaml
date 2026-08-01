@@ -1,6 +1,6 @@
 schema_version: 1
 state: prepared
-formal_launch_allowed: false
+formal_launch_allowed: true
 protocol:
   id: reddit-fixed-core-500-019fbc4f
   governance: governed
@@ -8,8 +8,8 @@ protocol:
   owner_thread_id: 019fbc4f-3c4e-7701-a1de-37f373693859
   source_thread_id: 019fbb9e-1afe-7192-a88a-f81e7e145055
   scientific_base_sha: 7a0540ec0ca80c079020da282a3ff5b629174ae7
-  execution_code_sha: TO_BE_BOUND_AFTER_PREPARED_COMMIT
-  prepared_protocol_commit: TO_BE_BOUND_AFTER_PREPARED_COMMIT
+  execution_code_sha: 081c246b1da213d093174375991b3582f4429b6e
+  prepared_protocol_commit: 081c246b1da213d093174375991b3582f4429b6e
   screening_registry_sha256: 4c1895d6c27189774fee3b1b8a4f26b10375ceccc2dcb810cd6b23a76e3c80ce
   screening_trials_sha256: 6c5b6ea56660443f623a95bbda4494ecf9e3ebf899072f4640f80929037cd273
   config_parser: run.py argparse with FIXED_CORE_GUARD=1

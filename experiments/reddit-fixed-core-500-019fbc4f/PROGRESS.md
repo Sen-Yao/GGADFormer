@@ -11,3 +11,5 @@
 - 下一决策：验证并提交 prepared protocol；在 clean detached worktree 完成一个计费 smoke 后，只有 smoke 身份、数据、指标和固定核心均有效才创建一次 screening sweep。
 
 当前材料不包含结果判断，screening/promotion/test 均未开始。
+
+- prepared commit: `081c246b1da213d093174375991b3582f4429b6e`; manifest binding commit pending before HCCS detached launch.
