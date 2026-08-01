@@ -1,0 +1,104 @@
+schema_version: 1
+state: prepared
+investigation_id: tolokers-direction-mag-lrec01-019fbba0
+owner_thread_id: 019fbba0-51fe-7952-8bc7-6c68f4e18858
+prepared_at_utc: 2026-08-01T04:45:36Z
+
+objective:
+  expected_trials: 25
+  dataset: tolokers
+  variants: [none, random_dir, random_mag, random_both, constant_mag]
+  seeds: [0, 1, 2, 3, 4]
+  metrics: [AUC.last, AP.last]
+  aggregation: {mean: true, sample_std_ddof: 1}
+  post_hoc_selection_allowed: false
+  smoke_counts_as_formal: false
+
+scientific_protocol:
+  perturbation_space: projected reconstruction error p_i
+  beta: 0.3
+  sample_rate: 0.15
+  ring_R_min: 0.3
+  ring_R_max: 1
+  data_split_seed: 42
+  lambda_rec_emb: 0.1
+  rng:
+    every_forward_random_controls: true
+    direction_rng: independent torch.Generator
+    magnitude_rng: independent torch.Generator
+    direction_seed_formula: seed * 1000003 + 1729
+    magnitude_seed_formula: seed * 1000003 + 7919
+  magnitude_permutation:
+    mechanism: nonzero cyclic shift in current generation subset
+    n_ge_2: exact multiset preserved and no fixed points
+    n_lt_2: explicit identity clone
+    detach_magnitudes: false
+
+authority_config:
+  command: python run.py --batch_size=1024 --dataset=tolokers --end_lr=0.00001 --lambda_rec_emb=0.1 --num_epoch=100 --outlier_beta=0.3 --peak_lr=0.0001 --pp_k=10 --progregate_alpha=0.9 --rec_loss_weight=1 --ring_R_max=1 --ring_R_min=0.3 --ring_loss_weight=1 --seed=<0..4> --train_rate=0.05 --warmup_updates=5
+  sample_rate: 0.15
+  data_split_seed: 42
+
+git:
+  branch: codex/tolokers-direction-mag-lrec01
+  code_sha: fdb150b7927f26f2e8b5270365a324d844dc8b98
+  code_tree: e631e5f3370e991f441ccc95cbae28315f7a82af
+  code_remote: https://github.com/Sen-Yao/GGADFormer.git
+  prepared_protocol_commit: pending_first_commit
+  launch_manifest_commit: pending_second_commit
+
+config_artifacts:
+  sweep: experiments/tolokers-direction-mag-lrec01-019fbba0/sweep.yaml
+  launcher: experiments/tolokers-direction-mag-lrec01-019fbba0/launch-agent.sh
+  resolved_config: experiments/tolokers-direction-mag-lrec01-019fbba0/resolved-config.json
+  sweep_sha256: 4ae0c47d627a6311f20b3c8e0710d184c51b005b9e6026d2382f22abcbbb86ec
+  launcher_sha256: 6c0999f270fe7791d278d93d73d983d244ed049baf77a5109bd73061195249b4
+  config_digest_sha256: 1acc516386ac12266379bf90684ec0d10005024a7627cbedd69bae3594b9e1a9
+  results_path: experiments/tolokers-direction-mag-lrec01-019fbba0/results.json
+  results_sha256: pending
+  remote_log_checksums_path: experiments/tolokers-direction-mag-lrec01-019fbba0/remote-log-sha256.txt
+  remote_log_checksums_sha256: pending
+
+execution:
+  execution_host: HCCS-85
+  observed_hostname: gpufree-container
+  host_probe_at_utc: 2026-08-01T04:43:00Z
+  tmux_version: 3.2a
+  gpu_model: NVIDIA GeForce RTX 4090
+  gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+  excluded_gpu_indices_due_to_foreign_compute_pids: []
+  task_root: /root/gpufree-data/linziyao/VecGAD-tolokers-direction-mag-lrec01-019fbba0
+  detached_worktree: /root/gpufree-data/linziyao/VecGAD-tolokers-direction-mag-lrec01-019fbba0/worktree
+  runtime_environment: /root/gpufree-data/linziyao/.conda/envs/DualRefGAD
+  parallel_agents_per_sweep: 8
+  per_agent_counts: {gpu0: 4, gpu1: 3, gpu2: 3, gpu3: 3, gpu4: 3, gpu5: 3, gpu6: 3, gpu7: 3}
+  tmux_session: vecgad_tolokers_lrec01_019fbba0
+  remain_on_exit: true
+
+data:
+  source_dir: /root/gpufree-data/linziyao/DualRefGAD/dataset
+  worktree_access: symlink_read_only_reuse
+  tolokers_mat:
+    size_bytes: 4763768
+    sha256: d6ec34984d4db3f52b53606a447f6101a74d8e9aad2ae8644dfe2ff33227a1d0
+
+wandb:
+  destination: HCCS/GGADFormer
+  code_upload_disabled: true
+  console_upload_disabled: true
+  sweep_id: pending_creation
+  sweep_url: pending_creation
+  forbidden_transmission: [raw dataset, source code, credentials, model checkpoints, undeclared artifacts]
+
+validation:
+  local_py_compile: passed
+  hccs85_unittest: pending
+  expected_trials: 25
+  finished_trials: 0
+  duplicate_trials: pending
+  missing_trials: pending
+  all_agent_exitcodes_zero: pending
+  all_final_steps_present: pending
+  all_configs_match_manifest: pending
+  all_rng_seeds_match_formula: pending
+  independent_wandb_replay: pending

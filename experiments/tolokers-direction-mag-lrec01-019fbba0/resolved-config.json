@@ -1,0 +1,28 @@
+{
+  "ablation_modes": [
+    "none",
+    "random_dir",
+    "random_mag",
+    "random_both",
+    "constant_mag"
+  ],
+  "batch_size": 1024,
+  "data_split_seed": 42,
+  "dataset": "tolokers",
+  "end_lr": 0.00001,
+  "lambda_rec_emb": 0.1,
+  "num_epoch": 100,
+  "outlier_beta": 0.3,
+  "peak_lr": 0.0001,
+  "pp_k": 10,
+  "progregate_alpha": 0.9,
+  "rec_loss_weight": 1,
+  "ring_R_max": 1,
+  "ring_R_min": 0.3,
+  "ring_loss_weight": 1,
+  "sample_rate": 0.15,
+  "seeds": [0, 1, 2, 3, 4],
+  "train_rate": 0.05,
+  "warmup_updates": 5
+}
+
