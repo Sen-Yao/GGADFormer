@@ -1,5 +1,5 @@
 schema_version: 1
-state: prepared
+state: launched
 formal_launch_allowed: true
 protocol:
   id: reddit-fixed-core-500-019fbc4f
@@ -40,13 +40,14 @@ budget:
   allocated_records: 385
   future_scientific_records_reserved: 90
   technical_retry_records_reserved: 25
-  created_records: 1
-  consumed_records: 1
+  created_records: 13
+  consumed_records: 13
   valid_records: 1
   failed_records: 0
   retry_records: 0
-  remaining_records: 499
-  next_record_ordinal: 2
+  remaining_records: 487
+  next_record_ordinal: 14
+  observed_at_utc: 2026-08-01T08:43:47Z
   allocation_guard: reject before any operation that would create or assign ordinal 501
 
 authorization:
@@ -114,18 +115,29 @@ wandb:
   screening_sweep_id: 2cibydx2
   screening_sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/2cibydx2
   screening_sweep_created_at_utc: 2026-08-01T08:40:00Z
+  screening_sweep_state: RUNNING
+  screening_runs_observed: 12
+  screening_run_ids_observed: [dbg08k3z, ppy7zubd, z28cbrlx, cefhhaju, dl7tlmge, q5fjmmkt, zmasbe8z, zsu2vyl0]
   create_exactly_once: true
   expected_screening_trials: 384
-  current_state: CREATED
+  current_state: RUNNING
   preassignment_invalid_launches:
     - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
 execution:
   detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-045915c633e3b6e24ebb35c2a233c35751bad7b6
-  tmux_session: reddit_fixed_core_500_019fbc4f_smoke
+  tmux_session: reddit_fixed_core_500_019fbc4f_screening
   pane_records:
-    - {pane_id: "%90", pane_pid: 159968, gpu_index: 0, phase: smoke, run_id: fcfqzf5w}
-  first_agent_start_utc: 2026-08-01T08:35:46Z
+    - {pane_id: "%91", pane_pid: 165995, gpu_index: 0, agent_count: 48}
+    - {pane_id: "%92", pane_pid: 166001, gpu_index: 1, agent_count: 48}
+    - {pane_id: "%93", pane_pid: 166012, gpu_index: 2, agent_count: 48}
+    - {pane_id: "%94", pane_pid: 166023, gpu_index: 3, agent_count: 48}
+    - {pane_id: "%95", pane_pid: 166034, gpu_index: 4, agent_count: 48}
+    - {pane_id: "%96", pane_pid: 166045, gpu_index: 5, agent_count: 48}
+    - {pane_id: "%97", pane_pid: 166056, gpu_index: 6, agent_count: 48}
+    - {pane_id: "%98", pane_pid: 166067, gpu_index: 7, agent_count: 48}
+  smoke_pane: {session: reddit_fixed_core_500_019fbc4f_smoke, pane_id: "%90", gpu_index: 0, run_id: fcfqzf5w}
+  first_agent_start_utc: 2026-08-01T08:42:37Z
   remain_on_exit: true
 
 heartbeat:

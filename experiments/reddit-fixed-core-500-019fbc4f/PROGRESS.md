@@ -18,3 +18,4 @@
 - Smoke `fcfqzf5w` finished valid on HCCS-90 GPU 0 at 2026-08-01T08:35:46Z: fixed-core config exact, validation-only metrics `Val/AUC.last=0.5257899142079934`, `Val/AP.last=0.04450442254016716`, no test metrics, no uploaded artifacts. Budget consumed is 1/500; remaining 499.
 - The first tmux shell expansion error was pre-assignment and consumed no W&B record; it is fenced in `manifest.yaml`.
 - Native screening sweep `2cibydx2` was created exactly once from parsed YAML at 2026-08-01T08:40:00Z. Its grid is 192 configs × seeds 0--1 = 384 validation-only records; launch is pending exact occupancy rebinding.
+- Screening launched on HCCS-90 at 2026-08-01T08:42:37Z with tmux session `reddit_fixed_core_500_019fbc4f_screening`, panes `%91`--`%98`, GPU mapping 0--7, and 48 assignments per pane. At 08:43:47Z W&B showed 12 records (4 finished, 8 running); the manifest records this checkpoint and leaves 487 unconsumed records under the 500 cap.
