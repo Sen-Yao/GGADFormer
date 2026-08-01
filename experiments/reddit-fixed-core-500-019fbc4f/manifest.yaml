@@ -103,8 +103,8 @@ runtime:
 wandb:
   entity: HCCS
   project: GGADFormer
-  smoke_run_id: null
-  smoke_run_url: null
+  smoke_run_id: fcfqzf5w
+  smoke_run_url: https://wandb.ai/HCCS/GGADFormer/runs/fcfqzf5w
   screening_sweep_id: null
   screening_sweep_url: null
   create_exactly_once: true
@@ -112,7 +112,7 @@ wandb:
   current_state: NOT_CREATED
 
 execution:
-  detached_worktree: null
+  detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-c20a37f327921f40c833be5e535bfc9a3f7cafc8
   tmux_session: null
   pane_records: []
   first_agent_start_utc: null

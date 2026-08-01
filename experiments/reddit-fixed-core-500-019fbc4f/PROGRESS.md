@@ -13,3 +13,4 @@
 当前材料不包含结果判断，screening/promotion/test 均未开始。
 
 - prepared commit `081c246b1da213d093174375991b3582f4429b6e` was superseded before launch by `c20a37f327921f40c833be5e535bfc9a3f7cafc8`, which withholds test labels during validation-only selection; manifest binding commit pending before HCCS detached launch.
+- HCCS-85 launch preflight revalidated at 2026-08-01T08:29:05Z: all eight GPUs clean, detached SHA/data/runtime/W&B identities exact. Smoke run identity reserved as `fcfqzf5w`.
