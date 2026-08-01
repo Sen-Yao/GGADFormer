@@ -127,9 +127,21 @@ formal_revalidation:
       sweep_url: https://wandb.ai/HCCS/DualRefGAD/sweeps/2uzmgq9u
       sweep_config_sha256: 67ed67f25d79043f13ed04b76c1a4153592475ac18abeadf33d7a6043e07d337
       wrapper_sha256: 2355605d3a532762144832762dbbd236ad5952ac8eeec2ec381f25767de642b7
+      execution_checkout_sha: cab9dea25a593867a425cb43fe9be51f5a23d2e1
       remote_worktree: /root/gpufree-data/linziyao/worktrees/GGADFormer-package-v2-019fbc58
       results_dir: /root/gpufree-data/linziyao/vecgad-package-v2-results-019fbc58/hccs85
-      state: prepared
+      tmux_session: vecgad-v2-85-019fbc58
+      agent_panes:
+        - {gpu: 0, pane_id: "%279", max_assignments: 4}
+        - {gpu: 1, pane_id: "%280", max_assignments: 4}
+        - {gpu: 2, pane_id: "%281", max_assignments: 4}
+        - {gpu: 3, pane_id: "%282", max_assignments: 4}
+        - {gpu: 4, pane_id: "%283", max_assignments: 4}
+        - {gpu: 5, pane_id: "%284", max_assignments: 4}
+        - {gpu: 6, pane_id: "%285", max_assignments: 3}
+        - {gpu: 7, pane_id: "%286", max_assignments: 3}
+      first_formal_agent_started_at: 2026-08-01T18:47:30+08:00
+      state: launched
     - id: dgraph-hccs90
       execution_host: HCCS-90
       gpu_indices: pending_release_and_live_selection
