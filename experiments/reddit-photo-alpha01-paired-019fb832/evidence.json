@@ -1,0 +1,3574 @@
+{
+  "entity": "HCCS",
+  "execution_host": "HCCS-85",
+  "expected_code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+  "expected_trial_count": 20,
+  "observed_trial_count": 20,
+  "project": "GGADFormer",
+  "protocol_id": "reddit-photo-alpha01-paired-019fb832",
+  "runs": [
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 128,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "photo",
+        "declared_variant": "alpha_0p1",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 6,
+        "progregate_alpha": 0.1,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 0,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "e7a1a6661eeae7be0496c1fe97f06ce67451bb9e1901c28a1400f12d4a0942e4",
+      "created_at": "2026-08-01T02:03:29Z",
+      "dataset": "photo",
+      "execution_host": "HCCS-85",
+      "gpu_index": "7",
+      "history": [
+        {
+          "AP": 0.2390096282766584,
+          "AUC": 0.6956407139290852,
+          "step": 0
+        },
+        {
+          "AP": 0.10824485979298658,
+          "AUC": 0.49857368500938726,
+          "step": 10
+        },
+        {
+          "AP": 0.14492764380736683,
+          "AUC": 0.5893936232315032,
+          "step": 20
+        },
+        {
+          "AP": 0.38117976232917206,
+          "AUC": 0.7210530569464355,
+          "step": 30
+        },
+        {
+          "AP": 0.44901728413302305,
+          "AUC": 0.7621328998912733,
+          "step": 40
+        },
+        {
+          "AP": 0.5028982599504953,
+          "AUC": 0.8054424688174877,
+          "step": 50
+        },
+        {
+          "AP": 0.5419739089134209,
+          "AUC": 0.8256879752212618,
+          "step": 60
+        },
+        {
+          "AP": 0.5485831236217186,
+          "AUC": 0.8362227123977326,
+          "step": 70
+        },
+        {
+          "AP": 0.5177618627677912,
+          "AUC": 0.8353056749314087,
+          "step": 80
+        },
+        {
+          "AP": 0.4835445385221591,
+          "AUC": 0.8226587806795004,
+          "step": 90
+        },
+        {
+          "AP": 0.5101914258275435,
+          "AUC": 0.842882885318361,
+          "step": 100
+        },
+        {
+          "AP": 0.5365588899040276,
+          "AUC": 0.858659646887775,
+          "step": 110
+        },
+        {
+          "AP": 0.6383974391985587,
+          "AUC": 0.8666984032312159,
+          "step": 120
+        },
+        {
+          "AP": 0.09066360347245139,
+          "AUC": 0.49078062655919596,
+          "step": 130
+        },
+        {
+          "AP": 0.1907462863887229,
+          "AUC": 0.6339746259548777,
+          "step": 140
+        },
+        {
+          "AP": 0.2808074112077772,
+          "AUC": 0.6855618906657047,
+          "step": 150
+        },
+        {
+          "AP": 0.4299758641801723,
+          "AUC": 0.7865092285255114,
+          "step": 160
+        },
+        {
+          "AP": 0.6041207632006831,
+          "AUC": 0.8814057805603825,
+          "step": 170
+        },
+        {
+          "AP": 0.33629020040009056,
+          "AUC": 0.7264796715617572,
+          "step": 180
+        },
+        {
+          "AP": 0.6509282510475284,
+          "AUC": 0.9096972241629305,
+          "step": 190
+        },
+        {
+          "AP": 0.6321658937540777,
+          "AUC": 0.8994449339628832,
+          "step": 200
+        }
+      ],
+      "history_sha256": "04fde63cf23e781131b390515b869ac44d61619cfe7b8b2919db248caab47cf8",
+      "name": "winter-sweep-12",
+      "run_id": "ag2u2ahl",
+      "seed": 0,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/ag2u2ahl",
+      "variant": "alpha_0p1"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 128,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "photo",
+        "declared_variant": "alpha_0p1",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 6,
+        "progregate_alpha": 0.1,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 1,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "7d6869ca6637ebe2962a4b62bcc26e6982b29c6f196783caf9488d4799a00988",
+      "created_at": "2026-08-01T02:03:32Z",
+      "dataset": "photo",
+      "execution_host": "HCCS-85",
+      "gpu_index": "1",
+      "history": [
+        {
+          "AP": 0.18572855439527425,
+          "AUC": 0.5936111789303002,
+          "step": 0
+        },
+        {
+          "AP": 0.12515254752091998,
+          "AUC": 0.542178513810756,
+          "step": 10
+        },
+        {
+          "AP": 0.1452641511414544,
+          "AUC": 0.590672941889421,
+          "step": 20
+        },
+        {
+          "AP": 0.3702284718464133,
+          "AUC": 0.6913987996425905,
+          "step": 30
+        },
+        {
+          "AP": 0.40614630101275756,
+          "AUC": 0.7149645364307319,
+          "step": 40
+        },
+        {
+          "AP": 0.3094105503746087,
+          "AUC": 0.7732926530838675,
+          "step": 50
+        },
+        {
+          "AP": 0.5659256323096422,
+          "AUC": 0.8257052937547116,
+          "step": 60
+        },
+        {
+          "AP": 0.6026517154314124,
+          "AUC": 0.8656400014755954,
+          "step": 70
+        },
+        {
+          "AP": 0.6550353417859311,
+          "AUC": 0.891667645234207,
+          "step": 80
+        },
+        {
+          "AP": 0.5409783153849956,
+          "AUC": 0.8660576174935772,
+          "step": 90
+        },
+        {
+          "AP": 0.6340410285710042,
+          "AUC": 0.8979791946684825,
+          "step": 100
+        },
+        {
+          "AP": 0.633332231037276,
+          "AUC": 0.9052794493213246,
+          "step": 110
+        },
+        {
+          "AP": 0.6297221757262361,
+          "AUC": 0.8911261242614631,
+          "step": 120
+        },
+        {
+          "AP": 0.6168465076929582,
+          "AUC": 0.892076109181667,
+          "step": 130
+        },
+        {
+          "AP": 0.5632756431229047,
+          "AUC": 0.8791726753529672,
+          "step": 140
+        },
+        {
+          "AP": 0.36108226595843035,
+          "AUC": 0.785032365945399,
+          "step": 150
+        },
+        {
+          "AP": 0.5001391944113797,
+          "AUC": 0.836074871258528,
+          "step": 160
+        },
+        {
+          "AP": 0.5876639794865645,
+          "AUC": 0.8784050278377824,
+          "step": 170
+        },
+        {
+          "AP": 0.6953649633371003,
+          "AUC": 0.9160321465773087,
+          "step": 180
+        },
+        {
+          "AP": 0.6415816733024996,
+          "AUC": 0.9011162428413207,
+          "step": 190
+        },
+        {
+          "AP": 0.6514365900691084,
+          "AUC": 0.909953200535382,
+          "step": 200
+        }
+      ],
+      "history_sha256": "98ccb28e4b3f9ab66b015c7b21836cd8bd3107daa2850e88a9b961856654f344",
+      "name": "winter-sweep-14",
+      "run_id": "ika8i5wa",
+      "seed": 1,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/ika8i5wa",
+      "variant": "alpha_0p1"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 128,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "photo",
+        "declared_variant": "alpha_0p1",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 6,
+        "progregate_alpha": 0.1,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 2,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "ed184c9cd2ef52492b843205ace12673657f85b261592012232595f94d7dbc25",
+      "created_at": "2026-08-01T02:03:32Z",
+      "dataset": "photo",
+      "execution_host": "HCCS-85",
+      "gpu_index": "2",
+      "history": [
+        {
+          "AP": 0.10429123612762661,
+          "AUC": 0.5092400712002927,
+          "step": 0
+        },
+        {
+          "AP": 0.14584907215334697,
+          "AUC": 0.5054709669570829,
+          "step": 10
+        },
+        {
+          "AP": 0.20132111431007882,
+          "AUC": 0.6164346123985494,
+          "step": 20
+        },
+        {
+          "AP": 0.32633988476729864,
+          "AUC": 0.6727698304952058,
+          "step": 30
+        },
+        {
+          "AP": 0.3125297526821096,
+          "AUC": 0.6599845287767849,
+          "step": 40
+        },
+        {
+          "AP": 0.3913512174765237,
+          "AUC": 0.7054886234131366,
+          "step": 50
+        },
+        {
+          "AP": 0.4138610851371478,
+          "AUC": 0.739085733499028,
+          "step": 60
+        },
+        {
+          "AP": 0.504740741668148,
+          "AUC": 0.7577311763733526,
+          "step": 70
+        },
+        {
+          "AP": 0.4279427341416206,
+          "AUC": 0.7885071959210488,
+          "step": 80
+        },
+        {
+          "AP": 0.5243952767925171,
+          "AUC": 0.8541573913951951,
+          "step": 90
+        },
+        {
+          "AP": 0.5761150693500607,
+          "AUC": 0.870299954183327,
+          "step": 100
+        },
+        {
+          "AP": 0.6141467207148446,
+          "AUC": 0.8880774991699775,
+          "step": 110
+        },
+        {
+          "AP": 0.6216255308318421,
+          "AUC": 0.8813421384699822,
+          "step": 120
+        },
+        {
+          "AP": 0.5417581209756688,
+          "AUC": 0.8551708776047144,
+          "step": 130
+        },
+        {
+          "AP": 0.5632687584063454,
+          "AUC": 0.8778180281145974,
+          "step": 140
+        },
+        {
+          "AP": 0.6072265455178883,
+          "AUC": 0.8791811234180645,
+          "step": 150
+        },
+        {
+          "AP": 0.6084027582502771,
+          "AUC": 0.9001351408813415,
+          "step": 160
+        },
+        {
+          "AP": 0.5825155552584895,
+          "AUC": 0.8951379695751385,
+          "step": 170
+        },
+        {
+          "AP": 0.6168131430108835,
+          "AUC": 0.9090695329261931,
+          "step": 180
+        },
+        {
+          "AP": 0.627765385067618,
+          "AUC": 0.8998217176662276,
+          "step": 190
+        },
+        {
+          "AP": 0.6370000443562481,
+          "AUC": 0.9110027318226503,
+          "step": 200
+        }
+      ],
+      "history_sha256": "750aab1553217c11b625478d3d13f02b66898f2e27c3d399a6416557f6547f46",
+      "name": "efficient-sweep-16",
+      "run_id": "qiep5mn5",
+      "seed": 2,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/qiep5mn5",
+      "variant": "alpha_0p1"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 128,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "photo",
+        "declared_variant": "alpha_0p1",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 6,
+        "progregate_alpha": 0.1,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 3,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "2d4286aa24fa235e62a38e6b024cbb359770d9f2199ca47bba1e16f2dc9f18b7",
+      "created_at": "2026-08-01T02:08:21Z",
+      "dataset": "photo",
+      "execution_host": "HCCS-85",
+      "gpu_index": "2",
+      "history": [
+        {
+          "AP": 0.11573334851148134,
+          "AUC": 0.4845924188753429,
+          "step": 0
+        },
+        {
+          "AP": 0.16127919967434956,
+          "AUC": 0.5671959097848025,
+          "step": 10
+        },
+        {
+          "AP": 0.2244242958037814,
+          "AUC": 0.6369818555273858,
+          "step": 20
+        },
+        {
+          "AP": 0.4579849319557589,
+          "AUC": 0.7324866682492709,
+          "step": 30
+        },
+        {
+          "AP": 0.5014894203437933,
+          "AUC": 0.7585914710024388,
+          "step": 40
+        },
+        {
+          "AP": 0.4704323240883141,
+          "AUC": 0.7209356288415816,
+          "step": 50
+        },
+        {
+          "AP": 0.5532075917371722,
+          "AUC": 0.8001922779616171,
+          "step": 60
+        },
+        {
+          "AP": 0.6040499228071688,
+          "AUC": 0.8320198000117709,
+          "step": 70
+        },
+        {
+          "AP": 0.624989380655239,
+          "AUC": 0.8455659907932986,
+          "step": 80
+        },
+        {
+          "AP": 0.6069349262097341,
+          "AUC": 0.8820483967121256,
+          "step": 90
+        },
+        {
+          "AP": 0.6755556454379572,
+          "AUC": 0.8927230901670437,
+          "step": 100
+        },
+        {
+          "AP": 0.6098488916507162,
+          "AUC": 0.8883624805659301,
+          "step": 110
+        },
+        {
+          "AP": 0.6704171454652263,
+          "AUC": 0.9073658397982151,
+          "step": 120
+        },
+        {
+          "AP": 0.688124206805813,
+          "AUC": 0.9060054197153621,
+          "step": 130
+        },
+        {
+          "AP": 0.6961898827392021,
+          "AUC": 0.9089222549913281,
+          "step": 140
+        },
+        {
+          "AP": 0.6535213106930448,
+          "AUC": 0.8865844444650951,
+          "step": 150
+        },
+        {
+          "AP": 0.6374057617335263,
+          "AUC": 0.883997928534438,
+          "step": 160
+        },
+        {
+          "AP": 0.6313028179728476,
+          "AUC": 0.8874469919115409,
+          "step": 170
+        },
+        {
+          "AP": 0.6769331773829016,
+          "AUC": 0.902022438624103,
+          "step": 180
+        },
+        {
+          "AP": 0.6777954707394942,
+          "AUC": 0.8979915851639586,
+          "step": 190
+        },
+        {
+          "AP": 0.6129147319219094,
+          "AUC": 0.8750201697554202,
+          "step": 200
+        }
+      ],
+      "history_sha256": "2c3708781fbaec2abcb52aacc9b4992f2b733c8623d6a15383f2fc96d5ec1ab3",
+      "name": "quiet-sweep-18",
+      "run_id": "ej5d63v0",
+      "seed": 3,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/ej5d63v0",
+      "variant": "alpha_0p1"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 128,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "photo",
+        "declared_variant": "alpha_0p1",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 6,
+        "progregate_alpha": 0.1,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 4,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "c94b2766f65bf44b35ac865e96d3a521e62ea3be727dc1248e7af88cd625e28f",
+      "created_at": "2026-08-01T02:08:36Z",
+      "dataset": "photo",
+      "execution_host": "HCCS-85",
+      "gpu_index": "0",
+      "history": [
+        {
+          "AP": 0.11895193680991559,
+          "AUC": 0.5650660117726602,
+          "step": 0
+        },
+        {
+          "AP": 0.14656495435008823,
+          "AUC": 0.5738612923455744,
+          "step": 10
+        },
+        {
+          "AP": 0.15982191333323026,
+          "AUC": 0.5953765429334892,
+          "step": 20
+        },
+        {
+          "AP": 0.38983296013649116,
+          "AUC": 0.7002609607308591,
+          "step": 30
+        },
+        {
+          "AP": 0.4961690046170606,
+          "AUC": 0.7607341819133121,
+          "step": 40
+        },
+        {
+          "AP": 0.49802322130427207,
+          "AUC": 0.7798218809954862,
+          "step": 50
+        },
+        {
+          "AP": 0.5120187183983417,
+          "AUC": 0.8064660927051239,
+          "step": 60
+        },
+        {
+          "AP": 0.47709992189166,
+          "AUC": 0.7708986122363465,
+          "step": 70
+        },
+        {
+          "AP": 0.2830331824870772,
+          "AUC": 0.7622187885530971,
+          "step": 80
+        },
+        {
+          "AP": 0.5622362346183272,
+          "AUC": 0.8444342316724156,
+          "step": 90
+        },
+        {
+          "AP": 0.5768654898540632,
+          "AUC": 0.8542698914620754,
+          "step": 100
+        },
+        {
+          "AP": 0.5255454936198382,
+          "AUC": 0.8392876704150732,
+          "step": 110
+        },
+        {
+          "AP": 0.5314727505391289,
+          "AUC": 0.8524853785113327,
+          "step": 120
+        },
+        {
+          "AP": 0.6544667222767403,
+          "AUC": 0.9022950295245795,
+          "step": 130
+        },
+        {
+          "AP": 0.5922950094439028,
+          "AUC": 0.8494001451377583,
+          "step": 140
+        },
+        {
+          "AP": 0.6308810309858126,
+          "AUC": 0.8868364784071678,
+          "step": 150
+        },
+        {
+          "AP": 0.6034023631979218,
+          "AUC": 0.8893568178278957,
+          "step": 160
+        },
+        {
+          "AP": 0.524834359069624,
+          "AUC": 0.8463109693338055,
+          "step": 170
+        },
+        {
+          "AP": 0.6030368615932229,
+          "AUC": 0.8780031815413156,
+          "step": 180
+        },
+        {
+          "AP": 0.6081631490288664,
+          "AUC": 0.8722993295897139,
+          "step": 190
+        },
+        {
+          "AP": 0.5657047702516124,
+          "AUC": 0.877522486637273,
+          "step": 200
+        }
+      ],
+      "history_sha256": "086c6ae03016b49612e645fca9956b18227707f6b54e39185a1bb1a8957df2cb",
+      "name": "dulcet-sweep-20",
+      "run_id": "2jfdsvxy",
+      "seed": 4,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/2jfdsvxy",
+      "variant": "alpha_0p1"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 128,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "photo",
+        "declared_variant": "historical_control",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 6,
+        "progregate_alpha": 0.05,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 0,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "6f1e5a001dbbfa13b5b00862c90736d5d0a565b5fc3df20b2e075a5ade44b94f",
+      "created_at": "2026-08-01T02:03:29Z",
+      "dataset": "photo",
+      "execution_host": "HCCS-85",
+      "gpu_index": "5",
+      "history": [
+        {
+          "AP": 0.24912771509278497,
+          "AUC": 0.6978169354981782,
+          "step": 0
+        },
+        {
+          "AP": 0.11861797015536171,
+          "AUC": 0.5061666651178547,
+          "step": 10
+        },
+        {
+          "AP": 0.15227598057958083,
+          "AUC": 0.6140447955835768,
+          "step": 20
+        },
+        {
+          "AP": 0.37115590172417096,
+          "AUC": 0.688745403196579,
+          "step": 30
+        },
+        {
+          "AP": 0.5170859384125707,
+          "AUC": 0.7932226242562535,
+          "step": 40
+        },
+        {
+          "AP": 0.5517328482688654,
+          "AUC": 0.8402382185396167,
+          "step": 50
+        },
+        {
+          "AP": 0.5156428194100603,
+          "AUC": 0.7811083805087369,
+          "step": 60
+        },
+        {
+          "AP": 0.6402630427346411,
+          "AUC": 0.8777594548632551,
+          "step": 70
+        },
+        {
+          "AP": 0.568050965914111,
+          "AUC": 0.8529432636396124,
+          "step": 80
+        },
+        {
+          "AP": 0.5624787837349712,
+          "AUC": 0.852125350137098,
+          "step": 90
+        },
+        {
+          "AP": 0.6449368613876683,
+          "AUC": 0.9093224116747753,
+          "step": 100
+        },
+        {
+          "AP": 0.6154442896225715,
+          "AUC": 0.8943506099080597,
+          "step": 110
+        },
+        {
+          "AP": 0.6208437212927959,
+          "AUC": 0.9002237047637793,
+          "step": 120
+        },
+        {
+          "AP": 0.601079626348872,
+          "AUC": 0.9022222353636568,
+          "step": 130
+        },
+        {
+          "AP": 0.4811297198205089,
+          "AUC": 0.8535958766683871,
+          "step": 140
+        },
+        {
+          "AP": 0.5861480287735593,
+          "AUC": 0.8918022510714257,
+          "step": 150
+        },
+        {
+          "AP": 0.45817431997706815,
+          "AUC": 0.8551672167765055,
+          "step": 160
+        },
+        {
+          "AP": 0.6653975777021227,
+          "AUC": 0.9303181062591995,
+          "step": 170
+        },
+        {
+          "AP": 0.5844173857739579,
+          "AUC": 0.9015973601486182,
+          "step": 180
+        },
+        {
+          "AP": 0.5727266551233305,
+          "AUC": 0.894395384653076,
+          "step": 190
+        },
+        {
+          "AP": 0.47593113405114656,
+          "AUC": 0.8600984931749491,
+          "step": 200
+        }
+      ],
+      "history_sha256": "4263abe11757e4cf7893496fe8c4db4dfa3df7f866ce928a393d2d58fa3733d2",
+      "name": "fiery-sweep-11",
+      "run_id": "9bkoahtz",
+      "seed": 0,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/9bkoahtz",
+      "variant": "historical_control"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 128,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "photo",
+        "declared_variant": "historical_control",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 6,
+        "progregate_alpha": 0.05,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 1,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "424fe3f0ad1074abea39e23010cfa042e1adeb9884a79d02632808a5b94a87e5",
+      "created_at": "2026-08-01T02:03:30Z",
+      "dataset": "photo",
+      "execution_host": "HCCS-85",
+      "gpu_index": "4",
+      "history": [
+        {
+          "AP": 0.19205793488423828,
+          "AUC": 0.5918170915057803,
+          "step": 0
+        },
+        {
+          "AP": 0.1353498942785204,
+          "AUC": 0.5513770486909864,
+          "step": 10
+        },
+        {
+          "AP": 0.12619589555237284,
+          "AUC": 0.5834064794969683,
+          "step": 20
+        },
+        {
+          "AP": 0.281555705156312,
+          "AUC": 0.6641297127179142,
+          "step": 30
+        },
+        {
+          "AP": 0.4147844909647861,
+          "AUC": 0.7387461212821121,
+          "step": 40
+        },
+        {
+          "AP": 0.44424373034441367,
+          "AUC": 0.7659103113984955,
+          "step": 50
+        },
+        {
+          "AP": 0.5588691650520454,
+          "AUC": 0.8510879277431359,
+          "step": 60
+        },
+        {
+          "AP": 0.5395876242134653,
+          "AUC": 0.8261286826171768,
+          "step": 70
+        },
+        {
+          "AP": 0.5658851397536754,
+          "AUC": 0.8756250512163947,
+          "step": 80
+        },
+        {
+          "AP": 0.6094078589137077,
+          "AUC": 0.8750111584859828,
+          "step": 90
+        },
+        {
+          "AP": 0.4767783052513158,
+          "AUC": 0.8397224641654198,
+          "step": 100
+        },
+        {
+          "AP": 0.5905052833721077,
+          "AUC": 0.8938739982354807,
+          "step": 110
+        },
+        {
+          "AP": 0.5445531268679346,
+          "AUC": 0.869040347677303,
+          "step": 120
+        },
+        {
+          "AP": 0.47714985048383307,
+          "AUC": 0.8335342564815668,
+          "step": 130
+        },
+        {
+          "AP": 0.6640617164064185,
+          "AUC": 0.9233495789625156,
+          "step": 140
+        },
+        {
+          "AP": 0.640489832421326,
+          "AUC": 0.918119381860709,
+          "step": 150
+        },
+        {
+          "AP": 0.6249819406665896,
+          "AUC": 0.9083636970873042,
+          "step": 160
+        },
+        {
+          "AP": 0.565065425244027,
+          "AUC": 0.889273463585601,
+          "step": 170
+        },
+        {
+          "AP": 0.6323899662149196,
+          "AUC": 0.9129425483701006,
+          "step": 180
+        },
+        {
+          "AP": 0.5683305471960299,
+          "AUC": 0.8926546608397545,
+          "step": 190
+        },
+        {
+          "AP": 0.5744035561080335,
+          "AUC": 0.8961786303940545,
+          "step": 200
+        }
+      ],
+      "history_sha256": "e834e25bed98f2344e914dba8e051048e9400dbd2c1e722ff308c7670111bd4c",
+      "name": "deft-sweep-13",
+      "run_id": "tdtqwfkz",
+      "seed": 1,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/tdtqwfkz",
+      "variant": "historical_control"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 128,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "photo",
+        "declared_variant": "historical_control",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 6,
+        "progregate_alpha": 0.05,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 2,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "2a828f421d93936a23858502fd05dadff982a48b9fc12609a7e3d86cb57bbb91",
+      "created_at": "2026-08-01T02:03:32Z",
+      "dataset": "photo",
+      "execution_host": "HCCS-85",
+      "gpu_index": "0",
+      "history": [
+        {
+          "AP": 0.10383591046135872,
+          "AUC": 0.5038368295650739,
+          "step": 0
+        },
+        {
+          "AP": 0.1265436233164262,
+          "AUC": 0.4968112778289825,
+          "step": 10
+        },
+        {
+          "AP": 0.18579813653527474,
+          "AUC": 0.6234612905433203,
+          "step": 20
+        },
+        {
+          "AP": 0.40810289655348986,
+          "AUC": 0.7180148511352369,
+          "step": 30
+        },
+        {
+          "AP": 0.5455673555606573,
+          "AUC": 0.8158192271766369,
+          "step": 40
+        },
+        {
+          "AP": 0.5468680797676535,
+          "AUC": 0.79904080668884,
+          "step": 50
+        },
+        {
+          "AP": 0.5905605979811304,
+          "AUC": 0.8477137705432304,
+          "step": 60
+        },
+        {
+          "AP": 0.5553898956014347,
+          "AUC": 0.8301581280664716,
+          "step": 70
+        },
+        {
+          "AP": 0.563682505394704,
+          "AUC": 0.8709597480674347,
+          "step": 80
+        },
+        {
+          "AP": 0.5464504545366815,
+          "AUC": 0.8588059392150452,
+          "step": 90
+        },
+        {
+          "AP": 0.588314057772809,
+          "AUC": 0.8877881529403912,
+          "step": 100
+        },
+        {
+          "AP": 0.5413645640078821,
+          "AUC": 0.8365490893126626,
+          "step": 110
+        },
+        {
+          "AP": 0.48406721223625826,
+          "AUC": 0.8460297895671464,
+          "step": 120
+        },
+        {
+          "AP": 0.5949603050318893,
+          "AUC": 0.8938435852011302,
+          "step": 130
+        },
+        {
+          "AP": 0.5664258323379899,
+          "AUC": 0.8900875754588213,
+          "step": 140
+        },
+        {
+          "AP": 0.5923071927148089,
+          "AUC": 0.8981535064116589,
+          "step": 150
+        },
+        {
+          "AP": 0.6123634721450952,
+          "AUC": 0.9071892752376793,
+          "step": 160
+        },
+        {
+          "AP": 0.6217827827425089,
+          "AUC": 0.90660016349822,
+          "step": 170
+        },
+        {
+          "AP": 0.591984858264733,
+          "AUC": 0.8889473682728409,
+          "step": 180
+        },
+        {
+          "AP": 0.6178084254787438,
+          "AUC": 0.9076150577185886,
+          "step": 190
+        },
+        {
+          "AP": 0.6307922554336073,
+          "AUC": 0.9178127170976729,
+          "step": 200
+        }
+      ],
+      "history_sha256": "021a4d7fe17ac27dc51f2d79214bb98f6b5179928d84f0ff1444fe54835c0336",
+      "name": "giddy-sweep-15",
+      "run_id": "gmveko6z",
+      "seed": 2,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/gmveko6z",
+      "variant": "historical_control"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 128,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "photo",
+        "declared_variant": "historical_control",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 6,
+        "progregate_alpha": 0.05,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 3,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "27059b803bb7856bc671c1ff5ec157c3858d109331ab6274c3fac486f5bb4952",
+      "created_at": "2026-08-01T02:04:55Z",
+      "dataset": "photo",
+      "execution_host": "HCCS-85",
+      "gpu_index": "3",
+      "history": [
+        {
+          "AP": 0.12867795616214145,
+          "AUC": 0.49173018907614496,
+          "step": 0
+        },
+        {
+          "AP": 0.11862333985098136,
+          "AUC": 0.49905156389173067,
+          "step": 10
+        },
+        {
+          "AP": 0.1908754863228284,
+          "AUC": 0.6399454367635575,
+          "step": 20
+        },
+        {
+          "AP": 0.45285670679448525,
+          "AUC": 0.731816736687046,
+          "step": 30
+        },
+        {
+          "AP": 0.4192130231401301,
+          "AUC": 0.721782406566512,
+          "step": 40
+        },
+        {
+          "AP": 0.5099331594717188,
+          "AUC": 0.7550086465946272,
+          "step": 50
+        },
+        {
+          "AP": 0.518622521339637,
+          "AUC": 0.7627200404155434,
+          "step": 60
+        },
+        {
+          "AP": 0.5704755391975288,
+          "AUC": 0.8048294208935856,
+          "step": 70
+        },
+        {
+          "AP": 0.6125397180473623,
+          "AUC": 0.8591532954916338,
+          "step": 80
+        },
+        {
+          "AP": 0.5709921763496436,
+          "AUC": 0.8291813909401261,
+          "step": 90
+        },
+        {
+          "AP": 0.5915144124717462,
+          "AUC": 0.8399402834438481,
+          "step": 100
+        },
+        {
+          "AP": 0.6667700666444313,
+          "AUC": 0.8996006599628454,
+          "step": 110
+        },
+        {
+          "AP": 0.47193643089136517,
+          "AUC": 0.7991272585550037,
+          "step": 120
+        },
+        {
+          "AP": 0.5788494770567344,
+          "AUC": 0.8525657759308429,
+          "step": 130
+        },
+        {
+          "AP": 0.5723096704053842,
+          "AUC": 0.8374502162563863,
+          "step": 140
+        },
+        {
+          "AP": 0.6687232207681365,
+          "AUC": 0.9062092996863796,
+          "step": 150
+        },
+        {
+          "AP": 0.5146962105717823,
+          "AUC": 0.8214446529239174,
+          "step": 160
+        },
+        {
+          "AP": 0.5676073059170732,
+          "AUC": 0.8573623056909827,
+          "step": 170
+        },
+        {
+          "AP": 0.6434816644766413,
+          "AUC": 0.9001844212610765,
+          "step": 180
+        },
+        {
+          "AP": 0.558299621042225,
+          "AUC": 0.8480391618505655,
+          "step": 190
+        },
+        {
+          "AP": 0.6318565445981189,
+          "AUC": 0.8926265006227633,
+          "step": 200
+        }
+      ],
+      "history_sha256": "935e256a2d67234fc9ff5d7f8f2e4813e22f75203ffc97b0a8ec9fb4c18e6c37",
+      "name": "balmy-sweep-17",
+      "run_id": "z3xyr9cb",
+      "seed": 3,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/z3xyr9cb",
+      "variant": "historical_control"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 128,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "photo",
+        "declared_variant": "historical_control",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 6,
+        "progregate_alpha": 0.05,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 4,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "0102e4ab5a419938c96e2dbc5454099e2d73232060cde4e8757f125e14492440",
+      "created_at": "2026-08-01T02:08:25Z",
+      "dataset": "photo",
+      "execution_host": "HCCS-85",
+      "gpu_index": "1",
+      "history": [
+        {
+          "AP": 0.1281637388953687,
+          "AUC": 0.5773517512416544,
+          "step": 0
+        },
+        {
+          "AP": 0.11065904230445713,
+          "AUC": 0.5415611010532203,
+          "step": 10
+        },
+        {
+          "AP": 0.18766550235626608,
+          "AUC": 0.6160414957693499,
+          "step": 20
+        },
+        {
+          "AP": 0.40748630777038647,
+          "AUC": 0.7008756982677806,
+          "step": 30
+        },
+        {
+          "AP": 0.5014823923107511,
+          "AUC": 0.7593258894615738,
+          "step": 40
+        },
+        {
+          "AP": 0.5580981020711956,
+          "AUC": 0.8053174374540462,
+          "step": 50
+        },
+        {
+          "AP": 0.6304582846219041,
+          "AUC": 0.8529082041694581,
+          "step": 60
+        },
+        {
+          "AP": 0.6019789460992698,
+          "AUC": 0.8458332312525467,
+          "step": 70
+        },
+        {
+          "AP": 0.5629972543250847,
+          "AUC": 0.8503906807704298,
+          "step": 80
+        },
+        {
+          "AP": 0.5065857131447932,
+          "AUC": 0.8072109304445455,
+          "step": 90
+        },
+        {
+          "AP": 0.5739013987632117,
+          "AUC": 0.8472691207169365,
+          "step": 100
+        },
+        {
+          "AP": 0.6135845417301539,
+          "AUC": 0.8867978989098899,
+          "step": 110
+        },
+        {
+          "AP": 0.5044071114913936,
+          "AUC": 0.8173331204420928,
+          "step": 120
+        },
+        {
+          "AP": 0.5168126616502532,
+          "AUC": 0.8280696255733069,
+          "step": 130
+        },
+        {
+          "AP": 0.6589495154753576,
+          "AUC": 0.9154450060530386,
+          "step": 140
+        },
+        {
+          "AP": 0.5771963796894822,
+          "AUC": 0.8748728918205552,
+          "step": 150
+        },
+        {
+          "AP": 0.6059988240916577,
+          "AUC": 0.888855565965449,
+          "step": 160
+        },
+        {
+          "AP": 0.595755137502663,
+          "AUC": 0.8546386495035776,
+          "step": 170
+        },
+        {
+          "AP": 0.6138843802816403,
+          "AUC": 0.8834485227009365,
+          "step": 180
+        },
+        {
+          "AP": 0.5924634787776899,
+          "AUC": 0.8601569256252061,
+          "step": 190
+        },
+        {
+          "AP": 0.6093352708844042,
+          "AUC": 0.8904097283412026,
+          "step": 200
+        }
+      ],
+      "history_sha256": "71c04f11ca057b3e47d88b6cc603c5abdcffed5cb8550f7d8f1fae938cae2288",
+      "name": "fine-sweep-19",
+      "run_id": "jvilw0t3",
+      "seed": 4,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/jvilw0t3",
+      "variant": "historical_control"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 1024,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "reddit",
+        "declared_variant": "alpha_0p1",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 10,
+        "progregate_alpha": 0.1,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 0,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "8860645b50ccb849782aed4c82e3f057240c2d726692a36cf21a5d35b674d447",
+      "created_at": "2026-08-01T02:02:00Z",
+      "dataset": "reddit",
+      "execution_host": "HCCS-85",
+      "gpu_index": "0",
+      "history": [
+        {
+          "AP": 0.03368865411798616,
+          "AUC": 0.49368455401793887,
+          "step": 0
+        },
+        {
+          "AP": 0.03663090601770601,
+          "AUC": 0.5355993724453045,
+          "step": 10
+        },
+        {
+          "AP": 0.040094634909031104,
+          "AUC": 0.574167481865536,
+          "step": 20
+        },
+        {
+          "AP": 0.03649253057215006,
+          "AUC": 0.5255106184847917,
+          "step": 30
+        },
+        {
+          "AP": 0.037153336205903165,
+          "AUC": 0.5349262544859688,
+          "step": 40
+        },
+        {
+          "AP": 0.038776368074872294,
+          "AUC": 0.5679305870928072,
+          "step": 50
+        },
+        {
+          "AP": 0.03830825238475914,
+          "AUC": 0.560617309195372,
+          "step": 60
+        },
+        {
+          "AP": 0.03837484979755519,
+          "AUC": 0.5637037839239696,
+          "step": 70
+        },
+        {
+          "AP": 0.03637064207407279,
+          "AUC": 0.5276822655237495,
+          "step": 80
+        },
+        {
+          "AP": 0.039329256928415796,
+          "AUC": 0.5824205243444625,
+          "step": 90
+        },
+        {
+          "AP": 0.04130566150706409,
+          "AUC": 0.5914605038819616,
+          "step": 100
+        },
+        {
+          "AP": 0.04195351278857772,
+          "AUC": 0.5906541516718761,
+          "step": 110
+        },
+        {
+          "AP": 0.04119980670713577,
+          "AUC": 0.5853308377441945,
+          "step": 120
+        },
+        {
+          "AP": 0.04099893999616207,
+          "AUC": 0.5832687349087273,
+          "step": 130
+        },
+        {
+          "AP": 0.03835815349662895,
+          "AUC": 0.5685002169509591,
+          "step": 140
+        },
+        {
+          "AP": 0.039456518765355886,
+          "AUC": 0.5787254113340311,
+          "step": 150
+        },
+        {
+          "AP": 0.03935558689169222,
+          "AUC": 0.5751070683263712,
+          "step": 160
+        },
+        {
+          "AP": 0.039314182160217676,
+          "AUC": 0.5768847124740745,
+          "step": 170
+        },
+        {
+          "AP": 0.03982986547551416,
+          "AUC": 0.5771941080536899,
+          "step": 180
+        },
+        {
+          "AP": 0.03835740934927505,
+          "AUC": 0.5715026187298857,
+          "step": 190
+        },
+        {
+          "AP": 0.03927680368096624,
+          "AUC": 0.5770460897884853,
+          "step": 200
+        }
+      ],
+      "history_sha256": "d198018e02546433c02124f20146e65e29088881ed257bd2c3cf52daff368ff9",
+      "name": "elated-sweep-2",
+      "run_id": "5xwcax72",
+      "seed": 0,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/5xwcax72",
+      "variant": "alpha_0p1"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 1024,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "reddit",
+        "declared_variant": "alpha_0p1",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 10,
+        "progregate_alpha": 0.1,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 1,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "e22d53ffc6bb93b59553f2fade6095a88e9254b39ddbbb9ede8ecb10c0581c33",
+      "created_at": "2026-08-01T02:02:00Z",
+      "dataset": "reddit",
+      "execution_host": "HCCS-85",
+      "gpu_index": "4",
+      "history": [
+        {
+          "AP": 0.03854585429329559,
+          "AUC": 0.5622114890673103,
+          "step": 0
+        },
+        {
+          "AP": 0.03608465072927773,
+          "AUC": 0.51692270917243,
+          "step": 10
+        },
+        {
+          "AP": 0.03854903136785539,
+          "AUC": 0.5498744961857243,
+          "step": 20
+        },
+        {
+          "AP": 0.036123108826702305,
+          "AUC": 0.5178633643572017,
+          "step": 30
+        },
+        {
+          "AP": 0.03620014470655006,
+          "AUC": 0.5220670118407488,
+          "step": 40
+        },
+        {
+          "AP": 0.03542422003982587,
+          "AUC": 0.5293311284371052,
+          "step": 50
+        },
+        {
+          "AP": 0.03622024840449045,
+          "AUC": 0.5369181777829393,
+          "step": 60
+        },
+        {
+          "AP": 0.03767584270983426,
+          "AUC": 0.5393920955752691,
+          "step": 70
+        },
+        {
+          "AP": 0.03607882626539337,
+          "AUC": 0.5325102259068657,
+          "step": 80
+        },
+        {
+          "AP": 0.036493046664389364,
+          "AUC": 0.534052394547228,
+          "step": 90
+        },
+        {
+          "AP": 0.03569017975929342,
+          "AUC": 0.5264965163162083,
+          "step": 100
+        },
+        {
+          "AP": 0.03677917711347175,
+          "AUC": 0.5331372106162762,
+          "step": 110
+        },
+        {
+          "AP": 0.036661455466027545,
+          "AUC": 0.5322587195404772,
+          "step": 120
+        },
+        {
+          "AP": 0.03635944074987154,
+          "AUC": 0.5290286795630772,
+          "step": 130
+        },
+        {
+          "AP": 0.036376618025975346,
+          "AUC": 0.5295783599077477,
+          "step": 140
+        },
+        {
+          "AP": 0.03593614116310778,
+          "AUC": 0.5260501459520657,
+          "step": 150
+        },
+        {
+          "AP": 0.036200712012857475,
+          "AUC": 0.5276019331078563,
+          "step": 160
+        },
+        {
+          "AP": 0.0362589346656363,
+          "AUC": 0.5268947941032087,
+          "step": 170
+        },
+        {
+          "AP": 0.03620119579411071,
+          "AUC": 0.526437736499701,
+          "step": 180
+        },
+        {
+          "AP": 0.03618314763315292,
+          "AUC": 0.5286011899884793,
+          "step": 190
+        },
+        {
+          "AP": 0.03628826445808796,
+          "AUC": 0.5278016063633248,
+          "step": 200
+        }
+      ],
+      "history_sha256": "a672732e4a53a9abe2f93863a303831b2c36a133c7d1d393e9ea8573bdc0b4bd",
+      "name": "classic-sweep-4",
+      "run_id": "19t4fgmr",
+      "seed": 1,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/19t4fgmr",
+      "variant": "alpha_0p1"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 1024,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "reddit",
+        "declared_variant": "alpha_0p1",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 10,
+        "progregate_alpha": 0.1,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 2,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "4bc2ed66b3a46d68221aaa40dbb25add521942220eda94f79403fb2913cb82fc",
+      "created_at": "2026-08-01T02:02:01Z",
+      "dataset": "reddit",
+      "execution_host": "HCCS-85",
+      "gpu_index": "7",
+      "history": [
+        {
+          "AP": 0.028161300515490068,
+          "AUC": 0.45482503920435635,
+          "step": 0
+        },
+        {
+          "AP": 0.034359383963842464,
+          "AUC": 0.5187607362225454,
+          "step": 10
+        },
+        {
+          "AP": 0.035034434626003245,
+          "AUC": 0.5222474480653603,
+          "step": 20
+        },
+        {
+          "AP": 0.036010092791371136,
+          "AUC": 0.5223108590189257,
+          "step": 30
+        },
+        {
+          "AP": 0.03702083505008681,
+          "AUC": 0.5518642820348219,
+          "step": 40
+        },
+        {
+          "AP": 0.036447978726653084,
+          "AUC": 0.5356275155089656,
+          "step": 50
+        },
+        {
+          "AP": 0.03639269837359756,
+          "AUC": 0.5428609953524759,
+          "step": 60
+        },
+        {
+          "AP": 0.03572655007202042,
+          "AUC": 0.5285557692211781,
+          "step": 70
+        },
+        {
+          "AP": 0.036014913486529035,
+          "AUC": 0.5399578067789872,
+          "step": 80
+        },
+        {
+          "AP": 0.03630632682111602,
+          "AUC": 0.5470662459219275,
+          "step": 90
+        },
+        {
+          "AP": 0.034899591993608446,
+          "AUC": 0.5413663849272876,
+          "step": 100
+        },
+        {
+          "AP": 0.03384500615321626,
+          "AUC": 0.5341542795625072,
+          "step": 110
+        },
+        {
+          "AP": 0.03279832123419944,
+          "AUC": 0.5252576871531546,
+          "step": 120
+        },
+        {
+          "AP": 0.031789168439143985,
+          "AUC": 0.5127062370016451,
+          "step": 130
+        },
+        {
+          "AP": 0.03380539997641139,
+          "AUC": 0.5302313502329462,
+          "step": 140
+        },
+        {
+          "AP": 0.03175464553154633,
+          "AUC": 0.5086908630515773,
+          "step": 150
+        },
+        {
+          "AP": 0.03206293724930733,
+          "AUC": 0.5142026286333943,
+          "step": 160
+        },
+        {
+          "AP": 0.03283867578915316,
+          "AUC": 0.5217862936867627,
+          "step": 170
+        },
+        {
+          "AP": 0.03203513394268753,
+          "AUC": 0.5150458518192887,
+          "step": 180
+        },
+        {
+          "AP": 0.03193346104452262,
+          "AUC": 0.5136280113968721,
+          "step": 190
+        },
+        {
+          "AP": 0.03297458043313234,
+          "AUC": 0.5238027976342727,
+          "step": 200
+        }
+      ],
+      "history_sha256": "10506f829c6d2fe7798374be1c7c03136fbc676c7e9b1248bd9ade46513eae86",
+      "name": "rosy-sweep-6",
+      "run_id": "uh5wgw5s",
+      "seed": 2,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/uh5wgw5s",
+      "variant": "alpha_0p1"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 1024,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "reddit",
+        "declared_variant": "alpha_0p1",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 10,
+        "progregate_alpha": 0.1,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 3,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "7a1d0ce0f35a35e19af2422a1504e327bf0e04a8d1e375e622d4ddddf04a31f8",
+      "created_at": "2026-08-01T02:02:01Z",
+      "dataset": "reddit",
+      "execution_host": "HCCS-85",
+      "gpu_index": "3",
+      "history": [
+        {
+          "AP": 0.039584124641788114,
+          "AUC": 0.5261463311063501,
+          "step": 0
+        },
+        {
+          "AP": 0.036799998858206416,
+          "AUC": 0.5198292820383843,
+          "step": 10
+        },
+        {
+          "AP": 0.041539132398018874,
+          "AUC": 0.5525778333830884,
+          "step": 20
+        },
+        {
+          "AP": 0.0367160929159802,
+          "AUC": 0.521231982205034,
+          "step": 30
+        },
+        {
+          "AP": 0.03792445021973834,
+          "AUC": 0.5295544917398327,
+          "step": 40
+        },
+        {
+          "AP": 0.04090241628681235,
+          "AUC": 0.535127708947998,
+          "step": 50
+        },
+        {
+          "AP": 0.04225396119287612,
+          "AUC": 0.5613504538158076,
+          "step": 60
+        },
+        {
+          "AP": 0.042157116984637026,
+          "AUC": 0.5623769631568111,
+          "step": 70
+        },
+        {
+          "AP": 0.04350556686468866,
+          "AUC": 0.5627536883444255,
+          "step": 80
+        },
+        {
+          "AP": 0.044184850243184,
+          "AUC": 0.5625842956004911,
+          "step": 90
+        },
+        {
+          "AP": 0.04591347284391996,
+          "AUC": 0.5550667133105291,
+          "step": 100
+        },
+        {
+          "AP": 0.046357848656209164,
+          "AUC": 0.5533656610449413,
+          "step": 110
+        },
+        {
+          "AP": 0.045304256798541914,
+          "AUC": 0.5487338115041719,
+          "step": 120
+        },
+        {
+          "AP": 0.04604088784884566,
+          "AUC": 0.5504583756963627,
+          "step": 130
+        },
+        {
+          "AP": 0.04460716615848953,
+          "AUC": 0.5536697130048741,
+          "step": 140
+        },
+        {
+          "AP": 0.04481753534312604,
+          "AUC": 0.5526043733608448,
+          "step": 150
+        },
+        {
+          "AP": 0.043889557709568136,
+          "AUC": 0.5446694543736814,
+          "step": 160
+        },
+        {
+          "AP": 0.0444730080009562,
+          "AUC": 0.5470954577095251,
+          "step": 170
+        },
+        {
+          "AP": 0.04566578471169552,
+          "AUC": 0.5419686108655025,
+          "step": 180
+        },
+        {
+          "AP": 0.044557653258610094,
+          "AUC": 0.5487126151460981,
+          "step": 190
+        },
+        {
+          "AP": 0.044734532920665995,
+          "AUC": 0.5504471540950295,
+          "step": 200
+        }
+      ],
+      "history_sha256": "57d1030804e5c498d4badc126c1266b27f185d8d72fc49b9a16c1e72f0f3e8d1",
+      "name": "valiant-sweep-8",
+      "run_id": "6s2q5igl",
+      "seed": 3,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/6s2q5igl",
+      "variant": "alpha_0p1"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 1024,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "reddit",
+        "declared_variant": "alpha_0p1",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 10,
+        "progregate_alpha": 0.1,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 4,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "bf5026bdf33ec049684c0c6b9d0510ced13ab90797bcd9e36e5fee70919901c7",
+      "created_at": "2026-08-01T02:03:28Z",
+      "dataset": "reddit",
+      "execution_host": "HCCS-85",
+      "gpu_index": "3",
+      "history": [
+        {
+          "AP": 0.026301670208733682,
+          "AUC": 0.4120951406547573,
+          "step": 0
+        },
+        {
+          "AP": 0.03408518408064182,
+          "AUC": 0.4955197311375569,
+          "step": 10
+        },
+        {
+          "AP": 0.03266617635770301,
+          "AUC": 0.5023538644701303,
+          "step": 20
+        },
+        {
+          "AP": 0.03531946483996164,
+          "AUC": 0.5136680885444906,
+          "step": 30
+        },
+        {
+          "AP": 0.03516068360659797,
+          "AUC": 0.5199931530419802,
+          "step": 40
+        },
+        {
+          "AP": 0.038106834838515666,
+          "AUC": 0.549768158154043,
+          "step": 50
+        },
+        {
+          "AP": 0.03591124745196223,
+          "AUC": 0.5332944911555969,
+          "step": 60
+        },
+        {
+          "AP": 0.03996365033959279,
+          "AUC": 0.541058592433577,
+          "step": 70
+        },
+        {
+          "AP": 0.03627556364182673,
+          "AUC": 0.5295869096992396,
+          "step": 80
+        },
+        {
+          "AP": 0.03859108932472628,
+          "AUC": 0.5372902718334958,
+          "step": 90
+        },
+        {
+          "AP": 0.03910139999357071,
+          "AUC": 0.5413223891252352,
+          "step": 100
+        },
+        {
+          "AP": 0.03604264837205007,
+          "AUC": 0.5312434318008069,
+          "step": 110
+        },
+        {
+          "AP": 0.03585755509725981,
+          "AUC": 0.528365536360482,
+          "step": 120
+        },
+        {
+          "AP": 0.03750691437672105,
+          "AUC": 0.5374562802849646,
+          "step": 130
+        },
+        {
+          "AP": 0.03664149662384587,
+          "AUC": 0.5325538654676059,
+          "step": 140
+        },
+        {
+          "AP": 0.03626718587236935,
+          "AUC": 0.5321477503717378,
+          "step": 150
+        },
+        {
+          "AP": 0.03842549522597352,
+          "AUC": 0.5381456072240038,
+          "step": 160
+        },
+        {
+          "AP": 0.0376512232880053,
+          "AUC": 0.5363127456729149,
+          "step": 170
+        },
+        {
+          "AP": 0.038119820844072935,
+          "AUC": 0.5359625604630567,
+          "step": 180
+        },
+        {
+          "AP": 0.036848467236206744,
+          "AUC": 0.5335712906551491,
+          "step": 190
+        },
+        {
+          "AP": 0.03603279166054704,
+          "AUC": 0.5300069182062823,
+          "step": 200
+        }
+      ],
+      "history_sha256": "4ef2d5ac356b057f2d170bac1f7137a619aeaafe6650f8f059aa5894f455dc1f",
+      "name": "proud-sweep-10",
+      "run_id": "iq3urstt",
+      "seed": 4,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/iq3urstt",
+      "variant": "alpha_0p1"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 1024,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "reddit",
+        "declared_variant": "historical_control",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 10,
+        "progregate_alpha": 0,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 0,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "d690f897fcfed256dd711a46e0923b17feb150c1fb169e91fcf5e6d4487d2386",
+      "created_at": "2026-08-01T02:02:00Z",
+      "dataset": "reddit",
+      "execution_host": "HCCS-85",
+      "gpu_index": "1",
+      "history": [
+        {
+          "AP": 0.026616877271224873,
+          "AUC": 0.43214956720242986,
+          "step": 0
+        },
+        {
+          "AP": 0.030033075937586907,
+          "AUC": 0.4849445296652828,
+          "step": 10
+        },
+        {
+          "AP": 0.03537675908880563,
+          "AUC": 0.49980834217405523,
+          "step": 20
+        },
+        {
+          "AP": 0.03591905693468699,
+          "AUC": 0.5284148757822169,
+          "step": 30
+        },
+        {
+          "AP": 0.03059921777977506,
+          "AUC": 0.47434492566312536,
+          "step": 40
+        },
+        {
+          "AP": 0.03329966087857607,
+          "AUC": 0.49387211506879375,
+          "step": 50
+        },
+        {
+          "AP": 0.03464679592520524,
+          "AUC": 0.5110844484280139,
+          "step": 60
+        },
+        {
+          "AP": 0.03848992014640002,
+          "AUC": 0.549377361434598,
+          "step": 70
+        },
+        {
+          "AP": 0.03693512405653906,
+          "AUC": 0.5253291135362437,
+          "step": 80
+        },
+        {
+          "AP": 0.03873885605927242,
+          "AUC": 0.5497946981317994,
+          "step": 90
+        },
+        {
+          "AP": 0.04245556335304862,
+          "AUC": 0.5521718964078763,
+          "step": 100
+        },
+        {
+          "AP": 0.04046094402827324,
+          "AUC": 0.5448723338009595,
+          "step": 110
+        },
+        {
+          "AP": 0.04052235607069937,
+          "AUC": 0.5400561293811447,
+          "step": 120
+        },
+        {
+          "AP": 0.04234590461185108,
+          "AUC": 0.5510821542339637,
+          "step": 130
+        },
+        {
+          "AP": 0.04225312970318055,
+          "AUC": 0.5477586009121203,
+          "step": 140
+        },
+        {
+          "AP": 0.04237381423165122,
+          "AUC": 0.5479075097806052,
+          "step": 150
+        },
+        {
+          "AP": 0.04050807924148831,
+          "AUC": 0.5387175526506848,
+          "step": 160
+        },
+        {
+          "AP": 0.041255528427376315,
+          "AUC": 0.5492443053045043,
+          "step": 170
+        },
+        {
+          "AP": 0.04189492896298798,
+          "AUC": 0.5503386786154753,
+          "step": 180
+        },
+        {
+          "AP": 0.04245564824095305,
+          "AUC": 0.5568871064156923,
+          "step": 190
+        },
+        {
+          "AP": 0.04275302902702981,
+          "AUC": 0.555046941917704,
+          "step": 200
+        }
+      ],
+      "history_sha256": "8f28ad8118fca6c76a13a1da33ab2068c343a4b9af2eedc6979de039ebff23dd",
+      "name": "chocolate-sweep-1",
+      "run_id": "0rrjyjys",
+      "seed": 0,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/0rrjyjys",
+      "variant": "historical_control"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 1024,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "reddit",
+        "declared_variant": "historical_control",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 10,
+        "progregate_alpha": 0,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 1,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "650c672e7c8d8d3f1d63911d536cba3a38483820cf796ddff92d2af96cf762ef",
+      "created_at": "2026-08-01T02:02:00Z",
+      "dataset": "reddit",
+      "execution_host": "HCCS-85",
+      "gpu_index": "6",
+      "history": [
+        {
+          "AP": 0.037560564740519525,
+          "AUC": 0.5506354276285087,
+          "step": 0
+        },
+        {
+          "AP": 0.03527617561412699,
+          "AUC": 0.5096201185143597,
+          "step": 10
+        },
+        {
+          "AP": 0.03567573977083387,
+          "AUC": 0.5380278694703333,
+          "step": 20
+        },
+        {
+          "AP": 0.036599871063629996,
+          "AUC": 0.527586080369465,
+          "step": 30
+        },
+        {
+          "AP": 0.031138074590533697,
+          "AUC": 0.4782781859907391,
+          "step": 40
+        },
+        {
+          "AP": 0.030574302168639836,
+          "AUC": 0.4673739956666807,
+          "step": 50
+        },
+        {
+          "AP": 0.03404802368390006,
+          "AUC": 0.5098922868768538,
+          "step": 60
+        },
+        {
+          "AP": 0.03489558666297825,
+          "AUC": 0.5144815655808195,
+          "step": 70
+        },
+        {
+          "AP": 0.03735868478692229,
+          "AUC": 0.5271169105613438,
+          "step": 80
+        },
+        {
+          "AP": 0.03543047845821553,
+          "AUC": 0.5220622025830345,
+          "step": 90
+        },
+        {
+          "AP": 0.03407691950277893,
+          "AUC": 0.5124502776188545,
+          "step": 100
+        },
+        {
+          "AP": 0.035133090818239114,
+          "AUC": 0.5101697988590304,
+          "step": 110
+        },
+        {
+          "AP": 0.033908336086892435,
+          "AUC": 0.5168163711407487,
+          "step": 120
+        },
+        {
+          "AP": 0.03463007935981109,
+          "AUC": 0.5235263543760327,
+          "step": 130
+        },
+        {
+          "AP": 0.03566471200421497,
+          "AUC": 0.5251590083096849,
+          "step": 140
+        },
+        {
+          "AP": 0.03589842112791363,
+          "AUC": 0.5249913967723112,
+          "step": 150
+        },
+        {
+          "AP": 0.036227722275306365,
+          "AUC": 0.5314863883757035,
+          "step": 160
+        },
+        {
+          "AP": 0.03562703559687494,
+          "AUC": 0.5305735200132807,
+          "step": 170
+        },
+        {
+          "AP": 0.03580155955465919,
+          "AUC": 0.5308725845948432,
+          "step": 180
+        },
+        {
+          "AP": 0.03585871374090851,
+          "AUC": 0.5337661546529033,
+          "step": 190
+        },
+        {
+          "AP": 0.03787849521973276,
+          "AUC": 0.5396330928229488,
+          "step": 200
+        }
+      ],
+      "history_sha256": "db942165a6108a552034eea26e47f4847fa945991641990a003f6d29e93c95f9",
+      "name": "lucky-sweep-3",
+      "run_id": "jk91gtds",
+      "seed": 1,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/jk91gtds",
+      "variant": "historical_control"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 1024,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "reddit",
+        "declared_variant": "historical_control",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 10,
+        "progregate_alpha": 0,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 2,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "8fcf22f3b031fee28e2aa20d8eb3a5ffd974505fa4afdc3abf7a9bd9a9c33d24",
+      "created_at": "2026-08-01T02:02:01Z",
+      "dataset": "reddit",
+      "execution_host": "HCCS-85",
+      "gpu_index": "2",
+      "history": [
+        {
+          "AP": 0.026913417771500383,
+          "AUC": 0.43447831666005243,
+          "step": 0
+        },
+        {
+          "AP": 0.027540329046802446,
+          "AUC": 0.4448089584715253,
+          "step": 10
+        },
+        {
+          "AP": 0.03575257905974037,
+          "AUC": 0.5306223250730473,
+          "step": 20
+        },
+        {
+          "AP": 0.03665109189028341,
+          "AUC": 0.5322100926013666,
+          "step": 30
+        },
+        {
+          "AP": 0.03703440190684887,
+          "AUC": 0.525824467080809,
+          "step": 40
+        },
+        {
+          "AP": 0.03823761798508141,
+          "AUC": 0.5248734808979847,
+          "step": 50
+        },
+        {
+          "AP": 0.0362798637545607,
+          "AUC": 0.49691762204649237,
+          "step": 60
+        },
+        {
+          "AP": 0.038986344094507935,
+          "AUC": 0.5231254047791909,
+          "step": 70
+        },
+        {
+          "AP": 0.04024209465532528,
+          "AUC": 0.5257701402807039,
+          "step": 80
+        },
+        {
+          "AP": 0.04041562341716855,
+          "AUC": 0.5328709202354327,
+          "step": 90
+        },
+        {
+          "AP": 0.03993670389784481,
+          "AUC": 0.5459576229584702,
+          "step": 100
+        },
+        {
+          "AP": 0.03995206264598232,
+          "AUC": 0.5277100523460985,
+          "step": 110
+        },
+        {
+          "AP": 0.039222278734937194,
+          "AUC": 0.5375378595454504,
+          "step": 120
+        },
+        {
+          "AP": 0.041097935196316646,
+          "AUC": 0.5473035026358295,
+          "step": 130
+        },
+        {
+          "AP": 0.04116457450616257,
+          "AUC": 0.548993155179428,
+          "step": 140
+        },
+        {
+          "AP": 0.04136975490899204,
+          "AUC": 0.5512410378591892,
+          "step": 150
+        },
+        {
+          "AP": 0.0396707924907771,
+          "AUC": 0.5469702388882991,
+          "step": 160
+        },
+        {
+          "AP": 0.04106549465643127,
+          "AUC": 0.5511430714983439,
+          "step": 170
+        },
+        {
+          "AP": 0.040036287623641725,
+          "AUC": 0.548541797436915,
+          "step": 180
+        },
+        {
+          "AP": 0.040566741057577446,
+          "AUC": 0.5536038083621235,
+          "step": 190
+        },
+        {
+          "AP": 0.0414333565824741,
+          "AUC": 0.5566293658263409,
+          "step": 200
+        }
+      ],
+      "history_sha256": "d7fe7aab3c0c774a18b9805962748fa26d1ace26a6b987da9c27f75739f3f847",
+      "name": "solar-sweep-5",
+      "run_id": "k7u85wtd",
+      "seed": 2,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/k7u85wtd",
+      "variant": "historical_control"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 1024,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "reddit",
+        "declared_variant": "historical_control",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 10,
+        "progregate_alpha": 0,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 3,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "0871e20cfbab63bc1365865d6950f7ab575257043eab09b30a44129266a3ad2b",
+      "created_at": "2026-08-01T02:02:01Z",
+      "dataset": "reddit",
+      "execution_host": "HCCS-85",
+      "gpu_index": "5",
+      "history": [
+        {
+          "AP": 0.04344025817763004,
+          "AUC": 0.5820421960709434,
+          "step": 0
+        },
+        {
+          "AP": 0.03429886874455083,
+          "AUC": 0.505779659048565,
+          "step": 10
+        },
+        {
+          "AP": 0.038064352240474136,
+          "AUC": 0.5606654017725142,
+          "step": 20
+        },
+        {
+          "AP": 0.036435680176958536,
+          "AUC": 0.5203032611042198,
+          "step": 30
+        },
+        {
+          "AP": 0.03411836557285876,
+          "AUC": 0.4881423298039319,
+          "step": 40
+        },
+        {
+          "AP": 0.03242856260504088,
+          "AUC": 0.48289471715508536,
+          "step": 50
+        },
+        {
+          "AP": 0.033462493334333286,
+          "AUC": 0.492795375702775,
+          "step": 60
+        },
+        {
+          "AP": 0.0380233742427068,
+          "AUC": 0.5113797724757987,
+          "step": 70
+        },
+        {
+          "AP": 0.03981297549341632,
+          "AUC": 0.5131057616332382,
+          "step": 80
+        },
+        {
+          "AP": 0.04081104472510072,
+          "AUC": 0.5430635185384416,
+          "step": 90
+        },
+        {
+          "AP": 0.03759745770166156,
+          "AUC": 0.5261402750040434,
+          "step": 100
+        },
+        {
+          "AP": 0.038756600615232686,
+          "AUC": 0.5309452578225249,
+          "step": 110
+        },
+        {
+          "AP": 0.03800903606121271,
+          "AUC": 0.53270099312953,
+          "step": 120
+        },
+        {
+          "AP": 0.038622922403489884,
+          "AUC": 0.5383499116165305,
+          "step": 130
+        },
+        {
+          "AP": 0.037782161545119375,
+          "AUC": 0.5391735415302559,
+          "step": 140
+        },
+        {
+          "AP": 0.04036058252434008,
+          "AUC": 0.5504728034695054,
+          "step": 150
+        },
+        {
+          "AP": 0.039327356340757104,
+          "AUC": 0.548060337303524,
+          "step": 160
+        },
+        {
+          "AP": 0.03858133286516029,
+          "AUC": 0.5464230522328137,
+          "step": 170
+        },
+        {
+          "AP": 0.03910544312888185,
+          "AUC": 0.5491411734446325,
+          "step": 180
+        },
+        {
+          "AP": 0.040308236724237445,
+          "AUC": 0.5536739879006201,
+          "step": 190
+        },
+        {
+          "AP": 0.04065305309097711,
+          "AUC": 0.5564758258207978,
+          "step": 200
+        }
+      ],
+      "history_sha256": "cb3b73a6f4186b69d37dd20c82c0955105c26d54e5ef16b5c335894e87f9db5d",
+      "name": "splendid-sweep-7",
+      "run_id": "vmfkq2pt",
+      "seed": 3,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/vmfkq2pt",
+      "variant": "historical_control"
+    },
+    {
+      "code_sha": "b4373042cc0fdec4bed0ecae16681dddcd9dab02",
+      "config": {
+        "GNA_temp": 1,
+        "GT_attention_dropout": 0.4,
+        "GT_dropout": 0.4,
+        "GT_ffn_dim": 256,
+        "GT_num_heads": 2,
+        "GT_num_layers": 3,
+        "ablation_mode": "none",
+        "auc_test_rounds": 256,
+        "batch_size": 1024,
+        "bce_loss_weight": 1,
+        "con_loss_temp": 10,
+        "con_loss_weight": 0.1,
+        "confidence_margin": 2,
+        "data_split_seed": 42,
+        "dataset": "reddit",
+        "declared_variant": "historical_control",
+        "device": 0,
+        "drop_prob": 0,
+        "embedding_dim": 256,
+        "end_lr": 0.0001,
+        "lambda_rec_emb": 0.1,
+        "lambda_rec_tok": 1,
+        "margin_loss_weight": 0,
+        "mean": 0.02,
+        "model_type": "VecGAD",
+        "negsamp_ratio": 1,
+        "num_epoch": 200,
+        "outlier_beta": 0.3,
+        "peak_lr": 0.0005,
+        "pp_k": 10,
+        "progregate_alpha": 0,
+        "proj_R_max": 0.5,
+        "proj_R_min": 0.1,
+        "proj_dim": 64,
+        "proj_loss_weight": 0,
+        "readout": "avg",
+        "rec_error_filter_ratio": 1,
+        "rec_loss_weight": 1,
+        "reconstruction_loss_weight": 1,
+        "ring_R_max": 1,
+        "ring_R_min": 0.3,
+        "ring_loss_weight": 1,
+        "sample_num_n": 7,
+        "sample_num_p": 7,
+        "sample_rate": 0.15,
+        "sample_size": 10000,
+        "seed": 4,
+        "tot_updates": 1000,
+        "train_rate": 0.05,
+        "var": 0.01,
+        "visualize": false,
+        "warmup_epoch": 20,
+        "warmup_updates": 50,
+        "weight_decay": 0
+      },
+      "config_sha256": "9892b678d0736ff1bce70e81be4fbd2d4f04c772709e70ab8541d93f3765c300",
+      "created_at": "2026-08-01T02:03:27Z",
+      "dataset": "reddit",
+      "execution_host": "HCCS-85",
+      "gpu_index": "6",
+      "history": [
+        {
+          "AP": 0.025492702949516145,
+          "AUC": 0.40270372906280755,
+          "step": 0
+        },
+        {
+          "AP": 0.0308828557935521,
+          "AUC": 0.4759191560215825,
+          "step": 10
+        },
+        {
+          "AP": 0.03206800181633064,
+          "AUC": 0.48658181473599316,
+          "step": 20
+        },
+        {
+          "AP": 0.03588942021467833,
+          "AUC": 0.520741794159495,
+          "step": 30
+        },
+        {
+          "AP": 0.030954549656680406,
+          "AUC": 0.4765098041171521,
+          "step": 40
+        },
+        {
+          "AP": 0.03323192813919852,
+          "AUC": 0.49359228751808815,
+          "step": 50
+        },
+        {
+          "AP": 0.03315719552401898,
+          "AUC": 0.4994114893523034,
+          "step": 60
+        },
+        {
+          "AP": 0.03775015375035268,
+          "AUC": 0.5328171277972958,
+          "step": 70
+        },
+        {
+          "AP": 0.03743834197053885,
+          "AUC": 0.5280536470916815,
+          "step": 80
+        },
+        {
+          "AP": 0.03872724035640951,
+          "AUC": 0.5455869538731624,
+          "step": 90
+        },
+        {
+          "AP": 0.038190477127209715,
+          "AUC": 0.5326473788120493,
+          "step": 100
+        },
+        {
+          "AP": 0.0382008583520496,
+          "AUC": 0.5385780841769721,
+          "step": 110
+        },
+        {
+          "AP": 0.039420735712175706,
+          "AUC": 0.5346747481195803,
+          "step": 120
+        },
+        {
+          "AP": 0.03836860141435267,
+          "AUC": 0.5444004921829968,
+          "step": 130
+        },
+        {
+          "AP": 0.03968661931282194,
+          "AUC": 0.5407766274349985,
+          "step": 140
+        },
+        {
+          "AP": 0.038669598396255465,
+          "AUC": 0.5460251306871253,
+          "step": 150
+        },
+        {
+          "AP": 0.039241565141842044,
+          "AUC": 0.5460406271842045,
+          "step": 160
+        },
+        {
+          "AP": 0.038935742362389364,
+          "AUC": 0.5488909139228366,
+          "step": 170
+        },
+        {
+          "AP": 0.040152658273753916,
+          "AUC": 0.5504311232359821,
+          "step": 180
+        },
+        {
+          "AP": 0.03944758138250447,
+          "AUC": 0.547937255930171,
+          "step": 190
+        },
+        {
+          "AP": 0.03893210304817621,
+          "AUC": 0.5494906461718665,
+          "step": 200
+        }
+      ],
+      "history_sha256": "46cf4e9c2af3d185b1d52a09478e4a9c5879c7fb2589decc824ae355a02700fb",
+      "name": "whole-sweep-9",
+      "run_id": "33761vnq",
+      "seed": 4,
+      "state": "finished",
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/33761vnq",
+      "variant": "historical_control"
+    }
+  ],
+  "schema_version": 1,
+  "sweep_id": "ry7lvaiy",
+  "sweep_url": "https://wandb.ai/HCCS/GGADFormer/sweeps/ry7lvaiy"
+}

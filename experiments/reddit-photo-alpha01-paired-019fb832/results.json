@@ -1,0 +1,510 @@
+{
+  "aggregate": {
+    "photo": {
+      "alpha_0p1": {
+        "AP.last": {
+          "mean": 0.6198444060705912,
+          "sample_std_ddof1": 0.03325402841738628
+        },
+        "AP.max_diagnostic": {
+          "mean": 0.6667899727513639,
+          "sample_std_ddof1": 0.027257023616511562
+        },
+        "AUC.last": {
+          "mean": 0.8945887045427218,
+          "sample_std_ddof1": 0.01734397835095834
+        },
+        "AUC.max_diagnostic": {
+          "mean": 0.9095898774157595,
+          "sample_std_ddof1": 0.00492876856593266
+        }
+      },
+      "historical_control": {
+        "AP.last": {
+          "mean": 0.5844637522150621,
+          "sample_std_ddof1": 0.06498372137020139
+        },
+        "AP.max_diagnostic": {
+          "mean": 0.6575848571571286,
+          "sample_std_ddof1": 0.015384710359810644
+        },
+        "AUC.last": {
+          "mean": 0.8914252139261285,
+          "sample_std_ddof1": 0.020632092874142038
+        },
+        "AUC.max_diagnostic": {
+          "mean": 0.9186269416117613,
+          "sample_std_ddof1": 0.008999613058438286
+        }
+      },
+      "paired_delta_alpha_0p1_minus_control": {
+        "AP.last": {
+          "mean": 0.0353806538555291,
+          "sample_std_ddof1": 0.08121789307273004
+        },
+        "AUC.last": {
+          "mean": 0.0031634906165932454,
+          "sample_std_ddof1": 0.023506821380411397
+        }
+      }
+    },
+    "reddit": {
+      "alpha_0p1": {
+        "AP.last": {
+          "mean": 0.03786139463067992,
+          "sample_std_ddof1": 0.004442490661120058
+        },
+        "AP.max_diagnostic": {
+          "mean": 0.040768975640464375,
+          "sample_std_ddof1": 0.003614688407744503
+        },
+        "AUC.last": {
+          "mean": 0.5418209132174789,
+          "sample_std_ddof1": 0.022226049064675138
+        },
+        "AUC.max_diagnostic": {
+          "mean": 0.5636116242965125,
+          "sample_std_ddof1": 0.016642551877444917
+        }
+      },
+      "historical_control": {
+        "AP.last": {
+          "mean": 0.040330007393677994,
+          "sample_std_ddof1": 0.0019465880591965174
+        },
+        "AP.max_diagnostic": {
+          "mean": 0.04113155945612412,
+          "sample_std_ddof1": 0.0022130866065556234
+        },
+        "AUC.last": {
+          "mean": 0.5514551745119316,
+          "sample_std_ddof1": 0.007219781428138927
+        },
+        "AUC.max_diagnostic": {
+          "mean": 0.5593250438354935,
+          "sample_std_ddof1": 0.01307564986851141
+        }
+      },
+      "paired_delta_alpha_0p1_minus_control": {
+        "AP.last": {
+          "mean": -0.002468612762998082,
+          "sample_std_ddof1": 0.004493275801989498
+        },
+        "AUC.last": {
+          "mean": -0.009634261294452662,
+          "sample_std_ddof1": 0.020330984622727265
+        }
+      }
+    }
+  },
+  "diagnostic_metric_policy": "independent per-metric maximum and epoch",
+  "paired_differences": [
+    {
+      "dataset": "reddit",
+      "delta_AP.last_alpha_0p1_minus_control": -0.003476225346063566,
+      "delta_AUC.last_alpha_0p1_minus_control": 0.021999147870781277,
+      "seed": 0
+    },
+    {
+      "dataset": "reddit",
+      "delta_AP.last_alpha_0p1_minus_control": -0.0015902307616448008,
+      "delta_AUC.last_alpha_0p1_minus_control": -0.011831486459623952,
+      "seed": 1
+    },
+    {
+      "dataset": "reddit",
+      "delta_AP.last_alpha_0p1_minus_control": -0.008458776149341762,
+      "delta_AUC.last_alpha_0p1_minus_control": -0.032826568192068195,
+      "seed": 2
+    },
+    {
+      "dataset": "reddit",
+      "delta_AP.last_alpha_0p1_minus_control": 0.004081479829688886,
+      "delta_AUC.last_alpha_0p1_minus_control": -0.006028671725768264,
+      "seed": 3
+    },
+    {
+      "dataset": "reddit",
+      "delta_AP.last_alpha_0p1_minus_control": -0.0028993113876291665,
+      "delta_AUC.last_alpha_0p1_minus_control": -0.019483727965584174,
+      "seed": 4
+    },
+    {
+      "dataset": "photo",
+      "delta_AP.last_alpha_0p1_minus_control": 0.15623475970293116,
+      "delta_AUC.last_alpha_0p1_minus_control": 0.039346440787934034,
+      "seed": 0
+    },
+    {
+      "dataset": "photo",
+      "delta_AP.last_alpha_0p1_minus_control": 0.07703303396107486,
+      "delta_AUC.last_alpha_0p1_minus_control": 0.013774570141327436,
+      "seed": 1
+    },
+    {
+      "dataset": "photo",
+      "delta_AP.last_alpha_0p1_minus_control": 0.0062077889226408445,
+      "delta_AUC.last_alpha_0p1_minus_control": -0.006809985275022523,
+      "seed": 2
+    },
+    {
+      "dataset": "photo",
+      "delta_AP.last_alpha_0p1_minus_control": -0.018941812676209535,
+      "delta_AUC.last_alpha_0p1_minus_control": -0.01760633086734309,
+      "seed": 3
+    },
+    {
+      "dataset": "photo",
+      "delta_AP.last_alpha_0p1_minus_control": -0.043630500632791835,
+      "delta_AUC.last_alpha_0p1_minus_control": -0.01288724170392963,
+      "seed": 4
+    }
+  ],
+  "primary_metric_policy": "fixed step 200",
+  "protocol_id": "reddit-photo-alpha01-paired-019fb832",
+  "runs": [
+    {
+      "AP": {
+        "last": 0.6321658937540777,
+        "max": 0.6509282510475284,
+        "max_epoch": 190
+      },
+      "AUC": {
+        "last": 0.8994449339628832,
+        "max": 0.9096972241629305,
+        "max_epoch": 190
+      },
+      "dataset": "photo",
+      "run_id": "ag2u2ahl",
+      "seed": 0,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/ag2u2ahl",
+      "variant": "alpha_0p1"
+    },
+    {
+      "AP": {
+        "last": 0.6514365900691084,
+        "max": 0.6953649633371003,
+        "max_epoch": 180
+      },
+      "AUC": {
+        "last": 0.909953200535382,
+        "max": 0.9160321465773087,
+        "max_epoch": 180
+      },
+      "dataset": "photo",
+      "run_id": "ika8i5wa",
+      "seed": 1,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/ika8i5wa",
+      "variant": "alpha_0p1"
+    },
+    {
+      "AP": {
+        "last": 0.6370000443562481,
+        "max": 0.6370000443562481,
+        "max_epoch": 200
+      },
+      "AUC": {
+        "last": 0.9110027318226503,
+        "max": 0.9110027318226503,
+        "max_epoch": 200
+      },
+      "dataset": "photo",
+      "run_id": "qiep5mn5",
+      "seed": 2,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/qiep5mn5",
+      "variant": "alpha_0p1"
+    },
+    {
+      "AP": {
+        "last": 0.6129147319219094,
+        "max": 0.6961898827392021,
+        "max_epoch": 140
+      },
+      "AUC": {
+        "last": 0.8750201697554202,
+        "max": 0.9089222549913281,
+        "max_epoch": 140
+      },
+      "dataset": "photo",
+      "run_id": "ej5d63v0",
+      "seed": 3,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/ej5d63v0",
+      "variant": "alpha_0p1"
+    },
+    {
+      "AP": {
+        "last": 0.5657047702516124,
+        "max": 0.6544667222767403,
+        "max_epoch": 130
+      },
+      "AUC": {
+        "last": 0.877522486637273,
+        "max": 0.9022950295245795,
+        "max_epoch": 130
+      },
+      "dataset": "photo",
+      "run_id": "2jfdsvxy",
+      "seed": 4,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/2jfdsvxy",
+      "variant": "alpha_0p1"
+    },
+    {
+      "AP": {
+        "last": 0.47593113405114656,
+        "max": 0.6653975777021227,
+        "max_epoch": 170
+      },
+      "AUC": {
+        "last": 0.8600984931749491,
+        "max": 0.9303181062591995,
+        "max_epoch": 170
+      },
+      "dataset": "photo",
+      "run_id": "9bkoahtz",
+      "seed": 0,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/9bkoahtz",
+      "variant": "historical_control"
+    },
+    {
+      "AP": {
+        "last": 0.5744035561080335,
+        "max": 0.6640617164064185,
+        "max_epoch": 140
+      },
+      "AUC": {
+        "last": 0.8961786303940545,
+        "max": 0.9233495789625156,
+        "max_epoch": 140
+      },
+      "dataset": "photo",
+      "run_id": "tdtqwfkz",
+      "seed": 1,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/tdtqwfkz",
+      "variant": "historical_control"
+    },
+    {
+      "AP": {
+        "last": 0.6307922554336073,
+        "max": 0.6307922554336073,
+        "max_epoch": 200
+      },
+      "AUC": {
+        "last": 0.9178127170976729,
+        "max": 0.9178127170976729,
+        "max_epoch": 200
+      },
+      "dataset": "photo",
+      "run_id": "gmveko6z",
+      "seed": 2,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/gmveko6z",
+      "variant": "historical_control"
+    },
+    {
+      "AP": {
+        "last": 0.6318565445981189,
+        "max": 0.6687232207681365,
+        "max_epoch": 150
+      },
+      "AUC": {
+        "last": 0.8926265006227633,
+        "max": 0.9062092996863796,
+        "max_epoch": 150
+      },
+      "dataset": "photo",
+      "run_id": "z3xyr9cb",
+      "seed": 3,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/z3xyr9cb",
+      "variant": "historical_control"
+    },
+    {
+      "AP": {
+        "last": 0.6093352708844042,
+        "max": 0.6589495154753576,
+        "max_epoch": 140
+      },
+      "AUC": {
+        "last": 0.8904097283412026,
+        "max": 0.9154450060530386,
+        "max_epoch": 140
+      },
+      "dataset": "photo",
+      "run_id": "jvilw0t3",
+      "seed": 4,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/jvilw0t3",
+      "variant": "historical_control"
+    },
+    {
+      "AP": {
+        "last": 0.03927680368096624,
+        "max": 0.04195351278857772,
+        "max_epoch": 110
+      },
+      "AUC": {
+        "last": 0.5770460897884853,
+        "max": 0.5914605038819616,
+        "max_epoch": 100
+      },
+      "dataset": "reddit",
+      "run_id": "5xwcax72",
+      "seed": 0,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/5xwcax72",
+      "variant": "alpha_0p1"
+    },
+    {
+      "AP": {
+        "last": 0.03628826445808796,
+        "max": 0.03854903136785539,
+        "max_epoch": 20
+      },
+      "AUC": {
+        "last": 0.5278016063633248,
+        "max": 0.5622114890673103,
+        "max_epoch": 0
+      },
+      "dataset": "reddit",
+      "run_id": "19t4fgmr",
+      "seed": 1,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/19t4fgmr",
+      "variant": "alpha_0p1"
+    },
+    {
+      "AP": {
+        "last": 0.03297458043313234,
+        "max": 0.03702083505008681,
+        "max_epoch": 40
+      },
+      "AUC": {
+        "last": 0.5238027976342727,
+        "max": 0.5518642820348219,
+        "max_epoch": 40
+      },
+      "dataset": "reddit",
+      "run_id": "uh5wgw5s",
+      "seed": 2,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/uh5wgw5s",
+      "variant": "alpha_0p1"
+    },
+    {
+      "AP": {
+        "last": 0.044734532920665995,
+        "max": 0.046357848656209164,
+        "max_epoch": 110
+      },
+      "AUC": {
+        "last": 0.5504471540950295,
+        "max": 0.5627536883444255,
+        "max_epoch": 80
+      },
+      "dataset": "reddit",
+      "run_id": "6s2q5igl",
+      "seed": 3,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/6s2q5igl",
+      "variant": "alpha_0p1"
+    },
+    {
+      "AP": {
+        "last": 0.03603279166054704,
+        "max": 0.03996365033959279,
+        "max_epoch": 70
+      },
+      "AUC": {
+        "last": 0.5300069182062823,
+        "max": 0.549768158154043,
+        "max_epoch": 50
+      },
+      "dataset": "reddit",
+      "run_id": "iq3urstt",
+      "seed": 4,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/iq3urstt",
+      "variant": "alpha_0p1"
+    },
+    {
+      "AP": {
+        "last": 0.04275302902702981,
+        "max": 0.04275302902702981,
+        "max_epoch": 200
+      },
+      "AUC": {
+        "last": 0.555046941917704,
+        "max": 0.5568871064156923,
+        "max_epoch": 190
+      },
+      "dataset": "reddit",
+      "run_id": "0rrjyjys",
+      "seed": 0,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/0rrjyjys",
+      "variant": "historical_control"
+    },
+    {
+      "AP": {
+        "last": 0.03787849521973276,
+        "max": 0.03787849521973276,
+        "max_epoch": 200
+      },
+      "AUC": {
+        "last": 0.5396330928229488,
+        "max": 0.5506354276285087,
+        "max_epoch": 0
+      },
+      "dataset": "reddit",
+      "run_id": "jk91gtds",
+      "seed": 1,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/jk91gtds",
+      "variant": "historical_control"
+    },
+    {
+      "AP": {
+        "last": 0.0414333565824741,
+        "max": 0.0414333565824741,
+        "max_epoch": 200
+      },
+      "AUC": {
+        "last": 0.5566293658263409,
+        "max": 0.5566293658263409,
+        "max_epoch": 200
+      },
+      "dataset": "reddit",
+      "run_id": "k7u85wtd",
+      "seed": 2,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/k7u85wtd",
+      "variant": "historical_control"
+    },
+    {
+      "AP": {
+        "last": 0.04065305309097711,
+        "max": 0.04344025817763004,
+        "max_epoch": 0
+      },
+      "AUC": {
+        "last": 0.5564758258207978,
+        "max": 0.5820421960709434,
+        "max_epoch": 0
+      },
+      "dataset": "reddit",
+      "run_id": "vmfkq2pt",
+      "seed": 3,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/vmfkq2pt",
+      "variant": "historical_control"
+    },
+    {
+      "AP": {
+        "last": 0.03893210304817621,
+        "max": 0.040152658273753916,
+        "max_epoch": 180
+      },
+      "AUC": {
+        "last": 0.5494906461718665,
+        "max": 0.5504311232359821,
+        "max_epoch": 180
+      },
+      "dataset": "reddit",
+      "run_id": "33761vnq",
+      "seed": 4,
+      "url": "https://wandb.ai/HCCS/GGADFormer/runs/33761vnq",
+      "variant": "historical_control"
+    }
+  ],
+  "schema_version": 1,
+  "source_evidence_sha256": "ac02f3418b8bdd9f42bcab2e9840c5e383f97ae830bbfc0b2c065f8b2763c283",
+  "sweep_id": "ry7lvaiy"
+}

@@ -1,5 +1,5 @@
 schema_version: 1
-state: launched
+state: completed
 formal_launch_allowed: true
 protocol_id: reddit-photo-alpha01-paired-019fb832
 owner_thread_id: 019fb832-e0e7-79e1-8748-b6f0ab3a8130
@@ -114,7 +114,7 @@ wandb:
   code_upload_disabled: true
   console_upload_disabled: true
   expected_trials: 20
-  current_state: RUNNING
+  current_state: FINISHED
   invalid_sweeps:
     - sweep_id: 11zvd8hg
       sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/11zvd8hg
@@ -136,9 +136,10 @@ execution:
     - {window: 4, pane_id: "%249", pane_pid: 2911773, gpu_index: 4, agent_count: 2}
     - {window: 5, pane_id: "%250", pane_pid: 2911784, gpu_index: 5, agent_count: 2}
     - {window: 6, pane_id: "%251", pane_pid: 2911795, gpu_index: 6, agent_count: 2}
-    - {window: 7, pane_id: "%252", pane_pid: 2911806, gpu_index: 7, agent_count: 2}
+  - {window: 7, pane_id: "%252", pane_pid: 2911806, gpu_index: 7, agent_count: 2}
   first_agent_start_utc: 2026-08-01T02:01:52Z
-  last_agent_finish_utc: null
+  last_agent_finish_utc: 2026-08-01T02:13:18Z
+  terminal_verified_at_utc: 2026-08-01T02:50:25Z
   invalid_launch_attempts:
     - tmux_session: reddit_photo_alpha01_019fb832
       started_at_utc: 2026-08-01T01:51:32Z
@@ -148,12 +149,21 @@ execution:
       disposition: all task-owned panes and orphaned child processes stopped; GPU 0-7 revalidated empty
 
 result_validation:
-  all_expected_trials_terminal: false
-  config_identity_valid: false
-  code_identity_valid: false
-  data_identity_valid: false
-  fixed_final_epoch_policy_valid: false
-  independent_local_replay_valid: false
+  all_expected_trials_terminal: true
+  config_identity_valid: true
+  code_identity_valid: true
+  data_identity_valid: true
+  fixed_final_epoch_policy_valid: true
+  history_grid_valid: true
+  independent_local_replay_valid: true
+  replay_numeric_tolerance: 1.0e-15
+  evidence_path: experiments/reddit-photo-alpha01-paired-019fb832/evidence.json
+  results_path: experiments/reddit-photo-alpha01-paired-019fb832/results.json
+  remote_replay_path: experiments/reddit-photo-alpha01-paired-019fb832/results.remote-replay.json
+  evidence_file_sha256: ac02f3418b8bdd9f42bcab2e9840c5e383f97ae830bbfc0b2c065f8b2763c283
+  evidence_canonical_sha256: 86fb8cb5f7e578738095db77b96db815a1b70cf70a4f60449a78b2a2f809659a
+  results_file_sha256: e466ac1bc0821413059453b3407f79787be440ab465ea680bbfa8bad8b44e96
+  remote_replay_file_sha256: 4f881ffc48d3183016257ad0fc7f7f1316fb593722b5738da17f3eff376d0486
 
 protocol_deviations:
   - id: invalid_launch_1
