@@ -1,6 +1,6 @@
 schema_version: 1
 state: prepared
-formal_launch_allowed: false
+formal_launch_allowed: true
 protocol_id: reddit-photo-alpha01-paired-019fb832
 owner_thread_id: 019fb832-e0e7-79e1-8748-b6f0ab3a8130
 
@@ -10,6 +10,8 @@ decision_scope:
   paper_authority_precommitted: false
   disclosure_policy_precommitted: false
   execution_manifest_frozen_before_launch: true
+  resource_authorization: user approved HCCS-85 GPUs 0-7 for this 20-trial sweep
+  resource_authorized_at_utc: 2026-08-01T01:44:40Z
 
 git:
   repository: https://github.com/Sen-Yao/GGADFormer.git
@@ -79,8 +81,8 @@ selection:
     aggregate_fp32_tflops: 660.64
     speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
   selected_at_utc: 2026-07-31T14:17:52Z
-  occupancy_state: pending_approval
-  occupancy_recorded_at_utc: 2026-07-31T14:19:36Z
+  occupancy_state: reserved
+  occupancy_recorded_at_utc: 2026-08-01T01:44:40Z
   excluded_hosts:
     HCCS-25: cooperative occupancy owned by another formal sweep; live compute PIDs present
     HCCS-90: cooperative occupancy owned by another formal sweep
