@@ -1,5 +1,5 @@
 schema_version: 1
-state: completed
+state: prepared
 formal_launch_allowed: true
 confirmation_launch_allowed: true
 protocol:
@@ -9,8 +9,8 @@ protocol:
   owner_thread_id: 019fbc4f-3c4e-7701-a1de-37f373693859
   source_thread_id: 019fbb9e-1afe-7192-a88a-f81e7e145055
   scientific_base_sha: 7a0540ec0ca80c079020da282a3ff5b629174ae7
-  execution_code_sha: b9a8c23af0160fb650e7bd3882543d985b6cfb1d
-  prepared_protocol_commit: b9a8c23af0160fb650e7bd3882543d985b6cfb1d
+  execution_code_sha: 73ae066e79ab20d09c69e3fc73b3ffb5e870fb8f
+  prepared_protocol_commit: 73ae066e79ab20d09c69e3fc73b3ffb5e870fb8f
   screening_registry_sha256: 4c1895d6c27189774fee3b1b8a4f26b10375ceccc2dcb810cd6b23a76e3c80ce
   screening_trials_sha256: 6c5b6ea56660443f623a95bbda4494ecf9e3ebf899072f4640f80929037cd273
   screening_results_file_sha256: b72084ed57b10eb4bc47568516c3665b809481216a40ec5ff666a09d33fce83d
@@ -92,6 +92,8 @@ selection:
   occupancy_document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
   snapshot_path: experiments/reddit-fixed-core-500-019fbc4f/selection-snapshot.json
   promotion_snapshot_path: experiments/reddit-fixed-core-500-019fbc4f/selection-promotion-snapshot.json
+  confirmation_snapshot_path: experiments/reddit-fixed-core-500-019fbc4f/selection-confirmation-snapshot.json
+  confirmation_snapshot_sha256: c8138f2468d37786af0f47f6b8f10d1684569f55928a24802f4b3dc766877f6c
   execution_host: HCCS-90
   gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
   selected_host_score:
@@ -99,11 +101,19 @@ selection:
     clean_gpu_count: 8
     aggregate_fp32_tflops: 660.64
     speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
-  occupancy_state: running
+  occupancy_state: reserved
   selected_at_utc: 2026-08-01T08:34:19Z
   promotion_selected_at_utc: 2026-08-01T10:51:08Z
+  confirmation_selected_at_utc: 2026-08-01T11:51:16Z
   promotion_parent_sweep_id: 2cibydx2
   promotion_selected_host_score:
+    model: RTX 4090
+    clean_gpu_count: 8
+    aggregate_fp32_tflops: 660.64
+    speed_constant_source: NVIDIA public product specifications; FP32 theoretical throughput
+  confirmation_raw_scorer_selected: HCCS-85
+  confirmation_switch_gate: {previous_host: HCCS-90, candidate_host: HCCS-85, estimated_speed_saving_seconds: 0, estimated_switch_cost_seconds: 180, required_minimum_saving_seconds: 360, switch_allowed: false}
+  confirmation_selected_host_score:
     model: RTX 4090
     clean_gpu_count: 8
     aggregate_fp32_tflops: 660.64
@@ -156,17 +166,19 @@ wandb:
   confirmation_config_ids: [cfg-117, cfg-058, cfg-183, cfg-177, cfg-018, cfg-016]
   confirmation_config_ids_sha256: adfb7edae5c7e46f0363ccf7e2e7db6332da5ada79620ddea4241ce1ea9f1a7c
   confirmation_trials_sha256: 95fbdac5ad1df47a47adf91a16df12f4618662f3fc5ebcce544d360e692872d0
+  expected_confirmation_trials: 30
   promotion_create_exactly_once: true
   expected_promotion_trials: 60
   create_exactly_once: true
   expected_screening_trials: 384
-  current_state: PROMOTION_COMPLETED_CONFIRMATION_FROZEN
+  current_state: CONFIRMATION_PREPARED
   preassignment_invalid_launches:
     - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
 execution:
   screening_detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-045915c633e3b6e24ebb35c2a233c35751bad7b6
   detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-promotion-b9a8c23af0160fb650e7bd3882543d985b6cfb1d
+  confirmation_detached_worktree: /root/gpufree-data/linziyao/worktrees/reddit-fixed-core-500-019fbc4f-confirmation-73ae066e79ab20d09c69e3fc73b3ffb5e870fb8f
   git_transport: verified_bundle_after_origin_https_tls_failure
   git_transport_ref: bead6c63120708bf3e62b58aeb6a2bd3140fa12e
   git_bundle_sha256: a7502419bc237cbb25f21608561730da2305fb858fa82c529447e6ffc22bff1c
@@ -230,6 +242,7 @@ result_validation:
   promotion_test_metrics_absent: true
   promotion_logged_artifacts_absent: true
   confirmation_selection_frozen: true
+  confirmation_expected_trials_terminal: false
   config_identity_valid: true
   code_identity_valid: true
   data_identity_valid: true
