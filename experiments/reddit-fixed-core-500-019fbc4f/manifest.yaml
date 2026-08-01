@@ -75,7 +75,7 @@ selection:
   candidate_pool: [HCCS-25, HCCS-85, HCCS-90]
   occupancy_document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
   snapshot_path: experiments/reddit-fixed-core-500-019fbc4f/selection-snapshot.json
-  execution_host: HCCS-85
+  execution_host: HCCS-90
   gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
   selected_host_score:
     model: RTX 4090

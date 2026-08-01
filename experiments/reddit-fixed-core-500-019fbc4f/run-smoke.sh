@@ -14,7 +14,7 @@ runtime_bin="$HOME/.conda/envs/DualRefGAD/bin"
 
 export CUDA_VISIBLE_DEVICES="$gpu_index"
 export EXPECTED_CODE_SHA="$expected_code_sha"
-export EXECUTION_HOST="HCCS-85"
+export EXECUTION_HOST="${EXECUTION_HOST:-HCCS-90}"
 export WANDB_RUN_ID="$run_id"
 export WANDB_NAME="reddit-fixed-core-smoke-$run_id"
 export WANDB_RUN_GROUP="reddit-fixed-core-500-019fbc4f"

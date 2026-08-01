@@ -29,7 +29,7 @@ fi
 
 export CUDA_VISIBLE_DEVICES="$gpu_index"
 export EXPECTED_CODE_SHA="$expected_code_sha"
-export EXECUTION_HOST="HCCS-85"
+export EXECUTION_HOST="${EXECUTION_HOST:-HCCS-90}"
 export WANDB_ENTITY="HCCS"
 export WANDB_PROJECT="GGADFormer"
 export WANDB_DISABLE_CODE="true"

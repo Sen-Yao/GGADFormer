@@ -95,5 +95,19 @@
       {"host": "HCCS-25", "clean_gpu_count": 5, "aggregate_fp32_tflops": 67.25}
     ],
     "tie_break_order": ["HCCS-85", "HCCS-90", "HCCS-25"]
+  },
+  "rerank_after_occupancy_conflict": {
+    "collected_at_utc": "2026-08-01T08:30:47Z",
+    "conflict": "HCCS-85 became pending_approval for another owner after the first launch preflight and was excluded without touching its GPUs",
+    "selected": "HCCS-90",
+    "occupancy_states": {
+      "HCCS-25": "free",
+      "HCCS-85": "pending_approval:019fbc4f-1fe7-7860-aee9-130f66dc70cd",
+      "HCCS-90": "free"
+    },
+    "ranked_eligible": [
+      {"host": "HCCS-90", "clean_gpu_count": 8, "aggregate_fp32_tflops": 660.64},
+      {"host": "HCCS-25", "clean_gpu_count": 5, "aggregate_fp32_tflops": 67.25}
+    ]
   }
 }
