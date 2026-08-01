@@ -1,5 +1,5 @@
 schema_version: 1
-state: prepared
+state: launched
 investigation_id: tolokers-direction-mag-lrec01-019fbba0
 owner_thread_id: 019fbba0-51fe-7952-8bc7-6c68f4e18858
 prepared_at_utc: 2026-08-01T04:45:36Z
@@ -80,6 +80,21 @@ execution:
   per_agent_counts: {gpu0: 4, gpu1: 3, gpu2: 3, gpu3: 3, gpu4: 3, gpu5: 3, gpu6: 3, gpu7: 3}
   tmux_session: vecgad_tolokers_lrec01_019fbba0
   remain_on_exit: true
+  first_agent_start_utc: 2026-08-01T05:33:41Z
+  launch_checkpoint:
+    occupancy_state: running
+    sweep_state: RUNNING
+    assigned_run_count: 8
+    first_valid_finished_trials: 8
+  pane_records:
+    - {pane: "%253", window: gpu0, gpu: 0, count: 4}
+    - {pane: "%254", window: gpu1, gpu: 1, count: 3}
+    - {pane: "%255", window: gpu2, gpu: 2, count: 3}
+    - {pane: "%256", window: gpu3, gpu: 3, count: 3}
+    - {pane: "%257", window: gpu4, gpu: 4, count: 3}
+    - {pane: "%258", window: gpu5, gpu: 5, count: 3}
+    - {pane: "%259", window: gpu6, gpu: 6, count: 3}
+    - {pane: "%260", window: gpu7, gpu: 7, count: 3}
 
 data:
   source_dir: /root/gpufree-data/linziyao/DualRefGAD/dataset
