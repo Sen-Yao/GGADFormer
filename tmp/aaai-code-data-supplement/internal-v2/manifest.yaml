@@ -73,8 +73,9 @@ excluded_from_anonymous_artifact:
 
 validation_state:
   local_internal_checks: passed_15_tests
-  formal_seven_dataset_five_seed_rerun: user_approved
+  formal_seven_dataset_five_seed_rerun: hccs85_30_complete_dgraph_paused
   material_result_difference_policy: stop_and_request_user_decision
+  material_result_difference_observed: true
 
 formal_revalidation:
   protocol_id: vecgad-package-v2-full-revalidation-019fbc58
@@ -145,10 +146,18 @@ formal_revalidation:
         automation_id: check-vecgad-package-v2-reruns
         generation: 1
         next_check_local: 2026-08-01T18:56:00+08:00
-      state: launched
+        terminal_status: consumed_and_paused
+      completed_at: 2026-08-01T19:04:20+08:00
+      validated_trials: 30
+      wandb_terminal_state: FINISHED
+      result_summary: results-hccs85.json
+      result_summary_sha256: 37b7033ab1626765d40713c3ba12f249d83cfa7cff296daebee5c4cf7824b962
+      result_set_sha256: a9ef0d4ebf5d8b36e24506fdef8bcce9eb2bdeb18e142993e4292a22e08fbafb
+      comparison_outcome: material_difference_from_current_main_table
+      state: completed
     - id: dgraph-hccs90
       execution_host: HCCS-90
       gpu_indices: pending_release_and_live_selection
       datasets: [dgraph]
       expected_trials: 5
-      state: waiting_for_existing_owner_release
+      state: blocked_pending_user_decision_after_material_result_difference

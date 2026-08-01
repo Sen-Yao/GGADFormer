@@ -1,0 +1,111 @@
+{
+  "aggregate_protocol": {
+    "metric_endpoint": "fixed_final_epoch",
+    "seeds": [0, 1, 2, 3, 4],
+    "standard_deviation": "sample"
+  },
+  "comparison_to_current_main_table": {
+    "Amazon": {
+      "AUPRC_delta": -0.0019666,
+      "AUROC_delta": -0.0049162,
+      "reference_AUPRC": 0.8064,
+      "reference_AUROC": 0.9391
+    },
+    "elliptic": {
+      "AUPRC_delta": -0.03342,
+      "AUROC_delta": -0.0143588,
+      "reference_AUPRC": 0.2813,
+      "reference_AUROC": 0.7627
+    },
+    "photo": {
+      "AUPRC_delta": -0.0654792,
+      "AUROC_delta": -0.041161,
+      "reference_AUPRC": 0.6198,
+      "reference_AUROC": 0.8946
+    },
+    "reddit": {
+      "AUPRC_delta": -0.0076536,
+      "AUROC_delta": -0.058098,
+      "reference_AUPRC": 0.0441,
+      "reference_AUROC": 0.5782
+    },
+    "t_finance": {
+      "AUPRC_delta": -0.004753,
+      "AUROC_delta": 0.0009106,
+      "reference_AUPRC": 0.646,
+      "reference_AUROC": 0.8975
+    },
+    "tolokers": {
+      "AUPRC_delta": 0.037922,
+      "AUROC_delta": 0.0109434,
+      "reference_AUPRC": 0.3103,
+      "reference_AUROC": 0.6612
+    }
+  },
+  "datasets": {
+    "Amazon": {
+      "AUPRC_mean": 0.8044334,
+      "AUPRC_sample_std": 0.019421896838362644,
+      "AUROC_mean": 0.9341838,
+      "AUROC_sample_std": 0.014330512471645962,
+      "runtime_seconds_mean": 35.484,
+      "wandb_run_ids": ["tz52wl41", "ruxcaygk", "3nj5jins", "c4vsmr51", "intdxt40"]
+    },
+    "elliptic": {
+      "AUPRC_mean": 0.24788,
+      "AUPRC_sample_std": 0.07657953330035382,
+      "AUROC_mean": 0.7483412,
+      "AUROC_sample_std": 0.03563116828985544,
+      "runtime_seconds_mean": 88.962,
+      "wandb_run_ids": ["l8wu1i12", "qxgbvyem", "ehafghv2", "ejc3gq0f", "8gw970mv"]
+    },
+    "photo": {
+      "AUPRC_mean": 0.5543208,
+      "AUPRC_sample_std": 0.11718374094856333,
+      "AUROC_mean": 0.853439,
+      "AUROC_sample_std": 0.054552273156120656,
+      "runtime_seconds_mean": 255.042,
+      "wandb_run_ids": ["01rajr4v", "eijorv87", "wdmwa6t0", "d12jgpkv", "vjhwfgg7"]
+    },
+    "reddit": {
+      "AUPRC_mean": 0.0364464,
+      "AUPRC_sample_std": 0.004550342877190684,
+      "AUROC_mean": 0.520102,
+      "AUROC_sample_std": 0.04394666729116101,
+      "runtime_seconds_mean": 61.134,
+      "wandb_run_ids": ["kqjcy35x", "srj9xzui", "ud2orb53", "vhnasnxv", "ddaj0e6n"]
+    },
+    "t_finance": {
+      "AUPRC_mean": 0.641247,
+      "AUPRC_sample_std": 0.02685385987153431,
+      "AUROC_mean": 0.8984106,
+      "AUROC_sample_std": 0.005061351084443725,
+      "runtime_seconds_mean": 28.568,
+      "wandb_run_ids": ["rg3w93m5", "ruy7qahq", "wtnz872h", "hnxi5tss", "5wzhym86"]
+    },
+    "tolokers": {
+      "AUPRC_mean": 0.348222,
+      "AUPRC_sample_std": 0.017800772974789617,
+      "AUROC_mean": 0.6721434,
+      "AUROC_sample_std": 0.012361779981054513,
+      "runtime_seconds_mean": 32.178,
+      "wandb_run_ids": ["ddr1twg8", "szad95bi", "wfb4l0v4", "9ligrb3t", "bsg4rlsh"]
+    }
+  },
+  "execution_checkout_sha": "cab9dea25a593867a425cb43fe9be51f5a23d2e1",
+  "execution_host": "HCCS-85",
+  "material_difference": true,
+  "protocol_id": "vecgad-package-v2-full-revalidation-019fbc58",
+  "remote_result_directory": "/root/gpufree-data/linziyao/vecgad-package-v2-results-019fbc58/hccs85",
+  "result_count": 30,
+  "result_set_sha256": "a9ef0d4ebf5d8b36e24506fdef8bcce9eb2bdeb18e142993e4292a22e08fbafb",
+  "sweep_id": "2uzmgq9u",
+  "sweep_state": "FINISHED",
+  "validation": {
+    "all_result_files_parse": true,
+    "all_wandb_runs_finished": true,
+    "identity_replay_passed": true,
+    "metric_replay_passed": true,
+    "unique_dataset_seed_pairs": 30
+  }
+}
