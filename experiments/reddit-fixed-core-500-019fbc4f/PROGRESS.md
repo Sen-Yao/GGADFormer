@@ -17,3 +17,4 @@
 - HCCS-85 was claimed by another owner before occupancy start; it was not launched or modified. Full rerank at 2026-08-01T08:30:47Z excluded it and selected HCCS-90, which passed the same 8-GPU/data/runtime/W&B preflight. Launcher host identity was made manifest-bound before relaunch.
 - Smoke `fcfqzf5w` finished valid on HCCS-90 GPU 0 at 2026-08-01T08:35:46Z: fixed-core config exact, validation-only metrics `Val/AUC.last=0.5257899142079934`, `Val/AP.last=0.04450442254016716`, no test metrics, no uploaded artifacts. Budget consumed is 1/500; remaining 499.
 - The first tmux shell expansion error was pre-assignment and consumed no W&B record; it is fenced in `manifest.yaml`.
+- Native screening sweep `2cibydx2` was created exactly once from parsed YAML at 2026-08-01T08:40:00Z. Its grid is 192 configs × seeds 0--1 = 384 validation-only records; launch is pending exact occupancy rebinding.

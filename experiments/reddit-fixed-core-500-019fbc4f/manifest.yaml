@@ -37,6 +37,9 @@ budget:
     technical_retry_reserve: 25
   scientific_records_planned: 475
   allocated_plus_reserved: 500
+  allocated_records: 385
+  future_scientific_records_reserved: 90
+  technical_retry_records_reserved: 25
   created_records: 1
   consumed_records: 1
   valid_records: 1
@@ -108,11 +111,12 @@ wandb:
   smoke_state: finished
   smoke_metrics: {Val/AUC.last: 0.5257899142079934, Val/AP.last: 0.04450442254016716}
   smoke_valid: true
-  screening_sweep_id: null
-  screening_sweep_url: null
+  screening_sweep_id: 2cibydx2
+  screening_sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/2cibydx2
+  screening_sweep_created_at_utc: 2026-08-01T08:40:00Z
   create_exactly_once: true
   expected_screening_trials: 384
-  current_state: NOT_CREATED
+  current_state: CREATED
   preassignment_invalid_launches:
     - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
