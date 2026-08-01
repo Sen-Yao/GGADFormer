@@ -1,0 +1,13 @@
+name: reddit-fixed-core-confirmation-019fbc4f
+program: experiments/reddit-fixed-core-500-019fbc4f/run-trial.py
+method: grid
+metric:
+  name: Val/AUC.last
+  goal: maximize
+parameters:
+  phase:
+    value: confirmation
+  config_id:
+    values: [cfg-117, cfg-058, cfg-183, cfg-177, cfg-018, cfg-016]
+  seed:
+    values: [0, 1, 2, 3, 4]

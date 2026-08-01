@@ -23,12 +23,27 @@ validation 标签用于超参数选择是本协议的明确科研假设；其目
 
 | ID | Scope item | Class | Completion evidence | Trigger / budget | State |
 |---|---|---|---|---|---|
-| S1 | validation-only screening | required | screening | 192 configs × 2 seeds = 384 | pending |
-| P1 | fresh-seed promotion | required | canonical-coverage | top 12 × 5 seeds = 60 | pending |
+| S1 | validation-only screening | required | screening | 192 configs × 2 seeds = 384 | complete |
+| P1 | fresh-seed promotion | required | canonical-coverage | top 12 × 5 seeds = 60 | complete |
 | C1 | frozen test confirmation | required | promotion | top 6 × 5 seeds = 30 | pending |
 | R1 | technical retries | adaptive | implementation validity | crashed/identity-invalid only; at most 25 | not-triggered |
 
 初始三轴状态为 `Lifecycle: active`、`Coverage: none`、`Scientific verdict: unresolved`。
+
+## Promotion 冻结结果
+
+Promotion sweep `55chbpyh` 的 60 条 validation-only 记录全部有效。按预声明的 mean `Val/AUC.last`、mean `Val/AP.last`、`config_id` 顺序独立重放后，confirmation 冻结为：
+
+| Rank | Config | Val AUROC mean ± sample std | Val AP mean ± sample std |
+|---:|---|---:|---:|
+| 1 | `cfg-117` | 0.585104 ± 0.020637 | 0.052359 ± 0.012751 |
+| 2 | `cfg-058` | 0.541091 ± 0.044289 | 0.043003 ± 0.008546 |
+| 3 | `cfg-183` | 0.535944 ± 0.042194 | 0.036757 ± 0.005250 |
+| 4 | `cfg-177` | 0.535779 ± 0.040434 | 0.036414 ± 0.004542 |
+| 5 | `cfg-018` | 0.532823 ± 0.050233 | 0.042230 ± 0.006503 |
+| 6 | `cfg-016` | 0.528330 ± 0.038136 | 0.036518 ± 0.004086 |
+
+完整 validation 证据位于 `promotion-results.json`。该冻结过程未读取 test；六个配置固定后，confirmation 才能用 seeds 0--4 在固定最终 epoch 各读取一次 test。
 
 ## 搜索空间
 

@@ -1,6 +1,7 @@
 schema_version: 1
-state: launched
+state: completed
 formal_launch_allowed: true
+confirmation_launch_allowed: true
 protocol:
   id: reddit-fixed-core-500-019fbc4f
   governance: governed
@@ -17,6 +18,12 @@ protocol:
   promotion_config_ids: [cfg-177, cfg-016, cfg-183, cfg-096, cfg-117, cfg-049, cfg-018, cfg-058, cfg-147, cfg-126, cfg-009, cfg-111]
   promotion_config_ids_sha256: 647346bd43308362620f9e63af6dda07f3b6823b225bc68b6551a626c53442ec
   promotion_trials_sha256: 44b95b6ccba88930f73777108a25fa7cdbf9733a898814a21004289b2c575bcd
+  promotion_results_file_sha256: 1aab85c5cf02682515b68d8bfe29a2b97dc086031110bd8444168516d3f82ad8
+  promotion_results_payload_sha256: c1f7b0a184a77a880ca2b3d6a3fd036052b35d75ca772894ce9cd5c2d53cfb3e
+  confirmation_config_ids: [cfg-117, cfg-058, cfg-183, cfg-177, cfg-018, cfg-016]
+  confirmation_config_ids_sha256: adfb7edae5c7e46f0363ccf7e2e7db6332da5ada79620ddea4241ce1ea9f1a7c
+  confirmation_trials_sha256: 95fbdac5ad1df47a47adf91a16df12f4618662f3fc5ebcce544d360e692872d0
+  confirmation_sweep_config_sha256: 866b6e15a3a85c87ac541b448ec75609847dc5179d7e7814452a4220babe810f
   config_parser: run.py argparse with FIXED_CORE_GUARD=1
   label_boundary: validation labels may select configs; test labels are inaccessible in validation_only and read once at the frozen final epoch in confirmation
   selection_policy:
@@ -45,14 +52,14 @@ budget:
   allocated_records: 445
   future_scientific_records_reserved: 30
   technical_retry_records_reserved: 25
-  created_records: 393
-  consumed_records: 393
-  valid_records: 385
+  created_records: 445
+  consumed_records: 445
+  valid_records: 445
   failed_records: 0
   retry_records: 0
-  remaining_records: 107
-  next_record_ordinal: 394
-  observed_at_utc: 2026-08-01T11:06:37Z
+  remaining_records: 55
+  next_record_ordinal: 446
+  observed_at_utc: 2026-08-01T11:36:06Z
   allocation_guard: reject before any operation that would create or assign ordinal 501
 
 authorization:
@@ -139,17 +146,21 @@ wandb:
   promotion_parent_sweep_id: 2cibydx2
   promotion_sweep_id: 55chbpyh
   promotion_sweep_url: https://wandb.ai/HCCS/GGADFormer/sweeps/55chbpyh
-  promotion_sweep_state: RUNNING
-  promotion_sweep_observed_at_utc: 2026-08-01T11:06:37Z
-  promotion_runs_observed: 8
-  promotion_state_counts_observed: {running: 8}
-  promotion_run_ids_observed: [5za63air, k34ted2r, 920ve8u4, 0cn6wyqz, vap26cle, 3hdz4w2u, 95ou5oe4, 0tlw11d7]
-  promotion_identity_audit: {unique_identities: 8, identity_violations: 0, duplicates: 0, forbidden_test_metrics: 0}
+  promotion_sweep_state: FINISHED
+  promotion_sweep_observed_at_utc: 2026-08-01T11:36:06Z
+  promotion_runs_observed: 60
+  promotion_state_counts_observed: {finished: 60}
+  promotion_run_ids_final: {count: 60, sha256: cf4748eeec4e151751f7e7268e4c99fb67b44ed4867d570622944a8032420d39, path: experiments/reddit-fixed-core-500-019fbc4f/promotion-results.json}
+  promotion_identity_audit: {unique_identities: 60, identity_violations: 0, duplicates: 0, finished_metric_violations: 0, forbidden_test_metrics: 0, logged_artifacts: 0}
+  promotion_results: {path: experiments/reddit-fixed-core-500-019fbc4f/promotion-results.json, file_sha256: 1aab85c5cf02682515b68d8bfe29a2b97dc086031110bd8444168516d3f82ad8, payload_sha256: c1f7b0a184a77a880ca2b3d6a3fd036052b35d75ca772894ce9cd5c2d53cfb3e, rows_sha256: 2512535ee4b28b144953cc818a318003bb35e1ce8876535e263300ee5759d592}
+  confirmation_config_ids: [cfg-117, cfg-058, cfg-183, cfg-177, cfg-018, cfg-016]
+  confirmation_config_ids_sha256: adfb7edae5c7e46f0363ccf7e2e7db6332da5ada79620ddea4241ce1ea9f1a7c
+  confirmation_trials_sha256: 95fbdac5ad1df47a47adf91a16df12f4618662f3fc5ebcce544d360e692872d0
   promotion_create_exactly_once: true
   expected_promotion_trials: 60
   create_exactly_once: true
   expected_screening_trials: 384
-  current_state: PROMOTION_RUNNING
+  current_state: PROMOTION_COMPLETED_CONFIRMATION_FROZEN
   preassignment_invalid_launches:
     - {attempt: 1, host: HCCS-90, pane_id: "%90", reason: "shell expansion sent cd an empty path; no W&B run, GPU process, or record was created", consumed_record: false}
 
@@ -185,18 +196,23 @@ execution:
     - {pane_id: "%105", pane_pid: 403484, gpu_index: 6, agent_count: 7}
     - {pane_id: "%106", pane_pid: 403496, gpu_index: 7, agent_count: 7}
   promotion_first_agent_start_utc: 2026-08-01T11:05:11Z
+  promotion_terminal_at_utc: 2026-08-01T11:36:06Z
+  promotion_agents_terminal: true
+  promotion_compute_pids_terminal: true
   remain_on_exit: true
 
 heartbeat:
   type: one_shot
-  status: active
+  status: completed
   automation_id: check-reddit-fixed-core-screening
   phase: promotion
-  generation: 1
+  generation: 3
   created_at_utc: 2026-08-01T09:02:47Z
   reactivated_at_utc: 2026-08-01T11:06:37Z
-  scheduled_for: 2026-08-01T11:12:00Z
-  scheduling_rule: "FREQ=DAILY;BYHOUR=19;BYMINUTE=12;COUNT=1"
+  scheduled_for: 2026-08-01T11:35:00Z
+  scheduling_rule: "FREQ=DAILY;BYHOUR=19;BYMINUTE=35;COUNT=1"
+  completed_at_utc: 2026-08-01T11:36:06Z
+  automation_deleted: true
 
 result_validation:
   all_expected_trials_terminal: false
@@ -206,14 +222,22 @@ result_validation:
   screening_data_identity_valid: true
   screening_fixed_final_epoch_policy_valid: true
   screening_test_metrics_absent: true
-  config_identity_valid: false
-  code_identity_valid: false
-  data_identity_valid: false
-  fixed_final_epoch_policy_valid: false
+  promotion_expected_trials_terminal: true
+  promotion_config_identity_valid: true
+  promotion_code_identity_valid: true
+  promotion_data_identity_valid: true
+  promotion_fixed_final_epoch_policy_valid: true
+  promotion_test_metrics_absent: true
+  promotion_logged_artifacts_absent: true
+  confirmation_selection_frozen: true
+  config_identity_valid: true
+  code_identity_valid: true
+  data_identity_valid: true
+  fixed_final_epoch_policy_valid: true
 
 scope_status:
   lifecycle: active
-  coverage: none
+  coverage: partial
   scientific_verdict: unresolved
 
 blockers: []

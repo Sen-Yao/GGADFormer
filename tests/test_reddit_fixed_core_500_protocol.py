@@ -46,7 +46,7 @@ def test_every_resolved_screening_config_has_fixed_core():
             assert config["wandb_log_training_metrics"] is False
 
 
-def test_promotion_is_validation_only_and_confirmation_fails_until_frozen():
+def test_promotion_is_validation_only_and_confirmation_is_frozen_test():
     protocol = load_protocol()
     assert protocol.resolve_config(
         "smoke", "smoke-control", 0
@@ -55,8 +55,24 @@ def test_promotion_is_validation_only_and_confirmation_fails_until_frozen():
         assert protocol.resolve_config(
             "promotion", config_id, 2
         )["evaluation_protocol"] == "validation_only"
-    with pytest.raises(ValueError, match="not frozen"):
-        protocol.resolve_config("confirmation", protocol.PROMOTION_CONFIG_IDS[0], 0)
+    assert len(protocol.CONFIRMATION_CONFIG_IDS) == 6
+    assert len(set(protocol.CONFIRMATION_CONFIG_IDS)) == 6
+    assert set(protocol.CONFIRMATION_CONFIG_IDS).issubset(
+        protocol.PROMOTION_CONFIG_IDS
+    )
+    for config_id in protocol.CONFIRMATION_CONFIG_IDS:
+        config = protocol.resolve_config("confirmation", config_id, 0)
+        assert config["evaluation_protocol"] == "frozen_test"
+        assert {key: config[key] for key in protocol.FIXED_CORE} == protocol.FIXED_CORE
+    rejected = next(
+        config_id
+        for config_id in protocol.PROMOTION_CONFIG_IDS
+        if config_id not in protocol.CONFIRMATION_CONFIG_IDS
+    )
+    with pytest.raises(ValueError, match="not confirmed"):
+        protocol.resolve_config("confirmation", rejected, 0)
+    with pytest.raises(ValueError, match="unsupported confirmation seed"):
+        protocol.resolve_config("confirmation", protocol.CONFIRMATION_CONFIG_IDS[0], 5)
 
 
 def test_screening_sweep_identity_and_trial_count():
@@ -83,6 +99,12 @@ def test_protocol_digests_are_stable():
     assert summary["promotion_config_ids_sha256"] == (
         "647346bd43308362620f9e63af6dda07f3b6823b225bc68b6551a626c53442ec"
     )
+    assert summary["confirmation_config_ids_sha256"] == (
+        "adfb7edae5c7e46f0363ccf7e2e7db6332da5ada79620ddea4241ce1ea9f1a7c"
+    )
+    assert summary["confirmation_trials_sha256"] == (
+        "95fbdac5ad1df47a47adf91a16df12f4618662f3fc5ebcce544d360e692872d0"
+    )
 
 
 def test_promotion_sweep_matches_frozen_screening_ranking():
@@ -106,6 +128,33 @@ def test_promotion_sweep_matches_frozen_screening_ranking():
     assert sweep["parameters"]["config_id"]["values"] == promoted
     assert sweep["parameters"]["seed"]["values"] == [2, 3, 4, 5, 6]
     assert len(protocol.promotion_trial_identities()) == 60
+
+
+def test_confirmation_sweep_matches_frozen_promotion_ranking():
+    protocol = load_protocol()
+    results = json.loads((TASK_ROOT / "promotion-results.json").read_text())
+    sweep = yaml.safe_load((TASK_ROOT / "sweep-confirmation.yaml").read_text())
+    by_config = {}
+    for row in results["runs"]:
+        by_config.setdefault(row["config_id"], []).append(row)
+    replay = []
+    for config_id, rows in by_config.items():
+        replay.append((
+            config_id,
+            statistics.mean(row["val_auc_last"] for row in rows),
+            statistics.mean(row["val_ap_last"] for row in rows),
+        ))
+    replay.sort(key=lambda item: (-item[1], -item[2], item[0]))
+    confirmed = [item[0] for item in replay[:6]]
+    assert confirmed == list(protocol.CONFIRMATION_CONFIG_IDS)
+    assert results["top6_config_ids"] == confirmed
+    assert sweep["method"] == "grid"
+    assert "early_terminate" not in sweep
+    assert sweep["metric"] == {"name": "Val/AUC.last", "goal": "maximize"}
+    assert sweep["parameters"]["phase"]["value"] == "confirmation"
+    assert sweep["parameters"]["config_id"]["values"] == confirmed
+    assert sweep["parameters"]["seed"]["values"] == [0, 1, 2, 3, 4]
+    assert len(protocol.confirmation_trial_identities()) == 30
 
 
 def test_validation_path_does_not_index_test_labels_or_carry_training_labels():

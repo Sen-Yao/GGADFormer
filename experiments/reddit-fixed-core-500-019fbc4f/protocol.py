@@ -25,9 +25,14 @@ PROMOTION_CONFIG_IDS = (
     "cfg-111",
 )
 
-# Frozen only after promotion finishes. Keeping this empty makes every
-# confirmation invocation fail closed until the selected top six are committed.
-CONFIRMATION_CONFIG_IDS = ()
+CONFIRMATION_CONFIG_IDS = (
+    "cfg-117",
+    "cfg-058",
+    "cfg-183",
+    "cfg-177",
+    "cfg-018",
+    "cfg-016",
+)
 
 PHASE_BUDGET = {
     "smoke": 1,
@@ -252,6 +257,19 @@ def promotion_trial_identities():
     ]
 
 
+def confirmation_trial_identities():
+    return [
+        {
+            "phase": "confirmation",
+            "config_id": config_id,
+            "seed": seed,
+        }
+        for config_id, seed in itertools.product(
+            CONFIRMATION_CONFIG_IDS, PHASE_SEEDS["confirmation"]
+        )
+    ]
+
+
 def validate_protocol():
     if sum(PHASE_BUDGET.values()) != HARD_RUN_LIMIT:
         raise AssertionError("phase allocation must equal hard budget")
@@ -261,13 +279,17 @@ def validate_protocol():
         raise AssertionError("promotion config freeze mismatch")
     if len(promotion_trial_identities()) != PHASE_BUDGET["promotion"]:
         raise AssertionError("promotion allocation mismatch")
-    if 6 * len(PHASE_SEEDS["confirmation"]) != PHASE_BUDGET["confirmation"]:
+    if len(CONFIRMATION_CONFIG_IDS) != 6:
+        raise AssertionError("confirmation must contain six frozen configs")
+    if len(set(CONFIRMATION_CONFIG_IDS)) != 6:
+        raise AssertionError("confirmation configs must be unique")
+    if not set(CONFIRMATION_CONFIG_IDS).issubset(PROMOTION_CONFIG_IDS):
+        raise AssertionError("confirmation config is outside promotion cohort")
+    if len(confirmation_trial_identities()) != PHASE_BUDGET["confirmation"]:
         raise AssertionError("confirmation allocation mismatch")
     registry = screening_registry()
     if not set(PROMOTION_CONFIG_IDS).issubset(registry):
         raise AssertionError("promotion config is outside screening registry")
-    if len(CONFIRMATION_CONFIG_IDS) not in (0, 6):
-        raise AssertionError("confirmation must be unfrozen or contain six configs")
     for config in registry.values():
         validate_resolved_config(config)
     for key, values in SEARCH_SPACE.items():
@@ -282,6 +304,12 @@ def validate_protocol():
         "screening_trials_sha256": canonical_sha256(screening_trial_identities()),
         "promotion_config_ids_sha256": canonical_sha256(PROMOTION_CONFIG_IDS),
         "promotion_trials_sha256": canonical_sha256(promotion_trial_identities()),
+        "confirmation_config_ids_sha256": canonical_sha256(
+            CONFIRMATION_CONFIG_IDS
+        ),
+        "confirmation_trials_sha256": canonical_sha256(
+            confirmation_trial_identities()
+        ),
     }
 
 
