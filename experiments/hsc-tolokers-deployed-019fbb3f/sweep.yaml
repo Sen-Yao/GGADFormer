@@ -1,0 +1,18 @@
+name: hsc-tolokers-deployed-019fbb3f
+program: experiments/hsc-tolokers-deployed-019fbb3f/run-sweep-trial.py
+method: grid
+metric:
+  name: AUC
+  goal: maximize
+parameters:
+  dataset:
+    values: [tolokers]
+  hsc_center_condition:
+    values: [default, q0, q10, q20, q30, q40]
+  seed:
+    values: [0, 1, 2, 3, 4]
+command:
+  - ${env}
+  - ${interpreter}
+  - ${program}
+  - ${args}

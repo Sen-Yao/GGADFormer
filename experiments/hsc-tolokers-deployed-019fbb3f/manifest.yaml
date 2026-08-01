@@ -1,0 +1,165 @@
+schema_version: 1
+state: prepared
+formal_launch_allowed: false
+investigation_id: 2026-08-01-vecgad-tolokers-hsc-deployed
+owner_thread_id: 019fbc4f-1fe7-7860-aee9-130f66dc70cd
+source_thread_id: 019fbb3f-2b0c-7d53-b852-457514993d8c
+protocol_id: hsc-tolokers-deployed-019fbb3f-v1
+prepared_at_utc: null
+last_material_transition_at_utc: null
+
+governance:
+  mode: governed
+  lifecycle: active
+  coverage: none
+  scientific_verdict: unresolved
+  scope_v1:
+    - {id: M1, class: required, evidence: canonical-coverage, state: pending, object: 30/30 condition-seed trials}
+    - {id: M2, class: required, evidence: canonical-coverage, state: pending, object: fixed-endpoint aggregation and independent replay}
+    - {id: M3, class: required, evidence: canonical-coverage, state: pending, object: paired initialization/batch/source diagnostics}
+    - {id: M4, class: required, evidence: canonical-coverage, state: pending, object: evidence archive, supplement update, HCCS-85 release}
+
+objective:
+  design: paired_batch_center_contamination_stress_test
+  dataset: tolokers
+  center_conditions: [default, q0, q10, q20, q30, q40]
+  seeds: [0, 1, 2, 3, 4]
+  data_split_seed: 42
+  expected_trials: 30
+  primary_metrics: [AUC.last, AP.last]
+  aggregation: {mean: arithmetic, sample_std_ddof: 1}
+  post_hoc_selection_allowed: false
+  fixed_final_epoch: 100
+
+authority_config:
+  batch_size: 1024
+  dataset: tolokers
+  end_lr: 0.00001
+  lambda_rec_emb: 0.1
+  num_epoch: 100
+  outlier_beta: 0.3
+  peak_lr: 0.0001
+  pp_k: 10
+  progregate_alpha: 0.9
+  rec_loss_weight: 1
+  ring_R_max: 1
+  ring_R_min: 0.3
+  ring_loss_weight: 1
+  sample_rate: 0.15
+  train_rate: 0.05
+  warmup_updates: 5
+  data_split_seed: 42
+
+scientific_protocol:
+  default_center: current sampled mini-batch embedding mean
+  oracle_center: "(1-q) * batch_normal_mean + q * batch_anomaly_mean"
+  oracle_label_scope: center construction only
+  forbidden_oracle_label_uses: [pseudo_anomaly_generation, BCE, reconstruction_loss, classifier, anomaly_scorer]
+  paired_trace_fields:
+    - initial_model_sha256
+    - training_batch_trace_sha256
+    - pseudo_source_trace_sha256
+    - HSC.diagnostic_batch_trace_sha256
+    - HSC.diagnostic_source_trace_sha256
+
+git:
+  branch: codex/hsc-tolokers-deployed-4193
+  code_sha: null
+  code_tree: null
+  prepared_protocol_commit: null
+  final_evidence_commit: null
+  remote_publication: pending
+
+execution:
+  execution_host: HCCS-85
+  observed_hostname: null
+  gpu_indices: [0, 1, 2, 3, 4, 5, 6, 7]
+  parallel_gpu_cap: 8
+  task_root: /root/gpufree-data/linziyao/VecGAD-hsc-tolokers-deployed-019fbb3f
+  detached_worktree: /root/gpufree-data/linziyao/VecGAD-hsc-tolokers-deployed-019fbb3f/worktree
+  runtime: /root/gpufree-data/linziyao/.conda/envs/DualRefGAD
+  tmux_session: vecgad_hsc_tolokers_019fbb3f
+  tmux_remain_on_exit: true
+  per_agent_counts: {gpu0: 4, gpu1: 4, gpu2: 4, gpu3: 4, gpu4: 4, gpu5: 4, gpu6: 3, gpu7: 3}
+  pane_records: []
+
+data:
+  access_mode: symlink_read_only_reuse
+  tolokers:
+    path: dataset/tolokers.mat
+    expected_sha256: d6ec34984d4db3f52b53606a447f6101a74d8e9aad2ae8644dfe2ff33227a1d0
+
+wandb:
+  destination: HCCS/GGADFormer
+  sweep_id: null
+  sweep_url: null
+  create_exactly_once: true
+  expected_trials: 30
+  code_upload_disabled: true
+  console_upload_disabled: true
+  raw_data_uploaded: false
+  source_code_uploaded: false
+  checkpoint_uploaded: false
+  undeclared_artifacts_uploaded: false
+
+authorization:
+  state: explicitly_approved_by_user
+  execution_location: HCCS-85
+  destination: HCCS/GGADFormer
+  allowed_data: [config, seed, run_status, necessary_code_host_gpu_pairing_metadata, AUROC, AP]
+  excluded_data: [raw_data, source_code, credentials, checkpoints, node_level_results, embeddings, undeclared_artifacts]
+
+validation:
+  wrapper_tests: pending
+  hsc_unit_tests: pending
+  expected_trials: 30
+  finished_trials: 0
+  valid_trials: 0
+  duplicate_trials: null
+  missing_trials: null
+  unexpected_trials: null
+  all_agent_exit_codes_zero: null
+  collector: pending
+  independent_wandb_replay: pending
+
+occupancy:
+  document: /Users/oliver/.agents/state/hccs-cluster/host-occupancy.json
+  state: free
+  released_at_utc: null
+  release_evidence: null
+
+blockers: []
+
+trials:
+  expected:
+    - {dataset: tolokers, hsc_center_condition: default, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: default, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: default, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: default, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: default, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: q0, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: q0, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: q0, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: q0, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: q0, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: q10, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: q10, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: q10, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: q10, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: q10, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: q20, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: q20, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: q20, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: q20, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: q20, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: q30, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: q30, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: q30, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: q30, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: q30, seed: 4}
+    - {dataset: tolokers, hsc_center_condition: q40, seed: 0}
+    - {dataset: tolokers, hsc_center_condition: q40, seed: 1}
+    - {dataset: tolokers, hsc_center_condition: q40, seed: 2}
+    - {dataset: tolokers, hsc_center_condition: q40, seed: 3}
+    - {dataset: tolokers, hsc_center_condition: q40, seed: 4}
+  observed: []
